@@ -1,0 +1,555 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PDFiumDotNET.Components.Contracts</name>
+    </assembly>
+    <members>
+        <member name="T:PDFiumDotNET.Components.Contracts.Action.IPDFAction">
+            <summary>
+            Interface defines action within PDF document.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Action.IPDFAction.ActionType">
+            <summary>
+            Gets the action type.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Action.IPDFAction.Destination">
+            <summary>
+            Gets destination associated with action.
+            Returned value is not <c>null</c> only if <see cref="T:System.Type"/> is <see cref="F:PDFiumDotNET.Components.Contracts.Action.PDFActionType.Goto"/> or <see cref="F:PDFiumDotNET.Components.Contracts.Action.PDFActionType.RemoteGoto"/>.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Action.IPDFAction.FilePath">
+            <summary>
+            Gets the file associated with action.
+            Returned value is not <c>null</c> only if <see cref="T:System.Type"/> is <see cref="F:PDFiumDotNET.Components.Contracts.Action.PDFActionType.Uri"/>.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Action.IPDFAction.UriPath">
+            <summary>
+            Gets the Uri associated with action.
+            Returned value is not <c>null</c> only if <see cref="T:System.Type"/> is <see cref="F:PDFiumDotNET.Components.Contracts.Action.PDFActionType.Launch"/> or <see cref="F:PDFiumDotNET.Components.Contracts.Action.PDFActionType.RemoteGoto"/>.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Action.IPDFAction.Info">
+            <summary>
+            Gets the simple info about destination for test purposes.
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Contracts.Action.PDFActionType">
+            <summary>
+            Definition of all action types.
+            </summary>
+        </member>
+        <member name="F:PDFiumDotNET.Components.Contracts.Action.PDFActionType.Unsupported">
+            <summary>
+            Unsupported action type.
+            </summary>
+        </member>
+        <member name="F:PDFiumDotNET.Components.Contracts.Action.PDFActionType.Goto">
+            <summary>
+            Go to a destination within current document.
+            </summary>
+        </member>
+        <member name="F:PDFiumDotNET.Components.Contracts.Action.PDFActionType.RemoteGoto">
+            <summary>
+            Go to a destination within another document.
+            </summary>
+        </member>
+        <member name="F:PDFiumDotNET.Components.Contracts.Action.PDFActionType.Uri">
+            <summary>
+            Uri, including web pages and other Internet resources.
+            </summary>
+        </member>
+        <member name="F:PDFiumDotNET.Components.Contracts.Action.PDFActionType.Launch">
+            <summary>
+            Launch an application or open a file.
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat">
+            <summary>
+            Enumeration defines format for supported formats.
+            </summary>
+        </member>
+        <member name="F:PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat.BitmapUnknown">
+            <summary>
+            Unknown or unsupported format.
+            </summary>
+        </member>
+        <member name="F:PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat.BitmapGray">
+            <summary>
+            Gray scale bitmap, one byte per pixel.
+            </summary>
+        </member>
+        <member name="F:PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat.BitmapBGR">
+            <summary>
+            3 bytes per pixel, byte order: blue, green, red.
+            </summary>
+        </member>
+        <member name="F:PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat.BitmapBGRx">
+            <summary>
+            4 bytes per pixel, byte order: blue, green, red, unused.
+            </summary>
+        </member>
+        <member name="F:PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat.BitmapBGRA">
+            <summary>
+            4 bytes per pixel, byte order: blue, green, red, alpha.
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Contracts.Bitmap.IPDFBitmap">
+            <summary>
+            Interface defines functionality of bitmap object.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Bitmap.IPDFBitmap.Width">
+            <summary>
+            Gets bitmap height in pixels.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Bitmap.IPDFBitmap.Height">
+            <summary>
+            Gets bitmap height in pixels.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Bitmap.IPDFBitmap.Destroy">
+            <summary>
+            Destroys any allocated resources.
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Contracts.Bookmark.IPDFBookmark">
+            <summary>
+            Interface defines functionality of bookmark.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Bookmark.IPDFBookmark.Action">
+            <summary>
+            Gets associated action of bookmark.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Bookmark.IPDFBookmark.Bookmarks">
+            <summary>
+            Gets the observable collection of child bookmarks on this bookmark level.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Bookmark.IPDFBookmark.Destination">
+            <summary>
+            Gets associated destionation of bookmark.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Bookmark.IPDFBookmark.Text">
+            <summary>
+            Gets the text of bookmark.
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Contracts.Bookmark.IPDFBookmarkComponent">
+            <summary>
+            Interface defines functionality of bookmark component.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Bookmark.IPDFBookmarkComponent.Bookmarks">
+            <summary>
+            Gets the top bookmarks of opened document.
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Contracts.Destination.IPDFDestination">
+            <summary>
+            Interface defines destination within PDF document.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Destination.IPDFDestination.PageIndex">
+            <summary>
+            Gets the page index of this destination.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Destination.IPDFDestination.X">
+            <summary>
+            Gets the x position of destination on the page in page coordinates.
+            <c>null</c> if not defined.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Destination.IPDFDestination.Y">
+            <summary>
+            Gets the y position of destination on the page in page coordinates.
+            <c>null</c> if not defined.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Destination.IPDFDestination.Zoom">
+            <summary>
+            Gets the zoom factor to apply for destination page.
+            <c>null</c> if not defined.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Destination.IPDFDestination.Info">
+            <summary>
+            Gets the simple info about destination for test purposes.
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Contracts.IPDFChildComponent">
+            <summary>
+            Defines functionality of every child component used in namespace <see cref="N:PDFiumDotNET.Components"/>.
+            This component is always child component to the <see cref="T:PDFiumDotNET.Components.Contracts.IPDFComponent"/>.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.IPDFChildComponent.MainComponent">
+            <summary>
+            Gets the main component where is this componnent attached.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.IPDFChildComponent.IsDisposed">
+            <summary>
+            Gets a value indicating whether the instance is disposed or not.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.IPDFChildComponent.AttachedTo(PDFiumDotNET.Components.Contracts.IPDFComponent)">
+            <summary>
+            Provides the information for child component he was added to another component.
+            </summary>
+            <param name="mainComponent">Component where was the component attached.</param>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Contracts.IPDFComponent">
+            <summary>
+            Defines functionality of main component used in namespace <see cref="N:PDFiumDotNET.Components"/>.
+            This component is parent component for every <see cref="T:PDFiumDotNET.Components.Contracts.IPDFChildComponent"/>.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.IPDFComponent.PageComponent">
+            <summary>
+            Gets the page component.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.IPDFComponent.BookmarkComponent">
+            <summary>
+            Gets the bookmark component.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.IPDFComponent.ZoomComponent">
+            <summary>
+            Gets the zoom component.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.IPDFComponent.ChildComponents">
+            <summary>
+            Gets all child components attached to this main component.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.IPDFComponent.IsDisposed">
+            <summary>
+            Gets a value indicating whether the instance is disposed or not.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.IPDFComponent.IsDocumentOpened">
+            <summary>
+            Gets a value indicating whether pdf document is opened or not.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.IPDFComponent.Attach(PDFiumDotNET.Components.Contracts.IPDFChildComponent)">
+            <summary>
+            Attaches new child component. This method calls <see cref="M:PDFiumDotNET.Components.Contracts.IPDFChildComponent.AttachedTo(PDFiumDotNET.Components.Contracts.IPDFComponent)"/> of child component.
+            </summary>
+            <param name="childComponent">Component to attach.</param>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.IPDFComponent.CloseDocument">
+            <summary>
+            Closes pdf document.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.IPDFComponent.OpenDocument(System.String,System.Func{System.String})">
+            <summary>
+            Opens given pdf document.
+            </summary>
+            <param name="file">Pdf file to open.</param>
+            <param name="getPassword">Callback function used to get password in case the document is password protected.</param>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Contracts.Link.IPDFLink">
+            <summary>
+            Defines properties and functionality of PDF link.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Link.IPDFLink.Action">
+            <summary>
+            Gets associated action of link.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Link.IPDFLink.Destination">
+            <summary>
+            Gets associated destionation of bookmark.
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Contracts.Observers.IPDFDocumentObserver">
+            <summary>
+            Defines possibility of one observer.
+            Observer should always implements <see cref="T:PDFiumDotNET.Components.Contracts.IPDFChildComponent"/> and optionally <see cref="T:PDFiumDotNET.Components.Contracts.Observers.IPDFDocumentObserver"/>.
+            Observer obtains all document related actions.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Observers.IPDFDocumentObserver.DocumentOpening(System.String)">
+            <summary>
+            Called whenever PDF document will be opened.
+            </summary>
+            <param name="file">Opened PDF file.</param>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Observers.IPDFDocumentObserver.DocumentOpened(System.String)">
+            <summary>
+            Called whenever PDF document has opened.
+            </summary>
+            <param name="file">Opened PDF file.</param>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Observers.IPDFDocumentObserver.DocumentOpenFailed(System.String)">
+            <summary>
+            Called whenever PDF document open has failed.
+            </summary>
+            <param name="file">Opened PDF file.</param>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Observers.IPDFDocumentObserver.DocumentClosing">
+            <summary>
+            Called whenever PDF document will be closed.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Observers.IPDFDocumentObserver.DocumentClosed">
+            <summary>
+            Called whenever PDF document was closed.
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Contracts.Page.IPDFPage">
+            <summary>
+            Interface defines properties and functionality of page in PDF document.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPage.Height">
+            <summary>
+            Gets page height defined in PDF document.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPage.Width">
+            <summary>
+            Gets page width defined in PDF document.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPage.ThumbnailHeight">
+            <summary>
+            Gets predefined thumbnail height.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPage.ThumbnailWidth">
+            <summary>
+            Gets predefined thumbnail width.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPage.PageLabel">
+            <summary>
+            Gets page label defined in PDF document.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPage.PageIndex">
+            <summary>
+            Gets page index. First page has index 0.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPage.CreatePageBitmap(System.Int32,System.Int32,PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
+            <summary>
+            Creates page bitmap of page. Usable to get the scaled page.
+            </summary>
+            <param name="width">Width of bitmap to draw into.</param>
+            <param name="height">Height of bitmap to draw into.</param>
+            <param name="format">Pixel format for created bitmap.</param>
+            <param name="buffer">Buffer for created bitmap.</param>
+            <param name="stride">Stride of created buffer.</param>
+            <returns>Create bitmap with thumbnail of page.</returns>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPage.CreatePageBitmap(PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
+            <summary>
+            Creates page bitmap of page. Width and height is used as defined in document.
+            </summary>
+            <param name="format">Pixel format for created bitmap.</param>
+            <param name="buffer">Buffer for created bitmap.</param>
+            <param name="stride">Stride of created buffer.</param>
+            <returns>Create bitmap with thumbnail of page.</returns>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPage.CreateThumbnailBitmap(PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
+            <summary>
+            Creates thumbnail bitmap of page.
+            </summary>
+            <param name="format">Pixel format for created bitmap.</param>
+            <param name="buffer">Buffer for created bitmap.</param>
+            <param name="stride">Stride of created buffer.</param>
+            <returns>Create bitmap with thumbnail of page.</returns>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPage.GetLinkFromPoint(System.Double,System.Double)">
+            <summary>
+            Gets the link on specified position.
+            </summary>
+            <param name="x">X position where to get the link from.</param>
+            <param name="y">Y position where to get the link from.</param>
+            <returns>Link on specified position. <c>null</c> if there don't exists any link.</returns>
+            <remarks>Warning. Point [0,0] is at the bottom left.
+            Therefore you need to transform screen coordinates where the point [0,0] is top left.</remarks>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPage.NavigteTo">
+            <summary>
+            Navigates to this page.
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent">
+            <summary>
+            Interface defines functionality of page component.
+            Component provides all information related to pages of opened PDF document.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.ActualPage">
+            <summary>
+            Gets actual page index of opened document.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.PageCount">
+            <summary>
+            Gets the page count of opened document.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.WidestWidth">
+            <summary>
+            Gets the width of widest page.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.HighestHeight">
+            <summary>
+            Gets the height of highest page.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.CumulativeHeight">
+            <summary>
+            Gets the cumulative height of all pages. This height contains no space between pages.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.Pages">
+            <summary>
+            Gets the pages of opened document.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.PagesToRender(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Gets all pages to be drawn in specified region.
+            </summary>
+            <param name="topLine">Top line of viewport.</param>
+            <param name="bottomLine">Bottom line of viewport.</param>
+            <param name="pageMargin">Margin between pages.</param>
+            <param name="zoomFactor">Zoom factor to use for pages. Not for page margin.</param>
+            <returns>Pages to draw in required region.</returns>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.GetPageTopLine(System.Int32,System.Double,System.Double)">
+            <summary>
+            Gets the top line of page by applying distance between pages.
+            </summary>
+            <param name="pageIndex">Index of the page for which the top line needs to be determined.</param>
+            <param name="pageMargin">Margin between pages.</param>
+            <param name="zoomFactor">Zoom factor to use for pages. Not for page margin.</param>
+            <returns>Position of the top line for required page.</returns>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.PerformAction(PDFiumDotNET.Components.Contracts.Action.IPDFAction)">
+            <summary>
+            Peforms the action defined in given <see cref="T:PDFiumDotNET.Components.Contracts.Action.IPDFAction"/>.
+            </summary>
+            <param name="action"><see cref="T:PDFiumDotNET.Components.Contracts.Action.IPDFAction"/> defines action to perform.</param>
+            <remarks>Only one type of action is performed: <see cref="F:PDFiumDotNET.Components.Contracts.Action.PDFActionType.Goto"/>.</remarks>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.NavigateToDestination(PDFiumDotNET.Components.Contracts.Destination.IPDFDestination)">
+            <summary>
+            Navigates to the specified page defined by given <see cref="T:PDFiumDotNET.Components.Contracts.Destination.IPDFDestination"/>.
+            </summary>
+            <param name="destination"><see cref="T:PDFiumDotNET.Components.Contracts.Destination.IPDFDestination"/> defines the destination.</param>
+            <remarks>Navigation is performed only to the side.
+            The position on the page is ignored even if it is defined.
+            Zoom factor as well.</remarks>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.NavigateToPage(System.Int32)">
+            <summary>
+            Navigates to the specified page.
+            </summary>
+            <param name="pageIndex">Index of page to navigate into. Index is 1 based.</param>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Contracts.Page.IPDFPageRenderInfo">
+            <summary>
+            Interface defines information about page to render.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageRenderInfo.Page">
+            <summary>
+            Gets the page estimated to render.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageRenderInfo.Left">
+            <summary>
+            Gets or sets the left line of page.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageRenderInfo.Right">
+            <summary>
+            Gets or sets the right line of page.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageRenderInfo.Top">
+            <summary>
+            Gets or sets the top line of page.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageRenderInfo.Bottom">
+            <summary>
+            Gets or sets the bottom line of page.
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent">
+            <summary>
+            Interface defines functionality of zoom component.
+            Component provides all information about zoom state of opened PDF document.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.ActualZoomType">
+            <summary>
+            Gets or sets the type of zoom.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.ActualZoomFactor">
+            <summary>
+            Gets or sets the fator of actual zoom. Factor 1.0 is 100%.
+            Value is returned regardless of <see cref="P:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.ActualZoomType"/> property.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.ZoomValues">
+            <summary>
+            Gets or sets predefined values in % used for particular zoom values. First and last value are used as min and max value.
+            It is possible that the value of <see cref="P:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.ActualZoomFactor"/> does not match any number of these values.
+            </summary>
+            <remarks>Predefined values: 0.10, 0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 2.00, 4.00, 8.00.</remarks>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.IncreaseZoom">
+            <summary>
+            Increases the zoom to the nearest value of <see cref="P:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.ZoomValues"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.DecreaseZoom">
+            <summary>
+            Decreases the zoom to the nearest value of <see cref="P:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.ZoomValues"/>.
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Contracts.Zoom.ZoomType">
+            <summary>
+            Enumeration defines all possible zoom types.
+            </summary>
+        </member>
+        <member name="F:PDFiumDotNET.Components.Contracts.Zoom.ZoomType.DefinedValue">
+            <summary>
+            Zoom is specific value defined by user.
+            </summary>
+        </member>
+        <member name="F:PDFiumDotNET.Components.Contracts.Zoom.ZoomType.FitWidth">
+            <summary>
+            Zoom is calculated in way so that the width of page matches the width of the view.
+            </summary>
+        </member>
+        <member name="F:PDFiumDotNET.Components.Contracts.Zoom.ZoomType.FitHeight">
+            <summary>
+            Zoom is calculated in way so that the height of page matches the height of the view.
+            </summary>
+        </member>
+    </members>
+</doc>

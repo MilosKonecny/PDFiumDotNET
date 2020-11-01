@@ -1,0 +1,16 @@
+# To learn more about .editorconfig see https://aka.ms/editorconfigdocs
+root=false
+
+#############################################
+# microsoft.codeanalysis.fxcopanalyzers\3.0.0
+#############################################
+
+# CA1822: Mark members as static
+dotnet_diagnostic.CA1822.severity = none
+
+########################################
+# StyleCop.Analyzers
+########################################
+
+# SA1310: Field names should not contain underscore
+dotnet_diagnostic.SA1310.severity = none

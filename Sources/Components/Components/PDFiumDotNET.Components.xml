@@ -1,0 +1,655 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PDFiumDotNET.Components</name>
+    </assembly>
+    <members>
+        <member name="T:PDFiumDotNET.Components.Action.PDFAction">
+            <summary>
+            <inheritdoc cref="T:PDFiumDotNET.Components.Contracts.Action.IPDFAction"/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Action.PDFAction.#ctor(PDFiumDotNET.Components.PDFComponent,PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates.FPDF_ACTION)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PDFiumDotNET.Components.Action.PDFAction"/> class.
+            </summary>
+            <param name="mainComponent">Main component where this destination belongs.</param>
+            <param name="actionHandle">Handle of associated action.</param>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Action.PDFAction.ToString">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Action.PDFAction.ActionType">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Action.PDFAction.Destination">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Action.PDFAction.FilePath">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Action.PDFAction.UriPath">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Action.PDFAction.Info">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Bitmap.PDFBitmap">
+            <summary>
+            <inheritdoc cref="T:PDFiumDotNET.Components.Contracts.Bitmap.IPDFBitmap"/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Bitmap.PDFBitmap.#ctor(PDFiumDotNET.Components.PDFComponent)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PDFiumDotNET.Components.Bitmap.PDFBitmap"/> class.
+            </summary>
+            <param name="mainComponent">Main component where this bookmark belongs.</param>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Bitmap.PDFBitmap.Render(PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates.FPDF_PAGE,System.Int32,System.Int32)">
+            <summary>
+            Render the page to the bitmap.
+            </summary>
+            <param name="page">Page to render.</param>
+            <param name="width">Width of bitmap to draw into.</param>
+            <param name="height">Height of bitmap to draw into.</param>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Bitmap.PDFBitmap.Create(System.Int32,System.Int32,PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
+            <summary>
+            Create bitmap based on given parameters.
+            </summary>
+            <param name="width">Required width.</param>
+            <param name="height">Required height.</param>
+            <param name="format">Required format.</param>
+            <param name="buffer">Required buffer.</param>
+            <param name="stride">Required stride.</param>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Bitmap.PDFBitmap.Width">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Bitmap.PDFBitmap.Height">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Bitmap.PDFBitmap.Destroy">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Bookmark.PDFBookmark">
+            <summary>
+            <inheritdoc cref="T:PDFiumDotNET.Components.Contracts.Bookmark.IPDFBookmark"/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Bookmark.PDFBookmark.#ctor(PDFiumDotNET.Components.PDFComponent,PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates.FPDF_BOOKMARK)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PDFiumDotNET.Components.Bookmark.PDFBookmark"/> class.
+            </summary>
+            <param name="mainComponent">Main component where this bookmark belongs.</param>
+            <param name="bookmarkHandle">Handle of this bookmark.</param>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Bookmark.PDFBookmark.Build">
+            <summary>
+            Builds bookmark object.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Bookmark.PDFBookmark.Action">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Bookmark.PDFBookmark.Bookmarks">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Bookmark.PDFBookmark.Destination">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Bookmark.PDFBookmark.Text">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Bookmark.PDFBookmarkComponent">
+            <summary>
+            <inheritdoc cref="T:PDFiumDotNET.Components.Contracts.Bookmark.IPDFBookmarkComponent"/>
+            </summary>
+            <summary>
+            <inheritdoc cref="T:PDFiumDotNET.Components.Contracts.Bookmark.IPDFBookmarkComponent"/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Bookmark.PDFBookmarkComponent.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:PDFiumDotNET.Components.Bookmark.PDFBookmarkComponent"/> class.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Bookmark.PDFBookmarkComponent.Bookmarks">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Bookmark.PDFBookmarkComponent.MainComponent">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Bookmark.PDFBookmarkComponent.IsDisposed">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Bookmark.PDFBookmarkComponent.AttachedTo(PDFiumDotNET.Components.Contracts.IPDFComponent)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="E:PDFiumDotNET.Components.Bookmark.PDFBookmarkComponent.PropertyChanged">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Bookmark.PDFBookmarkComponent.Dispose">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Bookmark.PDFBookmarkComponent.DocumentOpening(System.String)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Bookmark.PDFBookmarkComponent.DocumentOpened(System.String)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Bookmark.PDFBookmarkComponent.DocumentOpenFailed(System.String)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Bookmark.PDFBookmarkComponent.DocumentClosing">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Bookmark.PDFBookmarkComponent.DocumentClosed">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Destination.PDFDestination">
+            <summary>
+            <inheritdoc cref="T:PDFiumDotNET.Components.Contracts.Destination.IPDFDestination"/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Destination.PDFDestination.#ctor(PDFiumDotNET.Components.PDFComponent,PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates.FPDF_DEST)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PDFiumDotNET.Components.Destination.PDFDestination"/> class.
+            </summary>
+            <param name="mainComponent">Main component where this destination belongs.</param>
+            <param name="destinationHandle">Handle of associated destination.</param>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Destination.PDFDestination.ToString">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Destination.PDFDestination.PageIndex">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Destination.PDFDestination.X">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Destination.PDFDestination.Y">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Destination.PDFDestination.Zoom">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Destination.PDFDestination.Info">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Link.PDFLink">
+            <summary>
+            <inheritdoc cref="T:PDFiumDotNET.Components.Contracts.Link.IPDFLink"/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Link.PDFLink.#ctor(PDFiumDotNET.Components.PDFComponent,PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates.FPDF_LINK)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PDFiumDotNET.Components.Link.PDFLink"/> class.
+            </summary>
+            <param name="mainComponent">Main component where this bookmark belongs.</param>
+            <param name="linkHandle">Handle of this link.</param>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Link.PDFLink.Action">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Link.PDFLink.Destination">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Page.PDFPage">
+            <summary>
+            <inheritdoc cref="T:PDFiumDotNET.Components.Contracts.Page.IPDFPage"/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPage.#ctor(PDFiumDotNET.Components.PDFComponent,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PDFiumDotNET.Components.Page.PDFPage"/> class.
+            </summary>
+            <param name="mainComponent">Main component where this bookmark belongs.</param>
+            <param name="pageIndex">Index of associated page.</param>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPage.Build">
+            <summary>
+            Builds bookmark object.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPage.Height">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPage.Width">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPage.ThumbnailHeight">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPage.ThumbnailWidth">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPage.PageLabel">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPage.PageIndex">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPage.CreatePageBitmap(System.Int32,System.Int32,PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPage.CreatePageBitmap(PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPage.CreateThumbnailBitmap(PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPage.GetLinkFromPoint(System.Double,System.Double)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPage.NavigteTo">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Page.PDFPageComponent">
+            <summary>
+            <inheritdoc cref="T:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent"/>
+            </summary>
+            <summary>
+            <inheritdoc cref="T:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent"/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:PDFiumDotNET.Components.Page.PDFPageComponent"/> class.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPageComponent.ActualPage">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPageComponent.PageCount">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPageComponent.WidestWidth">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPageComponent.HighestHeight">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPageComponent.CumulativeHeight">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPageComponent.Pages">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.PagesToRender(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.GetPageTopLine(System.Int32,System.Double,System.Double)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.PerformAction(PDFiumDotNET.Components.Contracts.Action.IPDFAction)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.NavigateToDestination(PDFiumDotNET.Components.Contracts.Destination.IPDFDestination)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.NavigateToPage(System.Int32)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPageComponent.MainComponent">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPageComponent.IsDisposed">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.AttachedTo(PDFiumDotNET.Components.Contracts.IPDFComponent)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="E:PDFiumDotNET.Components.Page.PDFPageComponent.PropertyChanged">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.Dispose">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.DocumentOpening(System.String)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.DocumentOpened(System.String)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.DocumentOpenFailed(System.String)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.DocumentClosing">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.DocumentClosed">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Page.PDFPageRenderInfo">
+            <summary>
+            <inheritdoc cref="T:PDFiumDotNET.Components.Contracts.Page.IPDFPageRenderInfo"/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPageRenderInfo.#ctor(PDFiumDotNET.Components.Contracts.Page.IPDFPage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PDFiumDotNET.Components.Page.PDFPageRenderInfo"/> class.
+            </summary>
+            <param name="page">Page to render.</param>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPageRenderInfo.Page">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPageRenderInfo.Left">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPageRenderInfo.Right">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPageRenderInfo.Top">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPageRenderInfo.Bottom">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.PDFComponent">
+            <summary>
+            <inheritdoc cref="T:PDFiumDotNET.Components.Contracts.IPDFComponent"/>
+            </summary>
+            <summary>
+            <inheritdoc cref="T:PDFiumDotNET.Components.Contracts.IPDFComponent"/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.PDFComponent.PageComponent">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.PDFComponent.BookmarkComponent">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.PDFComponent.ZoomComponent">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.PDFComponent.ChildComponents">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.PDFComponent.IsDocumentOpened">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.PDFComponent.IsDisposed">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.PDFComponent.Attach(PDFiumDotNET.Components.Contracts.IPDFChildComponent)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.PDFComponent.OpenDocument(System.String,System.Func{System.String})">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.PDFComponent.CloseDocument">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.PDFComponent.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:PDFiumDotNET.Components.PDFComponent"/> class.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.PDFComponent.PDFiumBridge">
+            <summary>
+            Gets active bridge.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.PDFComponent.PDFiumDocument">
+            <summary>
+            Gets active document.
+            </summary>
+        </member>
+        <member name="E:PDFiumDotNET.Components.PDFComponent.PropertyChanged">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.PDFComponent.Dispose">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Components.Zoom.PDFZoomComponent">
+            <summary>
+            <inheritdoc cref="T:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent"/>
+            </summary>
+            <summary>
+            <inheritdoc cref="T:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent"/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Zoom.PDFZoomComponent.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:PDFiumDotNET.Components.Zoom.PDFZoomComponent"/> class.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Zoom.PDFZoomComponent.ActualZoomType">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Zoom.PDFZoomComponent.ActualZoomFactor">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Zoom.PDFZoomComponent.ZoomValues">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Zoom.PDFZoomComponent.IncreaseZoom">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Zoom.PDFZoomComponent.DecreaseZoom">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Zoom.PDFZoomComponent.MainComponent">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Zoom.PDFZoomComponent.IsDisposed">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Zoom.PDFZoomComponent.AttachedTo(PDFiumDotNET.Components.Contracts.IPDFComponent)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="E:PDFiumDotNET.Components.Zoom.PDFZoomComponent.PropertyChanged">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Zoom.PDFZoomComponent.Dispose">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Zoom.PDFZoomComponent.DocumentOpening(System.String)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Zoom.PDFZoomComponent.DocumentOpened(System.String)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Zoom.PDFZoomComponent.DocumentOpenFailed(System.String)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Zoom.PDFZoomComponent.DocumentClosing">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Zoom.PDFZoomComponent.DocumentClosed">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+    </members>
+</doc>

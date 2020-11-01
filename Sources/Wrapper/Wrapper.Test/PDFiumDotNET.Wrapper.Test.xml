@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PDFiumDotNET.Wrapper.Test</name>
+    </assembly>
+    <members>
+        <member name="T:PDFiumDotNET.Wrapper.Test.PDFiumBridgeDocTest">
+            <summary>
+            Test class for methods defined in 'PDFiumBridge.Doc.cs' file.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeDocTest.MyClassInitialize(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext)">
+            <summary>
+            Test class initialization method.
+            Use this method to run code before any test is executed.
+            </summary>
+            <param name="testContext">Test context for the test.</param>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeDocTest.MyClassCleanup">
+            <summary>
+            Test class cleanup method.
+            Use this method to run code after all tests in this class have run.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeDocTest.Bookmark">
+            <summary>
+            Base test for bookmark.
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Wrapper.Test.PDFiumBridgeTest">
+            <summary>
+            Test class for base functionality of the class <see cref="T:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeTest.UsageCount01">
+            <summary>
+            Test method  for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.UsageCount"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeTest.UsageCount02">
+            <summary>
+            Test method  for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.UsageCount"/>.
+            </summary>
+        </member>
+        <member name="T:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest">
+            <summary>
+            Test class for methods defined in 'PDFiumBridge.View.cs' file.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.MyClassInitialize(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext)">
+            <summary>
+            Test class initialization method.
+            Use this method to run code before any test is executed.
+            </summary>
+            <param name="testContext">Test context for the test.</param>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.MyClassCleanup">
+            <summary>
+            Test class cleanup method.
+            Use this method to run code after all tests in this class have run.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.GetLastError">
+            <summary>
+            Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_GetLastError"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.LoadDocument01">
+            <summary>
+            Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_LoadDocument"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.LoadDocument02">
+            <summary>
+            Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_LoadDocument"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.GetPageCount">
+            <summary>
+            Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_GetPageCount"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.GetFileVersion">
+            <summary>
+            Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_GetFileVersion"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.DocumentHasValidCrossReferenceTable01">
+            <summary>
+            Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_DocumentHasValidCrossReferenceTable"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.DocumentHasValidCrossReferenceTable02">
+            <summary>
+            Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_DocumentHasValidCrossReferenceTable"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.DocumentHasValidCrossReferenceTable03">
+            <summary>
+            Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_DocumentHasValidCrossReferenceTable"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.GetDocPermissions">
+            <summary>
+            Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_GetDocPermissions"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.LoadUnloadPage">
+            <summary>
+            Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_LoadPage"/> and <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_ClosePage"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.Render">
+            <summary>
+            Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_RenderPageBitmap"/> and <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_RenderPageBitmapWithMatrix"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.DeviceToPageToDevice">
+            <summary>
+            Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_DeviceToPage"/> and <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_PageToDevice"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.Bitmap">
+            <summary>
+            Test method for some bitmap methods.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.ViewerRef">
+            <summary>
+            Test method for some view ref methods.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.NamedDest">
+            <summary>
+            Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_GetNamedDest"/> and <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_GetNamedDestByName"/>.
+            </summary>
+        </member>
+    </members>
+</doc>

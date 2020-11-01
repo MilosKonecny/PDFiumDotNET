@@ -1,0 +1,88 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3F0204E0-2155-4433-8314-C8CB97341616}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{644EAD02-C97B-48BE-A00E-8ED14D303601}"
+	ProjectSection(SolutionItems) = preProject
+		Common\AssemblyGlobalInfo.cs = Common\AssemblyGlobalInfo.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wrapper", "Wrapper", "{6C9F4688-6827-47D4-BC0B-3E9AC7D1F3FE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.Wrapper", "Wrapper\Wrapper\PDFiumDotNET.Wrapper.csproj", "{6C4FC621-A329-4859-A2DD-E2ED63BED903}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.Wrapper.Test", "Wrapper\Wrapper.Test\PDFiumDotNET.Wrapper.Test.csproj", "{1A1670EF-167E-498F-B694-77BF3C02AC36}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{F0F26C63-E33F-494D-B376-3DD9823FAF98}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.Components", "Components\Components\PDFiumDotNET.Components.csproj", "{7EF04D1B-07A0-4603-BA46-C52CE4A80330}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.Components.Test", "Components\Components.Test\PDFiumDotNET.Components.Test.csproj", "{8FBACD37-4780-4973-8DAB-4399F1530AF7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.Components.Contracts", "Components\Components.Contracts\PDFiumDotNET.Components.Contracts.csproj", "{2E26ED44-85FE-401E-8954-C38103253F1B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{1D8395C4-4774-488C-BAC4-B0F2ADD6E85B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFiumDotNET.Samples.SimpleWpf", "Samples\Samples.SimpleWpf\PDFiumDotNET.Samples.SimpleWpf.csproj", "{F2A1A9EC-C144-4F5C-9142-7E4C1E3BBAF2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controls", "Controls", "{E7CEDADC-4B97-4BA8-97EF-0F3306AE7057}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFiumDotNET.WpfControls", "Controls\WpfControls\PDFiumDotNET.WpfControls.csproj", "{0BCAC3A2-5ACB-4FCD-AD3A-2A1E226DC693}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6C4FC621-A329-4859-A2DD-E2ED63BED903}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C4FC621-A329-4859-A2DD-E2ED63BED903}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C4FC621-A329-4859-A2DD-E2ED63BED903}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C4FC621-A329-4859-A2DD-E2ED63BED903}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A1670EF-167E-498F-B694-77BF3C02AC36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1670EF-167E-498F-B694-77BF3C02AC36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1670EF-167E-498F-B694-77BF3C02AC36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1670EF-167E-498F-B694-77BF3C02AC36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EF04D1B-07A0-4603-BA46-C52CE4A80330}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EF04D1B-07A0-4603-BA46-C52CE4A80330}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EF04D1B-07A0-4603-BA46-C52CE4A80330}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EF04D1B-07A0-4603-BA46-C52CE4A80330}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FBACD37-4780-4973-8DAB-4399F1530AF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FBACD37-4780-4973-8DAB-4399F1530AF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FBACD37-4780-4973-8DAB-4399F1530AF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FBACD37-4780-4973-8DAB-4399F1530AF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E26ED44-85FE-401E-8954-C38103253F1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E26ED44-85FE-401E-8954-C38103253F1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E26ED44-85FE-401E-8954-C38103253F1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E26ED44-85FE-401E-8954-C38103253F1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2A1A9EC-C144-4F5C-9142-7E4C1E3BBAF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2A1A9EC-C144-4F5C-9142-7E4C1E3BBAF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2A1A9EC-C144-4F5C-9142-7E4C1E3BBAF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2A1A9EC-C144-4F5C-9142-7E4C1E3BBAF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BCAC3A2-5ACB-4FCD-AD3A-2A1E226DC693}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BCAC3A2-5ACB-4FCD-AD3A-2A1E226DC693}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BCAC3A2-5ACB-4FCD-AD3A-2A1E226DC693}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BCAC3A2-5ACB-4FCD-AD3A-2A1E226DC693}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6C4FC621-A329-4859-A2DD-E2ED63BED903} = {6C9F4688-6827-47D4-BC0B-3E9AC7D1F3FE}
+		{1A1670EF-167E-498F-B694-77BF3C02AC36} = {6C9F4688-6827-47D4-BC0B-3E9AC7D1F3FE}
+		{7EF04D1B-07A0-4603-BA46-C52CE4A80330} = {F0F26C63-E33F-494D-B376-3DD9823FAF98}
+		{8FBACD37-4780-4973-8DAB-4399F1530AF7} = {F0F26C63-E33F-494D-B376-3DD9823FAF98}
+		{2E26ED44-85FE-401E-8954-C38103253F1B} = {F0F26C63-E33F-494D-B376-3DD9823FAF98}
+		{F2A1A9EC-C144-4F5C-9142-7E4C1E3BBAF2} = {1D8395C4-4774-488C-BAC4-B0F2ADD6E85B}
+		{0BCAC3A2-5ACB-4FCD-AD3A-2A1E226DC693} = {E7CEDADC-4B97-4BA8-97EF-0F3306AE7057}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EFF36FBA-336D-484C-B9B5-0F16E75DB07B}
+	EndGlobalSection
+EndGlobal
