@@ -4,4 +4,4 @@ Download your own copy of PDFium dlls from [bblanchon/pdfium-binaries](https://g
 
 Unzip the dlls to the appropriate subfolder.
 
-Actually used (supported) version is 4178.
+Actually used (supported) version is 4290.

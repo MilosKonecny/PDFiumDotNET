@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PDFiumDotNET.Components.Test</name>
+    </assembly>
+    <members>
+        <member name="T:PDFiumDotNET.Components.Test.UnitTest1">
+            <summary>
+            Unit test class for <see cref="N:PDFiumDotNET.Components"/>.
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Test.UnitTest1.TestMethod1">
+            <summary>
+            Primary test method.
+            </summary>
+        </member>
+    </members>
+</doc>

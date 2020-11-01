@@ -1,1 +1,1 @@
-Folder for 32bit version of PDFium - PDFium_x86.dll.
+Folder for 32bit version of PDFium dll.
