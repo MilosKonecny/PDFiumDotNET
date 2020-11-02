@@ -59,7 +59,9 @@
             {
                 // Actual page width
                 var actualPageWidth = pageInfo.Page.Width * PDFZoomComponent.ActualZoomFactor;
-                if (ViewportWidth < _workArea.Width)
+
+                // We have to avoid the 'inaccuracy' of double.
+                if (Math.Truncate(ViewportWidth) < Math.Truncate(_workArea.Width))
                 {
                     // Take offset into considertion.
                     pageInfo.Left = -HorizontalOffset + PDFPageMargin;
@@ -81,17 +83,16 @@
                 drawingContext.DrawRectangle(PDFPageBackground, null, new Rect(leftTop, rightBottom));
 
                 // ToDo: Implement exception handling. WriteableBitmap ctor throws COMException: MILERR_WIN32ERROR (Exception from HRESULT: 0x88980003)
-                // Prepare page content.
                 var bitmap = new WriteableBitmap(drawWidth, drawHeight, 96, 96, PixelFormats.Bgra32, null);
                 var format = BitmapFormatConverter.GetFormat(bitmap.Format);
                 bitmap.Lock();
                 var bmp = pageInfo.Page.CreatePageBitmap(drawWidth, drawHeight, format, bitmap.BackBuffer, bitmap.BackBufferStride);
                 bitmap.AddDirtyRect(new Int32Rect(0, 0, drawWidth, drawHeight));
                 bitmap.Unlock();
+                bmp.Destroy();
 
                 // Draw page content.
                 drawingContext.DrawImage(bitmap, new Rect(leftTop, rightBottom));
-                bmp.Destroy();
             }
 
             // Draw border
