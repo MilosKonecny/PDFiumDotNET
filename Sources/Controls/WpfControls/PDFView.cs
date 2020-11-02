@@ -276,17 +276,11 @@
         {
             base.OnMouseMove(e);
             var point = e.GetPosition(this);
-            //point.X += HorizontalOffset;
             point.Y += VerticalOffset;
-
-            // ToDo: Remove this debug info.
-            // Debug.WriteLine($"-----> Position on work area is: {point.X}, {point.Y}");
 
             // ToDo: Optimize this place. Don't iterate throught all pages in some cases.
             foreach (var pageInfo in _renderedPages)
             {
-                // ToDo: Remove this debug info.
-                // Debug.WriteLine($"-------------------------------------------------------------> Page: {pageInfo.Page.PageIndex}, l:{pageInfo.Left}, r:{pageInfo.Right}, t:{pageInfo.Top}, b:{pageInfo.Bottom}");
                 if (point.X > pageInfo.Left && point.X < pageInfo.Right
                     && point.Y > pageInfo.Top && point.Y < pageInfo.Bottom)
                 {
@@ -319,7 +313,6 @@
         {
             base.OnMouseLeftButtonUp(e);
             var point = e.GetPosition(this);
-            //point.X += HorizontalOffset;
             point.Y += VerticalOffset;
 
             // ToDo: Optimize this place. Don't iterate throught all pages in some cases.
