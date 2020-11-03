@@ -231,6 +231,13 @@ namespace PDFiumDotNET.WpfControls
 
         private void HandlePDFZoomComponentPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (string.Equals(nameof(IPDFZoomComponent.ActualZoomFactor), e.PropertyName))
+            {
+                // ToDo: Temporary solution. Change the offset only when the zoom is decreased and only by the necessary amount.
+                // ToDo: Change both offsets so that the center point of visible part of document remains on the same position.
+                // Actual zoom factor is changed.
+                HorizontalOffset = 0;
+            }
             InvalidateVisual();
         }
 

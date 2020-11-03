@@ -61,19 +61,21 @@
                 // Actual page width
                 var actualPageWidth = pageInfo.Page.Width * PDFZoomComponent.ActualZoomFactor;
 
-                // We have to avoid the 'inaccuracy' of double.
-                if (Math.Truncate(ViewportWidth) < Math.Truncate(_workArea.Width))
+                // Center the page horizontally
+                if (ViewportWidth > _workArea.Width)
                 {
-                    // Take offset into considertion.
-                    pageInfo.Left = -HorizontalOffset + PDFPageMargin;
-                    pageInfo.Right = pageInfo.Left + actualPageWidth;
+                    pageInfo.Left = ViewportWidth / 2d - actualPageWidth / 2d;
+                    pageInfo.Right = ViewportWidth / 2d + actualPageWidth / 2d;
                 }
                 else
                 {
-                    // Center page.
-                    pageInfo.Left = _viewport.Width / 2d - actualPageWidth / 2d;
-                    pageInfo.Right = _viewport.Width / 2d + actualPageWidth / 2d;
+                    pageInfo.Left = _workArea.Width / 2d - actualPageWidth / 2d;
+                    pageInfo.Right = _workArea.Width / 2d + actualPageWidth / 2d;
                 }
+
+                // Take offsets into account
+                pageInfo.Left -= HorizontalOffset;
+                pageInfo.Right -= HorizontalOffset;
                 pageInfo.Top -= VerticalOffset;
                 pageInfo.Bottom -= VerticalOffset;
 

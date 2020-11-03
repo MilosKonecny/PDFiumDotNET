@@ -30,7 +30,7 @@ namespace PDFiumDotNET.WpfControls
             get => _horizontalOffset;
             private set
             {
-                value = Math.Min(Math.Max(value, 0d), ExtentWidth - ViewportWidth);
+                value = Math.Max(0, Math.Min(value, ExtentWidth - ViewportWidth));
                 if (_horizontalOffset != value)
                 {
                     _horizontalOffset = value;
@@ -51,7 +51,7 @@ namespace PDFiumDotNET.WpfControls
             get => _verticalOffset;
             private set
             {
-                value = Math.Min(Math.Max(value, 0d), ExtentHeight - ViewportHeight);
+                value = Math.Max(0, Math.Min(value, ExtentHeight - ViewportHeight));
                 if (_verticalOffset != value)
                 {
                     _verticalOffset = value;
