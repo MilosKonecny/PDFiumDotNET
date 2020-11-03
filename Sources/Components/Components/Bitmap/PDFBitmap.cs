@@ -35,11 +35,13 @@
         /// Render the page to the bitmap.
         /// </summary>
         /// <param name="page">Page to render.</param>
-        /// <param name="width">Width of bitmap to draw into.</param>
-        /// <param name="height">Height of bitmap to draw into.</param>
-        public void Render(FPDF_PAGE page, int width, int height)
+        /// <param name="startX">Left pixel position of the page area to be rendered.</param>
+        /// <param name="startY">Top pixel position of the page area to be rendered.</param>
+        /// <param name="sizeX">Width of the page area to be rendered.</param>
+        /// <param name="sizeY">Height of the page area to be rendered.</param>
+        public void Render(FPDF_PAGE page, int startX, int startY, int sizeX, int sizeY)
         {
-            _mainComponent.PDFiumBridge.FPDF_RenderPageBitmap(_bitmapHandle, page, 0, 0, width, height, 0, 0);
+            _mainComponent.PDFiumBridge.FPDF_RenderPageBitmap(_bitmapHandle, page, startX, startY, sizeX, sizeY, 0, 0);
         }
 
         /// <summary>
