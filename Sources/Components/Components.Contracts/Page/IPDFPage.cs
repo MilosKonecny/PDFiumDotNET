@@ -42,22 +42,17 @@
         /// <summary>
         /// Creates page bitmap of page. Usable to get the scaled page.
         /// </summary>
+        /// <param name="startX">Left pixel position of the page area to be rendered.</param>
+        /// <param name="startY">Top pixel position of the page area to be rendered.</param>
+        /// <param name="sizeX">Width of the page area to be rendered.</param>
+        /// <param name="sizeY">Height of the page area to be rendered.</param>
         /// <param name="width">Width of bitmap to draw into.</param>
         /// <param name="height">Height of bitmap to draw into.</param>
         /// <param name="format">Pixel format for created bitmap.</param>
         /// <param name="buffer">Buffer for created bitmap.</param>
         /// <param name="stride">Stride of created buffer.</param>
         /// <returns>Create bitmap with thumbnail of page.</returns>
-        IPDFBitmap CreatePageBitmap(int width, int height, BitmapFormat format, IntPtr buffer, int stride);
-
-        /// <summary>
-        /// Creates page bitmap of page. Width and height is used as defined in document.
-        /// </summary>
-        /// <param name="format">Pixel format for created bitmap.</param>
-        /// <param name="buffer">Buffer for created bitmap.</param>
-        /// <param name="stride">Stride of created buffer.</param>
-        /// <returns>Create bitmap with thumbnail of page.</returns>
-        IPDFBitmap CreatePageBitmap(BitmapFormat format, IntPtr buffer, int stride);
+        IPDFBitmap CreatePageBitmap(int startX, int startY, int sizeX, int sizeY, int width, int height, BitmapFormat format, IntPtr buffer, int stride);
 
         /// <summary>
         /// Creates thumbnail bitmap of page.

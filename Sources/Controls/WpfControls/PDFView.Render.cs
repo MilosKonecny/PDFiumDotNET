@@ -26,7 +26,8 @@
                 text += Environment.NewLine + "Pages to draw: ";
                 foreach (var pageInfo in pages)
                 {
-                    text += pageInfo.Page.PageIndex + ",";
+                    text += Environment.NewLine + $"{pageInfo.Page.PageIndex}";
+                    text += $" / x:{Math.Round(pageInfo.Left, 2)}=>{Math.Round(pageInfo.Right, 2)} / y:{Math.Round(pageInfo.Top, 2)}=>{Math.Round(pageInfo.Bottom, 2)}";
                 }
             }
 
@@ -73,10 +74,12 @@
                     pageInfo.Left = _viewport.Width / 2d - actualPageWidth / 2d;
                     pageInfo.Right = _viewport.Width / 2d + actualPageWidth / 2d;
                 }
+                pageInfo.Top -= VerticalOffset;
+                pageInfo.Bottom -= VerticalOffset;
 
                 // Determine all necessary information.
-                var leftTop = new Point(pageInfo.Left, pageInfo.Top - VerticalOffset);
-                var rightBottom = new Point(pageInfo.Right, pageInfo.Bottom - VerticalOffset);
+                var leftTop = new Point(pageInfo.Left, pageInfo.Top);
+                var rightBottom = new Point(pageInfo.Right, pageInfo.Bottom);
                 var drawWidth = (int)(rightBottom.X - leftTop.X);
                 var drawHeight = (int)(rightBottom.Y - leftTop.Y);
                 // Draw page background
@@ -86,7 +89,9 @@
                 var bitmap = new WriteableBitmap(drawWidth, drawHeight, 96, 96, PixelFormats.Bgra32, null);
                 var format = BitmapFormatConverter.GetFormat(bitmap.Format);
                 bitmap.Lock();
-                var bmp = pageInfo.Page.CreatePageBitmap(drawWidth, drawHeight, format, bitmap.BackBuffer, bitmap.BackBufferStride);
+                var bmp = pageInfo.Page.CreatePageBitmap(
+                    0, 0, drawWidth, drawHeight,
+                    drawWidth, drawHeight, format, bitmap.BackBuffer, bitmap.BackBufferStride);
                 bitmap.AddDirtyRect(new Int32Rect(0, 0, drawWidth, drawHeight));
                 bitmap.Unlock();
                 bmp.Destroy();

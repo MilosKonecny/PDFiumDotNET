@@ -57,13 +57,15 @@
             </summary>
             <param name="mainComponent">Main component where this bookmark belongs.</param>
         </member>
-        <member name="M:PDFiumDotNET.Components.Bitmap.PDFBitmap.Render(PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates.FPDF_PAGE,System.Int32,System.Int32)">
+        <member name="M:PDFiumDotNET.Components.Bitmap.PDFBitmap.Render(PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates.FPDF_PAGE,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
             Render the page to the bitmap.
             </summary>
             <param name="page">Page to render.</param>
-            <param name="width">Width of bitmap to draw into.</param>
-            <param name="height">Height of bitmap to draw into.</param>
+            <param name="startX">Left pixel position of the page area to be rendered.</param>
+            <param name="startY">Top pixel position of the page area to be rendered.</param>
+            <param name="sizeX">Width of the page area to be rendered.</param>
+            <param name="sizeY">Height of the page area to be rendered.</param>
         </member>
         <member name="M:PDFiumDotNET.Components.Bitmap.PDFBitmap.Create(System.Int32,System.Int32,PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
             <summary>
@@ -306,12 +308,7 @@
             <inheritdoc/>
             </summary>
         </member>
-        <member name="M:PDFiumDotNET.Components.Page.PDFPage.CreatePageBitmap(System.Int32,System.Int32,PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
-            <summary>
-            <inheritdoc/>
-            </summary>
-        </member>
-        <member name="M:PDFiumDotNET.Components.Page.PDFPage.CreatePageBitmap(PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
+        <member name="M:PDFiumDotNET.Components.Page.PDFPage.CreatePageBitmap(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
             <summary>
             <inheritdoc/>
             </summary>
