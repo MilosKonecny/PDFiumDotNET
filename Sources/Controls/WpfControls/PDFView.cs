@@ -9,6 +9,7 @@
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
     using System.Windows.Media;
+    using PDFiumDotNET.Components.Contracts.Link;
     using PDFiumDotNET.Components.Contracts.Page;
 
     /// <summary>
@@ -276,31 +277,12 @@
         {
             base.OnMouseMove(e);
             var point = e.GetPosition(this);
-            point.Y += VerticalOffset;
 
-            // ToDo: Optimize this place. Don't iterate throught all pages in some cases.
-            foreach (var pageInfo in _renderedPages)
+            var link = GetLinkOnPosition(point);
+            if (link != null)
             {
-                if (point.X > pageInfo.Left && point.X < pageInfo.Right
-                    && point.Y > pageInfo.Top && point.Y < pageInfo.Bottom)
-                {
-                    // Mouse is over this page
-                    // Transform the point to the page.
-                    point.X -= pageInfo.Left;
-                    point.Y -= pageInfo.Top;
-                    // Eliminate zoom factor
-                    point.X /= PDFZoomComponent.ActualZoomFactor;
-                    point.Y /= PDFZoomComponent.ActualZoomFactor;
-                    // Transform y axis from top-left position to the bottom-left.
-                    point.Y = pageInfo.Page.Height - point.Y;
-                    // Get the link on this position.
-                    var link = pageInfo.Page.GetLinkFromPoint(point.X, point.Y);
-                    if (link != null)
-                    {
-                        Cursor = Cursors.Hand;
-                        return;
-                    }
-                }
+                Cursor = Cursors.Hand;
+                return;
             }
 
             Cursor = Cursors.Arrow;
@@ -313,8 +295,50 @@
         {
             base.OnMouseLeftButtonUp(e);
             var point = e.GetPosition(this);
-            point.Y += VerticalOffset;
 
+            var link = GetLinkOnPosition(point);
+            if (link != null)
+            {
+                if (link.Action != null)
+                {
+                    PDFPageComponent.PerformAction(link.Action);
+                }
+                else if (link.Destination != null)
+                {
+                    PDFPageComponent.NavigateToDestination(link.Destination);
+                }
+            }
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnTouchUp(TouchEventArgs e)
+        {
+            base.OnTouchUp(e);
+            var point = e.GetTouchPoint(this).Position;
+
+            var link = GetLinkOnPosition(point);
+            if (link != null)
+            {
+                if (link.Action != null)
+                {
+                    PDFPageComponent.PerformAction(link.Action);
+                }
+                else if (link.Destination != null)
+                {
+                    PDFPageComponent.NavigateToDestination(link.Destination);
+                }
+            }
+        }
+
+        #endregion Protected override methods
+
+        #region Private methods
+
+        private IPDFLink GetLinkOnPosition(Point point)
+        {
             // ToDo: Optimize this place. Don't iterate throught all pages in some cases.
             foreach (var pageInfo in _renderedPages)
             {
@@ -331,25 +355,11 @@
                     // Transform y axis from top-left position to the bottom-left.
                     point.Y = pageInfo.Page.Height - point.Y;
                     // Get the link on this position.
-                    var link = pageInfo.Page.GetLinkFromPoint(point.X, point.Y);
-                    if (link != null)
-                    {
-                        if (link.Action != null)
-                        {
-                            PDFPageComponent.PerformAction(link.Action);
-                        }
-                        else if (link.Destination != null)
-                        {
-                            PDFPageComponent.NavigateToDestination(link.Destination);
-                        }
-                    }
+                    return pageInfo.Page.GetLinkFromPoint(point.X, point.Y);
                 }
             }
+            return null;
         }
-
-        #endregion Protected override methods
-
-        #region Private methods
 
         /// <summary>
         /// Update the viewport size from the specified size.

@@ -346,21 +346,16 @@
             Gets page index. First page has index 0.
             </summary>
         </member>
-        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPage.CreatePageBitmap(System.Int32,System.Int32,PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
+        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPage.CreatePageBitmap(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
             <summary>
             Creates page bitmap of page. Usable to get the scaled page.
             </summary>
+            <param name="startX">Left pixel position of the page area to be rendered.</param>
+            <param name="startY">Top pixel position of the page area to be rendered.</param>
+            <param name="sizeX">Width of the page area to be rendered.</param>
+            <param name="sizeY">Height of the page area to be rendered.</param>
             <param name="width">Width of bitmap to draw into.</param>
             <param name="height">Height of bitmap to draw into.</param>
-            <param name="format">Pixel format for created bitmap.</param>
-            <param name="buffer">Buffer for created bitmap.</param>
-            <param name="stride">Stride of created buffer.</param>
-            <returns>Create bitmap with thumbnail of page.</returns>
-        </member>
-        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPage.CreatePageBitmap(PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
-            <summary>
-            Creates page bitmap of page. Width and height is used as defined in document.
-            </summary>
             <param name="format">Pixel format for created bitmap.</param>
             <param name="buffer">Buffer for created bitmap.</param>
             <param name="stride">Stride of created buffer.</param>
