@@ -152,6 +152,8 @@
     <PostBuildEvent>mkdir $(TargetDir)PDFium\x86
 mkdir $(TargetDir)PDFium\x64
 copy $(SolutionDir)..\Libs\PDFium\x86\pdfium.dll $(TargetDir)PDFium\x86
-copy $(SolutionDir)..\Libs\PDFium\x64\pdfium.dll $(TargetDir)PDFium\x64</PostBuildEvent>
+copy $(SolutionDir)..\Libs\PDFium\x86\LICENSE $(TargetDir)PDFium\x86
+copy $(SolutionDir)..\Libs\PDFium\x64\pdfium.dll $(TargetDir)PDFium\x64
+copy $(SolutionDir)..\Libs\PDFium\x64\LICENSE $(TargetDir)PDFium\x64</PostBuildEvent>
   </PropertyGroup>
 </Project>
