@@ -2,6 +2,9 @@
 {
     using System.Runtime.InteropServices;
 
+    // Disable "Field 'xxxx' should not contain an underscore" to preserve PDFium names.
+#pragma warning disable SA1310
+
     /// <summary>
     /// The class contains all delegates of methods in pdfium dll.
     /// </summary>

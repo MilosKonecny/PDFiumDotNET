@@ -4,6 +4,9 @@
     using System.Runtime.InteropServices;
     using PDFiumDotNET.Wrapper.Exceptions;
 
+    // Disable "Member 'xxxx' does not access instance data and can be marked as static."
+#pragma warning disable CA1822
+
     /// <summary>
     /// The class contains all pdfium methods currently supported in this project.
     /// </summary>

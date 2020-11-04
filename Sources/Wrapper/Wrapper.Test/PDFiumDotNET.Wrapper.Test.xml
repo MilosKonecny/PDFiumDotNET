@@ -60,11 +60,6 @@
             Use this method to run code after all tests in this class have run.
             </summary>
         </member>
-        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.GetLastError">
-            <summary>
-            Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_GetLastError"/>.
-            </summary>
-        </member>
         <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.LoadDocument01">
             <summary>
             Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_LoadDocument"/>.
