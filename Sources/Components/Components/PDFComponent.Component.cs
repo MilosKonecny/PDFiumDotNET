@@ -120,10 +120,27 @@
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        public void OpenDocument(string file, string password)
+        {
+            OpenDocument(file, () => password);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public void OpenDocument(string file, Func<string> getPassword = null)
         {
             _childComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentOpening(file));
             PDFiumDocument = PDFiumBridge.FPDF_LoadDocument(file, null);
+            if (!PDFiumDocument.IsValid)
+            {
+                // Something went wrong. Check password...
+                if (PDFiumBridge.FPDF_GetLastError() == FPDF_ERR_PASSWORD && getPassword != null)
+                {
+                    PDFiumDocument = PDFiumBridge.FPDF_LoadDocument(file, getPassword());
+                }
+            }
+
             IsDocumentOpened = PDFiumDocument.IsValid;
             InvokePropertyChangedEvent(nameof(IsDocumentOpened));
             if (IsDocumentOpened)

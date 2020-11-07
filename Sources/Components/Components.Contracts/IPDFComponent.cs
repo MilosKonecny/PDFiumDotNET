@@ -58,6 +58,13 @@
         /// Opens given pdf document.
         /// </summary>
         /// <param name="file">Pdf file to open.</param>
+        /// <param name="password">Password for protected document.</param>
+        void OpenDocument(string file, string password);
+
+        /// <summary>
+        /// Opens given pdf document.
+        /// </summary>
+        /// <param name="file">Pdf file to open.</param>
         /// <param name="getPassword">Callback function used to get password in case the document is password protected.</param>
         void OpenDocument(string file, Func<string> getPassword = null);
     }
