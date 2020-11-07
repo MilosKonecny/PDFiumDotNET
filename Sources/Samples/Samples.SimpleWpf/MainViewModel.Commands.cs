@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using Microsoft.Win32;
+    using PDFiumDotNET.Samples.SimpleWpf.CommonDialogs;
     using PDFiumDotNET.Samples.SimpleWpf.Helper;
 
     /// <summary>
@@ -120,7 +121,21 @@
                 return;
             }
 
-            _pdfComponent.OpenDocument(dialog.FileName);
+            _pdfComponent.OpenDocument(dialog.FileName, () =>
+            {
+                // ToDo: Hard coded text.
+                var inputDialog = new TextInputDialog()
+                {
+                    UsePasswordInput = true,
+                    InputDialogTitle = "PDF document is password protected",
+                    InputTextHint = "Please enter a password:"
+                };
+                if (inputDialog.ShowDialog(_view.Window))
+                {
+                    return inputDialog.InputText;
+                }
+                return null;
+            });
             InvokePropertyChangedEvent();
         }
 

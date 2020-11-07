@@ -55,6 +55,11 @@
         #region Implementation of IView
 
         /// <summary>
+        /// Gets the view <see cref="Window"/>.
+        /// </summary>
+        public Window Window => this;
+
+        /// <summary>
         /// Gets the actual width of control, where are the PDF pages rendered.
         /// </summary>
         public double PDFActualWidth => _pdfView.ActualWidth;

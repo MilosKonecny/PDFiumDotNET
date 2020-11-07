@@ -254,6 +254,13 @@
             Closes pdf document.
             </summary>
         </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.IPDFComponent.OpenDocument(System.String,System.String)">
+            <summary>
+            Opens given pdf document.
+            </summary>
+            <param name="file">Pdf file to open.</param>
+            <param name="password">Password for protected document.</param>
+        </member>
         <member name="M:PDFiumDotNET.Components.Contracts.IPDFComponent.OpenDocument(System.String,System.Func{System.String})">
             <summary>
             Opens given pdf document.

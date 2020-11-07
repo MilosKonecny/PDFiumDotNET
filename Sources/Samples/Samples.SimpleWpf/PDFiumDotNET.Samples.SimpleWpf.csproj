@@ -60,6 +60,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="CommonDialogs\TextInputView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -71,8 +75,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CommonDialogs\TextInputDialog.cs" />
+    <Compile Include="CommonDialogs\TextInputView.xaml.cs">
+      <DependentUpon>TextInputView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Contracts\IView.cs" />
     <Compile Include="Contracts\IViewModel.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Helper\ViewModelCommand.cs" />
     <Compile Include="MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>

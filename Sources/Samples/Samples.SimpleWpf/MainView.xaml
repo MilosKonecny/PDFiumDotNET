@@ -10,7 +10,7 @@
         mc:Ignorable="d" 
         d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type local:MainViewModel}}"
         d:DesignHeight="300" d:DesignWidth="500"
-        Title="PDFiumDotNET.miloskonecny.github.io / PDFiumDotNET.github.io">
+        Title="PDFiumDotNET sample application">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

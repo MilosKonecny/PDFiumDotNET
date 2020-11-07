@@ -1,0 +1,43 @@
+﻿<Window x:Class="PDFiumDotNET.Samples.SimpleWpf.CommonDialogs.TextInputView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PDFiumDotNET.Samples.SimpleWpf.CommonDialogs" xmlns:converters="clr-namespace:PDFiumDotNET.Samples.SimpleWpf.Converters"
+        mc:Ignorable="d"
+        WindowStyle="ToolWindow"
+        ResizeMode="CanResizeWithGrip"
+        WindowStartupLocation="CenterOwner"
+        SizeToContent="WidthAndHeight"
+        Title="{Binding Path=InputDialogTitle}"
+        MinWidth="400"
+        d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type local:TextInputDialog}}">
+    <Window.Resources>
+        <converters:BoolToVisibilityConverter x:Key="TrueVisibleFalseCollapsedKey" VisibilityForTrue="Visible" VisibilityForFalse="Collapsed" />
+        <converters:BoolToVisibilityConverter x:Key="TrueCollapsedFalseVisibleKey" VisibilityForTrue="Collapsed" VisibilityForFalse="Visible" />
+    </Window.Resources>
+    <Grid>
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" MinWidth="200" Text="{Binding Path=InputTextHint}"/>
+            <TextBox x:Name="_textBox"
+                     Grid.Row="2" MinWidth="300" Margin="20,0,0,0"
+                     Text="{Binding Path=InputText}"
+                     Visibility="{Binding Path=UsePasswordInput, Converter={StaticResource ResourceKey=TrueCollapsedFalseVisibleKey}}"/>
+            <PasswordBox x:Name="_pwdBox"
+                         Grid.Row="2" MinWidth="300" Margin="20,0,0,0"
+                         PasswordChar="*" PasswordChanged="HandlePasswordChangedEvent"
+                         Visibility="{Binding Path=UsePasswordInput, Converter={StaticResource ResourceKey=TrueVisibleFalseCollapsedKey}}"/>
+            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Margin="5,0,5,0" Width="50" IsDefault="True" Content="Ok" Click="HandleButtonOkClickEvent" />
+                <Button Content="Cancel" Width="50" Click="HandleButtonCancelClickEvent"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

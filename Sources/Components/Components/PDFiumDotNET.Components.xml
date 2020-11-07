@@ -528,6 +528,11 @@
             <inheritdoc/>
             </summary>
         </member>
+        <member name="M:PDFiumDotNET.Components.PDFComponent.OpenDocument(System.String,System.String)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
         <member name="M:PDFiumDotNET.Components.PDFComponent.OpenDocument(System.String,System.Func{System.String})">
             <summary>
             <inheritdoc/>
