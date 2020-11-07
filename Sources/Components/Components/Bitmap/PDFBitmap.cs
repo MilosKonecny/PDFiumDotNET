@@ -39,9 +39,27 @@
         /// <param name="startY">Top pixel position of the page area to be rendered.</param>
         /// <param name="sizeX">Width of the page area to be rendered.</param>
         /// <param name="sizeY">Height of the page area to be rendered.</param>
-        public void Render(FPDF_PAGE page, int startX, int startY, int sizeX, int sizeY)
+        public void RenderWithoutTransformation(FPDF_PAGE page, int startX, int startY, int sizeX, int sizeY)
         {
             _mainComponent.PDFiumBridge.FPDF_RenderPageBitmap(_bitmapHandle, page, startX, startY, sizeX, sizeY, 0, 0);
+        }
+
+        /// <summary>
+        /// Render the page to the bitmap.
+        /// </summary>
+        /// <param name="page">Page to render.</param>
+        /// <param name="zoomFactor">Zoom factor to use for transformation.</param>
+        /// <param name="startX">Left pixel position of the page area to be rendered.</param>
+        /// <param name="startY">Top pixel position of the page area to be rendered.</param>
+        /// <param name="sizeX">Width of the page area to be rendered.</param>
+        /// <param name="sizeY">Height of the page area to be rendered.</param>
+        public void RenderWithTransformation(FPDF_PAGE page, double zoomFactor, int startX, int startY, int sizeX, int sizeY)
+        {
+            // Translation is performed with [1 0 0 1 tx ty].
+            // Scaling is performed with [sx 0 0 sy 0 0].
+            FS_MATRIX matrix = new FS_MATRIX { A = (float)zoomFactor, B = 0, C = 0, D = (float)zoomFactor, E = startX > 0f ? 0f : startX, F = startY > 0f ? 0f : startY };
+            FS_RECTF rect = new FS_RECTF { Left = startX, Right = startX + sizeX, Top = startY, Bottom = startY + sizeY };
+            _mainComponent.PDFiumBridge.FPDF_RenderPageBitmapWithMatrix(_bitmapHandle, page, ref matrix, ref rect, 0);
         }
 
         /// <summary>

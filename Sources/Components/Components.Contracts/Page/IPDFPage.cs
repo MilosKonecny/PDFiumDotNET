@@ -42,6 +42,7 @@
         /// <summary>
         /// Creates page bitmap of page. Usable to get the scaled page.
         /// </summary>
+        /// <param name="zoomFactor">Zoom factor to use for transformation.</param>
         /// <param name="startX">Left pixel position of the page area to be rendered.</param>
         /// <param name="startY">Top pixel position of the page area to be rendered.</param>
         /// <param name="sizeX">Width of the page area to be rendered.</param>
@@ -51,8 +52,7 @@
         /// <param name="format">Pixel format for created bitmap.</param>
         /// <param name="buffer">Buffer for created bitmap.</param>
         /// <param name="stride">Stride of created buffer.</param>
-        /// <returns>Create bitmap with thumbnail of page.</returns>
-        IPDFBitmap CreatePageBitmap(int startX, int startY, int sizeX, int sizeY, int width, int height, BitmapFormat format, IntPtr buffer, int stride);
+        void RenderPageBitmap(double zoomFactor, int startX, int startY, int sizeX, int sizeY, int width, int height, BitmapFormat format, IntPtr buffer, int stride);
 
         /// <summary>
         /// Creates thumbnail bitmap of page.
@@ -60,8 +60,7 @@
         /// <param name="format">Pixel format for created bitmap.</param>
         /// <param name="buffer">Buffer for created bitmap.</param>
         /// <param name="stride">Stride of created buffer.</param>
-        /// <returns>Create bitmap with thumbnail of page.</returns>
-        IPDFBitmap CreateThumbnailBitmap(BitmapFormat format, IntPtr buffer, int stride);
+        void RenderThumbnailBitmap(BitmapFormat format, IntPtr buffer, int stride);
 
         /// <summary>
         /// Gets the link on specified position.
