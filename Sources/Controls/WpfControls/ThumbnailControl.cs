@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -54,15 +55,19 @@ namespace PDFiumDotNET.WpfControls
                 return;
             }
 
-            var bitmap = new WriteableBitmap((int)Width, (int)Height, 96, 96, PixelFormats.Bgra32, null);
-            var format = BitmapFormatConverter.GetFormat(bitmap.Format);
-            bitmap.Lock();
-            var bmp = Page.CreateThumbnailBitmap(format, bitmap.BackBuffer, bitmap.BackBufferStride);
-            bitmap.AddDirtyRect(new Int32Rect(0, 0, (int)Width, (int)Height));
-            bitmap.Unlock();
+            try
+            {
+                var bitmap = new WriteableBitmap((int)Width, (int)Height, 96, 96, PixelFormats.Bgra32, null);
+                var format = BitmapFormatConverter.GetFormat(bitmap.Format);
 
-            drawingContext.DrawImage(bitmap, new Rect(0, 0, Width, Height));
-            bmp.Destroy();
+                bitmap.Lock();
+                Page.RenderThumbnailBitmap(format, bitmap.BackBuffer, bitmap.BackBufferStride);
+                bitmap.AddDirtyRect(new Int32Rect(0, 0, (int)Width, (int)Height));
+                bitmap.Unlock();
+
+                drawingContext.DrawImage(bitmap, new Rect(0, 0, Width, Height));
+            }
+            catch { }
         }
     }
 }

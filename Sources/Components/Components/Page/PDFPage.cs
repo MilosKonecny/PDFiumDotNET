@@ -108,31 +108,31 @@
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IPDFBitmap CreatePageBitmap(int startX, int startY, int sizeX, int sizeY, int width, int height, BitmapFormat format, IntPtr buffer, int stride)
+        public void RenderPageBitmap(double zoomFactor, int startX, int startY, int sizeX, int sizeY, int width, int height, BitmapFormat format, IntPtr buffer, int stride)
         {
             var bmp = new PDFBitmap(_mainComponent);
             bmp.Create(width, height, format, buffer, stride);
 
             var pageHandle = _mainComponent.PDFiumBridge.FPDF_LoadPage(_mainComponent.PDFiumDocument, PageIndex);
-            bmp.Render(pageHandle, startX, startY, sizeX, sizeY);
+            bmp.RenderWithTransformation(pageHandle, zoomFactor, startX, startY, sizeX, sizeY);
             _mainComponent.PDFiumBridge.FPDF_ClosePage(pageHandle);
 
-            return bmp;
+            bmp.Destroy();
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IPDFBitmap CreateThumbnailBitmap(BitmapFormat format, IntPtr buffer, int stride)
+        public void RenderThumbnailBitmap(BitmapFormat format, IntPtr buffer, int stride)
         {
             var bmp = new PDFBitmap(_mainComponent);
             bmp.Create((int)ThumbnailWidth, (int)ThumbnailHeight, format, buffer, stride);
 
             var pageHandle = _mainComponent.PDFiumBridge.FPDF_LoadPage(_mainComponent.PDFiumDocument, PageIndex);
-            bmp.Render(pageHandle, 0, 0, (int)ThumbnailWidth, (int)ThumbnailHeight);
+            bmp.RenderWithoutTransformation(pageHandle, 0, 0, (int)ThumbnailWidth, (int)ThumbnailHeight);
             _mainComponent.PDFiumBridge.FPDF_ClosePage(pageHandle);
 
-            return bmp;
+            bmp.Destroy();
         }
 
         /// <summary>

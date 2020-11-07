@@ -346,10 +346,11 @@
             Gets page index. First page has index 0.
             </summary>
         </member>
-        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPage.CreatePageBitmap(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
+        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPage.RenderPageBitmap(System.Double,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
             <summary>
             Creates page bitmap of page. Usable to get the scaled page.
             </summary>
+            <param name="zoomFactor">Zoom factor to use for transformation.</param>
             <param name="startX">Left pixel position of the page area to be rendered.</param>
             <param name="startY">Top pixel position of the page area to be rendered.</param>
             <param name="sizeX">Width of the page area to be rendered.</param>
@@ -359,16 +360,14 @@
             <param name="format">Pixel format for created bitmap.</param>
             <param name="buffer">Buffer for created bitmap.</param>
             <param name="stride">Stride of created buffer.</param>
-            <returns>Create bitmap with thumbnail of page.</returns>
         </member>
-        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPage.CreateThumbnailBitmap(PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
+        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPage.RenderThumbnailBitmap(PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
             <summary>
             Creates thumbnail bitmap of page.
             </summary>
             <param name="format">Pixel format for created bitmap.</param>
             <param name="buffer">Buffer for created bitmap.</param>
             <param name="stride">Stride of created buffer.</param>
-            <returns>Create bitmap with thumbnail of page.</returns>
         </member>
         <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPage.GetLinkFromPoint(System.Double,System.Double)">
             <summary>

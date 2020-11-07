@@ -57,11 +57,22 @@
             </summary>
             <param name="mainComponent">Main component where this bookmark belongs.</param>
         </member>
-        <member name="M:PDFiumDotNET.Components.Bitmap.PDFBitmap.Render(PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates.FPDF_PAGE,System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:PDFiumDotNET.Components.Bitmap.PDFBitmap.RenderWithoutTransformation(PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates.FPDF_PAGE,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
             Render the page to the bitmap.
             </summary>
             <param name="page">Page to render.</param>
+            <param name="startX">Left pixel position of the page area to be rendered.</param>
+            <param name="startY">Top pixel position of the page area to be rendered.</param>
+            <param name="sizeX">Width of the page area to be rendered.</param>
+            <param name="sizeY">Height of the page area to be rendered.</param>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Bitmap.PDFBitmap.RenderWithTransformation(PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates.FPDF_PAGE,System.Double,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Render the page to the bitmap.
+            </summary>
+            <param name="page">Page to render.</param>
+            <param name="zoomFactor">Zoom factor to use for transformation.</param>
             <param name="startX">Left pixel position of the page area to be rendered.</param>
             <param name="startY">Top pixel position of the page area to be rendered.</param>
             <param name="sizeX">Width of the page area to be rendered.</param>
@@ -308,12 +319,12 @@
             <inheritdoc/>
             </summary>
         </member>
-        <member name="M:PDFiumDotNET.Components.Page.PDFPage.CreatePageBitmap(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
+        <member name="M:PDFiumDotNET.Components.Page.PDFPage.RenderPageBitmap(System.Double,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
             <summary>
             <inheritdoc/>
             </summary>
         </member>
-        <member name="M:PDFiumDotNET.Components.Page.PDFPage.CreateThumbnailBitmap(PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
+        <member name="M:PDFiumDotNET.Components.Page.PDFPage.RenderThumbnailBitmap(PDFiumDotNET.Components.Contracts.Bitmap.BitmapFormat,System.IntPtr,System.Int32)">
             <summary>
             <inheritdoc/>
             </summary>
