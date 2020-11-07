@@ -165,14 +165,19 @@ namespace PDFiumDotNET.WpfControls
         /// <remarks>Don't handle mouse wheel input from the ScrollViewer, the mouse wheel is used for zooming in and out, not for manipulating the scrollbars.</remarks>
         public void MouseWheelDown()
         {
-            if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
                 // Zoom
                 PDFZoomComponent?.DecreaseZoom();
             }
+            else if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+            {
+                // Move right
+                LineRight();
+            }
             else
             {
-                // Move
+                // Move down
                 LineDown();
             }
         }
@@ -183,14 +188,14 @@ namespace PDFiumDotNET.WpfControls
         /// <remarks>Don't handle mouse wheel input from the ScrollViewer, the mouse wheel is used for zooming in and out, not for manipulating the scrollbars.</remarks>
         public void MouseWheelLeft()
         {
-            if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
                 // Zoom
                 PDFZoomComponent?.DecreaseZoom();
             }
             else
             {
-                // Move
+                // Move up
                 LineLeft();
             }
         }
@@ -201,7 +206,7 @@ namespace PDFiumDotNET.WpfControls
         /// <remarks>Don't handle mouse wheel input from the ScrollViewer, the mouse wheel is used for zooming in and out, not for manipulating the scrollbars.</remarks>
         public void MouseWheelRight()
         {
-            if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
                 // Zoom
                 PDFZoomComponent?.IncreaseZoom();
@@ -219,14 +224,19 @@ namespace PDFiumDotNET.WpfControls
         /// <remarks>Don't handle mouse wheel input from the ScrollViewer, the mouse wheel is used for zooming in and out, not for manipulating the scrollbars.</remarks>
         public void MouseWheelUp()
         {
-            if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
                 // Zoom
                 PDFZoomComponent?.IncreaseZoom();
             }
+            else if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+            {
+                // Move right
+                LineLeft();
+            }
             else
             {
-                // Move
+                // Move down
                 LineUp();
             }
         }
