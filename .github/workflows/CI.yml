@@ -57,7 +57,8 @@ jobs:
 
     env:
       Solution_Name: Sources\PDFiumDotNET.sln
-      Test_Project_Path: Sources\Wrapper\Wrapper.Test\PDFiumDotNET.Wrapper.Test.csproj
+      Test_Project_Path_1: Sources\Wrapper\Wrapper.Test\PDFiumDotNET.Wrapper.Test.csproj
+      Test_Project_Path_2: Sources\Components\Components.Test\PDFiumDotNET.Components.Test.csproj
 
     steps:
     - name: Checkout
@@ -76,5 +77,8 @@ jobs:
       uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
 
     # Execute all unit tests in the solution
-    - name: Execute unit tests
-      run: dotnet test $env:Test_Project_Path
+    - name: Execute unit tests 1
+      run: dotnet test $env:Test_Project_Path_1
+    - name: Execute unit tests 2
+      run: dotnet test $env:Test_Project_Path_2
+
