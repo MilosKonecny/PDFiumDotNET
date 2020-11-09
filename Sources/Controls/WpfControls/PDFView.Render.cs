@@ -4,10 +4,12 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
+    using System.Linq;
     using System.Windows;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using PDFiumDotNET.Components.Contracts.Page;
+    using PDFiumDotNET.Components.Contracts.Zoom;
     using PDFiumDotNET.WpfControls.Helper;
 
     /// <summary>
@@ -15,6 +17,69 @@
     /// </summary>
     public partial class PDFView
     {
+        #region Private methods - redraw related
+
+        private void RedrawView()
+        {
+            InvalidateVisual();
+        }
+
+        private void RedrawViewPageComponentChanged(string propertyName)
+        {
+            if (string.Equals(nameof(IPDFPageComponent.ActualPage), propertyName))
+            {
+                // Actual page is changed. Scroll to this page.
+                VerticalOffset = PDFPageComponent.GetPageTopLine(PDFPageComponent.ActualPage - 1, PDFPageMargin, PDFZoomComponent.ActualZoomFactor);
+            }
+            else
+            {
+                InvalidateVisual();
+            }
+        }
+
+        private void RedrawViewZoomComponentChanged(string propertyName)
+        {
+            if (string.Equals(nameof(IPDFZoomComponent.ActualZoomFactor), propertyName))
+            {
+                // ToDo: Temporary solution. Change the offset only when the zoom is decreased and only by the necessary amount.
+                // ToDo: Change both offsets so that the center point of visible part of document remains on the same position.
+                // Actual zoom factor is changed.
+                ////HorizontalOffset = 0;
+                InvalidateVisual();
+            }
+            else
+            {
+                InvalidateVisual();
+            }
+        }
+
+        private void RedrawViewPageMarginChanged()
+        {
+            InvalidateVisual();
+        }
+
+        private void RedrawViewHorizontalOffsetChanged()
+        {
+            InvalidateVisual();
+        }
+
+        private void RedrawViewVerticalOffsetChanged()
+        {
+            InvalidateVisual();
+        }
+
+        private void RedrawViewCanHorizontallyScrollChanged()
+        {
+            InvalidateVisual();
+        }
+
+        private void RedrawViewCanVerticallyScrollChanged()
+        {
+            InvalidateVisual();
+        }
+
+        #endregion Private methods - redraw related
+
         #region Private methods - render related
 
         [Conditional("DEBUG")]
@@ -32,6 +97,11 @@
                     var pageRect = new Rect(pageInfo.Left, pageInfo.Top, Math.Max(1d, pageInfo.Right - pageInfo.Left), Math.Max(0d, pageInfo.Bottom - pageInfo.Top));
                     var pageOnViewport = pageRect;
                     pageOnViewport.Intersect(viewportRectangle);
+                    if (pageOnViewport.IsEmpty)
+                    {
+                        continue;
+                    }
+
                     pageOnViewport.Width = Math.Max(1d, pageOnViewport.Width);
                     pageOnViewport.Height = Math.Max(1d, pageOnViewport.Height);
 
@@ -63,13 +133,44 @@
             // Draw background
             drawingContext.DrawRectangle(Background, null, new Rect(0, 0, ViewportWidth, ViewportHeight));
 
-            // Determine bages to draw
-            _renderedPages.Clear();
-            _renderedPages.AddRange(PDFPageComponent.PagesToRender(
-                VerticalOffset,
-                VerticalOffset + ViewportHeight,
-                PDFPageMargin,
-                PDFZoomComponent.ActualZoomFactor));
+            var newZoomFactor = PDFZoomComponent.ActualZoomFactor;
+            var pageOnCenter = _renderedPages.FirstOrDefault(page => page.IsOnCenter);
+            if (pageOnCenter == null
+                || _oldZoomFactor < 0d
+                || double.Epsilon > Math.Abs(_oldZoomFactor - newZoomFactor))
+            {
+                // Zoom factor was not changed or not preserved
+                // Determine pages to draw.
+                _renderedPages.Clear();
+                _renderedPages.AddRange(PDFPageComponent.DeterminePagesToRender(
+                    VerticalOffset,
+                    VerticalOffset + ViewportHeight,
+                    PDFPageMargin,
+                    PDFZoomComponent.ActualZoomFactor));
+            }
+            else
+            {
+                // Zoom factor was changed.
+                // Set 'predefined' top and bottom line.
+                // These lines will be probably changed in 'DeterminePagesToRender'
+                var topLine = VerticalOffset;
+                var bottomLine = topLine + ViewportHeight;
+
+                // Determine pages to draw.
+                _renderedPages.Clear();
+                _renderedPages.AddRange(PDFPageComponent.DeterminePagesToRender(
+                    pageOnCenter,
+                    ref topLine,
+                    ref bottomLine,
+                    PDFPageMargin,
+                    PDFZoomComponent.ActualZoomFactor));
+
+                _verticalOffset = topLine;
+                if (newZoomFactor < _oldZoomFactor)
+                {
+                    HorizontalOffset = HorizontalOffset;
+                }
+            }
 
             // Determine viewport rectangle
             var viewportRectangle = new Rect(0, 0, _viewport.Width, _viewport.Height);
@@ -102,6 +203,11 @@
 
                 var pageOnViewport = pageRect;
                 pageOnViewport.Intersect(viewportRectangle);
+                if (pageOnViewport.IsEmpty)
+                {
+                    continue;
+                }
+
                 pageOnViewport.Width = Math.Max(1d, pageOnViewport.Width);
                 pageOnViewport.Height = Math.Max(1d, pageOnViewport.Height);
 
@@ -133,16 +239,18 @@
                 catch { }
             }
 
-            // Draw page border - left
+            // Draw background border - left
             drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Left), new Point(0, 0), new Point(0, ViewportHeight));
-            // Draw page border - top
+            // Draw background border - top
             drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Top), new Point(0, 0), new Point(ViewportWidth, 0));
-            // Draw page border - right
+            // Draw background border - right
             drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Right), new Point(ViewportWidth, 0), new Point(ViewportWidth, ViewportHeight));
-            // Draw page border - bottom
+            // Draw background border - bottom
             drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Bottom), new Point(0, ViewportHeight), new Point(ViewportWidth, ViewportHeight));
 
             RenderDebugInfo(drawingContext, _renderedPages);
+
+            _oldZoomFactor = PDFZoomComponent.ActualZoomFactor;
         }
 
         private void RenderEmptyArea(DrawingContext drawingContext)

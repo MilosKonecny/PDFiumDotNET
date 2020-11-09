@@ -15,7 +15,6 @@
         public void DocumentOpening(string file)
         {
             SetDefaultValues();
-            InvokePropertyChangedEvent(null);
         }
 
         /// <summary>
@@ -38,9 +37,6 @@
                 ActualPage = 1;
             }
 
-            InvokePropertyChangedEvent(nameof(ActualPage));
-            InvokePropertyChangedEvent(nameof(PageCount));
-
             if (PageCount > 0)
             {
                 CumulativeHeight = 0;
@@ -62,10 +58,7 @@
                 }
             }
 
-            InvokePropertyChangedEvent(nameof(Pages));
-            InvokePropertyChangedEvent(nameof(WidestWidth));
-            InvokePropertyChangedEvent(nameof(HighestHeight));
-            InvokePropertyChangedEvent(nameof(CumulativeHeight));
+            InvokePropertyChangedEvent(null);
         }
 
         /// <summary>
@@ -74,7 +67,6 @@
         public void DocumentOpenFailed(string file)
         {
             SetDefaultValues();
-            InvokePropertyChangedEvent(null);
         }
 
         /// <summary>
@@ -83,7 +75,6 @@
         public void DocumentClosing()
         {
             SetDefaultValues();
-            InvokePropertyChangedEvent(null);
         }
 
         /// <summary>

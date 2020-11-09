@@ -427,13 +427,33 @@
             Gets the pages of opened document.
             </summary>
         </member>
-        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.PagesToRender(System.Double,System.Double,System.Double,System.Double)">
+        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.DeterminePageArea(System.Double@,System.Double@,System.Double,System.Double)">
+            <summary>
+            Determine required size of area where fit all pages.
+            </summary>
+            <param name="width">In: available width. Out: required width.</param>
+            <param name="height">In: available height. Out: required height.</param>
+            <param name="pageMargin">Margin around the page.</param>
+            <param name="zoomFactor">Zoom factor to use for the computing of required area.</param>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.DeterminePagesToRender(System.Double,System.Double,System.Double,System.Double)">
             <summary>
             Gets all pages to be drawn in specified region.
             </summary>
             <param name="topLine">Top line of viewport.</param>
             <param name="bottomLine">Bottom line of viewport.</param>
-            <param name="pageMargin">Margin between pages.</param>
+            <param name="pageMargin">Margin around the page.</param>
+            <param name="zoomFactor">Zoom factor to use for pages. Not for page margin.</param>
+            <returns>Pages to draw in required region.</returns>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.DeterminePagesToRender(PDFiumDotNET.Components.Contracts.Page.IPDFPageRenderInfo,System.Double@,System.Double@,System.Double,System.Double)">
+            <summary>
+            Gets all pages to be drawn in specified region.
+            </summary>
+            <param name="pageOnCenter">The page on which is center of vertical direction of the viewport.</param>
+            <param name="topLine">Top line of viewport.</param>
+            <param name="bottomLine">Bottom line of viewport.</param>
+            <param name="pageMargin">Margin around the page.</param>
             <param name="zoomFactor">Zoom factor to use for pages. Not for page margin.</param>
             <returns>Pages to draw in required region.</returns>
         </member>
@@ -442,7 +462,7 @@
             Gets the top line of page by applying distance between pages.
             </summary>
             <param name="pageIndex">Index of the page for which the top line needs to be determined.</param>
-            <param name="pageMargin">Margin between pages.</param>
+            <param name="pageMargin">Margin around the page.</param>
             <param name="zoomFactor">Zoom factor to use for pages. Not for page margin.</param>
             <returns>Position of the top line for required page.</returns>
         </member>
@@ -496,6 +516,17 @@
         <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageRenderInfo.Bottom">
             <summary>
             Gets or sets the bottom line of page.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageRenderInfo.IsOnCenter">
+            <summary>
+            Gets or sets the value indicating that this page is in the center of vertical direction of viewport.
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageRenderInfo.PagePositionOnCenter">
+            <summary>
+            Gets or sets the position of center of vertical direction of viewport on this page.
+            Valid only if <see cref="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageRenderInfo.IsOnCenter"/> is <c>true</c>.
             </summary>
         </member>
         <member name="T:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent">

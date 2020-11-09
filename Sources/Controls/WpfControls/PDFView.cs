@@ -69,6 +69,13 @@
         /// </summary>
         private double _startManipulationVerticalOffset;
 
+        /// <summary>
+        /// <c>true</c> if touch manipulation for zoom is active.
+        /// </summary>
+        private bool _zoomManipulationActive = false;
+
+        private double _oldZoomFactor = -1d;
+
         #endregion Private fields
 
         #region Constructors
@@ -79,6 +86,9 @@
         static PDFView()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(PDFView), new FrameworkPropertyMetadata(typeof(PDFView)));
+            BackgroundProperty.OverrideMetadata(typeof(PDFView), new FrameworkPropertyMetadata(Brushes.DarkGray));
+            BorderBrushProperty.OverrideMetadata(typeof(PDFView), new FrameworkPropertyMetadata(Brushes.Black));
+            BorderThicknessProperty.OverrideMetadata(typeof(PDFView), new FrameworkPropertyMetadata(new Thickness(1)));
         }
 
         /// <summary>
@@ -96,6 +106,34 @@
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        protected override Size MeasureOverride(Size constraint)
+        {
+            var newSize = new Size(
+                double.IsInfinity(constraint.Width) ? 0d : constraint.Width,
+                double.IsInfinity(constraint.Height) ? 0d : constraint.Height);
+
+            UpdateViewportSize(newSize);
+
+            return newSize;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        protected override Size ArrangeOverride(Size arrangeBounds)
+        {
+            Size size = base.ArrangeOverride(DesiredSize);
+
+            UpdateWorkAreaSize(DeterminePageArea(arrangeBounds));
+
+            UpdateViewportSize(arrangeBounds);
+
+            return size;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         protected override void OnRender(DrawingContext drawingContext)
         {
             if (PDFPageComponent != null && PDFPageComponent.PageCount != 0)
@@ -106,80 +144,6 @@
             {
                 RenderEmptyArea(drawingContext);
             }
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        protected override Size MeasureOverride(Size constraint)
-        {
-            Size infiniteSize = new Size(double.PositiveInfinity, double.PositiveInfinity);
-            Size childSize = base.MeasureOverride(infiniteSize);
-
-            if (PDFPageComponent != null && PDFPageComponent.PageCount != 0)
-            {
-                var newSize = DetermineExtent();
-                if (_workArea != newSize)
-                {
-                    _workArea = newSize;
-                    ScrollOwner?.InvalidateScrollInfo();
-                }
-            }
-            else if (childSize != _workArea)
-            {
-                // Use the size of the child as the un-scaled extent content.
-                _workArea = childSize;
-                ScrollOwner?.InvalidateScrollInfo();
-            }
-
-            // Update the size of the viewport onto the content based on the passed in 'constraint'.
-            UpdateViewportSize(constraint);
-
-            double width = constraint.Width;
-            double height = constraint.Height;
-
-            if (double.IsInfinity(width))
-            {
-                // Make sure we don't return infinity!
-                width = childSize.Width;
-            }
-
-            if (double.IsInfinity(height))
-            {
-                // Make sure we don't return infinity!
-                height = childSize.Height;
-            }
-
-            return new Size(width, height);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        protected override Size ArrangeOverride(Size arrangeBounds)
-        {
-            Size size = base.ArrangeOverride(DesiredSize);
-
-            if (PDFPageComponent != null && PDFPageComponent.PageCount != 0)
-            {
-                var newSize = DetermineExtent();
-                if (_workArea != newSize)
-                {
-                    _workArea = newSize;
-                    ScrollOwner?.InvalidateScrollInfo();
-                }
-            }
-            else if (DesiredSize != _workArea)
-            {
-                // Use the size of the child as the un-scaled extent content.
-                _workArea = DesiredSize;
-                ScrollOwner?.InvalidateScrollInfo();
-            }
-
-            // Update the size of the viewport onto the content based on the passed in 'arrangeBounds'.
-            UpdateViewportSize(arrangeBounds);
-
-            return size;
         }
 
         /// <summary>
@@ -210,6 +174,7 @@
         /// </summary>
         protected override void OnManipulationStarted(ManipulationStartedEventArgs e)
         {
+            _zoomManipulationActive = false;
             _startManipulationZoom = PDFZoomComponent.ActualZoomFactor;
             _startManipulationHorizontalOffset = HorizontalOffset;
             _startManipulationVerticalOffset = VerticalOffset;
@@ -222,19 +187,20 @@
         /// </summary>
         protected override void OnManipulationDelta(ManipulationDeltaEventArgs e)
         {
-            if (e.Manipulators.Count() == 1)
+            if (e.Manipulators.Count() == 1 && !_zoomManipulationActive)
             {
                 HorizontalOffset = _startManipulationHorizontalOffset - e.CumulativeManipulation.Translation.X;
                 VerticalOffset = _startManipulationVerticalOffset - e.CumulativeManipulation.Translation.Y;
             }
             else if (e.Manipulators.Count() == 2)
             {
+                _zoomManipulationActive = true;
                 var factor = (e.CumulativeManipulation.Scale.X + e.CumulativeManipulation.Scale.Y) / 2;
                 var newZoom = _startManipulationZoom * factor;
                 PDFZoomComponent.ActualZoomFactor = newZoom;
             }
 
-            e.Handled = true;
+            // e.Handled = true;
             base.OnManipulationDelta(e);
         }
 
@@ -258,7 +224,7 @@
             // (2 * 360 degrees / (1000ms^2)
             e.RotationBehavior.DesiredDeceleration = 720 / (1000.0 * 1000.0);
 
-            e.Handled = true;
+            // e.Handled = true;
             base.OnManipulationInertiaStarting(e);
         }
 
@@ -362,30 +328,53 @@
         }
 
         /// <summary>
-        /// Update the viewport size from the specified size.
+        /// Update the viewport size.
         /// </summary>
+        /// <param name="newSize">New size to use for viewport.</param>
         private void UpdateViewportSize(Size newSize)
         {
             if (_viewport == newSize)
             {
-                // The viewport is already the specified size.
                 return;
             }
 
-            // Set the new value
             _viewport = newSize;
-
-            // Tell that owning ScrollViewer that scrollbar data has changed.
             ScrollOwner?.InvalidateScrollInfo();
         }
 
-        private Size DetermineExtent()
+        /// <summary>
+        /// Update the viewport size.
+        /// </summary>
+        /// <param name="newSize">New size to use for viewport.</param>
+        private void UpdateWorkAreaSize(Size newSize)
         {
-            var width = PDFPageComponent.WidestWidth * PDFZoomComponent.ActualZoomFactor;
-            var height = PDFPageComponent.CumulativeHeight * PDFZoomComponent.ActualZoomFactor;
-            var marginWidth = 2d * PDFPageMargin;
-            var marginHeight = (PDFPageComponent.PageCount + 1) * PDFPageMargin;
-            return new Size(Math.Round(width + marginWidth, 2), Math.Round(height + marginHeight, 2));
+            if (_workArea == newSize)
+            {
+                return;
+            }
+
+            _workArea = newSize;
+            ScrollOwner?.InvalidateScrollInfo();
+        }
+
+        /// <summary>
+        /// Datermines area where fit all pages of opened document.
+        /// </summary>
+        /// <param name="availableSize">Available size based on actual layout of application.</param>
+        /// <returns>Required size to show all pages of opened</returns>
+        private Size DeterminePageArea(Size availableSize)
+        {
+            if (PDFPageComponent == null
+                || PDFZoomComponent == null
+                || PDFPageComponent.PageCount == 0)
+            {
+                return availableSize;
+            }
+
+            var width = availableSize.Width;
+            var height = availableSize.Height;
+            PDFPageComponent.DeterminePageArea(ref width, ref height, PDFPageMargin, PDFZoomComponent.ActualZoomFactor);
+            return new Size(width, height);
         }
 
         #endregion Private methods

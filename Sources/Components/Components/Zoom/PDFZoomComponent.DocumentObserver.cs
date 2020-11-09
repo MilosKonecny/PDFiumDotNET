@@ -14,6 +14,7 @@
         /// </summary>
         public void DocumentOpening(string file)
         {
+            SetDefaultValues();
         }
 
         /// <summary>

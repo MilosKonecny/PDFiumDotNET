@@ -42,20 +42,40 @@
         ObservableCollection<IPDFPage> Pages { get; }
 
         /// <summary>
+        /// Determine required size of area where fit all pages.
+        /// </summary>
+        /// <param name="width">In: available width. Out: required width.</param>
+        /// <param name="height">In: available height. Out: required height.</param>
+        /// <param name="pageMargin">Margin around the page.</param>
+        /// <param name="zoomFactor">Zoom factor to use for the computing of required area.</param>
+        void DeterminePageArea(ref double width, ref double height, double pageMargin, double zoomFactor);
+
+        /// <summary>
         /// Gets all pages to be drawn in specified region.
         /// </summary>
         /// <param name="topLine">Top line of viewport.</param>
         /// <param name="bottomLine">Bottom line of viewport.</param>
-        /// <param name="pageMargin">Margin between pages.</param>
+        /// <param name="pageMargin">Margin around the page.</param>
         /// <param name="zoomFactor">Zoom factor to use for pages. Not for page margin.</param>
         /// <returns>Pages to draw in required region.</returns>
-        IList<IPDFPageRenderInfo> PagesToRender(double topLine, double bottomLine, double pageMargin, double zoomFactor);
+        IList<IPDFPageRenderInfo> DeterminePagesToRender(double topLine, double bottomLine, double pageMargin, double zoomFactor);
+
+        /// <summary>
+        /// Gets all pages to be drawn in specified region.
+        /// </summary>
+        /// <param name="pageOnCenter">The page on which is center of vertical direction of the viewport.</param>
+        /// <param name="topLine">Top line of viewport.</param>
+        /// <param name="bottomLine">Bottom line of viewport.</param>
+        /// <param name="pageMargin">Margin around the page.</param>
+        /// <param name="zoomFactor">Zoom factor to use for pages. Not for page margin.</param>
+        /// <returns>Pages to draw in required region.</returns>
+        IList<IPDFPageRenderInfo> DeterminePagesToRender(IPDFPageRenderInfo pageOnCenter, ref double topLine, ref double bottomLine, double pageMargin, double zoomFactor);
 
         /// <summary>
         /// Gets the top line of page by applying distance between pages.
         /// </summary>
         /// <param name="pageIndex">Index of the page for which the top line needs to be determined.</param>
-        /// <param name="pageMargin">Margin between pages.</param>
+        /// <param name="pageMargin">Margin around the page.</param>
         /// <param name="zoomFactor">Zoom factor to use for pages. Not for page margin.</param>
         /// <returns>Position of the top line for required page.</returns>
         double GetPageTopLine(int pageIndex, double pageMargin, double zoomFactor);
