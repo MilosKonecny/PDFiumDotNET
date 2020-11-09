@@ -187,10 +187,7 @@
         <ScrollViewer Grid.Row="2" Grid.Column="2" CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <wpfControl:PDFView x:Name="_pdfView"
                                 PDFPageComponent="{Binding Path=PageComponent}"
-                                PDFZoomComponent="{Binding Path=ZoomComponent}"
-                                Background="DarkGray"
-                                BorderBrush="Black"
-                                BorderThickness="1" />
+                                PDFZoomComponent="{Binding Path=ZoomComponent}" />
         </ScrollViewer>
     </Grid>
 </Window>

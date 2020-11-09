@@ -1,11 +1,11 @@
-﻿using System.Windows;
-using System.Windows.Media;
-using System.Windows.Controls;
-using System;
-using System.Windows.Input;
-
-namespace PDFiumDotNET.WpfControls
+﻿namespace PDFiumDotNET.WpfControls
 {
+    using System.Windows;
+    using System.Windows.Media;
+    using System.Windows.Controls;
+    using System;
+    using System.Windows.Input;
+
     /// <summary>
     /// View class shows pages from opend PDF document.
     /// </summary>
@@ -34,7 +34,7 @@ namespace PDFiumDotNET.WpfControls
                 if (_horizontalOffset != value)
                 {
                     _horizontalOffset = value;
-                    InvalidateVisual();
+                    RedrawViewHorizontalOffsetChanged();
                     ScrollOwner?.InvalidateScrollInfo();
                 }
             }
@@ -55,7 +55,7 @@ namespace PDFiumDotNET.WpfControls
                 if (_verticalOffset != value)
                 {
                     _verticalOffset = value;
-                    InvalidateVisual();
+                    RedrawViewVerticalOffsetChanged();
                     ScrollOwner?.InvalidateScrollInfo();
                 }
             }
@@ -102,7 +102,7 @@ namespace PDFiumDotNET.WpfControls
                 if (_canHorizontallyScroll != value)
                 {
                     _canHorizontallyScroll = value;
-                    InvalidateVisual();
+                    RedrawViewCanHorizontallyScrollChanged();
                     ScrollOwner?.InvalidateScrollInfo();
                 }
             }
@@ -121,7 +121,7 @@ namespace PDFiumDotNET.WpfControls
                 if (_canVerticallyScroll != value)
                 {
                     _canVerticallyScroll = value;
-                    InvalidateVisual();
+                    RedrawViewCanVerticallyScrollChanged();
                     ScrollOwner?.InvalidateScrollInfo();
                 }
             }

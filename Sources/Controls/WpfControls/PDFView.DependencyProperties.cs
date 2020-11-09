@@ -1,12 +1,11 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows;
-using System.Windows.Media;
-using PDFiumDotNET.Components.Contracts.Page;
-using PDFiumDotNET.Components.Contracts.Zoom;
-
-namespace PDFiumDotNET.WpfControls
+﻿namespace PDFiumDotNET.WpfControls
 {
+    using System.ComponentModel;
+    using System.Windows;
+    using System.Windows.Media;
+    using PDFiumDotNET.Components.Contracts.Page;
+    using PDFiumDotNET.Components.Contracts.Zoom;
+
     /// <summary>
     /// View class shows pages from opend PDF document.
     /// </summary>
@@ -19,7 +18,7 @@ namespace PDFiumDotNET.WpfControls
         /// </summary>
         public static readonly DependencyProperty PDFPageMarginProperty
             = DependencyProperty.Register("PDFPageMargin", typeof(double), typeof(PDFView),
-                new FrameworkPropertyMetadata(10d, HandlePDFPageMarginPropertyChanged));
+                new FrameworkPropertyMetadata(5d, HandlePDFPageMarginPropertyChanged));
 
         /// <summary>
         /// Dependency property for 'PDFPageBackground' - source of information to draw content.
@@ -99,7 +98,7 @@ namespace PDFiumDotNET.WpfControls
                 return;
             }
 
-            view.InvalidateVisual();
+            view.RedrawViewPageMarginChanged();
         }
 
         /// <summary>
@@ -115,7 +114,7 @@ namespace PDFiumDotNET.WpfControls
                 return;
             }
 
-            view.InvalidateVisual();
+            view.RedrawView();
         }
 
         /// <summary>
@@ -220,25 +219,12 @@ namespace PDFiumDotNET.WpfControls
 
         private void HandlePDFPageComponentPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (string.Equals(nameof(IPDFPageComponent.ActualPage), e.PropertyName))
-            {
-                // Actual page is changed. Scroll to this page.
-                VerticalOffset = PDFPageComponent.GetPageTopLine(PDFPageComponent.ActualPage - 1, PDFPageMargin, PDFZoomComponent.ActualZoomFactor);
-                return;
-            }
-            InvalidateVisual();
+            RedrawViewPageComponentChanged(e.PropertyName);
         }
 
         private void HandlePDFZoomComponentPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (string.Equals(nameof(IPDFZoomComponent.ActualZoomFactor), e.PropertyName))
-            {
-                // ToDo: Temporary solution. Change the offset only when the zoom is decreased and only by the necessary amount.
-                // ToDo: Change both offsets so that the center point of visible part of document remains on the same position.
-                // Actual zoom factor is changed.
-                HorizontalOffset = 0;
-            }
-            InvalidateVisual();
+            RedrawViewZoomComponentChanged(e.PropertyName);
         }
 
         #endregion Private event handler methods

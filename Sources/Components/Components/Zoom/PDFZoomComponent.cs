@@ -49,6 +49,7 @@
             ActualZoomType = ZoomType.DefinedValue;
             ActualZoomFactor = 1d;
             SetDefaultZoomList();
+            InvokePropertyChangedEvent(null);
         }
 
         private void SetDefaultZoomList()

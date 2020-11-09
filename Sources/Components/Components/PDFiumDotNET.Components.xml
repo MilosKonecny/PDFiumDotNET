@@ -382,7 +382,17 @@
             <inheritdoc/>
             </summary>
         </member>
-        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.PagesToRender(System.Double,System.Double,System.Double,System.Double)">
+        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.DeterminePageArea(System.Double@,System.Double@,System.Double,System.Double)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.DeterminePagesToRender(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.DeterminePagesToRender(PDFiumDotNET.Components.Contracts.Page.IPDFPageRenderInfo,System.Double@,System.Double@,System.Double,System.Double)">
             <summary>
             <inheritdoc/>
             </summary>
@@ -489,6 +499,16 @@
             </summary>
         </member>
         <member name="P:PDFiumDotNET.Components.Page.PDFPageRenderInfo.Bottom">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPageRenderInfo.IsOnCenter">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="P:PDFiumDotNET.Components.Page.PDFPageRenderInfo.PagePositionOnCenter">
             <summary>
             <inheritdoc/>
             </summary>

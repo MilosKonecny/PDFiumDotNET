@@ -47,6 +47,16 @@
         /// </summary>
         public double Bottom { get; set; }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public bool IsOnCenter { get; set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public double PagePositionOnCenter { get; set; }
+
         #endregion Implementation of IPDFPageRenderInfo
     }
 }
