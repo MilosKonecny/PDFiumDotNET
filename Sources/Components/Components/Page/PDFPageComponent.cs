@@ -39,7 +39,7 @@
 
         private void SetDefaultValues()
         {
-            ActualPage = 0;
+            CurrentPageIndex = 0;
             WidestWidth = 0;
             HighestHeight = 0;
             CumulativeHeight = 0;
@@ -64,7 +64,7 @@
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public int ActualPage { get; private set; }
+        public int CurrentPageIndex { get; private set; }
 
         /// <summary>
         /// <inheritdoc/>
@@ -323,7 +323,7 @@
         /// </summary>
         public double GetPageTopLine(int pageIndex, double margin, double zoomFactor)
         {
-            var actualPosition = margin;
+            var currentPosition = margin;
             for (var index = 0; index < Pages.Count; index++)
             {
                 if (index == pageIndex)
@@ -331,11 +331,11 @@
                     break;
                 }
 
-                actualPosition += Pages[index].Height * zoomFactor;
-                actualPosition += margin;
+                currentPosition += Pages[index].Height * zoomFactor;
+                currentPosition += margin;
             }
 
-            return actualPosition;
+            return currentPosition;
         }
 
         /// <summary>
@@ -355,8 +355,8 @@
                 return;
             }
 
-            ActualPage = 1 + action.Destination.PageIndex;
-            InvokePropertyChangedEvent(nameof(ActualPage));
+            CurrentPageIndex = 1 + action.Destination.PageIndex;
+            InvokePropertyChangedEvent(nameof(CurrentPageIndex));
         }
 
         /// <summary>
@@ -374,8 +374,8 @@
                 return;
             }
 
-            ActualPage = 1 + destination.PageIndex;
-            InvokePropertyChangedEvent(nameof(ActualPage));
+            CurrentPageIndex = 1 + destination.PageIndex;
+            InvokePropertyChangedEvent(nameof(CurrentPageIndex));
         }
 
         /// <summary>
@@ -388,8 +388,8 @@
                 return;
             }
 
-            ActualPage = pageIndex;
-            InvokePropertyChangedEvent(nameof(ActualPage));
+            CurrentPageIndex = pageIndex;
+            InvokePropertyChangedEvent(nameof(CurrentPageIndex));
         }
 
         #endregion Implementation of IPageComponent

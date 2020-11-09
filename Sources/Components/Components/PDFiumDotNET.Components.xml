@@ -352,7 +352,7 @@
             Initializes a new instance of the <see cref="T:PDFiumDotNET.Components.Page.PDFPageComponent"/> class.
             </summary>
         </member>
-        <member name="P:PDFiumDotNET.Components.Page.PDFPageComponent.ActualPage">
+        <member name="P:PDFiumDotNET.Components.Page.PDFPageComponent.CurrentPageIndex">
             <summary>
             <inheritdoc/>
             </summary>
@@ -609,12 +609,12 @@
             Initializes a new instance of the <see cref="T:PDFiumDotNET.Components.Zoom.PDFZoomComponent"/> class.
             </summary>
         </member>
-        <member name="P:PDFiumDotNET.Components.Zoom.PDFZoomComponent.ActualZoomType">
+        <member name="P:PDFiumDotNET.Components.Zoom.PDFZoomComponent.CurrentZoomType">
             <summary>
             <inheritdoc/>
             </summary>
         </member>
-        <member name="P:PDFiumDotNET.Components.Zoom.PDFZoomComponent.ActualZoomFactor">
+        <member name="P:PDFiumDotNET.Components.Zoom.PDFZoomComponent.CurrentZoomFactor">
             <summary>
             <inheritdoc/>
             </summary>

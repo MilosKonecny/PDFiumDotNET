@@ -27,14 +27,14 @@
                 return;
             }
 
-            ActualPage = 0;
+            CurrentPageIndex = 0;
             WidestWidth = 0;
             HighestHeight = 0;
             CumulativeHeight = 0;
             PageCount = _mainComponent.PDFiumBridge.FPDF_GetPageCount(_mainComponent.PDFiumDocument);
             if (PageCount > 0)
             {
-                ActualPage = 1;
+                CurrentPageIndex = 1;
             }
 
             if (PageCount > 0)

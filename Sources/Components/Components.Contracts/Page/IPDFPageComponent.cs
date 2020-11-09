@@ -12,9 +12,9 @@
     public interface IPDFPageComponent : IPDFChildComponent
     {
         /// <summary>
-        /// Gets actual page index of opened document.
+        /// Gets index of current page of opened document. First page has index 1.
         /// </summary>
-        int ActualPage { get; }
+        int CurrentPageIndex { get; }
 
         /// <summary>
         /// Gets the page count of opened document.

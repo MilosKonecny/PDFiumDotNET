@@ -397,9 +397,9 @@
             Component provides all information related to pages of opened PDF document.
             </summary>
         </member>
-        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.ActualPage">
+        <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.CurrentPageIndex">
             <summary>
-            Gets actual page index of opened document.
+            Gets index of current page of opened document. First page has index 1.
             </summary>
         </member>
         <member name="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.PageCount">
@@ -535,21 +535,21 @@
             Component provides all information about zoom state of opened PDF document.
             </summary>
         </member>
-        <member name="P:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.ActualZoomType">
+        <member name="P:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.CurrentZoomType">
             <summary>
-            Gets or sets the type of zoom.
+            Gets or sets the current type of zoom. Set causes recalculation of <see cref="P:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.CurrentZoomFactor"/>.
             </summary>
         </member>
-        <member name="P:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.ActualZoomFactor">
+        <member name="P:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.CurrentZoomFactor">
             <summary>
-            Gets or sets the fator of actual zoom. Factor 1.0 is 100%.
-            Value is returned regardless of <see cref="P:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.ActualZoomType"/> property.
+            Gets or sets the current zoom factor. Factor 1.0 is 100%.
+            Value is returned regardless of <see cref="P:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.CurrentZoomType"/> property.
             </summary>
         </member>
         <member name="P:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.ZoomValues">
             <summary>
             Gets or sets predefined values in % used for particular zoom values. First and last value are used as min and max value.
-            It is possible that the value of <see cref="P:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.ActualZoomFactor"/> does not match any number of these values.
+            It is possible that the value of <see cref="P:PDFiumDotNET.Components.Contracts.Zoom.IPDFZoomComponent.CurrentZoomFactor"/> does not match any number of these values.
             </summary>
             <remarks>Predefined values: 0.10, 0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 2.00, 4.00, 8.00.</remarks>
         </member>

@@ -89,11 +89,11 @@
         /// <summary>
         /// Gets the page count.
         /// </summary>
-        public double ActualZoom
+        public double CurrentZoom
         {
             get
             {
-                return (_pdfComponent != null && _pdfComponent.ZoomComponent != null) ? _pdfComponent.ZoomComponent.ActualZoomFactor * 100d : 100d;
+                return (_pdfComponent != null && _pdfComponent.ZoomComponent != null) ? _pdfComponent.ZoomComponent.CurrentZoomFactor * 100d : 100d;
             }
         }
 
@@ -162,10 +162,10 @@
 
             _pdfComponent.ZoomComponent.PropertyChanged += (s, e) =>
             {
-                if (string.Equals(nameof(IPDFZoomComponent.ActualZoomFactor), e.PropertyName)
+                if (string.Equals(nameof(IPDFZoomComponent.CurrentZoomFactor), e.PropertyName)
                     || string.IsNullOrEmpty(e.PropertyName))
                 {
-                    InvokePropertyChangedEvent(nameof(ActualZoom));
+                    InvokePropertyChangedEvent(nameof(CurrentZoom));
                 }
             };
         }

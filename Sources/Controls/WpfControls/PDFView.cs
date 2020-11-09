@@ -175,7 +175,7 @@
         protected override void OnManipulationStarted(ManipulationStartedEventArgs e)
         {
             _zoomManipulationActive = false;
-            _startManipulationZoom = PDFZoomComponent.ActualZoomFactor;
+            _startManipulationZoom = PDFZoomComponent.CurrentZoomFactor;
             _startManipulationHorizontalOffset = HorizontalOffset;
             _startManipulationVerticalOffset = VerticalOffset;
             e.Handled = true;
@@ -197,7 +197,7 @@
                 _zoomManipulationActive = true;
                 var factor = (e.CumulativeManipulation.Scale.X + e.CumulativeManipulation.Scale.Y) / 2;
                 var newZoom = _startManipulationZoom * factor;
-                PDFZoomComponent.ActualZoomFactor = newZoom;
+                PDFZoomComponent.CurrentZoomFactor = newZoom;
             }
 
             // e.Handled = true;
@@ -316,8 +316,8 @@
                     point.X -= pageInfo.Left;
                     point.Y -= pageInfo.Top;
                     // Eliminate zoom factor
-                    point.X /= PDFZoomComponent.ActualZoomFactor;
-                    point.Y /= PDFZoomComponent.ActualZoomFactor;
+                    point.X /= PDFZoomComponent.CurrentZoomFactor;
+                    point.Y /= PDFZoomComponent.CurrentZoomFactor;
                     // Transform y axis from top-left position to the bottom-left.
                     point.Y = pageInfo.Page.Height - point.Y;
                     // Get the link on this position.
@@ -360,7 +360,7 @@
         /// <summary>
         /// Datermines area where fit all pages of opened document.
         /// </summary>
-        /// <param name="availableSize">Available size based on actual layout of application.</param>
+        /// <param name="availableSize">Available size based on current layout of application.</param>
         /// <returns>Required size to show all pages of opened</returns>
         private Size DeterminePageArea(Size availableSize)
         {
@@ -373,7 +373,7 @@
 
             var width = availableSize.Width;
             var height = availableSize.Height;
-            PDFPageComponent.DeterminePageArea(ref width, ref height, PDFPageMargin, PDFZoomComponent.ActualZoomFactor);
+            PDFPageComponent.DeterminePageArea(ref width, ref height, PDFPageMargin, PDFZoomComponent.CurrentZoomFactor);
             return new Size(width, height);
         }
 

@@ -22,7 +22,7 @@
         </member>
         <member name="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.UsageCount">
             <summary>
-            Gets the actual count of <see cref="T:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge"/> classes that are using loaded PDFium dll.
+            Gets the current count of <see cref="T:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge"/> classes that are using loaded PDFium dll.
             </summary>
         </member>
         <member name="M:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.LoadPDFium">
