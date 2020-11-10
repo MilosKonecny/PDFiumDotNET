@@ -17,69 +17,6 @@
     /// </summary>
     public partial class PDFView
     {
-        #region Private methods - redraw related
-
-        private void RedrawView()
-        {
-            InvalidateVisual();
-        }
-
-        private void RedrawViewPageComponentChanged(string propertyName)
-        {
-            if (string.Equals(nameof(IPDFPageComponent.ActualPage), propertyName))
-            {
-                // Actual page is changed. Scroll to this page.
-                VerticalOffset = PDFPageComponent.GetPageTopLine(PDFPageComponent.ActualPage - 1, PDFPageMargin, PDFZoomComponent.ActualZoomFactor);
-            }
-            else
-            {
-                InvalidateVisual();
-            }
-        }
-
-        private void RedrawViewZoomComponentChanged(string propertyName)
-        {
-            if (string.Equals(nameof(IPDFZoomComponent.ActualZoomFactor), propertyName))
-            {
-                // ToDo: Temporary solution. Change the offset only when the zoom is decreased and only by the necessary amount.
-                // ToDo: Change both offsets so that the center point of visible part of document remains on the same position.
-                // Actual zoom factor is changed.
-                ////HorizontalOffset = 0;
-                InvalidateVisual();
-            }
-            else
-            {
-                InvalidateVisual();
-            }
-        }
-
-        private void RedrawViewPageMarginChanged()
-        {
-            InvalidateVisual();
-        }
-
-        private void RedrawViewHorizontalOffsetChanged()
-        {
-            InvalidateVisual();
-        }
-
-        private void RedrawViewVerticalOffsetChanged()
-        {
-            InvalidateVisual();
-        }
-
-        private void RedrawViewCanHorizontallyScrollChanged()
-        {
-            InvalidateVisual();
-        }
-
-        private void RedrawViewCanVerticallyScrollChanged()
-        {
-            InvalidateVisual();
-        }
-
-        #endregion Private methods - redraw related
-
         #region Private methods - render related
 
         [Conditional("DEBUG")]
@@ -133,7 +70,7 @@
             // Draw background
             drawingContext.DrawRectangle(Background, null, new Rect(0, 0, ViewportWidth, ViewportHeight));
 
-            var newZoomFactor = PDFZoomComponent.ActualZoomFactor;
+            var newZoomFactor = PDFZoomComponent.CurrentZoomFactor;
             var pageOnCenter = _renderedPages.FirstOrDefault(page => page.IsOnCenter);
             if (pageOnCenter == null
                 || _oldZoomFactor < 0d
@@ -146,7 +83,7 @@
                     VerticalOffset,
                     VerticalOffset + ViewportHeight,
                     PDFPageMargin,
-                    PDFZoomComponent.ActualZoomFactor));
+                    PDFZoomComponent.CurrentZoomFactor));
             }
             else
             {
@@ -163,7 +100,7 @@
                     ref topLine,
                     ref bottomLine,
                     PDFPageMargin,
-                    PDFZoomComponent.ActualZoomFactor));
+                    PDFZoomComponent.CurrentZoomFactor));
 
                 _verticalOffset = topLine;
                 if (newZoomFactor < _oldZoomFactor)
@@ -178,19 +115,19 @@
             // Iterate the pages, adjust some values, and draw them.
             foreach (var pageInfo in _renderedPages)
             {
-                // Actual page width
-                var actualPageWidth = pageInfo.Page.Width * PDFZoomComponent.ActualZoomFactor;
+                // Current page width
+                var currentPageWidth = pageInfo.Page.Width * PDFZoomComponent.CurrentZoomFactor;
 
                 // Center the page horizontally
                 if (ViewportWidth > _workArea.Width)
                 {
-                    pageInfo.Left = ViewportWidth / 2d - actualPageWidth / 2d;
-                    pageInfo.Right = ViewportWidth / 2d + actualPageWidth / 2d;
+                    pageInfo.Left = ViewportWidth / 2d - currentPageWidth / 2d;
+                    pageInfo.Right = ViewportWidth / 2d + currentPageWidth / 2d;
                 }
                 else
                 {
-                    pageInfo.Left = _workArea.Width / 2d - actualPageWidth / 2d;
-                    pageInfo.Right = _workArea.Width / 2d + actualPageWidth / 2d;
+                    pageInfo.Left = _workArea.Width / 2d - currentPageWidth / 2d;
+                    pageInfo.Right = _workArea.Width / 2d + currentPageWidth / 2d;
                 }
 
                 // Take offsets into account
@@ -227,7 +164,7 @@
 
                     bitmap.Lock();
                     pageInfo.Page.RenderPageBitmap(
-                        PDFZoomComponent.ActualZoomFactor,
+                        PDFZoomComponent.CurrentZoomFactor,
                         (int)pageRectForPDFium.X, (int)pageRectForPDFium.Y, (int)pageRectForPDFium.Width, (int)pageRectForPDFium.Height,
                         (int)pageOnViewport.Width, (int)pageOnViewport.Height, format, bitmap.BackBuffer, bitmap.BackBufferStride);
                     bitmap.AddDirtyRect(new Int32Rect(0, 0, (int)pageOnViewport.Width, (int)pageOnViewport.Height));
@@ -250,7 +187,7 @@
 
             RenderDebugInfo(drawingContext, _renderedPages);
 
-            _oldZoomFactor = PDFZoomComponent.ActualZoomFactor;
+            _oldZoomFactor = PDFZoomComponent.CurrentZoomFactor;
         }
 
         private void RenderEmptyArea(DrawingContext drawingContext)

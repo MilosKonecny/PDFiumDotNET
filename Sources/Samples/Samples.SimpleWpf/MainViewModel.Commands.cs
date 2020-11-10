@@ -168,7 +168,7 @@
                 return;
             }
 
-            zoomComponent.ActualZoomFactor = _view.PDFActualWidth / (pageComponent.WidestWidth + 2 * _view.PDFPageMargin);
+            zoomComponent.CurrentZoomFactor = _view.PDFActualWidth / (pageComponent.WidestWidth + 2 * _view.PDFPageMargin);
         }
 
         private bool CanExecuteZoomWidthCommand()
@@ -185,7 +185,7 @@
                 return;
             }
 
-            zoomComponent.ActualZoomFactor = _view.PDFActualHeight / (pageComponent.HighestHeight + 2 * _view.PDFPageMargin);
+            zoomComponent.CurrentZoomFactor = _view.PDFActualHeight / (pageComponent.HighestHeight + 2 * _view.PDFPageMargin);
         }
 
         private bool CanExecuteZoomHeightCommand()
@@ -210,7 +210,7 @@
                 return false;
             }
 
-            return Math.Abs(values[values.Count - 1] - _pdfComponent.ZoomComponent.ActualZoomFactor) > 0.01;
+            return Math.Abs(values[values.Count - 1] - _pdfComponent.ZoomComponent.CurrentZoomFactor) > 0.01;
         }
 
         private void ExecuteZoomOutCommand()
@@ -230,7 +230,7 @@
                 return false;
             }
 
-            return Math.Abs(values[0] - _pdfComponent.ZoomComponent.ActualZoomFactor) > 0.01;
+            return Math.Abs(values[0] - _pdfComponent.ZoomComponent.CurrentZoomFactor) > 0.01;
         }
 
         private void ExecuteGoToFirstPageCommand()
@@ -245,7 +245,7 @@
 
         private void ExecuteGoToPreviousPageCommand()
         {
-            _pdfComponent.PageComponent.NavigateToPage(_pdfComponent.PageComponent.ActualPage - 1);
+            _pdfComponent.PageComponent.NavigateToPage(_pdfComponent.PageComponent.CurrentPageIndex - 1);
         }
 
         private bool CanExecuteGoToPreviousPageCommand()
@@ -255,7 +255,7 @@
 
         private void ExecuteGoToNextPageCommand()
         {
-            _pdfComponent.PageComponent.NavigateToPage(_pdfComponent.PageComponent.ActualPage + 1);
+            _pdfComponent.PageComponent.NavigateToPage(_pdfComponent.PageComponent.CurrentPageIndex + 1);
         }
 
         private bool CanExecuteGoToNextPageCommand()

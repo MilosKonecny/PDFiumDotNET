@@ -1,5 +1,6 @@
 ﻿namespace PDFiumDotNET.Components.Contracts.Page
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using PDFiumDotNET.Components.Contracts.Action;
@@ -12,9 +13,9 @@
     public interface IPDFPageComponent : IPDFChildComponent
     {
         /// <summary>
-        /// Gets actual page index of opened document.
+        /// Gets index of current page of opened document. First page has index 1.
         /// </summary>
-        int ActualPage { get; }
+        int CurrentPageIndex { get; }
 
         /// <summary>
         /// Gets the page count of opened document.
@@ -101,5 +102,10 @@
         /// </summary>
         /// <param name="pageIndex">Index of page to navigate into. Index is 1 based.</param>
         void NavigateToPage(int pageIndex);
+
+        /// <summary>
+        /// Occurs whenever some of 'navigate' methods was called and <see cref="CurrentPageIndex"/> was changed.
+        /// </summary>
+        event EventHandler<EventArgs> NavigatedToPage;
     }
 }

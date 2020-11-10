@@ -27,7 +27,7 @@
         #region Internal static properties
 
         /// <summary>
-        /// Gets the actual count of <see cref="PDFiumBridge"/> classes that are using loaded PDFium dll.
+        /// Gets the current count of <see cref="PDFiumBridge"/> classes that are using loaded PDFium dll.
         /// </summary>
         internal static int UsageCount { get; private set; }
 

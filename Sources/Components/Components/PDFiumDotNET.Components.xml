@@ -352,7 +352,7 @@
             Initializes a new instance of the <see cref="T:PDFiumDotNET.Components.Page.PDFPageComponent"/> class.
             </summary>
         </member>
-        <member name="P:PDFiumDotNET.Components.Page.PDFPageComponent.ActualPage">
+        <member name="P:PDFiumDotNET.Components.Page.PDFPageComponent.CurrentPageIndex">
             <summary>
             <inheritdoc/>
             </summary>
@@ -415,6 +415,11 @@
         <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.NavigateToPage(System.Int32)">
             <summary>
             <inheritdoc/>
+            </summary>
+        </member>
+        <member name="E:PDFiumDotNET.Components.Page.PDFPageComponent.NavigatedToPage">
+            <summary>
+            Occurs whenever some of 'navigate' methods was called and <see cref="P:PDFiumDotNET.Components.Page.PDFPageComponent.CurrentPageIndex"/> was changed.
             </summary>
         </member>
         <member name="P:PDFiumDotNET.Components.Page.PDFPageComponent.MainComponent">
@@ -609,12 +614,12 @@
             Initializes a new instance of the <see cref="T:PDFiumDotNET.Components.Zoom.PDFZoomComponent"/> class.
             </summary>
         </member>
-        <member name="P:PDFiumDotNET.Components.Zoom.PDFZoomComponent.ActualZoomType">
+        <member name="P:PDFiumDotNET.Components.Zoom.PDFZoomComponent.CurrentZoomType">
             <summary>
             <inheritdoc/>
             </summary>
         </member>
-        <member name="P:PDFiumDotNET.Components.Zoom.PDFZoomComponent.ActualZoomFactor">
+        <member name="P:PDFiumDotNET.Components.Zoom.PDFZoomComponent.CurrentZoomFactor">
             <summary>
             <inheritdoc/>
             </summary>

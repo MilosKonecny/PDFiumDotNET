@@ -42,6 +42,7 @@
         /// </summary>
         public void DocumentClosing()
         {
+            SetDefaultValues();
         }
 
         /// <summary>

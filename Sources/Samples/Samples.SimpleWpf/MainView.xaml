@@ -104,7 +104,7 @@
                 <Button Command="{Binding Path=ZoomOutCommand}" ToolTip="Zoom out">
                     <wpfControl:AutoDisabledImage Source="Resources\zoom_out_40px.png"/>
                 </Button>
-                <TextBlock Width="120" Style="{DynamicResource ResourceKey=SingleInfoText}" Text="{Binding Path=ActualZoom, StringFormat=Zoom: {0}%}" />
+                <TextBlock Width="120" Style="{DynamicResource ResourceKey=SingleInfoText}" Text="{Binding Path=CurrentZoom, StringFormat=Zoom: {0}%}" />
                 <Button Command="{Binding Path=ZoomInCommand}" ToolTip="Zoom in">
                     <wpfControl:AutoDisabledImage Source="Resources\zoom_in_40px.png"/>
                 </Button>
@@ -119,7 +119,7 @@
                 <TextBlock Width="120" Style="{DynamicResource ResourceKey=SingleInfoText}">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}Page: {0} of {1}">
-                            <Binding Path="PageComponent.ActualPage" />
+                            <Binding Path="PageComponent.CurrentPageIndex" />
                             <Binding Path="PageComponent.PageCount" />
                         </MultiBinding>
                     </TextBlock.Text>

@@ -24,8 +24,8 @@
         #region Private fields
 
         private PDFComponent _mainComponent;
-        private ZoomType _actualZoomType;
-        private double _actualZoomFactor;
+        private ZoomType _currentZoomType;
+        private double _currentZoomFactor;
         private List<double> _zoomList;
 
         #endregion Private fields
@@ -46,8 +46,8 @@
 
         private void SetDefaultValues()
         {
-            ActualZoomType = ZoomType.DefinedValue;
-            ActualZoomFactor = 1d;
+            CurrentZoomType = ZoomType.DefinedValue;
+            CurrentZoomFactor = 1d;
             SetDefaultZoomList();
             InvokePropertyChangedEvent(null);
         }
@@ -73,14 +73,14 @@
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public ZoomType ActualZoomType
+        public ZoomType CurrentZoomType
         {
-            get => _actualZoomType;
+            get => _currentZoomType;
             set
             {
-                if (_actualZoomType != value)
+                if (_currentZoomType != value)
                 {
-                    _actualZoomType = value;
+                    _currentZoomType = value;
                     InvokePropertyChangedEvent();
                 }
             }
@@ -89,22 +89,22 @@
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public double ActualZoomFactor
+        public double CurrentZoomFactor
         {
-            get => _actualZoomFactor;
+            get => _currentZoomFactor;
             set
             {
                 value = Math.Round(value, 2);
-                if (Math.Abs(_actualZoomFactor - value) > _doubleEpsilon)
+                if (Math.Abs(_currentZoomFactor - value) > _doubleEpsilon)
                 {
-                    _actualZoomFactor = value;
-                    if (_actualZoomFactor < ZoomValues.First())
+                    _currentZoomFactor = value;
+                    if (_currentZoomFactor < ZoomValues.First())
                     {
-                        _actualZoomFactor = ZoomValues.First();
+                        _currentZoomFactor = ZoomValues.First();
                     }
-                    else if (_actualZoomFactor > ZoomValues.Last())
+                    else if (_currentZoomFactor > ZoomValues.Last())
                     {
-                        _actualZoomFactor = ZoomValues.Last();
+                        _currentZoomFactor = ZoomValues.Last();
                     }
 
                     InvokePropertyChangedEvent();
@@ -147,10 +147,10 @@
         public void IncreaseZoom()
         {
             // Find the nearest bigger value.
-            var newValue = ZoomValues.Where(a => a > ActualZoomFactor).ToList();
+            var newValue = ZoomValues.Where(a => a > CurrentZoomFactor).ToList();
             if (newValue.Count > 0)
             {
-                ActualZoomFactor = newValue[0];
+                CurrentZoomFactor = newValue[0];
             }
         }
 
@@ -160,10 +160,10 @@
         public void DecreaseZoom()
         {
             // Find the nearest lower value.
-            var newValue = ZoomValues.Reverse().Where(a => a < ActualZoomFactor).ToList();
+            var newValue = ZoomValues.Reverse().Where(a => a < CurrentZoomFactor).ToList();
             if (newValue.Count > 0)
             {
-                ActualZoomFactor = newValue[0];
+                CurrentZoomFactor = newValue[0];
             }
         }
 
