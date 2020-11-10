@@ -488,6 +488,11 @@
             </summary>
             <param name="pageIndex">Index of page to navigate into. Index is 1 based.</param>
         </member>
+        <member name="E:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.NavigatedToPage">
+            <summary>
+            Occurs whenever some of 'navigate' methods was called and <see cref="P:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.CurrentPageIndex"/> was changed.
+            </summary>
+        </member>
         <member name="T:PDFiumDotNET.Components.Contracts.Page.IPDFPageRenderInfo">
             <summary>
             Interface defines information about page to render.

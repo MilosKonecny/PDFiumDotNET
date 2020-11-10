@@ -34,7 +34,7 @@
                 if (_horizontalOffset != value)
                 {
                     _horizontalOffset = value;
-                    RedrawViewHorizontalOffsetChanged();
+                    InvalidateVisual();
                     ScrollOwner?.InvalidateScrollInfo();
                 }
             }
@@ -55,7 +55,7 @@
                 if (_verticalOffset != value)
                 {
                     _verticalOffset = value;
-                    RedrawViewVerticalOffsetChanged();
+                    InvalidateVisual();
                     ScrollOwner?.InvalidateScrollInfo();
                 }
             }
@@ -102,7 +102,7 @@
                 if (_canHorizontallyScroll != value)
                 {
                     _canHorizontallyScroll = value;
-                    RedrawViewCanHorizontallyScrollChanged();
+                    InvalidateVisual();
                     ScrollOwner?.InvalidateScrollInfo();
                 }
             }
@@ -121,7 +121,7 @@
                 if (_canVerticallyScroll != value)
                 {
                     _canVerticallyScroll = value;
-                    RedrawViewCanVerticallyScrollChanged();
+                    InvalidateVisual();
                     ScrollOwner?.InvalidateScrollInfo();
                 }
             }

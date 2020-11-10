@@ -162,6 +162,8 @@
                     pageToAdd.IsOnCenter = true;
                     pageToAdd.PagePositionOnCenter = (centerLine - pageToAdd.Top) / (pageToAdd.Bottom - pageToAdd.Top);
                     isCenterSet = true;
+                    CurrentPageIndex = pageToAdd.Page.PageIndex + 1;
+                    InvokePropertyChangedEvent(nameof(CurrentPageIndex));
                 }
 
                 // Special behaviour. Middle point of height of viewpoert may be between to pages.
@@ -171,6 +173,8 @@
                     pageToAdd.IsOnCenter = true;
                     pageToAdd.PagePositionOnCenter = 0d;
                     isCenterSet = true;
+                    CurrentPageIndex = pageToAdd.Page.PageIndex + 1;
+                    InvokePropertyChangedEvent(nameof(CurrentPageIndex));
                 }
 
                 // Add the page to the list.
@@ -357,6 +361,7 @@
 
             CurrentPageIndex = 1 + action.Destination.PageIndex;
             InvokePropertyChangedEvent(nameof(CurrentPageIndex));
+            NavigatedToPage?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -376,6 +381,7 @@
 
             CurrentPageIndex = 1 + destination.PageIndex;
             InvokePropertyChangedEvent(nameof(CurrentPageIndex));
+            NavigatedToPage?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -390,7 +396,13 @@
 
             CurrentPageIndex = pageIndex;
             InvokePropertyChangedEvent(nameof(CurrentPageIndex));
+            NavigatedToPage?.Invoke(this, EventArgs.Empty);
         }
+
+        /// <summary>
+        /// Occurs whenever some of 'navigate' methods was called and <see cref="CurrentPageIndex"/> was changed.
+        /// </summary>
+        public event EventHandler<EventArgs> NavigatedToPage;
 
         #endregion Implementation of IPageComponent
 

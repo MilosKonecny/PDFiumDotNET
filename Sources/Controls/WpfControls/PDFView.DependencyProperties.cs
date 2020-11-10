@@ -98,7 +98,7 @@
                 return;
             }
 
-            view.RedrawViewPageMarginChanged();
+            view.InvalidateVisual();
         }
 
         /// <summary>
@@ -114,7 +114,7 @@
                 return;
             }
 
-            view.RedrawView();
+            view.InvalidateVisual();
         }
 
         /// <summary>
@@ -176,7 +176,8 @@
                 return;
             }
 
-            component.PropertyChanged += HandlePDFPageComponentPropertyChanged;
+            component.PropertyChanged += HandlePDFPageComponentPropertyChangedEvent;
+            component.NavigatedToPage += HandlePDFPageComponentNavigatedToPageEvent;
             ScrollOwner?.InvalidateScrollInfo();
         }
 
@@ -187,7 +188,8 @@
                 return;
             }
 
-            component.PropertyChanged -= HandlePDFPageComponentPropertyChanged;
+            component.PropertyChanged -= HandlePDFPageComponentPropertyChangedEvent;
+            component.NavigatedToPage -= HandlePDFPageComponentNavigatedToPageEvent;
             ScrollOwner?.InvalidateScrollInfo();
         }
 
@@ -198,7 +200,7 @@
                 return;
             }
 
-            component.PropertyChanged += HandlePDFZoomComponentPropertyChanged;
+            component.PropertyChanged += HandlePDFZoomComponentPropertyChangedEvent;
             ScrollOwner?.InvalidateScrollInfo();
         }
 
@@ -209,7 +211,7 @@
                 return;
             }
 
-            component.PropertyChanged -= HandlePDFZoomComponentPropertyChanged;
+            component.PropertyChanged -= HandlePDFZoomComponentPropertyChangedEvent;
             ScrollOwner?.InvalidateScrollInfo();
         }
 
@@ -217,14 +219,23 @@
 
         #region Private event handler methods
 
-        private void HandlePDFPageComponentPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void HandlePDFPageComponentPropertyChangedEvent(object sender, PropertyChangedEventArgs e)
         {
-            RedrawViewPageComponentChanged(e.PropertyName);
+            if (!string.Equals(nameof(IPDFPageComponent.CurrentPageIndex), e.PropertyName))
+            {
+                InvalidateVisual();
+            }
         }
 
-        private void HandlePDFZoomComponentPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void HandlePDFPageComponentNavigatedToPageEvent(object sender, System.EventArgs e)
         {
-            RedrawViewZoomComponentChanged(e.PropertyName);
+            // Current page is changed. Scroll to this page.
+            VerticalOffset = PDFPageComponent.GetPageTopLine(PDFPageComponent.CurrentPageIndex - 1, PDFPageMargin, PDFZoomComponent.CurrentZoomFactor);
+        }
+
+        private void HandlePDFZoomComponentPropertyChangedEvent(object sender, PropertyChangedEventArgs e)
+        {
+            InvalidateVisual();
         }
 
         #endregion Private event handler methods

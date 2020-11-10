@@ -417,6 +417,11 @@
             <inheritdoc/>
             </summary>
         </member>
+        <member name="E:PDFiumDotNET.Components.Page.PDFPageComponent.NavigatedToPage">
+            <summary>
+            Occurs whenever some of 'navigate' methods was called and <see cref="P:PDFiumDotNET.Components.Page.PDFPageComponent.CurrentPageIndex"/> was changed.
+            </summary>
+        </member>
         <member name="P:PDFiumDotNET.Components.Page.PDFPageComponent.MainComponent">
             <summary>
             <inheritdoc/>

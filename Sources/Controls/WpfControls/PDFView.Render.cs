@@ -17,69 +17,6 @@
     /// </summary>
     public partial class PDFView
     {
-        #region Private methods - redraw related
-
-        private void RedrawView()
-        {
-            InvalidateVisual();
-        }
-
-        private void RedrawViewPageComponentChanged(string propertyName)
-        {
-            if (string.Equals(nameof(IPDFPageComponent.CurrentPageIndex), propertyName))
-            {
-                // Current page is changed. Scroll to this page.
-                VerticalOffset = PDFPageComponent.GetPageTopLine(PDFPageComponent.CurrentPageIndex - 1, PDFPageMargin, PDFZoomComponent.CurrentZoomFactor);
-            }
-            else
-            {
-                InvalidateVisual();
-            }
-        }
-
-        private void RedrawViewZoomComponentChanged(string propertyName)
-        {
-            if (string.Equals(nameof(IPDFZoomComponent.CurrentZoomFactor), propertyName))
-            {
-                // ToDo: Temporary solution. Change the offset only when the zoom is decreased and only by the necessary amount.
-                // ToDo: Change both offsets so that the center point of visible part of document remains on the same position.
-                // Current zoom factor is changed.
-                ////HorizontalOffset = 0;
-                InvalidateVisual();
-            }
-            else
-            {
-                InvalidateVisual();
-            }
-        }
-
-        private void RedrawViewPageMarginChanged()
-        {
-            InvalidateVisual();
-        }
-
-        private void RedrawViewHorizontalOffsetChanged()
-        {
-            InvalidateVisual();
-        }
-
-        private void RedrawViewVerticalOffsetChanged()
-        {
-            InvalidateVisual();
-        }
-
-        private void RedrawViewCanHorizontallyScrollChanged()
-        {
-            InvalidateVisual();
-        }
-
-        private void RedrawViewCanVerticallyScrollChanged()
-        {
-            InvalidateVisual();
-        }
-
-        #endregion Private methods - redraw related
-
         #region Private methods - render related
 
         [Conditional("DEBUG")]
