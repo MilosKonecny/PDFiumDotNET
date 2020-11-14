@@ -80,17 +80,7 @@
             Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_GetFileVersion"/>.
             </summary>
         </member>
-        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.DocumentHasValidCrossReferenceTable01">
-            <summary>
-            Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_DocumentHasValidCrossReferenceTable"/>.
-            </summary>
-        </member>
-        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.DocumentHasValidCrossReferenceTable02">
-            <summary>
-            Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_DocumentHasValidCrossReferenceTable"/>.
-            </summary>
-        </member>
-        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.DocumentHasValidCrossReferenceTable03">
+        <member name="M:PDFiumDotNET.Wrapper.Test.PDFiumBridgeViewTest.DocumentHasValidCrossReferenceTable">
             <summary>
             Test method for <see cref="P:PDFiumDotNET.Wrapper.Bridge.PDFiumBridge.FPDF_DocumentHasValidCrossReferenceTable"/>.
             </summary>

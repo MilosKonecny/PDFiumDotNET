@@ -118,44 +118,12 @@
         /// Test method for <see cref="PDFiumBridge.FPDF_DocumentHasValidCrossReferenceTable"/>.
         /// </summary>
         [TestMethod]
-        public void DocumentHasValidCrossReferenceTable01()
+        public void DocumentHasValidCrossReferenceTable()
         {
             var pdfFile = Path.Combine(_pdfFilesFolder, "Precalculus.pdf");
             var bridge = new PDFiumBridge();
             var document = bridge.FPDF_LoadDocument(pdfFile, null);
             Assert.AreNotEqual(IntPtr.Zero, document);
-            var retVal = bridge.FPDF_DocumentHasValidCrossReferenceTable(document);
-            Assert.IsTrue(retVal);
-            bridge.FPDF_CloseDocument(document);
-            bridge.Dispose();
-        }
-
-        /// <summary>
-        /// Test method for <see cref="PDFiumBridge.FPDF_DocumentHasValidCrossReferenceTable"/>.
-        /// </summary>
-        [TestMethod]
-        public void DocumentHasValidCrossReferenceTable02()
-        {
-            var pdfFile = Path.Combine(_pdfFilesFolder, "Introduction to Calculus (Volume-1).pdf");
-            var bridge = new PDFiumBridge();
-            var document = bridge.FPDF_LoadDocument(pdfFile, null);
-            Assert.IsTrue(document.IsValid);
-            var retVal = bridge.FPDF_DocumentHasValidCrossReferenceTable(document);
-            Assert.IsTrue(retVal);
-            bridge.FPDF_CloseDocument(document);
-            bridge.Dispose();
-        }
-
-        /// <summary>
-        /// Test method for <see cref="PDFiumBridge.FPDF_DocumentHasValidCrossReferenceTable"/>.
-        /// </summary>
-        [TestMethod]
-        public void DocumentHasValidCrossReferenceTable03()
-        {
-            var pdfFile = Path.Combine(_pdfFilesFolder, "Introduction to Calculus (Volume-2).pdf");
-            var bridge = new PDFiumBridge();
-            var document = bridge.FPDF_LoadDocument(pdfFile, null);
-            Assert.IsTrue(document.IsValid);
             var retVal = bridge.FPDF_DocumentHasValidCrossReferenceTable(document);
             Assert.IsTrue(retVal);
             bridge.FPDF_CloseDocument(document);
