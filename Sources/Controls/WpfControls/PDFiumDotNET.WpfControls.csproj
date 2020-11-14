@@ -55,6 +55,10 @@
     </Compile>
     <Compile Include="AutoDisabledImage.cs" />
     <Compile Include="Helper\BitmapFormatConverter.cs" />
+    <Compile Include="PDFThumbnailView.cs" />
+    <Compile Include="PDFThumbnailView.IScrollInfo.cs" />
+    <Compile Include="PDFThumbnailView.DependencyProperties.cs" />
+    <Compile Include="PDFThumbnailView.Render.cs" />
     <Compile Include="PDFView.cs" />
     <Compile Include="PDFView.DependencyProperties.cs" />
     <Compile Include="PDFView.IScrollInfo.cs" />
