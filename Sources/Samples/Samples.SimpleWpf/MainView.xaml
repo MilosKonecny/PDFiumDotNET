@@ -156,7 +156,7 @@
                     </TreeView.ItemTemplate>
                 </TreeView>
             </TabItem>
-            <TabItem Header="Thumbnails">
+            <TabItem Header="Thumbnails I">
                 <ListBox ItemsSource="{Binding Path=PageComponent.Pages}" SelectedItem="{Binding Path=SelectedThumbnail, Mode=OneWayToSource}"
                          VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Standard"
                          ScrollViewer.CanContentScroll="True">
@@ -181,6 +181,12 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+            </TabItem>
+            <TabItem Header="Thumbnails II">
+                <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+                    <wpfControl:PDFThumbnailView x:Name="_pdfThumbnailView"
+                                                 PDFPageComponent="{Binding Path=PageComponent}"/>
+                </ScrollViewer>
             </TabItem>
         </TabControl>
         <!-- PDF -->

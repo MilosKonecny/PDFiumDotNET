@@ -1,13 +1,13 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using PDFiumDotNET.Components.Contracts.Page;
-using PDFiumDotNET.WpfControls.Helper;
-
-namespace PDFiumDotNET.WpfControls
+﻿namespace PDFiumDotNET.WpfControls
 {
+    using System;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+    using PDFiumDotNET.Components.Contracts.Page;
+    using PDFiumDotNET.WpfControls.Helper;
+
     /// <summary>
     /// Thumbnail control used to show small image of page.
     /// </summary>

@@ -7,14 +7,19 @@
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
     using System.Windows.Media;
-    using PDFiumDotNET.Components.Contracts.Link;
     using PDFiumDotNET.Components.Contracts.Page;
 
     /// <summary>
-    /// View class shows pages from opened PDF document.
+    /// View class shows page thumbnails from opened PDF document.
     /// </summary>
-    public partial class PDFView : Control, IScrollInfo
+    public partial class PDFThumbnailView : Control, IScrollInfo
     {
+        #region Private consts
+
+        private const double _thumbnailZoomFactor = 0.2d;
+
+        #endregion Private consts
+
         #region Private fields
 
         /// <summary>
@@ -33,11 +38,6 @@
         private bool _canVerticallyScroll;
 
         /// <summary>
-        /// Offset of viewport in x axis.
-        /// </summary>
-        private double _horizontalOffset;
-
-        /// <summary>
         /// Offset of viewport in y axis.
         /// </summary>
         private double _verticalOffset;
@@ -53,11 +53,6 @@
         private Size _viewport = new Size(0, 0);
 
         /// <summary>
-        /// Zoom at manipulation start.
-        /// </summary>
-        private double _startManipulationZoom;
-
-        /// <summary>
         /// Horizontal offset at manipulation start.
         /// </summary>
         private double _startManipulationHorizontalOffset;
@@ -67,34 +62,16 @@
         /// </summary>
         private double _startManipulationVerticalOffset;
 
-        /// <summary>
-        /// <c>true</c> if touch manipulation for zoom is active.
-        /// </summary>
-        private bool _zoomManipulationActive = false;
-
-        private double _oldZoomFactor = -1d;
-
         #endregion Private fields
 
         #region Constructors
 
-        /// <summary>
-        /// Static constructor to define metadata for the control (and link it to the style in Generic.xaml).
-        /// </summary>
-        static PDFView()
+        static PDFThumbnailView()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(PDFView), new FrameworkPropertyMetadata(typeof(PDFView)));
-            BackgroundProperty.OverrideMetadata(typeof(PDFView), new FrameworkPropertyMetadata(Brushes.DarkGray));
-            BorderBrushProperty.OverrideMetadata(typeof(PDFView), new FrameworkPropertyMetadata(Brushes.Black));
-            BorderThicknessProperty.OverrideMetadata(typeof(PDFView), new FrameworkPropertyMetadata(new Thickness(1)));
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PDFView"/> class.
-        /// </summary>
-        public PDFView()
-        {
-            IsManipulationEnabled = true;
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(PDFThumbnailView), new FrameworkPropertyMetadata(typeof(PDFThumbnailView)));
+            BackgroundProperty.OverrideMetadata(typeof(PDFThumbnailView), new FrameworkPropertyMetadata(Brushes.White));
+            BorderBrushProperty.OverrideMetadata(typeof(PDFThumbnailView), new FrameworkPropertyMetadata(Brushes.Black));
+            BorderThicknessProperty.OverrideMetadata(typeof(PDFThumbnailView), new FrameworkPropertyMetadata(new Thickness(0.5d)));
         }
 
         #endregion Constructors
@@ -172,8 +149,6 @@
         /// </summary>
         protected override void OnManipulationStarted(ManipulationStartedEventArgs e)
         {
-            _zoomManipulationActive = false;
-            _startManipulationZoom = PDFZoomComponent.CurrentZoomFactor;
             _startManipulationHorizontalOffset = HorizontalOffset;
             _startManipulationVerticalOffset = VerticalOffset;
             e.Handled = true;
@@ -185,17 +160,9 @@
         /// </summary>
         protected override void OnManipulationDelta(ManipulationDeltaEventArgs e)
         {
-            if (e.Manipulators.Count() == 1 && !_zoomManipulationActive)
+            if (e.Manipulators.Count() == 1)
             {
-                HorizontalOffset = _startManipulationHorizontalOffset - e.CumulativeManipulation.Translation.X;
                 VerticalOffset = _startManipulationVerticalOffset - e.CumulativeManipulation.Translation.Y;
-            }
-            else if (e.Manipulators.Count() == 2)
-            {
-                _zoomManipulationActive = true;
-                var factor = (e.CumulativeManipulation.Scale.X + e.CumulativeManipulation.Scale.Y) / 2;
-                var newZoom = _startManipulationZoom * factor;
-                PDFZoomComponent.CurrentZoomFactor = newZoom;
             }
 
             // e.Handled = true;
@@ -237,40 +204,15 @@
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        protected override void OnMouseMove(MouseEventArgs e)
-        {
-            base.OnMouseMove(e);
-            var point = e.GetPosition(this);
-
-            var link = GetLinkOnPosition(point);
-            if (link != null)
-            {
-                Cursor = Cursors.Hand;
-                return;
-            }
-
-            Cursor = Cursors.Arrow;
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonUp(e);
             var point = e.GetPosition(this);
 
-            var link = GetLinkOnPosition(point);
-            if (link != null)
+            var page = _renderedPages.FirstOrDefault(p => point.X > p.Left && point.X < p.Right && point.Y > p.Top && point.Y < p.Bottom);
+            if (page != null)
             {
-                if (link.Action != null)
-                {
-                    PDFPageComponent.PerformAction(link.Action);
-                }
-                else if (link.Destination != null)
-                {
-                    PDFPageComponent.NavigateToDestination(link.Destination);
-                }
+                PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
             }
         }
 
@@ -283,47 +225,16 @@
             base.OnTouchUp(e);
             var point = e.GetTouchPoint(this).Position;
 
-            var link = GetLinkOnPosition(point);
-            if (link != null)
+            var page = _renderedPages.FirstOrDefault(p => point.X > p.Left && point.X < p.Right && point.Y > p.Top && point.Y < p.Bottom);
+            if (page != null)
             {
-                if (link.Action != null)
-                {
-                    PDFPageComponent.PerformAction(link.Action);
-                }
-                else if (link.Destination != null)
-                {
-                    PDFPageComponent.NavigateToDestination(link.Destination);
-                }
+                PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
             }
         }
 
         #endregion Protected override methods
 
         #region Private methods
-
-        private IPDFLink GetLinkOnPosition(Point point)
-        {
-            // ToDo: Optimize this place. Don't iterate throught all pages in some cases.
-            foreach (var pageInfo in _renderedPages)
-            {
-                if (point.X > pageInfo.Left && point.X < pageInfo.Right
-                    && point.Y > pageInfo.Top && point.Y < pageInfo.Bottom)
-                {
-                    // Mouse is over this page
-                    // Transform the point to the page.
-                    point.X -= pageInfo.Left;
-                    point.Y -= pageInfo.Top;
-                    // Eliminate zoom factor
-                    point.X /= PDFZoomComponent.CurrentZoomFactor;
-                    point.Y /= PDFZoomComponent.CurrentZoomFactor;
-                    // Transform y axis from top-left position to the bottom-left.
-                    point.Y = pageInfo.Page.Height - point.Y;
-                    // Get the link on this position.
-                    return pageInfo.Page.GetLinkFromPoint(point.X, point.Y);
-                }
-            }
-            return null;
-        }
 
         /// <summary>
         /// Update the viewport size.
@@ -363,7 +274,6 @@
         private Size DeterminePageArea(Size availableSize)
         {
             if (PDFPageComponent == null
-                || PDFZoomComponent == null
                 || PDFPageComponent.PageCount == 0)
             {
                 return availableSize;
@@ -371,7 +281,7 @@
 
             var width = availableSize.Width;
             var height = availableSize.Height;
-            PDFPageComponent.DeterminePageArea(ref width, ref height, PDFPageMargin, PDFZoomComponent.CurrentZoomFactor);
+            PDFPageComponent.DeterminePageArea(ref width, ref height, 2d * FontSize, _thumbnailZoomFactor);
             return new Size(width, height);
         }
 

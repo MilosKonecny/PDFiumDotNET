@@ -9,11 +9,10 @@
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using PDFiumDotNET.Components.Contracts.Page;
-    using PDFiumDotNET.Components.Contracts.Zoom;
     using PDFiumDotNET.WpfControls.Helper;
 
     /// <summary>
-    /// View class shows pages from opend PDF document.
+    /// View class shows pages from opened PDF document.
     /// </summary>
     public partial class PDFView
     {

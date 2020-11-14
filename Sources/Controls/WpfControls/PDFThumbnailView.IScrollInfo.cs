@@ -1,15 +1,14 @@
 ﻿namespace PDFiumDotNET.WpfControls
 {
-    using System.Windows;
-    using System.Windows.Media;
-    using System.Windows.Controls;
     using System;
-    using System.Windows.Input;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
 
     /// <summary>
-    /// View class shows pages from opened PDF document.
+    /// View class shows page thumbnails from opened PDF document.
     /// </summary>
-    public partial class PDFView
+    public partial class PDFThumbnailView
     {
         #region Implementation of IScrollInfo
 
@@ -25,20 +24,7 @@
         /// </summary>
         /// <value>A <see cref="double"/> that represents, in device independent pixels, the horizontal offset.
         /// This property has no default value.</value>
-        public double HorizontalOffset
-        {
-            get => _horizontalOffset;
-            private set
-            {
-                value = Math.Max(0, Math.Min(value, ExtentWidth - ViewportWidth));
-                if (_horizontalOffset != value)
-                {
-                    _horizontalOffset = value;
-                    InvalidateVisual();
-                    ScrollOwner?.InvalidateScrollInfo();
-                }
-            }
-        }
+        public double HorizontalOffset => 0;
 
         /// <summary>
         /// Gets the vertical offset of the scrolled content.
@@ -140,7 +126,6 @@
         /// </summary>
         public void LineLeft()
         {
-            HorizontalOffset -= ViewportWidth / 10;
         }
 
         /// <summary>
@@ -148,7 +133,6 @@
         /// </summary>
         public void LineRight()
         {
-            HorizontalOffset += ViewportWidth / 10;
         }
 
         /// <summary>
@@ -165,21 +149,8 @@
         /// <remarks>Don't handle mouse wheel input from the ScrollViewer, the mouse wheel is used for zooming in and out, not for manipulating the scrollbars.</remarks>
         public void MouseWheelDown()
         {
-            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-            {
-                // Zoom
-                PDFZoomComponent?.DecreaseZoom();
-            }
-            else if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
-            {
-                // Move right
-                LineRight();
-            }
-            else
-            {
-                // Move down
-                LineDown();
-            }
+            // Move down
+            LineDown();
         }
 
         /// <summary>
@@ -188,16 +159,6 @@
         /// <remarks>Don't handle mouse wheel input from the ScrollViewer, the mouse wheel is used for zooming in and out, not for manipulating the scrollbars.</remarks>
         public void MouseWheelLeft()
         {
-            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-            {
-                // Zoom
-                PDFZoomComponent?.DecreaseZoom();
-            }
-            else
-            {
-                // Move up
-                LineLeft();
-            }
         }
 
         /// <summary>
@@ -206,16 +167,6 @@
         /// <remarks>Don't handle mouse wheel input from the ScrollViewer, the mouse wheel is used for zooming in and out, not for manipulating the scrollbars.</remarks>
         public void MouseWheelRight()
         {
-            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-            {
-                // Zoom
-                PDFZoomComponent?.IncreaseZoom();
-            }
-            else
-            {
-                // Move
-                LineRight();
-            }
         }
 
         /// <summary>
@@ -224,21 +175,8 @@
         /// <remarks>Don't handle mouse wheel input from the ScrollViewer, the mouse wheel is used for zooming in and out, not for manipulating the scrollbars.</remarks>
         public void MouseWheelUp()
         {
-            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-            {
-                // Zoom
-                PDFZoomComponent?.IncreaseZoom();
-            }
-            else if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
-            {
-                // Move right
-                LineLeft();
-            }
-            else
-            {
-                // Move down
-                LineUp();
-            }
+            // Move down
+            LineUp();
         }
 
         /// <summary>
@@ -254,7 +192,6 @@
         /// </summary>
         public void PageLeft()
         {
-            HorizontalOffset -= ViewportWidth;
         }
 
         /// <summary>
@@ -262,7 +199,6 @@
         /// </summary>
         public void PageRight()
         {
-            HorizontalOffset += ViewportWidth;
         }
 
         /// <summary>
@@ -291,7 +227,6 @@
         /// <param name="offset">The degree to which content is horizontally offset from the containing viewport.</param>
         public void SetHorizontalOffset(double offset)
         {
-            HorizontalOffset = offset;
         }
 
         /// <summary>

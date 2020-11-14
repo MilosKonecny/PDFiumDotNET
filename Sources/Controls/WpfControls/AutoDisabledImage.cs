@@ -1,10 +1,10 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-
-namespace PDFiumDotNET.WpfControls
+﻿namespace PDFiumDotNET.WpfControls
 {
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+
     /// <summary>
     /// Control implements auto disabled image based on property 'IsEnabled'.
     /// </summary>

@@ -7,7 +7,7 @@
     using PDFiumDotNET.Components.Contracts.Zoom;
 
     /// <summary>
-    /// View class shows pages from opend PDF document.
+    /// View class shows pages from opened PDF document.
     /// </summary>
     public partial class PDFView
     {
