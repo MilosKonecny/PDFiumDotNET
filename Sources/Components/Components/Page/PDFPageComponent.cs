@@ -193,7 +193,10 @@
         public IList<IPDFPageRenderInfo> DeterminePagesToRender(IPDFPageRenderInfo pageOnCenter, ref double topLine, ref double bottomLine, double pageMargin, double zoomFactor)
         {
             // Base check.
-            if (pageOnCenter == null || !pageOnCenter.IsOnCenter)
+            if (pageOnCenter == null
+                || !pageOnCenter.IsOnCenter
+                || pageOnCenter.Page == null
+                || pageOnCenter.Page.PageIndex >= PageCount)
             {
                 // We don't have required information.
                 return DeterminePagesToRender(topLine, bottomLine, pageMargin, zoomFactor);
