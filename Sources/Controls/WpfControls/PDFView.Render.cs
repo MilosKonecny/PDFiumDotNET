@@ -82,7 +82,8 @@
                     VerticalOffset,
                     VerticalOffset + ViewportHeight,
                     PDFPageMargin,
-                    PDFZoomComponent.CurrentZoomFactor));
+                    PDFZoomComponent.CurrentZoomFactor,
+                    true));
             }
             else
             {

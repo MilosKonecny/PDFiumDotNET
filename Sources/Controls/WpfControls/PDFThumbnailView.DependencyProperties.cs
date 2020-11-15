@@ -188,6 +188,12 @@
 
         private void HandlePDFPageComponentPropertyChangedEvent(object sender, PropertyChangedEventArgs e)
         {
+            if (string.IsNullOrEmpty(e.PropertyName))
+            {
+                // Everything is changed
+                ResetStatus();
+            }
+
             if (!string.Equals(nameof(IPDFPageComponent.CurrentPageIndex), e.PropertyName))
             {
                 InvalidateVisual();

@@ -58,8 +58,9 @@
         /// <param name="bottomLine">Bottom line of viewport.</param>
         /// <param name="pageMargin">Margin around the page.</param>
         /// <param name="zoomFactor">Zoom factor to use for pages. Not for page margin.</param>
+        /// <param name="setCurrentPageIndex">If <c>true</c>, page on middle of height will be set as current page.</param>
         /// <returns>Pages to draw in required region.</returns>
-        IList<IPDFPageRenderInfo> DeterminePagesToRender(double topLine, double bottomLine, double pageMargin, double zoomFactor);
+        IList<IPDFPageRenderInfo> DeterminePagesToRender(double topLine, double bottomLine, double pageMargin, double zoomFactor, bool setCurrentPageIndex = false);
 
         /// <summary>
         /// Gets all pages to be drawn in specified region.

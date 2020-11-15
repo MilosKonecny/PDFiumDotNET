@@ -112,7 +112,7 @@
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IList<IPDFPageRenderInfo> DeterminePagesToRender(double topLine, double bottomLine, double pageMargin, double zoomFactor)
+        public IList<IPDFPageRenderInfo> DeterminePagesToRender(double topLine, double bottomLine, double pageMargin, double zoomFactor, bool setCurrentPageIndex = false)
         {
             // List of all pages to render.
             var list = new List<IPDFPageRenderInfo>();
@@ -162,19 +162,25 @@
                     pageToAdd.IsOnCenter = true;
                     pageToAdd.PagePositionOnCenter = (centerLine - pageToAdd.Top) / (pageToAdd.Bottom - pageToAdd.Top);
                     isCenterSet = true;
-                    CurrentPageIndex = pageToAdd.Page.PageIndex + 1;
-                    InvokePropertyChangedEvent(nameof(CurrentPageIndex));
+                    if (setCurrentPageIndex)
+                    {
+                        CurrentPageIndex = pageToAdd.Page.PageIndex + 1;
+                        InvokePropertyChangedEvent(nameof(CurrentPageIndex));
+                    }
                 }
 
-                // Special behaviour. Middle point of height of viewpoert may be between to pages.
+                // Special behaviour. Middle point of height of viewport may be between to pages.
                 // In this case use current page to add.
                 if (!isCenterSet && pageToAdd.Top > centerLine)
                 {
                     pageToAdd.IsOnCenter = true;
                     pageToAdd.PagePositionOnCenter = 0d;
                     isCenterSet = true;
-                    CurrentPageIndex = pageToAdd.Page.PageIndex + 1;
-                    InvokePropertyChangedEvent(nameof(CurrentPageIndex));
+                    if (setCurrentPageIndex)
+                    {
+                        CurrentPageIndex = pageToAdd.Page.PageIndex + 1;
+                        InvokePropertyChangedEvent(nameof(CurrentPageIndex));
+                    }
                 }
 
                 // Add the page to the list.
