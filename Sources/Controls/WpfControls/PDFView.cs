@@ -185,7 +185,7 @@
         /// </summary>
         protected override void OnManipulationDelta(ManipulationDeltaEventArgs e)
         {
-            if (e.Manipulators.Count() == 1 && !_zoomManipulationActive)
+            if ((e.Manipulators.Count() == 1 || e.IsInertial) && !_zoomManipulationActive)
             {
                 HorizontalOffset = _startManipulationHorizontalOffset - e.CumulativeManipulation.Translation.X;
                 VerticalOffset = _startManipulationVerticalOffset - e.CumulativeManipulation.Translation.Y;
@@ -277,7 +277,6 @@
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <param name="e"></param>
         protected override void OnTouchUp(TouchEventArgs e)
         {
             base.OnTouchUp(e);

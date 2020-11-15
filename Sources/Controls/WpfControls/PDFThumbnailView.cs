@@ -28,6 +28,11 @@
         private List<IPDFPageRenderInfo> _renderedPages = new List<IPDFPageRenderInfo>();
 
         /// <summary>
+        /// Page with touch down.
+        /// </summary>
+        private IPDFPageRenderInfo _onTouchDownPage;
+
+        /// <summary>
         /// Permission for horizontal scroll.
         /// </summary>
         private bool _canHorizontallyScroll;
@@ -72,6 +77,14 @@
             BackgroundProperty.OverrideMetadata(typeof(PDFThumbnailView), new FrameworkPropertyMetadata(Brushes.White));
             BorderBrushProperty.OverrideMetadata(typeof(PDFThumbnailView), new FrameworkPropertyMetadata(Brushes.Black));
             BorderThicknessProperty.OverrideMetadata(typeof(PDFThumbnailView), new FrameworkPropertyMetadata(new Thickness(0.5d)));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PDFView"/> class.
+        /// </summary>
+        public PDFThumbnailView()
+        {
+            IsManipulationEnabled = true;
         }
 
         #endregion Constructors
@@ -160,10 +173,7 @@
         /// </summary>
         protected override void OnManipulationDelta(ManipulationDeltaEventArgs e)
         {
-            if (e.Manipulators.Count() == 1)
-            {
-                VerticalOffset = _startManipulationVerticalOffset - e.CumulativeManipulation.Translation.Y;
-            }
+            VerticalOffset = _startManipulationVerticalOffset - e.CumulativeManipulation.Translation.Y;
 
             // e.Handled = true;
             base.OnManipulationDelta(e);
@@ -219,16 +229,30 @@
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <param name="e"></param>
+        protected override void OnTouchDown(TouchEventArgs e)
+        {
+            base.OnTouchDown(e);
+            var point = e.GetTouchPoint(this).Position;
+
+            _onTouchDownPage = _renderedPages.FirstOrDefault(p => point.X > p.Left && point.X < p.Right && point.Y > p.Top && point.Y < p.Bottom);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         protected override void OnTouchUp(TouchEventArgs e)
         {
             base.OnTouchUp(e);
             var point = e.GetTouchPoint(this).Position;
 
             var page = _renderedPages.FirstOrDefault(p => point.X > p.Left && point.X < p.Right && point.Y > p.Top && point.Y < p.Bottom);
-            if (page != null)
+            if (page != null && _onTouchDownPage != null)
             {
-                PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
+                if (_onTouchDownPage.Page.PageIndex == page.Page.PageIndex)
+                {
+                    // Navigate to this page only if touch down and up was made on the same page.
+                    PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
+                }
             }
         }
 
@@ -293,6 +317,7 @@
             _verticalOffset = 0d;
             _workArea = new Size(0, 0);
             _renderedPages.Clear();
+            _onTouchDownPage = null;
         }
 
         #endregion Private methods
