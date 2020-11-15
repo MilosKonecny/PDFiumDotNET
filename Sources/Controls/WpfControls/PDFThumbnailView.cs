@@ -285,6 +285,16 @@
             return new Size(width, height);
         }
 
+        /// <summary>
+        /// Reset all relevat status fields.
+        /// </summary>
+        private void ResetStatus()
+        {
+            _verticalOffset = 0d;
+            _workArea = new Size(0, 0);
+            _renderedPages.Clear();
+        }
+
         #endregion Private methods
     }
 }

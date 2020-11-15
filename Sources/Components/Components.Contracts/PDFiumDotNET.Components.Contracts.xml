@@ -436,7 +436,7 @@
             <param name="pageMargin">Margin around the page.</param>
             <param name="zoomFactor">Zoom factor to use for the computing of required area.</param>
         </member>
-        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.DeterminePagesToRender(System.Double,System.Double,System.Double,System.Double)">
+        <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.DeterminePagesToRender(System.Double,System.Double,System.Double,System.Double,System.Boolean)">
             <summary>
             Gets all pages to be drawn in specified region.
             </summary>
@@ -444,6 +444,7 @@
             <param name="bottomLine">Bottom line of viewport.</param>
             <param name="pageMargin">Margin around the page.</param>
             <param name="zoomFactor">Zoom factor to use for pages. Not for page margin.</param>
+            <param name="setCurrentPageIndex">If <c>true</c>, page on middle of height will be set as current page.</param>
             <returns>Pages to draw in required region.</returns>
         </member>
         <member name="M:PDFiumDotNET.Components.Contracts.Page.IPDFPageComponent.DeterminePagesToRender(PDFiumDotNET.Components.Contracts.Page.IPDFPageRenderInfo,System.Double@,System.Double@,System.Double,System.Double)">

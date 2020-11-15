@@ -375,6 +375,18 @@
             return new Size(width, height);
         }
 
+        /// <summary>
+        /// Reset all relevat status fields.
+        /// </summary>
+        private void ResetStatus()
+        {
+            _horizontalOffset = 0d;
+            _verticalOffset = 0d;
+            _oldZoomFactor = 1d;
+            _workArea = new Size(0, 0);
+            _renderedPages.Clear();
+        }
+
         #endregion Private methods
     }
 }

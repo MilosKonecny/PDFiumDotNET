@@ -387,7 +387,7 @@
             <inheritdoc/>
             </summary>
         </member>
-        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.DeterminePagesToRender(System.Double,System.Double,System.Double,System.Double)">
+        <member name="M:PDFiumDotNET.Components.Page.PDFPageComponent.DeterminePagesToRender(System.Double,System.Double,System.Double,System.Double,System.Boolean)">
             <summary>
             <inheritdoc/>
             </summary>
