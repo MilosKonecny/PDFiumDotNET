@@ -1,4 +1,8 @@
-﻿namespace PDFiumDotNET.WpfControls
+﻿#if WpfControls
+namespace PDFiumDotNET.WpfControls
+#else
+namespace PDFiumDotNET.WpfCoreControls
+#endif
 {
     using System.Windows;
     using System.Windows.Media;

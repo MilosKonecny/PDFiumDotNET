@@ -1,4 +1,8 @@
-﻿namespace PDFiumDotNET.WpfControls
+﻿#if WpfControls
+namespace PDFiumDotNET.WpfControls
+#else
+namespace PDFiumDotNET.WpfCoreControls
+#endif
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -134,6 +138,11 @@
         /// </summary>
         protected override void OnRender(DrawingContext drawingContext)
         {
+            if (drawingContext == null)
+            {
+                return;
+            }
+
             if (PDFPageComponent != null && PDFPageComponent.PageCount != 0)
             {
                 RenderPages(drawingContext);
@@ -150,6 +159,12 @@
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
+
+            if (e == null)
+            {
+                return;
+            }
+
             switch (e.Key)
             {
                 case Key.Left:
@@ -176,7 +191,7 @@
             _startManipulationZoom = PDFZoomComponent.CurrentZoomFactor;
             _startManipulationHorizontalOffset = HorizontalOffset;
             _startManipulationVerticalOffset = VerticalOffset;
-            e.Handled = true;
+
             base.OnManipulationStarted(e);
         }
 
@@ -185,20 +200,22 @@
         /// </summary>
         protected override void OnManipulationDelta(ManipulationDeltaEventArgs e)
         {
-            if ((e.Manipulators.Count() == 1 || e.IsInertial) && !_zoomManipulationActive)
+            if (e != null && e.CumulativeManipulation != null)
             {
-                HorizontalOffset = _startManipulationHorizontalOffset - e.CumulativeManipulation.Translation.X;
-                VerticalOffset = _startManipulationVerticalOffset - e.CumulativeManipulation.Translation.Y;
-            }
-            else if (e.Manipulators.Count() == 2)
-            {
-                _zoomManipulationActive = true;
-                var factor = (e.CumulativeManipulation.Scale.X + e.CumulativeManipulation.Scale.Y) / 2;
-                var newZoom = _startManipulationZoom * factor;
-                PDFZoomComponent.CurrentZoomFactor = newZoom;
+                if ((e.Manipulators.Count() == 1 || e.IsInertial) && !_zoomManipulationActive)
+                {
+                    HorizontalOffset = _startManipulationHorizontalOffset - e.CumulativeManipulation.Translation.X;
+                    VerticalOffset = _startManipulationVerticalOffset - e.CumulativeManipulation.Translation.Y;
+                }
+                else if (e.Manipulators.Count() == 2)
+                {
+                    _zoomManipulationActive = true;
+                    var factor = (e.CumulativeManipulation.Scale.X + e.CumulativeManipulation.Scale.Y) / 2;
+                    var newZoom = _startManipulationZoom * factor;
+                    PDFZoomComponent.CurrentZoomFactor = newZoom;
+                }
             }
 
-            // e.Handled = true;
             base.OnManipulationDelta(e);
         }
 
@@ -207,22 +224,33 @@
         /// </summary>
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingEventArgs e)
         {
-            // Decrease the velocity of the Rectangle's movement by
-            // 10 inches per second every second.
-            // (10 inches * 96 pixels per inch / 1000ms^2)
-            e.TranslationBehavior.DesiredDeceleration = 10.0 * 96.0 / (1000.0 * 1000.0);
+            if (e != null)
+            {
+                if (e.TranslationBehavior != null)
+                {
+                    // Decrease the velocity of the Rectangle's movement by
+                    // 10 inches per second every second.
+                    // (10 inches * 96 pixels per inch / 1000ms^2)
+                    e.TranslationBehavior.DesiredDeceleration = 10.0 * 96.0 / (1000.0 * 1000.0);
+                }
 
-            // Decrease the velocity of the Rectangle's resizing by
-            // 0.1 inches per second every second.
-            // (0.1 inches * 96 pixels per inch / (1000ms^2)
-            e.ExpansionBehavior.DesiredDeceleration = 0.1 * 96 / (1000.0 * 1000.0);
+                if (e.ExpansionBehavior != null)
+                {
+                    // Decrease the velocity of the Rectangle's resizing by
+                    // 0.1 inches per second every second.
+                    // (0.1 inches * 96 pixels per inch / (1000ms^2)
+                    e.ExpansionBehavior.DesiredDeceleration = 0.1 * 96 / (1000.0 * 1000.0);
+                }
 
-            // Decrease the velocity of the Rectangle's rotation rate by
-            // 2 rotations per second every second.
-            // (2 * 360 degrees / (1000ms^2)
-            e.RotationBehavior.DesiredDeceleration = 720 / (1000.0 * 1000.0);
+                if (e.RotationBehavior != null)
+                {
+                    // Decrease the velocity of the Rectangle's rotation rate by
+                    // 2 rotations per second every second.
+                    // (2 * 360 degrees / (1000ms^2)
+                    e.RotationBehavior.DesiredDeceleration = 720 / (1000.0 * 1000.0);
+                }
+            }
 
-            // e.Handled = true;
             base.OnManipulationInertiaStarting(e);
         }
 
@@ -240,13 +268,16 @@
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
-            var point = e.GetPosition(this);
 
-            var link = GetLinkOnPosition(point);
-            if (link != null)
+            if (e != null)
             {
-                Cursor = Cursors.Hand;
-                return;
+                var point = e.GetPosition(this);
+                var link = GetLinkOnPosition(point);
+                if (link != null)
+                {
+                    Cursor = Cursors.Hand;
+                    return;
+                }
             }
 
             Cursor = Cursors.Arrow;
@@ -258,18 +289,21 @@
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonUp(e);
-            var point = e.GetPosition(this);
 
-            var link = GetLinkOnPosition(point);
-            if (link != null)
+            if (e != null)
             {
-                if (link.Action != null)
+                var point = e.GetPosition(this);
+                var link = GetLinkOnPosition(point);
+                if (link != null)
                 {
-                    PDFPageComponent.PerformAction(link.Action);
-                }
-                else if (link.Destination != null)
-                {
-                    PDFPageComponent.NavigateToDestination(link.Destination);
+                    if (link.Action != null)
+                    {
+                        PDFPageComponent.PerformAction(link.Action);
+                    }
+                    else if (link.Destination != null)
+                    {
+                        PDFPageComponent.NavigateToDestination(link.Destination);
+                    }
                 }
             }
         }
@@ -280,18 +314,21 @@
         protected override void OnTouchUp(TouchEventArgs e)
         {
             base.OnTouchUp(e);
-            var point = e.GetTouchPoint(this).Position;
 
-            var link = GetLinkOnPosition(point);
-            if (link != null)
+            if (e != null)
             {
-                if (link.Action != null)
+                var point = e.GetTouchPoint(this).Position;
+                var link = GetLinkOnPosition(point);
+                if (link != null)
                 {
-                    PDFPageComponent.PerformAction(link.Action);
-                }
-                else if (link.Destination != null)
-                {
-                    PDFPageComponent.NavigateToDestination(link.Destination);
+                    if (link.Action != null)
+                    {
+                        PDFPageComponent.PerformAction(link.Action);
+                    }
+                    else if (link.Destination != null)
+                    {
+                        PDFPageComponent.NavigateToDestination(link.Destination);
+                    }
                 }
             }
         }

@@ -1,4 +1,8 @@
-﻿namespace PDFiumDotNET.WpfControls
+﻿#if WpfControls
+namespace PDFiumDotNET.WpfControls
+#else
+namespace PDFiumDotNET.WpfCoreControls
+#endif
 {
     using System;
     using System.Collections.Generic;
@@ -9,7 +13,11 @@
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using PDFiumDotNET.Components.Contracts.Page;
+#if WpfControls
     using PDFiumDotNET.WpfControls.Helper;
+#else
+    using PDFiumDotNET.WpfCoreControls.Helper;
+#endif
 
     /// <summary>
     /// View class shows pages from opened PDF document.
@@ -105,7 +113,7 @@
                 _verticalOffset = topLine;
                 if (newZoomFactor < _oldZoomFactor)
                 {
-                    HorizontalOffset = HorizontalOffset;
+                    HorizontalOffset = _horizontalOffset;
                 }
             }
 
@@ -173,7 +181,9 @@
                     // Draw page content.
                     drawingContext.DrawImage(bitmap, new Rect(pageOnViewport.TopLeft, pageOnViewport.BottomRight));
                 }
+#pragma warning disable CA1031 // Do not catch general exception types
                 catch { }
+#pragma warning restore CA1031 // Do not catch general exception types
             }
 
             // Draw background border - left

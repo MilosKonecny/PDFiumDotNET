@@ -1,4 +1,8 @@
-﻿namespace PDFiumDotNET.WpfControls
+﻿#if WpfControls
+namespace PDFiumDotNET.WpfControls
+#else
+namespace PDFiumDotNET.WpfCoreControls
+#endif
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -56,11 +60,6 @@
         /// The area visible to user.
         /// </summary>
         private Size _viewport = new Size(0, 0);
-
-        /// <summary>
-        /// Horizontal offset at manipulation start.
-        /// </summary>
-        private double _startManipulationHorizontalOffset;
 
         /// <summary>
         /// Vertical offset at manipulation start.
@@ -124,6 +123,11 @@
         /// </summary>
         protected override void OnRender(DrawingContext drawingContext)
         {
+            if (drawingContext == null)
+            {
+                return;
+            }
+
             if (PDFPageComponent != null && PDFPageComponent.PageCount != 0)
             {
                 RenderPages(drawingContext);
@@ -140,6 +144,12 @@
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
+
+            if (e == null)
+            {
+                return;
+            }
+
             switch (e.Key)
             {
                 case Key.Left:
@@ -162,9 +172,8 @@
         /// </summary>
         protected override void OnManipulationStarted(ManipulationStartedEventArgs e)
         {
-            _startManipulationHorizontalOffset = HorizontalOffset;
             _startManipulationVerticalOffset = VerticalOffset;
-            e.Handled = true;
+
             base.OnManipulationStarted(e);
         }
 
@@ -173,9 +182,11 @@
         /// </summary>
         protected override void OnManipulationDelta(ManipulationDeltaEventArgs e)
         {
-            VerticalOffset = _startManipulationVerticalOffset - e.CumulativeManipulation.Translation.Y;
+            if (e != null && e.CumulativeManipulation != null)
+            {
+                VerticalOffset = _startManipulationVerticalOffset - e.CumulativeManipulation.Translation.Y;
+            }
 
-            // e.Handled = true;
             base.OnManipulationDelta(e);
         }
 
@@ -184,22 +195,33 @@
         /// </summary>
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingEventArgs e)
         {
-            // Decrease the velocity of the Rectangle's movement by
-            // 10 inches per second every second.
-            // (10 inches * 96 pixels per inch / 1000ms^2)
-            e.TranslationBehavior.DesiredDeceleration = 10.0 * 96.0 / (1000.0 * 1000.0);
+            if (e != null)
+            {
+                if (e.TranslationBehavior != null)
+                {
+                    // Decrease the velocity of the Rectangle's movement by
+                    // 10 inches per second every second.
+                    // (10 inches * 96 pixels per inch / 1000ms^2)
+                    e.TranslationBehavior.DesiredDeceleration = 10.0 * 96.0 / (1000.0 * 1000.0);
+                }
 
-            // Decrease the velocity of the Rectangle's resizing by
-            // 0.1 inches per second every second.
-            // (0.1 inches * 96 pixels per inch / (1000ms^2)
-            e.ExpansionBehavior.DesiredDeceleration = 0.1 * 96 / (1000.0 * 1000.0);
+                if (e.ExpansionBehavior != null)
+                {
+                    // Decrease the velocity of the Rectangle's resizing by
+                    // 0.1 inches per second every second.
+                    // (0.1 inches * 96 pixels per inch / (1000ms^2)
+                    e.ExpansionBehavior.DesiredDeceleration = 0.1 * 96 / (1000.0 * 1000.0);
+                }
 
-            // Decrease the velocity of the Rectangle's rotation rate by
-            // 2 rotations per second every second.
-            // (2 * 360 degrees / (1000ms^2)
-            e.RotationBehavior.DesiredDeceleration = 720 / (1000.0 * 1000.0);
+                if (e.RotationBehavior != null)
+                {
+                    // Decrease the velocity of the Rectangle's rotation rate by
+                    // 2 rotations per second every second.
+                    // (2 * 360 degrees / (1000ms^2)
+                    e.RotationBehavior.DesiredDeceleration = 720 / (1000.0 * 1000.0);
+                }
+            }
 
-            // e.Handled = true;
             base.OnManipulationInertiaStarting(e);
         }
 
@@ -217,12 +239,15 @@
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonUp(e);
-            var point = e.GetPosition(this);
 
-            var page = _renderedPages.FirstOrDefault(p => point.X > p.Left && point.X < p.Right && point.Y > p.Top && point.Y < p.Bottom);
-            if (page != null)
+            if (e != null)
             {
-                PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
+                var point = e.GetPosition(this);
+                var page = _renderedPages.FirstOrDefault(p => point.X > p.Left && point.X < p.Right && point.Y > p.Top && point.Y < p.Bottom);
+                if (page != null)
+                {
+                    PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
+                }
             }
         }
 
@@ -232,9 +257,12 @@
         protected override void OnTouchDown(TouchEventArgs e)
         {
             base.OnTouchDown(e);
-            var point = e.GetTouchPoint(this).Position;
 
-            _onTouchDownPage = _renderedPages.FirstOrDefault(p => point.X > p.Left && point.X < p.Right && point.Y > p.Top && point.Y < p.Bottom);
+            if (e != null)
+            {
+                var point = e.GetTouchPoint(this).Position;
+                _onTouchDownPage = _renderedPages.FirstOrDefault(p => point.X > p.Left && point.X < p.Right && point.Y > p.Top && point.Y < p.Bottom);
+            }
         }
 
         /// <summary>
@@ -243,15 +271,18 @@
         protected override void OnTouchUp(TouchEventArgs e)
         {
             base.OnTouchUp(e);
-            var point = e.GetTouchPoint(this).Position;
 
-            var page = _renderedPages.FirstOrDefault(p => point.X > p.Left && point.X < p.Right && point.Y > p.Top && point.Y < p.Bottom);
-            if (page != null && _onTouchDownPage != null)
+            if (e != null)
             {
-                if (_onTouchDownPage.Page.PageIndex == page.Page.PageIndex)
+                var point = e.GetTouchPoint(this).Position;
+                var page = _renderedPages.FirstOrDefault(p => point.X > p.Left && point.X < p.Right && point.Y > p.Top && point.Y < p.Bottom);
+                if (page != null && _onTouchDownPage != null)
                 {
-                    // Navigate to this page only if touch down and up was made on the same page.
-                    PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
+                    if (_onTouchDownPage.Page.PageIndex == page.Page.PageIndex)
+                    {
+                        // Navigate to this page only if touch down and up was made on the same page.
+                        PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
+                    }
                 }
             }
         }

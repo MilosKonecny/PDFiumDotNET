@@ -1,5 +1,10 @@
-﻿namespace PDFiumDotNET.WpfControls
+﻿#if WpfControls
+namespace PDFiumDotNET.WpfControls
+#else
+namespace PDFiumDotNET.WpfCoreControls
+#endif
 {
+    using System;
     using System.ComponentModel;
     using System.Windows;
     using System.Windows.Media;
@@ -194,7 +199,7 @@
                 ResetStatus();
             }
 
-            if (!string.Equals(nameof(IPDFPageComponent.CurrentPageIndex), e.PropertyName))
+            if (!string.Equals(nameof(IPDFPageComponent.CurrentPageIndex), e.PropertyName, StringComparison.OrdinalIgnoreCase))
             {
                 InvalidateVisual();
             }
