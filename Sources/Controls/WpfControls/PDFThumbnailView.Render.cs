@@ -1,4 +1,8 @@
-﻿namespace PDFiumDotNET.WpfControls
+﻿#if WpfControls
+namespace PDFiumDotNET.WpfControls
+#else
+namespace PDFiumDotNET.WpfCoreControls
+#endif
 {
     using System;
     using System.Globalization;
@@ -6,7 +10,11 @@
     using System.Windows;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
+#if WpfControls
     using PDFiumDotNET.WpfControls.Helper;
+#else
+    using PDFiumDotNET.WpfCoreControls.Helper;
+#endif
 
     /// <summary>
     /// View class shows page thumbnails from opened PDF document.
@@ -85,7 +93,9 @@
                     // Draw page content.
                     drawingContext.DrawImage(bitmap, new Rect(pageOnViewport.TopLeft, pageOnViewport.BottomRight));
                 }
+#pragma warning disable CA1031 // Do not catch general exception types
                 catch { }
+#pragma warning restore CA1031 // Do not catch general exception types
 
                 // Draw page label
                 var ft = new FormattedText(

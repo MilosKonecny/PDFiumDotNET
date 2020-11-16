@@ -1,12 +1,20 @@
-﻿namespace PDFiumDotNET.WpfControls
+﻿#if WpfControls
+namespace PDFiumDotNET.WpfControls
+#else
+namespace PDFiumDotNET.WpfCoreControls
+#endif
 {
-    using System;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using PDFiumDotNET.Components.Contracts.Page;
+#if WpfControls
     using PDFiumDotNET.WpfControls.Helper;
+#else
+    using PDFiumDotNET.WpfCoreControls.Helper;
+#endif
+
 
     /// <summary>
     /// Thumbnail control used to show small image of page.
@@ -38,7 +46,13 @@
         /// </summary>
         protected override void OnRender(DrawingContext drawingContext)
         {
+            if (drawingContext == null)
+            {
+                return;
+            }
+
             base.OnRender(drawingContext);
+
             // background
             drawingContext.DrawRectangle(Background, null, new Rect(0, 0, Width, Height));
             // left
@@ -67,7 +81,9 @@
 
                 drawingContext.DrawImage(bitmap, new Rect(0, 0, Width, Height));
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch { }
+#pragma warning restore CA1031 // Do not catch general exception types
         }
     }
 }
