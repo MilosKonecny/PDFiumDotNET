@@ -70,6 +70,12 @@
         /// </summary>
         public void Dispose()
         {
+            foreach (var component in _childComponents)
+            {
+                component.Dispose();
+            }
+
+            _childComponents.Clear();
             IsDisposed = true;
             PDFiumBridge?.Dispose();
         }

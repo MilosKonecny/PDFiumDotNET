@@ -6,14 +6,23 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using PDFiumDotNET.Wrapper.Bridge;
 
+    // Disable "Remove the underscores from member name"
+#pragma warning disable CA1707
+
     /// <summary>
     /// Test class for methods defined in 'PDFiumBridge.View.cs' file.
     /// </summary>
     [TestClass]
     public class PDFiumBridgeViewTest
     {
+        #region Private fields
+
         private static TestContext _testContext;
         private static string _pdfFilesFolder;
+
+        #endregion Private fields
+
+        #region Test init and clean up
 
         /// <summary>
         /// Test class initialization method.
@@ -39,27 +48,31 @@
         {
         }
 
-        /////// <summary>
-        /////// Test method for <see cref="PDFiumBridge.FPDF_GetLastError"/>.
-        /////// </summary>
-        ////[TestMethod]
-        ////public void GetLastError()
-        ////{
-        ////    // The test will be successful for (net48), but it will fail for (netcoreapp3.1).
-        ////    // Here is such error described: https://bugs.chromium.org/p/pdfium/issues/detail?id=452
-        ////    var bridge = new PDFiumBridge();
-        ////    var document = bridge.FPDF_LoadDocument(@"FileDoesNotExist.pdf", null);
-        ////    Assert.IsFalse(document.IsValid);
-        ////    var lastError = bridge.FPDF_GetLastError();
-        ////    Assert.AreEqual(PDFiumDelegates.FPDF_ERR_FILE, lastError);
-        ////    bridge.Dispose();
-        ////}
+        #endregion Test init and clean up
+
+        /// <summary>
+        /// Test method for <see cref="PDFiumBridge.FPDF_GetLastError"/>.
+        /// </summary>
+        [TestMethod]
+        public void FPDFVIEW_GetLastError_OpenPdf_Fail()
+        {
+#if NET48
+            // The test will be successful for (net48), but fails for (netcoreapp3.1).
+            // Here is such error described: https://bugs.chromium.org/p/pdfium/issues/detail?id=452
+            var bridge = new PDFiumBridge();
+            var document = bridge.FPDF_LoadDocument(@"FileDoesNotExist.pdf", null);
+            Assert.IsFalse(document.IsValid);
+            var lastError = bridge.FPDF_GetLastError();
+            Assert.AreEqual(PDFiumDelegates.FPDF_ERR_FILE, lastError);
+            bridge.Dispose();
+#endif // NET48
+        }
 
         /// <summary>
         /// Test method for <see cref="PDFiumBridge.FPDF_LoadDocument"/>.
         /// </summary>
         [TestMethod]
-        public void LoadDocument01()
+        public void FPDFVIEW_LoadDocument_DocumentDoesNotExist_Fail()
         {
             var bridge = new PDFiumBridge();
             var document = bridge.FPDF_LoadDocument(@"FileDoesNotExist.pdf", string.Empty);
@@ -71,7 +84,7 @@
         /// Test method for <see cref="PDFiumBridge.FPDF_LoadDocument"/>.
         /// </summary>
         [TestMethod]
-        public void LoadDocument02()
+        public void FPDFVIEW_LoadDocument_DocumentExists_Success()
         {
             var pdfFile = Path.Combine(_pdfFilesFolder, "Precalculus.pdf");
             var bridge = new PDFiumBridge();
@@ -82,10 +95,34 @@
         }
 
         /// <summary>
+        /// Test method for <see cref="PDFiumBridge.FPDF_LoadDocument"/>.
+        /// </summary>
+        [TestMethod]
+        public void FPDFVIEW_LoadDocument_ProtectedDocument_Success()
+        {
+#if NET48
+            var pdfFile = Path.Combine(_pdfFilesFolder, "PwdProtected(Pwd is pwd).pdf");
+            var bridge = new PDFiumBridge();
+
+            var document = bridge.FPDF_LoadDocument(pdfFile, null);
+            Assert.IsFalse(document.IsValid);
+
+            var lastError = bridge.FPDF_GetLastError();
+            Assert.AreEqual(PDFiumDelegates.FPDF_ERR_PASSWORD, lastError);
+
+            document = bridge.FPDF_LoadDocument(pdfFile, "pwd");
+            Assert.IsTrue(document.IsValid);
+
+            bridge.FPDF_CloseDocument(document);
+            bridge.Dispose();
+#endif // NET48
+        }
+
+        /// <summary>
         /// Test method for <see cref="PDFiumBridge.FPDF_GetPageCount"/>.
         /// </summary>
         [TestMethod]
-        public void GetPageCount()
+        public void FPDFVIEW_GetPageCount_CheckCount_Success()
         {
             var pdfFile = Path.Combine(_pdfFilesFolder, "Precalculus.pdf");
             var bridge = new PDFiumBridge();
@@ -101,7 +138,7 @@
         /// Test method for <see cref="PDFiumBridge.FPDF_GetFileVersion"/>.
         /// </summary>
         [TestMethod]
-        public void GetFileVersion()
+        public void FPDFVIEW_GetFileVersion_CheckVersion_Success()
         {
             var pdfFile = Path.Combine(_pdfFilesFolder, "Precalculus.pdf");
             var bridge = new PDFiumBridge();
@@ -118,7 +155,7 @@
         /// Test method for <see cref="PDFiumBridge.FPDF_DocumentHasValidCrossReferenceTable"/>.
         /// </summary>
         [TestMethod]
-        public void DocumentHasValidCrossReferenceTable()
+        public void FPDFVIEW_DocumentHasValidCrossReferenceTable_Call_Success()
         {
             var pdfFile = Path.Combine(_pdfFilesFolder, "Precalculus.pdf");
             var bridge = new PDFiumBridge();
@@ -134,7 +171,7 @@
         /// Test method for <see cref="PDFiumBridge.FPDF_GetDocPermissions"/>.
         /// </summary>
         [TestMethod]
-        public void GetDocPermissions()
+        public void FPDFVIEW_GetDocPermissions_Call_Success()
         {
             var pdfFile = Path.Combine(_pdfFilesFolder, "Precalculus.pdf");
             var bridge = new PDFiumBridge();
@@ -150,7 +187,7 @@
         /// Test method for <see cref="PDFiumBridge.FPDF_LoadPage"/> and <see cref="PDFiumBridge.FPDF_ClosePage"/>.
         /// </summary>
         [TestMethod]
-        public void LoadUnloadPage()
+        public void FPDFVIEW_LoadPageCheckEveryPageProperties_Check_Success()
         {
             var pdfFile = Path.Combine(_pdfFilesFolder, "Precalculus.pdf");
             var bridge = new PDFiumBridge();
@@ -171,16 +208,14 @@
                 var height = bridge.FPDF_GetPageHeight(page);
                 Assert.AreEqual(792d, height);
 
-                PDFiumDelegates.FS_RECTF rect;
-                var retBool = bridge.FPDF_GetPageBoundingBox(page, out rect);
+                var retBool = bridge.FPDF_GetPageBoundingBox(page, out PDFiumDelegates.FS_RECTF rect);
                 Assert.IsTrue(retBool);
                 Assert.AreEqual(0f, rect.Left);
                 Assert.AreEqual(0f, rect.Bottom);
                 Assert.AreEqual(612f, rect.Right);
                 Assert.AreEqual(792f, rect.Top);
 
-                PDFiumDelegates.FS_SIZEF size;
-                retBool = bridge.FPDF_GetPageSizeByIndexF(document, index, out size);
+                retBool = bridge.FPDF_GetPageSizeByIndexF(document, index, out PDFiumDelegates.FS_SIZEF size);
                 Assert.IsTrue(retBool);
                 Assert.AreEqual(612f, size.Width);
                 Assert.AreEqual(792f, size.Height);
@@ -199,7 +234,7 @@
         /// Test method for <see cref="PDFiumBridge.FPDF_RenderPageBitmap"/> and <see cref="PDFiumBridge.FPDF_RenderPageBitmapWithMatrix"/>.
         /// </summary>
         [TestMethod]
-        public void Render()
+        public void FPDFVIEW_Render_Call()
         {
             var pdfFile = Path.Combine(_pdfFilesFolder, "Precalculus.pdf");
             var bridge = new PDFiumBridge();
@@ -245,7 +280,7 @@
         /// Test method for <see cref="PDFiumBridge.FPDF_DeviceToPage"/> and <see cref="PDFiumBridge.FPDF_PageToDevice"/>.
         /// </summary>
         [TestMethod]
-        public void DeviceToPageToDevice()
+        public void FPDFVIEW_DeviceToPageToDevice_Call_Success()
         {
             var pdfFile = Path.Combine(_pdfFilesFolder, "Precalculus.pdf");
             var bridge = new PDFiumBridge();
@@ -278,7 +313,7 @@
         /// Test method for some bitmap methods.
         /// </summary>
         [TestMethod]
-        public void Bitmap()
+        public void FPDFVIEW_BitmapOperation_Call_Success()
         {
             const int width = 612;
             const int height = 792;
@@ -351,7 +386,7 @@
         /// Test method for some view ref methods.
         /// </summary>
         [TestMethod]
-        public void ViewerRef()
+        public void FPDFVIEW_ViewerRef()
         {
             var pdfFile = Path.Combine(_pdfFilesFolder, "Precalculus.pdf");
             var bridge = new PDFiumBridge();
@@ -376,7 +411,7 @@
         /// Test method for <see cref="PDFiumBridge.FPDF_GetNamedDest"/> and <see cref="PDFiumBridge.FPDF_GetNamedDestByName"/>.
         /// </summary>
         [TestMethod]
-        public void NamedDest()
+        public void FPDFVIEW_NamedDest()
         {
             var pdfFile = Path.Combine(_pdfFilesFolder, "Precalculus.pdf");
             var bridge = new PDFiumBridge();

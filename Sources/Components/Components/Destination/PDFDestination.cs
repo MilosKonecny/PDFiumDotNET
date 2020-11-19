@@ -73,13 +73,8 @@
                     return 0;
                 }
 
-                bool hasXVal, hasYVal, hasZoomVal;
-                hasXVal = hasYVal = hasZoomVal = false;
-                float x, y, zoom;
-                x = y = zoom = 0f;
-
                 var ret = _mainComponent.PDFiumBridge.FPDFDest_GetLocationInPage(
-                    _destinationHandle, ref hasXVal, ref hasYVal, ref hasZoomVal, ref x, ref y, ref zoom);
+                    _destinationHandle, out bool hasXVal, out bool hasYVal, out bool hasZoomVal, out float x, out float y, out float zoom);
                 if (!ret || !hasXVal)
                 {
                     return null;
@@ -101,13 +96,8 @@
                     return 0;
                 }
 
-                bool hasXVal, hasYVal, hasZoomVal;
-                hasXVal = hasYVal = hasZoomVal = false;
-                float x, y, zoom;
-                x = y = zoom = 0f;
-
                 var ret = _mainComponent.PDFiumBridge.FPDFDest_GetLocationInPage(
-                    _destinationHandle, ref hasXVal, ref hasYVal, ref hasZoomVal, ref x, ref y, ref zoom);
+                    _destinationHandle, out bool hasXVal, out bool hasYVal, out bool hasZoomVal, out float x, out float y, out float zoom);
                 if (!ret || !hasYVal)
                 {
                     return null;
@@ -129,13 +119,8 @@
                     return 0;
                 }
 
-                bool hasXVal, hasYVal, hasZoomVal;
-                hasXVal = hasYVal = hasZoomVal = false;
-                float x, y, zoom;
-                x = y = zoom = 0f;
-
                 var ret = _mainComponent.PDFiumBridge.FPDFDest_GetLocationInPage(
-                    _destinationHandle, ref hasXVal, ref hasYVal, ref hasZoomVal, ref x, ref y, ref zoom);
+                    _destinationHandle, out bool hasXVal, out bool hasYVal, out bool hasZoomVal, out float x, out float y, out float zoom);
                 if (!ret || !hasZoomVal)
                 {
                     return null;

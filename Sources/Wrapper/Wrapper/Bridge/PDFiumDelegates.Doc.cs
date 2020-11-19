@@ -183,7 +183,7 @@
         /// FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFDest_GetLocationInPage(FPDF_DEST dest, FPDF_BOOL* hasXVal, FPDF_BOOL* hasYVal, FPDF_BOOL* hasZoomVal, FS_FLOAT* x, FS_FLOAT* y, FS_FLOAT* zoom);.
         /// </remarks>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate bool FPDFDest_GetLocationInPage(FPDF_DEST dest, ref bool hasXVal, ref bool hasYVal, ref bool hasZoomVal, ref float x, ref float y, ref float zoom);
+        internal delegate bool FPDFDest_GetLocationInPage(FPDF_DEST dest, out bool hasXVal, out bool hasYVal, out bool hasZoomVal, out float x, out float y, out float zoom);
 
         /// <summary>
         /// Find a link at point (|x|,|y|) on |page|.
