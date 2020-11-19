@@ -1,12 +1,8 @@
-﻿using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-
-[assembly: InternalsVisibleTo("PDFiumDotNET.Wrapper.Test")]
-[assembly: InternalsVisibleTo("PDFiumDotNET.Components")]
-
-namespace PDFiumDotNET.Wrapper
+﻿namespace PDFiumDotNET.Wrapper
 {
+    using System;
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// Class contains win api native methods.
     /// </summary>

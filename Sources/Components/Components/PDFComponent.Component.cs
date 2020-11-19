@@ -27,6 +27,11 @@
         {
             get
             {
+                if (IsDisposed)
+                {
+                    return null;
+                }
+
                 var component = _childComponents.OfType<IPDFPageComponent>().FirstOrDefault();
                 if (component == null)
                 {
@@ -45,6 +50,11 @@
         {
             get
             {
+                if (IsDisposed)
+                {
+                    return null;
+                }
+
                 var component = _childComponents.OfType<IPDFBookmarkComponent>().FirstOrDefault();
                 if (component == null)
                 {
@@ -63,6 +73,11 @@
         {
             get
             {
+                if (IsDisposed)
+                {
+                    return null;
+                }
+
                 var component = _childComponents.OfType<IPDFZoomComponent>().FirstOrDefault();
                 if (component == null)
                 {
@@ -158,6 +173,12 @@
         /// </summary>
         public void CloseDocument()
         {
+            if (!IsDocumentOpened)
+            {
+                // Nothing to close.
+                return;
+            }
+
             _childComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentClosing());
             PDFiumBridge.FPDF_CloseDocument(PDFiumDocument);
             PDFiumDocument = FPDF_DOCUMENT.InvalidHandle;

@@ -1,9 +1,10 @@
 ﻿namespace PDFiumDotNET.Wrapper.Test
 {
-    using System;
-    using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using PDFiumDotNET.Wrapper.Bridge;
+
+    // Disable "Remove the underscores from member name"
+#pragma warning disable CA1707
 
     /// <summary>
     /// Test class for base functionality of the class <see cref="PDFiumBridge"/>.
@@ -15,7 +16,7 @@
         /// Test method  for <see cref="PDFiumBridge.UsageCount"/>.
         /// </summary>
         [TestMethod]
-        public void UsageCount01()
+        public void PDFiumBridge_UsageCount_BridgesChanged_AlwaysCorrect_01()
         {
             Assert.AreEqual(0, PDFiumBridge.UsageCount);
             var bridge1 = new PDFiumBridge();
@@ -32,7 +33,7 @@
         /// Test method  for <see cref="PDFiumBridge.UsageCount"/>.
         /// </summary>
         [TestMethod]
-        public void UsageCount02()
+        public void PDFiumBridge_UsageCount_BridgesChanged_AlwaysCorrect_02()
         {
             Assert.AreEqual(0, PDFiumBridge.UsageCount);
             var bridge1 = new PDFiumBridge();
