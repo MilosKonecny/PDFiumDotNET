@@ -74,9 +74,7 @@ jobs:
 
     # Add MSBuild to the PATH
     - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v1.0.2
-      with:
-        vs-version: '[16.4,16.5)'
+      uses: microsoft/setup-msbuild@v1
 
     # Execute all unit tests in the solution
     - name: Execute unit tests 1
