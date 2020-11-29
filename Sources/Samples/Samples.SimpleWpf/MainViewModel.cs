@@ -2,7 +2,10 @@
 {
     using System;
     using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Globalization;
     using System.Runtime.CompilerServices;
+    using System.Windows;
     using PDFiumDotNET.Components;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Bookmark;
@@ -166,6 +169,30 @@
                     || string.IsNullOrEmpty(e.PropertyName))
                 {
                     InvokePropertyChangedEvent(nameof(CurrentZoom));
+                }
+            };
+
+            _pdfComponent.PageComponent.PerformOutsideAction += (s, e) =>
+            {
+                if (e == null || e.Action == null)
+                {
+                    return;
+                }
+
+                // Simple example solution.
+                var caption = "Perform action?";
+                var text = string.Format(CultureInfo.InvariantCulture, "Action type: {0}\nUri path: {1}\nFile path: {2}",
+                    e.Action.ActionType, Uri.UnescapeDataString(e.Action.UriPath ?? string.Empty), Uri.UnescapeDataString(e.Action.FilePath ?? string.Empty));
+                if (MessageBox.Show(text, caption, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        Process.Start(Uri.UnescapeDataString(e.Action.UriPath ?? string.Empty) ?? Uri.UnescapeDataString(e.Action.FilePath ?? string.Empty));
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, ex.GetType().ToString());
+                    }
                 }
             };
         }
