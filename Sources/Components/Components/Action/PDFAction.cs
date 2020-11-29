@@ -2,6 +2,7 @@
 {
     using System;
     using System.Runtime.InteropServices;
+    using System.Text;
     using PDFiumDotNET.Components.Contracts.Action;
     using PDFiumDotNET.Components.Contracts.Destination;
     using PDFiumDotNET.Components.Destination;
@@ -45,6 +46,24 @@
         }
 
         #endregion Public override methods
+
+        #region Private static methods
+
+        private static string PtrToStringUTF8(IntPtr nativeUtf8)
+        {
+            // .net framework 4.8 doesn't know Marshal.PtrToStringUTF8
+            int len = 0;
+            while (Marshal.ReadByte(nativeUtf8, len) != 0)
+            {
+                ++len;
+            }
+
+            byte[] buffer = new byte[len];
+            Marshal.Copy(nativeUtf8, buffer, 0, buffer.Length);
+            return Encoding.UTF8.GetString(buffer);
+        }
+
+        #endregion Private static methods
 
         #region Implementation of IAction
 
@@ -106,7 +125,7 @@
 
                 var buffer = Marshal.AllocHGlobal(requiredLen);
                 _mainComponent.PDFiumBridge.FPDFAction_GetFilePath(_actionHandle, buffer, (ulong)requiredLen);
-                var text = Marshal.PtrToStringUni(buffer);
+                var text = PtrToStringUTF8(buffer);
                 Marshal.FreeHGlobal(buffer);
 
                 return text;
@@ -116,7 +135,7 @@
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public Uri UriPath
+        public string UriPath
         {
             get
             {
@@ -133,10 +152,10 @@
 
                 var buffer = Marshal.AllocHGlobal(requiredLen);
                 _mainComponent.PDFiumBridge.FPDFAction_GetURIPath(_mainComponent.PDFiumDocument, _actionHandle, buffer, (ulong)requiredLen);
-                var text = Marshal.PtrToStringUni(buffer);
+                var text = PtrToStringUTF8(buffer);
                 Marshal.FreeHGlobal(buffer);
 
-                return new Uri(text);
+                return text;
             }
         }
 

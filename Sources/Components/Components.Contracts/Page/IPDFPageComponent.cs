@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using PDFiumDotNET.Components.Contracts.Action;
     using PDFiumDotNET.Components.Contracts.Destination;
+    using PDFiumDotNET.Components.Contracts.EventArguments;
 
     /// <summary>
     /// Interface defines functionality of page component.
@@ -105,8 +106,13 @@
         void NavigateToPage(int pageIndex);
 
         /// <summary>
-        /// Occurs whenever some of 'navigate' methods was called and <see cref="CurrentPageIndex"/> was changed.
+        /// Occurs whenever some of 'navigate' / 'perform' methods was called and <see cref="CurrentPageIndex"/> was changed.
         /// </summary>
-        event EventHandler<EventArgs> NavigatedToPage;
+        event EventHandler<NavigatedToPageEventArgs> NavigatedToPage;
+
+        /// <summary>
+        /// Occurs whenever an action outside of the current pdf document is to perform.
+        /// </summary>
+        event EventHandler<PerformActionEventArgs> PerformOutsideAction;
     }
 }

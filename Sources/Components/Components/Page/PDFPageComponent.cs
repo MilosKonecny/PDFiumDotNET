@@ -9,6 +9,7 @@
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Action;
     using PDFiumDotNET.Components.Contracts.Destination;
+    using PDFiumDotNET.Components.Contracts.EventArguments;
     using PDFiumDotNET.Components.Contracts.Observers;
     using PDFiumDotNET.Components.Contracts.Page;
 
@@ -356,21 +357,26 @@
         /// </summary>
         public void PerformAction(IPDFAction action)
         {
-            if (action == null
-                || action.ActionType != PDFActionType.Goto
-                || action.Destination == null)
+            if (action == null)
             {
                 return;
             }
 
-            if (action.Destination.PageIndex < 0 || action.Destination.PageIndex >= PageCount)
+            if (action.ActionType != PDFActionType.Goto)
+            {
+                PerformOutsideAction?.Invoke(this, new PerformActionEventArgs(action));
+                return;
+            }
+
+            if (action.Destination == null || action.Destination.PageIndex < 0 || action.Destination.PageIndex >= PageCount)
             {
                 return;
             }
 
+            var previousCurrentPageIndex = CurrentPageIndex;
             CurrentPageIndex = 1 + action.Destination.PageIndex;
             InvokePropertyChangedEvent(nameof(CurrentPageIndex));
-            NavigatedToPage?.Invoke(this, EventArgs.Empty);
+            NavigatedToPage?.Invoke(this, new NavigatedToPageEventArgs(previousCurrentPageIndex, CurrentPageIndex));
         }
 
         /// <summary>
@@ -388,9 +394,10 @@
                 return;
             }
 
+            var previousCurrentPageIndex = CurrentPageIndex;
             CurrentPageIndex = 1 + destination.PageIndex;
             InvokePropertyChangedEvent(nameof(CurrentPageIndex));
-            NavigatedToPage?.Invoke(this, EventArgs.Empty);
+            NavigatedToPage?.Invoke(this, new NavigatedToPageEventArgs(previousCurrentPageIndex, CurrentPageIndex));
         }
 
         /// <summary>
@@ -403,15 +410,21 @@
                 return;
             }
 
+            var previousCurrentPageIndex = CurrentPageIndex;
             CurrentPageIndex = pageIndex;
             InvokePropertyChangedEvent(nameof(CurrentPageIndex));
-            NavigatedToPage?.Invoke(this, EventArgs.Empty);
+            NavigatedToPage?.Invoke(this, new NavigatedToPageEventArgs(previousCurrentPageIndex, CurrentPageIndex));
         }
 
         /// <summary>
-        /// Occurs whenever some of 'navigate' methods was called and <see cref="CurrentPageIndex"/> was changed.
+        /// <inheritdoc/>
         /// </summary>
-        public event EventHandler<EventArgs> NavigatedToPage;
+        public event EventHandler<NavigatedToPageEventArgs> NavigatedToPage;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public event EventHandler<PerformActionEventArgs> PerformOutsideAction;
 
         #endregion Implementation of IPageComponent
 
