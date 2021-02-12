@@ -12,6 +12,7 @@ namespace PDFiumDotNET.WpfCoreControls
     using System.Windows;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
+    using PDFiumDotNET.Components.Contracts.Adapters;
     using PDFiumDotNET.Components.Contracts.Page;
 #if WpfControls
     using PDFiumDotNET.WpfControls.Helper;
@@ -86,7 +87,7 @@ namespace PDFiumDotNET.WpfCoreControls
                 // Zoom factor was not changed or not preserved
                 // Determine pages to draw.
                 _renderedPages.Clear();
-                _renderedPages.AddRange(PDFPageComponent.DeterminePagesToRender(
+                _renderedPages.AddRange(PDFPageComponent[PageLayoutType.Standard].DeterminePagesToRender(
                     VerticalOffset,
                     VerticalOffset + ViewportHeight,
                     PDFPageMargin,
@@ -103,7 +104,7 @@ namespace PDFiumDotNET.WpfCoreControls
 
                 // Determine pages to draw.
                 _renderedPages.Clear();
-                _renderedPages.AddRange(PDFPageComponent.DeterminePagesToRender(
+                _renderedPages.AddRange(PDFPageComponent[PageLayoutType.Standard].DeterminePagesToRender(
                     pageOnCenter,
                     ref topLine,
                     ref bottomLine,

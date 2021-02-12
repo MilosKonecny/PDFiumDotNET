@@ -10,6 +10,7 @@ namespace PDFiumDotNET.WpfCoreControls
     using System.Windows;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
+    using PDFiumDotNET.Components.Contracts.Adapters;
 #if WpfControls
     using PDFiumDotNET.WpfControls.Helper;
 #else
@@ -31,7 +32,7 @@ namespace PDFiumDotNET.WpfCoreControls
             var pageOnCenter = _renderedPages.FirstOrDefault(page => page.IsOnCenter);
             // Determine pages to draw.
             _renderedPages.Clear();
-            _renderedPages.AddRange(PDFPageComponent.DeterminePagesToRender(
+            _renderedPages.AddRange(PDFPageComponent[PageLayoutType.Thumbnail].DeterminePagesToRender(
                 VerticalOffset,
                 VerticalOffset + ViewportHeight,
                 2d * FontSize,
@@ -44,7 +45,7 @@ namespace PDFiumDotNET.WpfCoreControls
             foreach (var pageInfo in _renderedPages)
             {
                 // Current page width
-                var currentPageWidth = pageInfo.Page.Width * _thumbnailZoomFactor;
+                var currentPageWidth = pageInfo.Page.ThumbnailWidth * _thumbnailZoomFactor;
 
                 // Center the page horizontally
                 pageInfo.Left = ViewportWidth / 2d - currentPageWidth / 2d;
@@ -58,15 +59,15 @@ namespace PDFiumDotNET.WpfCoreControls
 
                 var pageRect = new Rect(pageInfo.Left, pageInfo.Top, Math.Max(1d, pageInfo.Right - pageInfo.Left), Math.Max(0d, pageInfo.Bottom - pageInfo.Top));
 
-                var pageOnViewport = pageRect;
-                pageOnViewport.Intersect(viewportRectangle);
-                if (pageOnViewport.IsEmpty)
-                {
-                    continue;
-                }
+                ////////var pageOnViewport = pageRect;
+                ////////pageOnViewport.Intersect(viewportRectangle);
+                ////////if (pageOnViewport.IsEmpty)
+                ////////{
+                ////////    continue;
+                ////////}
 
-                pageOnViewport.Width = Math.Max(1d, pageOnViewport.Width);
-                pageOnViewport.Height = Math.Max(1d, pageOnViewport.Height);
+                ////////pageOnViewport.Width = Math.Max(1d, pageOnViewport.Width);
+                ////////pageOnViewport.Height = Math.Max(1d, pageOnViewport.Height);
 
                 var pageRectForPDFium = pageRect;
                 pageRectForPDFium.Y = pageRect.Y > 0d ? 0d : pageRect.Y;
@@ -79,19 +80,16 @@ namespace PDFiumDotNET.WpfCoreControls
 
                 try
                 {
-                    var bitmap = new WriteableBitmap((int)pageOnViewport.Width, (int)pageOnViewport.Height, 96, 96, PixelFormats.Bgra32, null);
+                    var bitmap = new WriteableBitmap((int)pageInfo.Page.ThumbnailWidth, (int)pageInfo.Page.ThumbnailHeight, 96, 96, PixelFormats.Bgra32, null);
                     var format = BitmapFormatConverter.GetFormat(bitmap.Format);
 
                     bitmap.Lock();
-                    pageInfo.Page.RenderPageBitmap(
-                        _thumbnailZoomFactor,
-                        (int)pageRectForPDFium.X, (int)pageRectForPDFium.Y, (int)pageRectForPDFium.Width, (int)pageRectForPDFium.Height,
-                        (int)pageOnViewport.Width, (int)pageOnViewport.Height, format, bitmap.BackBuffer, bitmap.BackBufferStride);
-                    bitmap.AddDirtyRect(new Int32Rect(0, 0, (int)pageOnViewport.Width, (int)pageOnViewport.Height));
+                    pageInfo.Page.RenderThumbnailBitmap(format, bitmap.BackBuffer, bitmap.BackBufferStride);
+                    bitmap.AddDirtyRect(new Int32Rect(0, 0, (int)pageRect.Width, (int)pageRect.Height));
                     bitmap.Unlock();
 
                     // Draw page content.
-                    drawingContext.DrawImage(bitmap, new Rect(pageOnViewport.TopLeft, pageOnViewport.BottomRight));
+                    drawingContext.DrawImage(bitmap, new Rect(pageRect.TopLeft, pageRect.BottomRight));
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
                 catch { }

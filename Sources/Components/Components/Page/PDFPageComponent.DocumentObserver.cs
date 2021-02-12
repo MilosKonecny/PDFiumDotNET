@@ -28,34 +28,21 @@
             }
 
             CurrentPageIndex = 0;
-            WidestWidth = 0;
-            HighestHeight = 0;
-            CumulativeHeight = 0;
             PageCount = _mainComponent.PDFiumBridge.FPDF_GetPageCount(_mainComponent.PDFiumDocument);
+            _standardPageLayout.SetDefaultValues();
+            _thumbnailPageLayout.SetDefaultValues();
             if (PageCount > 0)
             {
                 CurrentPageIndex = 1;
-            }
-
-            if (PageCount > 0)
-            {
-                CumulativeHeight = 0;
                 for (var index = 0; index < PageCount; index++)
                 {
                     var newPage = new PDFPage(_mainComponent, index);
                     newPage.Build();
                     Pages.Add(newPage);
-                    CumulativeHeight += newPage.Height;
-                    if (newPage.Width > WidestWidth)
-                    {
-                        WidestWidth = newPage.Width;
-                    }
-
-                    if (newPage.Height > HighestHeight)
-                    {
-                        HighestHeight = newPage.Height;
-                    }
                 }
+
+                _standardPageLayout.InitializeLayout();
+                _thumbnailPageLayout.InitializeLayout();
             }
 
             InvokePropertyChangedEvent(null);

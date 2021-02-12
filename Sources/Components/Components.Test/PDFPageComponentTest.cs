@@ -3,6 +3,7 @@
     using System;
     using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using PDFiumDotNET.Components.Contracts.Adapters;
     using PDFiumDotNET.Components.Page;
 
     // Disable "Remove the underscores from member name"
@@ -74,15 +75,30 @@
 
             var component = new PDFComponent();
             var pageComponent = component.PageComponent;
+            Assert.IsNotNull(pageComponent);
+            Assert.IsNotNull(pageComponent[PageLayoutType.Standard]);
 
             component.OpenDocument(pdfFile, string.Empty);
             Assert.IsTrue(component.IsDocumentOpened);
 
-            Assert.AreEqual(866448, pageComponent.CumulativeHeight);
             Assert.AreEqual(1, pageComponent.CurrentPageIndex);
-            Assert.AreEqual(792, pageComponent.HighestHeight);
             Assert.AreEqual(1094, pageComponent.PageCount);
-            Assert.AreEqual(612, pageComponent.WidestWidth);
+
+            // Test all layout adapters
+            foreach (PageLayoutType type in Enum.GetValues(typeof(PageLayoutType)))
+            {
+                Assert.IsNotNull(pageComponent[type]);
+            }
+
+            // Standard
+            Assert.IsTrue(866448 - pageComponent[PageLayoutType.Standard].CumulativeHeight <= 1, "Value: " + pageComponent[PageLayoutType.Standard].CumulativeHeight);
+            Assert.IsTrue(792 - pageComponent[PageLayoutType.Standard].HighestGridCellHeight <= 1, "Value: " + pageComponent[PageLayoutType.Standard].HighestGridCellHeight);
+            Assert.IsTrue(612 - pageComponent[PageLayoutType.Standard].WidestGridCellWidth <= 1, "Value: " + pageComponent[PageLayoutType.Standard].WidestGridCellWidth);
+
+            // Thumbnail
+            Assert.IsTrue(218800 - (int)pageComponent[PageLayoutType.Thumbnail].CumulativeHeight <= 1, "Value: " + (int)pageComponent[PageLayoutType.Thumbnail].CumulativeHeight);
+            Assert.IsTrue(100 - (int)pageComponent[PageLayoutType.Thumbnail].HighestGridCellHeight <= 1, "Value: " + (int)pageComponent[PageLayoutType.Thumbnail].HighestGridCellHeight);
+            Assert.IsTrue(77 - (int)pageComponent[PageLayoutType.Thumbnail].WidestGridCellWidth <= 1, "Value: " + (int)pageComponent[PageLayoutType.Thumbnail].WidestGridCellWidth);
 
             component.CloseDocument();
             component.Dispose();

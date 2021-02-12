@@ -11,6 +11,7 @@ namespace PDFiumDotNET.WpfCoreControls
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
     using System.Windows.Media;
+    using PDFiumDotNET.Components.Contracts.Adapters;
     using PDFiumDotNET.Components.Contracts.Page;
 
     /// <summary>
@@ -20,7 +21,7 @@ namespace PDFiumDotNET.WpfCoreControls
     {
         #region Private consts
 
-        private const double _thumbnailZoomFactor = 0.2d;
+        private const double _thumbnailZoomFactor = 1d;
 
         #endregion Private consts
 
@@ -336,7 +337,7 @@ namespace PDFiumDotNET.WpfCoreControls
 
             var width = availableSize.Width;
             var height = availableSize.Height;
-            PDFPageComponent.DeterminePageArea(ref width, ref height, 2d * FontSize, _thumbnailZoomFactor);
+            PDFPageComponent[PageLayoutType.Thumbnail].DetermineArea(ref width, ref height, 2d * FontSize, _thumbnailZoomFactor);
             return new Size(width, height);
         }
 

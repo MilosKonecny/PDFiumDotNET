@@ -11,6 +11,7 @@ namespace PDFiumDotNET.WpfCoreControls
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
     using System.Windows.Media;
+    using PDFiumDotNET.Components.Contracts.Adapters;
     using PDFiumDotNET.Components.Contracts.Link;
     using PDFiumDotNET.Components.Contracts.Page;
 
@@ -407,7 +408,7 @@ namespace PDFiumDotNET.WpfCoreControls
 
             var width = availableSize.Width;
             var height = availableSize.Height;
-            PDFPageComponent.DeterminePageArea(ref width, ref height, PDFPageMargin, PDFZoomComponent.CurrentZoomFactor);
+            PDFPageComponent[PageLayoutType.Standard].DetermineArea(ref width, ref height, PDFPageMargin, PDFZoomComponent.CurrentZoomFactor);
             return new Size(width, height);
         }
 

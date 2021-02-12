@@ -36,6 +36,18 @@
 
         #endregion Constructors
 
+        #region Private properties
+
+        private double ThumbnailFactor
+        {
+            get
+            {
+                return (Width > Height ? Width : Height) / 200d;
+            }
+        }
+
+        #endregion Private properties
+
         #region Public methods
 
         /// <summary>
@@ -88,12 +100,24 @@
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public double ThumbnailHeight => Height / 6;
+        public double ThumbnailHeight
+        {
+            get
+            {
+                return Height / ThumbnailFactor;
+            }
+        }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public double ThumbnailWidth => Width / 6;
+        public double ThumbnailWidth
+        {
+            get
+            {
+                return Width / ThumbnailFactor;
+            }
+        }
 
         /// <summary>
         /// <inheritdoc/>
