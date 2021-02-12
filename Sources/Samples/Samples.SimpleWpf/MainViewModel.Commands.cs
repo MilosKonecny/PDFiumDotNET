@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using Microsoft.Win32;
+    using PDFiumDotNET.Components.Contracts.Adapters;
     using PDFiumDotNET.Samples.SimpleWpf.CommonDialogs;
     using PDFiumDotNET.Samples.SimpleWpf.Helper;
 
@@ -168,7 +169,7 @@
                 return;
             }
 
-            zoomComponent.CurrentZoomFactor = _view.PDFActualWidth / (pageComponent.WidestWidth + 2 * _view.PDFPageMargin);
+            zoomComponent.CurrentZoomFactor = _view.PDFActualWidth / (pageComponent[PageLayoutType.Standard].WidestGridCellWidth + 2 * _view.PDFPageMargin);
         }
 
         private bool CanExecuteZoomWidthCommand()
@@ -185,7 +186,7 @@
                 return;
             }
 
-            zoomComponent.CurrentZoomFactor = _view.PDFActualHeight / (pageComponent.HighestHeight + 2 * _view.PDFPageMargin);
+            zoomComponent.CurrentZoomFactor = _view.PDFActualHeight / (pageComponent[PageLayoutType.Standard].HighestGridCellHeight + 2 * _view.PDFPageMargin);
         }
 
         private bool CanExecuteZoomHeightCommand()

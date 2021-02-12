@@ -8,6 +8,7 @@ namespace PDFiumDotNET.WpfCoreControls
     using System.ComponentModel;
     using System.Windows;
     using System.Windows.Media;
+    using PDFiumDotNET.Components.Contracts.Adapters;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Zoom;
 
@@ -241,7 +242,7 @@ namespace PDFiumDotNET.WpfCoreControls
         private void HandlePDFPageComponentNavigatedToPageEvent(object sender, System.EventArgs e)
         {
             // Current page is changed. Scroll to this page.
-            VerticalOffset = PDFPageComponent.GetPageTopLine(PDFPageComponent.CurrentPageIndex - 1, PDFPageMargin, PDFZoomComponent.CurrentZoomFactor);
+            VerticalOffset = PDFPageComponent[PageLayoutType.Standard].GetPageTopLine(PDFPageComponent.CurrentPageIndex - 1, PDFPageMargin, PDFZoomComponent.CurrentZoomFactor);
         }
 
         private void HandlePDFZoomComponentPropertyChangedEvent(object sender, PropertyChangedEventArgs e)
