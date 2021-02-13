@@ -6,3 +6,4 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCulture("")]
 
 [assembly: InternalsVisibleTo("PDFiumDotNET.Components.Test")]
+[assembly: InternalsVisibleTo("PDFiumDotNET.Components.Factory")]

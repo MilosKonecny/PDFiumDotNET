@@ -16,7 +16,7 @@
     /// <summary>
     /// <inheritdoc cref="IPDFComponent"/>
     /// </summary>
-    public sealed partial class PDFComponent
+    internal sealed partial class PDFComponent
     {
         #region Implementation of IPDFComponent
 

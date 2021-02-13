@@ -11,7 +11,7 @@
     /// <summary>
     /// <inheritdoc cref="IPDFComponent"/>
     /// </summary>
-    public sealed partial class PDFComponent : IPDFComponent, IDisposable
+    internal sealed partial class PDFComponent : IPDFComponent, IDisposable
     {
         #region Private fields
 
