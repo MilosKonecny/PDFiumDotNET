@@ -162,7 +162,7 @@
                     isCenterSet = true;
                     if (setCurrentPageIndex)
                     {
-                        PageComponent.CurrentPageIndex = pageToAdd.Page.PageIndex + 1;
+                        PageComponent.SetCurrentInformation(pageToAdd.Page);
                     }
                 }
 
@@ -175,7 +175,7 @@
                     isCenterSet = true;
                     if (setCurrentPageIndex)
                     {
-                        PageComponent.CurrentPageIndex = pageToAdd.Page.PageIndex + 1;
+                        PageComponent.SetCurrentInformation(pageToAdd.Page);
                     }
                 }
 

@@ -77,10 +77,6 @@
       <Project>{2e26ed44-85fe-401e-8954-c38103253f1b}</Project>
       <Name>PDFiumDotNET.Components.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Components\Components\PDFiumDotNET.Components.csproj">
-      <Project>{7ef04d1b-07a0-4603-ba46-c52ce4a80330}</Project>
-      <Name>PDFiumDotNET.Components</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

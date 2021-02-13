@@ -27,7 +27,6 @@
                 return;
             }
 
-            CurrentPageIndex = 0;
             PageCount = _mainComponent.PDFiumBridge.FPDF_GetPageCount(_mainComponent.PDFiumDocument);
             _standardPageLayout.SetDefaultValues();
             _thumbnailPageLayout.SetDefaultValues();
