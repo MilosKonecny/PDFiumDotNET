@@ -19,6 +19,11 @@
         int CurrentPageIndex { get; }
 
         /// <summary>
+        /// Gets label of current page of opened document.
+        /// </summary>
+        string CurrentPageLabel { get; }
+
+        /// <summary>
         /// Gets the page count of opened document.
         /// </summary>
         int PageCount { get; }

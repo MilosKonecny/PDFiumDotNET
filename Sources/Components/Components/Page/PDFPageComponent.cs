@@ -27,7 +27,6 @@
         private PDFComponent _mainComponent;
         private StandardPageLayout _standardPageLayout;
         private ThumbnailPageLayout _thumbnailPageLayout;
-        private int _currentPageIndex;
 
         #endregion Private fields
 
@@ -52,15 +51,62 @@
 
         private void SetDefaultValues()
         {
-            CurrentPageIndex = 0;
-            _standardPageLayout.SetDefaultValues();
-            _thumbnailPageLayout.SetDefaultValues();
             PageCount = 0;
             Pages.Clear();
+            SetCurrentInformation(null);
+            _standardPageLayout.SetDefaultValues();
+            _thumbnailPageLayout.SetDefaultValues();
             InvokePropertyChangedEvent(null);
         }
 
+        /// <summary>
+        /// Gets the page. In case the index is out of range, <c>null</c>
+        /// </summary>
+        /// <param name="pageIndex">Index of page to return.</param>
+        /// <returns>Return required page.
+        /// <c>null</c> is returned in case the <paramref name="pageIndex"/> is out of range.</returns>
+        private IPDFPage GetPage(int pageIndex)
+        {
+            if (pageIndex >= 0 && pageIndex < PageCount)
+            {
+                return Pages[pageIndex];
+            }
+
+            return null;
+        }
+
         #endregion Private methods
+
+        #region Internal methods
+
+        /// <summary>
+        /// Sets all 'current' properties based on given page.
+        /// </summary>
+        /// <param name="page">Page to use as a source for 'current' properties.</param>
+        internal void SetCurrentInformation(IPDFPage page)
+        {
+            var newPageIndex = 0;
+            var newPageLabel = string.Empty;
+            if (page != null)
+            {
+                newPageIndex = page.PageIndex + 1;
+                newPageLabel = page.PageLabel;
+            }
+
+            if (CurrentPageIndex != newPageIndex)
+            {
+                CurrentPageIndex = newPageIndex;
+                InvokePropertyChangedEvent(nameof(CurrentPageIndex));
+            }
+
+            if (!string.Equals(CurrentPageLabel, newPageLabel, StringComparison.Ordinal))
+            {
+                CurrentPageLabel = newPageLabel;
+                InvokePropertyChangedEvent(nameof(CurrentPageLabel));
+            }
+        }
+
+        #endregion Internal methods
 
         #region Private methods - invoke event
 
@@ -78,19 +124,17 @@
         /// </summary>
         public int CurrentPageIndex
         {
-            get
-            {
-                return _currentPageIndex;
-            }
+            get;
+            private set;
+        }
 
-            internal set
-            {
-                if (_currentPageIndex != value)
-                {
-                    _currentPageIndex = value;
-                    InvokePropertyChangedEvent(nameof(CurrentPageIndex));
-                }
-            }
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public string CurrentPageLabel
+        {
+            get;
+            private set;
         }
 
         /// <summary>
@@ -136,8 +180,7 @@
             }
 
             var previousCurrentPageIndex = CurrentPageIndex;
-            CurrentPageIndex = 1 + action.Destination.PageIndex;
-            InvokePropertyChangedEvent(nameof(CurrentPageIndex));
+            SetCurrentInformation(GetPage(action.Destination.PageIndex));
             NavigatedToPage?.Invoke(this, new NavigatedToPageEventArgs(previousCurrentPageIndex, CurrentPageIndex));
         }
 
@@ -157,8 +200,7 @@
             }
 
             var previousCurrentPageIndex = CurrentPageIndex;
-            CurrentPageIndex = 1 + destination.PageIndex;
-            InvokePropertyChangedEvent(nameof(CurrentPageIndex));
+            SetCurrentInformation(GetPage(destination.PageIndex));
             NavigatedToPage?.Invoke(this, new NavigatedToPageEventArgs(previousCurrentPageIndex, CurrentPageIndex));
         }
 
@@ -173,8 +215,7 @@
             }
 
             var previousCurrentPageIndex = CurrentPageIndex;
-            CurrentPageIndex = pageIndex;
-            InvokePropertyChangedEvent(nameof(CurrentPageIndex));
+            SetCurrentInformation(GetPage(pageIndex - 1));
             NavigatedToPage?.Invoke(this, new NavigatedToPageEventArgs(previousCurrentPageIndex, CurrentPageIndex));
         }
 

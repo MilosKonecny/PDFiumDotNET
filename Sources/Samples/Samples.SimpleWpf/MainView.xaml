@@ -116,9 +116,10 @@
                 <Button Command="{Binding Path=GoToPreviousPageCommand}" ToolTip="Navigate to previous page">
                     <wpfControl:AutoDisabledImage Source="Resources\previous_40px.png"/>
                 </Button>
-                <TextBlock Width="120" Style="{DynamicResource ResourceKey=SingleInfoText}">
+                <TextBlock Width="150" Style="{DynamicResource ResourceKey=SingleInfoText}">
                     <TextBlock.Text>
-                        <MultiBinding StringFormat="{}Page: {0} of {1}">
+                        <MultiBinding StringFormat="{}Page: {0} ({1} of {2})">
+                            <Binding Path="PageComponent.CurrentPageLabel" />
                             <Binding Path="PageComponent.CurrentPageIndex" />
                             <Binding Path="PageComponent.PageCount" />
                         </MultiBinding>

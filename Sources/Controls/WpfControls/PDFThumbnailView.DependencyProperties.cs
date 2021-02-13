@@ -8,6 +8,7 @@ namespace PDFiumDotNET.WpfCoreControls
     using System.ComponentModel;
     using System.Windows;
     using System.Windows.Media;
+    using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Page;
 
     /// <summary>
@@ -172,7 +173,7 @@ namespace PDFiumDotNET.WpfCoreControls
                 return;
             }
 
-            component.PropertyChanged += HandlePDFPageComponentPropertyChangedEvent;
+            component.MainComponent.PropertyChanged += HandlePDFComponentPropertyChangedEvent;
             ScrollOwner?.InvalidateScrollInfo();
         }
 
@@ -183,7 +184,7 @@ namespace PDFiumDotNET.WpfCoreControls
                 return;
             }
 
-            component.PropertyChanged -= HandlePDFPageComponentPropertyChangedEvent;
+            component.MainComponent.PropertyChanged -= HandlePDFComponentPropertyChangedEvent;
             ScrollOwner?.InvalidateScrollInfo();
         }
 
@@ -191,16 +192,15 @@ namespace PDFiumDotNET.WpfCoreControls
 
         #region Private event handler methods
 
-        private void HandlePDFPageComponentPropertyChangedEvent(object sender, PropertyChangedEventArgs e)
+        private void HandlePDFComponentPropertyChangedEvent(object sender, PropertyChangedEventArgs e)
         {
-            if (string.IsNullOrEmpty(e.PropertyName))
+            if (string.IsNullOrEmpty(e.PropertyName)
+                || string.Equals(
+                    nameof(IPDFComponent.IsDocumentOpened),
+                    e.PropertyName,
+                    StringComparison.OrdinalIgnoreCase))
             {
-                // Everything is changed
                 ResetStatus();
-            }
-
-            if (!string.Equals(nameof(IPDFPageComponent.CurrentPageIndex), e.PropertyName, StringComparison.OrdinalIgnoreCase))
-            {
                 InvalidateVisual();
             }
         }
