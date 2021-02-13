@@ -124,9 +124,9 @@
       <Project>{2e26ed44-85fe-401e-8954-c38103253f1b}</Project>
       <Name>PDFiumDotNET.Components.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Components\Components\PDFiumDotNET.Components.csproj">
-      <Project>{7ef04d1b-07a0-4603-ba46-c52ce4a80330}</Project>
-      <Name>PDFiumDotNET.Components</Name>
+    <ProjectReference Include="..\..\Components\Components.Factory\PDFiumDotNET.Components.Factory.csproj">
+      <Project>{501c6e92-72dd-4944-8822-2483920e44b4}</Project>
+      <Name>PDFiumDotNET.Components.Factory</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Controls\WpfControls\PDFiumDotNET.WpfControls.csproj">
       <Project>{0bcac3a2-5acb-4fcd-ad3a-2a1e226dc693}</Project>

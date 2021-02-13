@@ -6,11 +6,11 @@
     using System.Globalization;
     using System.Runtime.CompilerServices;
     using System.Windows;
-    using PDFiumDotNET.Components;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Bookmark;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Zoom;
+    using PDFiumDotNET.Components.Factory;
     using PDFiumDotNET.Samples.SimpleWpf.Contracts;
     using PDFiumDotNET.Samples.SimpleWpf.Helper;
 
@@ -160,8 +160,8 @@
             GoToNextPageCommand = new ViewModelCommand(ExecuteGoToNextPageCommand, CanExecuteGoToNextPageCommand);
             GoToLastPageCommand = new ViewModelCommand(ExecuteGoToLastPageCommand, CanExecuteGoToLastPageCommand);
 
-            // Initialize pdf vomponent
-            _pdfComponent = new PDFComponent();
+            // Initialize pdf component
+            _pdfComponent = PDFFactory.PDFComponent;
 
             _pdfComponent.ZoomComponent.PropertyChanged += (s, e) =>
             {
