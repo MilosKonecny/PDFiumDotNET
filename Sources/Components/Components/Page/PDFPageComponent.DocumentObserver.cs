@@ -32,7 +32,6 @@
             _thumbnailPageLayout.SetDefaultValues();
             if (PageCount > 0)
             {
-                CurrentPageIndex = 1;
                 for (var index = 0; index < PageCount; index++)
                 {
                     var newPage = new PDFPage(_mainComponent, index);
@@ -42,6 +41,7 @@
 
                 _standardPageLayout.InitializeLayout();
                 _thumbnailPageLayout.InitializeLayout();
+                SetCurrentInformation(Pages[0]);
             }
 
             InvokePropertyChangedEvent(null);

@@ -24,6 +24,8 @@
         private IView _view;
         private IPDFComponent _pdfComponent;
         private IPDFPage _selectedThumbnail;
+        private string _currentPageLabel;
+        private int _currentPageIndex;
 
         #endregion Private fields
 
@@ -100,6 +102,44 @@
             }
         }
 
+        /// <summary>
+        /// Gets or sets the current page label.
+        /// </summary>
+        public string CurrentPageLabel
+        {
+            get
+            {
+                return _currentPageLabel;
+            }
+
+            set
+            {
+                if (!string.Equals(_currentPageLabel, value, StringComparison.OrdinalIgnoreCase))
+                {
+                    _pdfComponent.PageComponent.NavigateToPage(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the current page index.
+        /// </summary>
+        public int CurrentPageIndex
+        {
+            get
+            {
+                return _currentPageIndex;
+            }
+
+            set
+            {
+                if (_currentPageIndex != value)
+                {
+                    _pdfComponent.PageComponent.NavigateToPage(value);
+                }
+            }
+        }
+
         #endregion Public properties
 
         #region Public methods
@@ -169,6 +209,20 @@
                     || string.IsNullOrEmpty(e.PropertyName))
                 {
                     InvokePropertyChangedEvent(nameof(CurrentZoom));
+                }
+            };
+
+            _pdfComponent.PageComponent.PropertyChanged += (s, e) =>
+            {
+                if (string.Equals(nameof(IPDFPageComponent.CurrentPageIndex), e.PropertyName))
+                {
+                    _currentPageIndex = _pdfComponent.PageComponent.CurrentPageIndex;
+                    InvokePropertyChangedEvent(nameof(CurrentPageIndex));
+                }
+                else if (string.Equals(nameof(IPDFPageComponent.CurrentPageLabel), e.PropertyName))
+                {
+                    _currentPageLabel = _pdfComponent.PageComponent.CurrentPageLabel;
+                    InvokePropertyChangedEvent(nameof(CurrentPageLabel));
                 }
             };
 

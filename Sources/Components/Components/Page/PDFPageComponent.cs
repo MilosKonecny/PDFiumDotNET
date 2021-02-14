@@ -60,10 +60,10 @@
         }
 
         /// <summary>
-        /// Gets the page. In case the index is out of range, <c>null</c>
+        /// Gets the page. In case the index is out of range, <c>null</c> is returned.
         /// </summary>
         /// <param name="pageIndex">Index of page to return.</param>
-        /// <returns>Return required page.
+        /// <returns>Returns required page.
         /// <c>null</c> is returned in case the <paramref name="pageIndex"/> is out of range.</returns>
         private IPDFPage GetPage(int pageIndex)
         {
@@ -217,6 +217,20 @@
             var previousCurrentPageIndex = CurrentPageIndex;
             SetCurrentInformation(GetPage(pageIndex - 1));
             NavigatedToPage?.Invoke(this, new NavigatedToPageEventArgs(previousCurrentPageIndex, CurrentPageIndex));
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void NavigateToPage(string pageLabel)
+        {
+            var page = Pages.FirstOrDefault(p => string.Equals(p.PageLabel, pageLabel, StringComparison.OrdinalIgnoreCase));
+            if (page != null)
+            {
+                var previousCurrentPageIndex = CurrentPageIndex;
+                SetCurrentInformation(page);
+                NavigatedToPage?.Invoke(this, new NavigatedToPageEventArgs(previousCurrentPageIndex, CurrentPageIndex));
+            }
         }
 
         /// <summary>
