@@ -60,10 +60,17 @@
         void NavigateToDestination(IPDFDestination destination);
 
         /// <summary>
-        /// Navigates to the specified page.
+        /// Navigates to the specified page based on its index.
         /// </summary>
-        /// <param name="pageIndex">Index of page to navigate into. Index is 1 based.</param>
+        /// <param name="pageIndex">Index of page to navigate to. Index is 1 based.</param>
         void NavigateToPage(int pageIndex);
+
+        /// <summary>
+        /// Navigates to the specified page based on its label.
+        /// </summary>
+        /// <param name="pageLabel">Label of page to navigate to.
+        /// In case the label not exists, text is converted to index and method <see cref="NavigateToPage(int)"/> will be used.</param>
+        void NavigateToPage(string pageLabel);
 
         /// <summary>
         /// Occurs whenever some of 'navigate' / 'perform' methods was called and <see cref="CurrentPageIndex"/> was changed.

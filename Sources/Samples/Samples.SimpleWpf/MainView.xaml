@@ -110,21 +110,39 @@
                 </Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,10,5">
+                <StackPanel.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="2,0"/>
+                    </Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="Padding" Value="2,0"/>
+                    </Style>
+                </StackPanel.Resources>
                 <Button Command="{Binding Path=GoToFirstPageCommand}" ToolTip="Navigate to first page">
                     <wpfControl:AutoDisabledImage Source="Resources\first_40px.png"/>
                 </Button>
                 <Button Command="{Binding Path=GoToPreviousPageCommand}" ToolTip="Navigate to previous page">
                     <wpfControl:AutoDisabledImage Source="Resources\previous_40px.png"/>
                 </Button>
-                <TextBlock Width="150" Style="{DynamicResource ResourceKey=SingleInfoText}">
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="{}Page: {0} ({1} of {2})">
-                            <Binding Path="PageComponent.CurrentPageLabel" />
-                            <Binding Path="PageComponent.CurrentPageIndex" />
-                            <Binding Path="PageComponent.PageCount" />
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
+                <StackPanel Orientation="Horizontal" Margin="10,0">
+                    <TextBlock Text="Page:" />
+                    <TextBox Text="{Binding Path=CurrentPageLabel, UpdateSourceTrigger=PropertyChanged}"
+                             GotFocus="HandleTextBoxGotFocusEvent"
+                             ToolTip="Enter the page label to navigate to page" />
+                    <TextBlock Text="(" />
+                    <TextBox Text="{Binding Path=CurrentPageIndex, UpdateSourceTrigger=PropertyChanged}"
+                             GotFocus="HandleTextBoxGotFocusEvent"
+                             ToolTip="Enter the page number to navigate to page" />
+                    <TextBlock Text="/" />
+                    <TextBox Text="{Binding Path=PageComponent.PageCount, Mode=OneWay}"
+                             ToolTip="Not editable"
+                             IsReadOnly="True" SelectionBrush="Transparent" />
+                    <TextBlock Text=")" />
+                </StackPanel>
                 <Button Command="{Binding Path=GoToNextPageCommand}" ToolTip="Navigate to next page">
                     <wpfControl:AutoDisabledImage Source="Resources\next_40px.png"/>
                 </Button>
