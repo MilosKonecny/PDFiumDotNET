@@ -1,8 +1,6 @@
 ﻿namespace PDFiumDotNET.Samples.SimpleWpf
 {
-    using System;
     using System.Windows;
-    using System.Windows.Controls;
     using PDFiumDotNET.Components.Contracts.Bookmark;
     using PDFiumDotNET.Samples.SimpleWpf.Contracts;
 
@@ -50,10 +48,6 @@
             {
                 ViewModel.NavigateTo(bookmark);
             }
-        }
-        private void HandleTextBoxGotFocusEvent(object sender, RoutedEventArgs e)
-        {
-            Dispatcher.BeginInvoke(new Action(() => (sender as TextBox)?.SelectAll()));
         }
 
         #endregion Private event handler methods
