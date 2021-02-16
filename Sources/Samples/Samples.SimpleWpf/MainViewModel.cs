@@ -43,13 +43,24 @@
         #region Public properties
 
         /// <summary>
+        /// Gets the main PDF component.
+        /// </summary>
+        public IPDFComponent PDFComponent
+        {
+            get
+            {
+                return _pdfComponent;
+            }
+        }
+
+        /// <summary>
         /// Gets the page component.
         /// </summary>
         public IPDFPageComponent PageComponent
         {
             get
             {
-                return _pdfComponent.PageComponent;
+                return _pdfComponent?.PageComponent;
             }
         }
 
@@ -60,7 +71,7 @@
         {
             get
             {
-                return _pdfComponent.BookmarkComponent;
+                return _pdfComponent?.BookmarkComponent;
             }
         }
 
@@ -71,7 +82,7 @@
         {
             get
             {
-                return _pdfComponent.ZoomComponent;
+                return _pdfComponent?.ZoomComponent;
             }
         }
 
@@ -99,6 +110,14 @@
             get
             {
                 return (_pdfComponent != null && _pdfComponent.ZoomComponent != null) ? _pdfComponent.ZoomComponent.CurrentZoomFactor * 100d : 100d;
+            }
+
+            set
+            {
+                if (_pdfComponent != null && _pdfComponent.ZoomComponent != null)
+                {
+                    _pdfComponent.ZoomComponent.CurrentZoomFactor = value / 100d;
+                }
             }
         }
 
@@ -137,6 +156,17 @@
                 {
                     _pdfComponent.PageComponent.NavigateToPage(value);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets the information whether the PDF document is closed.
+        /// </summary>
+        public bool IsDocumentClosed
+        {
+            get
+            {
+                return !_pdfComponent.IsDocumentOpened;
             }
         }
 
@@ -202,6 +232,14 @@
 
             // Initialize pdf component
             _pdfComponent = PDFFactory.PDFComponent;
+
+            _pdfComponent.PropertyChanged += (s, e) =>
+            {
+                if (string.Equals(nameof(IPDFComponent.IsDocumentOpened), e?.PropertyName))
+                {
+                    InvokePropertyChangedEvent(nameof(IsDocumentClosed));
+                }
+            };
 
             _pdfComponent.ZoomComponent.PropertyChanged += (s, e) =>
             {
