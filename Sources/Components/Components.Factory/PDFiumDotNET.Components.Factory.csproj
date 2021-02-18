@@ -9,35 +9,35 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.1|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard2.1\PDFiumDotNET.Components.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netstandard2.1\PDFiumDotNET.Components.Factory.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard2.1\PDFiumDotNET.Components.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\netstandard2.1\PDFiumDotNET.Components.Factory.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
-    <DocumentationFile>bin\Debug\netcoreapp3.1\PDFiumDotNET.Components.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netcoreapp3.1\PDFiumDotNET.Components.Factory.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
-    <DocumentationFile>bin\Release\netcoreapp3.1\PDFiumDotNET.Components.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\netcoreapp3.1\PDFiumDotNET.Components.Factory.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
-    <DocumentationFile>bin\Debug\net48\PDFiumDotNET.Components.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\net48\PDFiumDotNET.Components.Factory.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|AnyCPU'">
-    <DocumentationFile>bin\Release\net48\PDFiumDotNET.Components.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\net48\PDFiumDotNET.Components.Factory.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|AnyCPU'">
-    <DocumentationFile>bin\Debug\net5.0-windows\PDFiumDotNET.Components.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\net5.0-windows\PDFiumDotNET.Components.Factory.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0-windows|AnyCPU'">
-    <DocumentationFile>bin\Release\net5.0-windows\PDFiumDotNET.Components.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\net5.0-windows\PDFiumDotNET.Components.Factory.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
