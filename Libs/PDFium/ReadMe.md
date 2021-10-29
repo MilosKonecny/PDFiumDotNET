@@ -1,5 +1,7 @@
 ## Libs/PDFium folder
 
-PDFium dlls were downloaded from [bblanchon/pdfium-binaries](https://github.com/bblanchon/pdfium-binaries/releases)
+I found and fixed an issue in PDFium and compiled it.
 
-Used version: [4290](https://github.com/bblanchon/pdfium-binaries/releases/tag/chromium%2F4290).
+Compilation is based on solution from [bblanchon/pdfium-binaries](https://github.com/bblanchon)
+
+Used PDFium version: [4685](https://pdfium.googlesource.com/pdfium/+/refs/heads/chromium/4685).
