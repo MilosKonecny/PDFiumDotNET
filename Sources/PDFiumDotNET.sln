@@ -37,7 +37,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFiumDotNET.WpfControls", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.WpfCoreControls", "Controls\WpfCoreControls\PDFiumDotNET.WpfCoreControls.csproj", "{ADF2387D-A099-4A84-B64C-ADD6CE626D2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFiumDotNET.Components.Factory", "Components\Components.Factory\PDFiumDotNET.Components.Factory.csproj", "{501C6E92-72DD-4944-8822-2483920E44B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.Components.Factory", "Components\Components.Factory\PDFiumDotNET.Components.Factory.csproj", "{501C6E92-72DD-4944-8822-2483920E44B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
