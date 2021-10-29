@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace PDFiumConsoleTest.DotNETFramework
 {
@@ -19,6 +16,8 @@ namespace PDFiumConsoleTest.DotNETFramework
             Console.WriteLine("Call FPDF_LoadDocument");
             var doc = NativeMethods.FPDF_LoadDocument(file, null);
             Console.WriteLine("Document {0} opened", doc == IntPtr.Zero ? "was not" : "was");
+
+            Console.WriteLine("Last WIN32 error is {0}", Marshal.GetLastWin32Error());
 
             var lastError = NativeMethods.FPDF_GetLastError();
             Console.WriteLine("Last error is {0}", lastError);

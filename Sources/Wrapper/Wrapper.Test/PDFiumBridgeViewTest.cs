@@ -56,7 +56,6 @@
         [TestMethod]
         public void FPDFVIEW_GetLastError_OpenPdf_Fail()
         {
-#if NET48
             // The test will be successful for (net48), but fails for (netcoreapp3.1).
             // Here is such error described: https://bugs.chromium.org/p/pdfium/issues/detail?id=452
             var bridge = new PDFiumBridge();
@@ -65,7 +64,6 @@
             var lastError = bridge.FPDF_GetLastError();
             Assert.AreEqual(PDFiumDelegates.FPDF_ERR_FILE, lastError);
             bridge.Dispose();
-#endif // NET48
         }
 
         /// <summary>
@@ -418,7 +416,7 @@
             var document = bridge.FPDF_LoadDocument(pdfFile, null);
             Assert.IsTrue(document.IsValid);
 
-            var dests = bridge.FPDF_CountNamedDests(document);
+            var dests = Math.Min(20, bridge.FPDF_CountNamedDests(document));
             for (var index = 0; index < dests; index++)
             {
                 int len = 0;
