@@ -1,52 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
-  <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net5.0-windows</TargetFrameworks>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFrameworks>netcoreapp3.1;net48;net5.0-windows;net6.0-windows</TargetFrameworks>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
 
-  <PropertyGroup>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  </PropertyGroup>
+    <PropertyGroup>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
-    <DocumentationFile>bin\Debug\netcoreapp3.1\PDFiumDotNET.WpfCoreControls.xml</DocumentationFile>
-  </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="..\..\Common\AssemblyGlobalInfo.cs" Link="AssemblyGlobalInfo.cs" />
+        <Compile Include="..\WpfControls\AutoDisabledImage.cs" Link="AutoDisabledImage.cs" />
+        <Compile Include="..\WpfControls\Helper\BitmapFormatConverter.cs" Link="Helper\BitmapFormatConverter.cs" />
+        <Compile Include="..\WpfControls\PDFThumbnailView.cs" Link="PDFThumbnailView.cs" />
+        <Compile Include="..\WpfControls\PDFThumbnailView.DependencyProperties.cs" Link="PDFThumbnailView.DependencyProperties.cs" />
+        <Compile Include="..\WpfControls\PDFThumbnailView.IScrollInfo.cs" Link="PDFThumbnailView.IScrollInfo.cs" />
+        <Compile Include="..\WpfControls\PDFThumbnailView.Render.cs" Link="PDFThumbnailView.Render.cs" />
+        <Compile Include="..\WpfControls\PDFView.cs" Link="PDFView.cs" />
+        <Compile Include="..\WpfControls\PDFView.DependencyProperties.cs" Link="PDFView.DependencyProperties.cs" />
+        <Compile Include="..\WpfControls\PDFView.IScrollInfo.cs" Link="PDFView.IScrollInfo.cs" />
+        <Compile Include="..\WpfControls\PDFView.Render.cs" Link="PDFView.Render.cs" />
+        <Compile Include="..\WpfControls\ThumbnailControl.cs" Link="ThumbnailControl.cs" />
+    </ItemGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
-    <DocumentationFile>bin\Release\netcoreapp3.1\PDFiumDotNET.WpfCoreControls.xml</DocumentationFile>
-  </PropertyGroup>
+    <ItemGroup>
+        <Folder Include="Helper\" />
+    </ItemGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|AnyCPU'">
-    <DocumentationFile>bin\Debug\net5.0-windows\PDFiumDotNET.WpfCoreControls.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0-windows|AnyCPU'">
-    <DocumentationFile>bin\Release\net5.0-windows\PDFiumDotNET.WpfCoreControls.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="..\..\Common\AssemblyGlobalInfo.cs" Link="AssemblyGlobalInfo.cs" />
-    <Compile Include="..\WpfControls\AutoDisabledImage.cs" Link="AutoDisabledImage.cs" />
-    <Compile Include="..\WpfControls\Helper\BitmapFormatConverter.cs" Link="Helper\BitmapFormatConverter.cs" />
-    <Compile Include="..\WpfControls\PDFThumbnailView.cs" Link="PDFThumbnailView.cs" />
-    <Compile Include="..\WpfControls\PDFThumbnailView.DependencyProperties.cs" Link="PDFThumbnailView.DependencyProperties.cs" />
-    <Compile Include="..\WpfControls\PDFThumbnailView.IScrollInfo.cs" Link="PDFThumbnailView.IScrollInfo.cs" />
-    <Compile Include="..\WpfControls\PDFThumbnailView.Render.cs" Link="PDFThumbnailView.Render.cs" />
-    <Compile Include="..\WpfControls\PDFView.cs" Link="PDFView.cs" />
-    <Compile Include="..\WpfControls\PDFView.DependencyProperties.cs" Link="PDFView.DependencyProperties.cs" />
-    <Compile Include="..\WpfControls\PDFView.IScrollInfo.cs" Link="PDFView.IScrollInfo.cs" />
-    <Compile Include="..\WpfControls\PDFView.Render.cs" Link="PDFView.Render.cs" />
-    <Compile Include="..\WpfControls\ThumbnailControl.cs" Link="ThumbnailControl.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Helper\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Components\Components.Contracts\PDFiumDotNET.Components.Contracts.csproj" />
-    <ProjectReference Include="..\..\Components\Components\PDFiumDotNET.Components.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Components\Components.Contracts\PDFiumDotNET.Components.Contracts.csproj" />
+        <ProjectReference Include="..\..\Components\Components\PDFiumDotNET.Components.csproj" />
+    </ItemGroup>
 
 </Project>
