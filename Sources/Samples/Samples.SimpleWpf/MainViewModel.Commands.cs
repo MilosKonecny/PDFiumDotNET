@@ -6,6 +6,7 @@
     using PDFiumDotNET.Components.Contracts.Adapters;
     using PDFiumDotNET.Samples.SimpleWpf.CommonDialogs;
     using PDFiumDotNET.Samples.SimpleWpf.Helper;
+    using PDFiumDotNET.Samples.SimpleWpf.Windows;
 
     /// <summary>
     /// View model class vor <see cref="MainView"/>.
@@ -27,6 +28,15 @@
         /// Gets the close pdf command.
         /// </summary>
         public ViewModelCommand CloseCommand
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the document information command.
+        /// </summary>
+        public ViewModelCommand InformationCommand
         {
             get;
             private set;
@@ -115,8 +125,10 @@
                 return;
             }
 
-            var dialog = new OpenFileDialog();
-            dialog.Filter = "PDF Files|*.pdf|All files|*.*";
+            var dialog = new OpenFileDialog
+            {
+                Filter = "PDF Files|*.pdf|All files|*.*"
+            };
             if (dialog.ShowDialog() == false)
             {
                 return;
@@ -142,7 +154,7 @@
 
         private bool CanExecuteOpenCommand()
         {
-            return _pdfComponent == null ? false : !_pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && !_pdfComponent.IsDocumentOpened;
         }
 
         private void ExecuteCloseCommand()
@@ -157,7 +169,21 @@
 
         private bool CanExecuteCloseCommand()
         {
-            return _pdfComponent == null ? false : _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+        }
+
+        private void ExecuteInformationCommand()
+        {
+            var di = new DocumentInformation(_pdfComponent)
+            {
+                Owner = _view.Window
+            };
+            di.ShowDialog();
+        }
+
+        private bool CanExecuteInformationCommand()
+        {
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
         }
 
         private void ExecuteZoomWidthCommand()
@@ -174,7 +200,7 @@
 
         private bool CanExecuteZoomWidthCommand()
         {
-            return _pdfComponent == null ? false : _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
         }
 
         private void ExecuteZoomHeightCommand()
@@ -191,7 +217,7 @@
 
         private bool CanExecuteZoomHeightCommand()
         {
-            return _pdfComponent == null ? false : _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
         }
 
         private void ExecuteZoomInCommand()
@@ -241,7 +267,7 @@
 
         private bool CanExecuteGoToFirstPageCommand()
         {
-            return _pdfComponent == null ? false : _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
         }
 
         private void ExecuteGoToPreviousPageCommand()
@@ -251,7 +277,7 @@
 
         private bool CanExecuteGoToPreviousPageCommand()
         {
-            return _pdfComponent == null ? false : _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
         }
 
         private void ExecuteGoToNextPageCommand()
@@ -261,7 +287,7 @@
 
         private bool CanExecuteGoToNextPageCommand()
         {
-            return _pdfComponent == null ? false : _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
         }
 
         private void ExecuteGoToLastPageCommand()
@@ -271,7 +297,7 @@
 
         private bool CanExecuteGoToLastPageCommand()
         {
-            return _pdfComponent == null ? false : _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
         }
 
         #endregion Private methods - command related

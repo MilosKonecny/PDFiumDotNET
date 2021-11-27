@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
+    using System.Runtime.InteropServices;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Wrapper.Bridge;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates;
@@ -15,7 +16,7 @@
     {
         #region Private fields
 
-        private readonly List<Contracts.IPDFChildComponent> _childComponents = new List<Contracts.IPDFChildComponent>();
+        private readonly List<IPDFChildComponent> _childComponents = new List<IPDFChildComponent>();
 
         #endregion Private fields
 
@@ -44,6 +45,25 @@
         internal FPDF_DOCUMENT PDFiumDocument { get; private set; }
 
         #endregion Internal methods
+
+        #region Private methods - helper
+
+        private string ReadMetaText(string key)
+        {
+            string retValue = null;
+            var requiredLen = PDFiumBridge.FPDF_GetMetaText(PDFiumDocument, key, IntPtr.Zero, 0);
+            if (requiredLen > 0)
+            {
+                var buffer = Marshal.AllocHGlobal(requiredLen);
+                PDFiumBridge.FPDF_GetMetaText(PDFiumDocument, key, buffer, (ulong)requiredLen);
+                retValue = Marshal.PtrToStringUni(buffer);
+                Marshal.FreeHGlobal(buffer);
+            }
+
+            return retValue;
+        }
+
+        #endregion Private methods - helper
 
         #region Private methods - invoke event
 

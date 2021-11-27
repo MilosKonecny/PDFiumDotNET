@@ -2,13 +2,18 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
     using System.Linq;
     using PDFiumDotNET.Components.Bookmark;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Bookmark;
+    using PDFiumDotNET.Components.Contracts.Information;
     using PDFiumDotNET.Components.Contracts.Observers;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Zoom;
+    using PDFiumDotNET.Components.Helper;
+    using PDFiumDotNET.Components.Information;
     using PDFiumDotNET.Components.Page;
     using PDFiumDotNET.Components.Zoom;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates;
@@ -145,6 +150,9 @@
         /// </summary>
         public void OpenDocument(string file, Func<string> getPassword = null)
         {
+            FileName = Path.GetFileName(file);
+            FileWithPath = file;
+
             _childComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentOpening(file));
             PDFiumDocument = PDFiumBridge.FPDF_LoadDocument(file, null);
             if (!PDFiumDocument.IsValid)
@@ -173,6 +181,9 @@
         /// </summary>
         public void CloseDocument()
         {
+            FileName = null;
+            FileWithPath = null;
+
             if (!IsDocumentOpened)
             {
                 // Nothing to close.
@@ -186,6 +197,57 @@
             InvokePropertyChangedEvent(nameof(IsDocumentOpened));
             _childComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentClosed());
         }
+
+        /// <summary>
+        /// Gets available document's information from opened PDF document.
+        /// </summary>
+        public IPDFInformation DocumentInformation
+        {
+            get
+            {
+                var retValue = new PDFInformation();
+                if (!IsDocumentOpened)
+                {
+                    return retValue;
+                }
+
+                // Title
+                retValue.Title = ReadMetaText(nameof(PDFInformation.Title));
+
+                // Author
+                retValue.Author = ReadMetaText(nameof(PDFInformation.Author));
+
+                // Subject
+                retValue.Subject = ReadMetaText(nameof(PDFInformation.Subject));
+
+                // Keywords
+                retValue.Keywords = ReadMetaText(nameof(PDFInformation.Keywords));
+
+                // Creator
+                retValue.Creator = ReadMetaText(nameof(PDFInformation.Creator));
+
+                // Producer
+                retValue.Producer = ReadMetaText(nameof(PDFInformation.Producer));
+
+                // CreationDate
+                retValue.CreationDate = DataConverter.Asn1DateTimeToToDateTime(ReadMetaText(nameof(PDFInformation.CreationDate)));
+
+                // ModDate
+                retValue.ModDate = DataConverter.Asn1DateTimeToToDateTime(ReadMetaText(nameof(PDFInformation.ModDate)));
+
+                return retValue;
+            }
+        }
+
+        /// <summary>
+        /// Gets opened file name.
+        /// </summary>
+        public string FileName { get; private set; }
+
+        /// <summary>
+        /// Gets opened file with path.
+        /// </summary>
+        public string FileWithPath { get; private set; }
 
         #endregion Implementation of IPDFComponent
     }

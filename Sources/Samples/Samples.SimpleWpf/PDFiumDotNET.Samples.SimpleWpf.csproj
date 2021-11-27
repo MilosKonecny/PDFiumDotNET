@@ -63,6 +63,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Windows\DocumentInformation.xaml.cs">
+      <DependentUpon>DocumentInformation.xaml</DependentUpon>
+    </Compile>
     <Page Include="CommonDialogs\TextInputView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -92,6 +95,10 @@
     </Compile>
     <Compile Include="MainViewModel.cs" />
     <Page Include="ResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\DocumentInformation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -160,6 +167,12 @@
   <ItemGroup>
     <Resource Include="Resources\app.ico" />
     <Resource Include="Resources\app_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\info_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\show_property_40px.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

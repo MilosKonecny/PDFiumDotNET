@@ -1,0 +1,46 @@
+﻿<Window x:Class="PDFiumDotNET.Samples.SimpleWpf.Windows.DocumentInformation"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PDFiumDotNET.Samples.SimpleWpf.Windows"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type={x:Type local:DocumentInformation}}"
+        Title="{Binding Path=PDFFFileName}"
+        Height="200" Width="500"
+        ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Title" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding Path=PdfInformation.Title, Mode=OneTime}" IsReadOnly="True"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Author" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Path=PdfInformation.Author, Mode=OneTime}" IsReadOnly="True"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Subject" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Path=PdfInformation.Subject, Mode=OneTime}" IsReadOnly="True"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Keywords" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding Path=PdfInformation.Keywords, Mode=OneTime}" IsReadOnly="True"/>
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Creator" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Path=PdfInformation.Creator, Mode=OneTime}" IsReadOnly="True"/>
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="Producer" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding Path=PdfInformation.Producer, Mode=OneTime}" IsReadOnly="True"/>
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="CreationDate" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="6" Grid.Column="2" Text="{Binding Path=PdfInformation.CreationDate.LocalDateTime, Mode=OneTime}" IsReadOnly="True"/>
+        <TextBlock Grid.Row="7" Grid.Column="0" Text="ModDate" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="7" Grid.Column="2" Text="{Binding Path=PdfInformation.ModDate.LocalDateTime, Mode=OneTime}" IsReadOnly="True"/>
+    </Grid>
+</Window>
