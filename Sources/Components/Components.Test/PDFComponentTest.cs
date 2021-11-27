@@ -19,7 +19,7 @@
     {
         #region Private consts
 
-        private const string ConstDiversePagesPDF = "DiversePages.pdf";
+        private const string _constDiversePagesPDF = "DiversePages.pdf";
 
         #endregion Private consts
         #region Private fields
@@ -320,18 +320,18 @@
         [TestMethod]
         public void PDFComponent_DocumentInformation_Get_Success()
         {
-            var pdfFile = Path.Combine(_pdfFilesFolder, ConstDiversePagesPDF);
+            var pdfFile = Path.Combine(_pdfFilesFolder, _constDiversePagesPDF);
             var component = new PDFComponent();
             component.OpenDocument(pdfFile);
             var info = component.DocumentInformation;
-            Assert.AreEqual(info.Title, "Diverse pages");
-            Assert.AreEqual(info.Author, "Miloš Konečný");
-            Assert.AreEqual(info.Subject, "Diverse pages");
-            Assert.AreEqual(info.Keywords, "-");
-            Assert.AreEqual(info.Creator, "Miloš Konečný");
-            Assert.AreEqual(info.Producer, "PDFsharp 1.50.4740 (www.pdfsharp.com)");
-            Assert.AreEqual(info.CreationDate, DateTimeOffset.Parse("2021-02-12T11:37:53", CultureInfo.InvariantCulture));
-            Assert.AreEqual(info.ModDate, DateTimeOffset.Parse("2021-02-12T11:37:53", CultureInfo.InvariantCulture));
+            Assert.AreEqual("Diverse pages", info.Title);
+            Assert.AreEqual("Miloš Konečný", info.Author);
+            Assert.AreEqual("Diverse pages", info.Subject);
+            Assert.AreEqual("-", info.Keywords);
+            Assert.AreEqual("Miloš Konečný", info.Creator);
+            Assert.AreEqual("PDFsharp 1.50.4740 (www.pdfsharp.com)", info.Producer);
+            Assert.AreEqual(DateTimeOffset.Parse("2021-02-12T11:37:53+01:00", CultureInfo.InvariantCulture), info.CreationDate);
+            Assert.AreEqual(DateTimeOffset.Parse("2021-02-12T11:37:53+01:00", CultureInfo.InvariantCulture), info.ModDate);
             component.Dispose();
         }
 
@@ -341,7 +341,7 @@
         [TestMethod]
         public void PDFComponent_FileName_Get_Success()
         {
-            var pdfFile = ConstDiversePagesPDF;
+            var pdfFile = _constDiversePagesPDF;
             var pdfPath = Path.Combine(_pdfFilesFolder, pdfFile);
 
             var component = new PDFComponent();
@@ -361,7 +361,7 @@
         [TestMethod]
         public void PDFComponent_FileWithPath_Get_Success()
         {
-            var pdfFile = ConstDiversePagesPDF;
+            var pdfFile = _constDiversePagesPDF;
             var pdfPath = Path.Combine(_pdfFilesFolder, pdfFile);
 
             var component = new PDFComponent();
