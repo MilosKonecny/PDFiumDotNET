@@ -1,6 +1,7 @@
-namespace PDFiumDotNET.Components.Test
+﻿namespace PDFiumDotNET.Components.Test
 {
     using System;
+    using System.Globalization;
     using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
@@ -16,6 +17,11 @@ namespace PDFiumDotNET.Components.Test
     [TestClass]
     public class PDFComponentTest
     {
+        #region Private consts
+
+        private const string ConstDiversePagesPDF = "DiversePages.pdf";
+
+        #endregion Private consts
         #region Private fields
 
         private static TestContext _testContext;
@@ -101,7 +107,6 @@ namespace PDFiumDotNET.Components.Test
         [TestMethod]
         public void PDFComponent_OpenDocument_PasswordProtected_Success()
         {
-#if NET48
             var pdfFile = Path.Combine(_pdfFilesFolder, "PwdProtected(Pwd is pwd).pdf");
 
             var component = new PDFComponent();
@@ -111,7 +116,6 @@ namespace PDFiumDotNET.Components.Test
             Assert.IsTrue(component.IsDocumentOpened);
             component.CloseDocument();
             component.Dispose();
-#endif // NET48
         }
 
         /// <summary>
@@ -306,6 +310,67 @@ namespace PDFiumDotNET.Components.Test
             Assert.AreEqual(string.Empty, openedFile);
             Assert.AreEqual(string.Empty, failedFile);
             Assert.AreEqual(string.Empty, openingFile);
+
+            component.Dispose();
+        }
+
+        /// <summary>
+        /// Test for <see cref="IPDFComponent.DocumentInformation"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFComponent_DocumentInformation_Get_Success()
+        {
+            var pdfFile = Path.Combine(_pdfFilesFolder, ConstDiversePagesPDF);
+            var component = new PDFComponent();
+            component.OpenDocument(pdfFile);
+            var info = component.DocumentInformation;
+            Assert.AreEqual(info.Title, "Diverse pages");
+            Assert.AreEqual(info.Author, "Miloš Konečný");
+            Assert.AreEqual(info.Subject, "Diverse pages");
+            Assert.AreEqual(info.Keywords, "-");
+            Assert.AreEqual(info.Creator, "Miloš Konečný");
+            Assert.AreEqual(info.Producer, "PDFsharp 1.50.4740 (www.pdfsharp.com)");
+            Assert.AreEqual(info.CreationDate, DateTimeOffset.Parse("2021-02-12T11:37:53", CultureInfo.InvariantCulture));
+            Assert.AreEqual(info.ModDate, DateTimeOffset.Parse("2021-02-12T11:37:53", CultureInfo.InvariantCulture));
+            component.Dispose();
+        }
+
+        /// <summary>
+        /// Test for <see cref="IPDFComponent.FileName"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFComponent_FileName_Get_Success()
+        {
+            var pdfFile = ConstDiversePagesPDF;
+            var pdfPath = Path.Combine(_pdfFilesFolder, pdfFile);
+
+            var component = new PDFComponent();
+
+            Assert.IsNull(component.FileName);
+            component.OpenDocument(pdfPath);
+            Assert.AreEqual(pdfFile, component.FileName);
+            component.CloseDocument();
+            Assert.IsNull(component.FileName);
+
+            component.Dispose();
+        }
+
+        /// <summary>
+        /// Test for <see cref="IPDFComponent.FileWithPath"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFComponent_FileWithPath_Get_Success()
+        {
+            var pdfFile = ConstDiversePagesPDF;
+            var pdfPath = Path.Combine(_pdfFilesFolder, pdfFile);
+
+            var component = new PDFComponent();
+
+            Assert.IsNull(component.FileWithPath);
+            component.OpenDocument(pdfPath);
+            Assert.AreEqual(pdfPath, component.FileWithPath);
+            component.CloseDocument();
+            Assert.IsNull(component.FileWithPath);
 
             component.Dispose();
         }

@@ -219,6 +219,7 @@
             // Base commands
             OpenCommand = new ViewModelCommand(ExecuteOpenCommand, CanExecuteOpenCommand);
             CloseCommand = new ViewModelCommand(ExecuteCloseCommand, CanExecuteCloseCommand);
+            InformationCommand = new ViewModelCommand(ExecuteInformationCommand, CanExecuteInformationCommand);
             // Zoom commands
             ZoomWidthCommand = new ViewModelCommand(ExecuteZoomWidthCommand, CanExecuteZoomWidthCommand);
             ZoomHeightCommand = new ViewModelCommand(ExecuteZoomHeightCommand, CanExecuteZoomHeightCommand);

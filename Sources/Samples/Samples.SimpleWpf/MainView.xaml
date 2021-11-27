@@ -107,6 +107,9 @@
                 <Button Command="{Binding Path=CloseCommand}" ToolTip="Close PDF document">
                     <wpfControl:AutoDisabledImage Source="Resources\close_40px.png"/>
                 </Button>
+                <Button Command="{Binding Path=InformationCommand}" ToolTip="Document information">
+                    <wpfControl:AutoDisabledImage Source="Resources\show_property_40px.png"/>
+                </Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,10,5">
                 <Button Command="{Binding Path=ZoomWidthCommand}" ToolTip="Zoom to width of widest page">

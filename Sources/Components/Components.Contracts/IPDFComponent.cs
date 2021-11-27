@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using PDFiumDotNET.Components.Contracts.Bookmark;
+    using PDFiumDotNET.Components.Contracts.Information;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Zoom;
 
@@ -67,5 +68,20 @@
         /// <param name="file">Pdf file to open.</param>
         /// <param name="getPassword">Callback function used to get password in case the document is password protected.</param>
         void OpenDocument(string file, Func<string> getPassword = null);
+
+        /// <summary>
+        /// Gets available document's information from opened PDF document.
+        /// </summary>
+        IPDFInformation DocumentInformation { get; }
+
+        /// <summary>
+        /// Gets opened file name.
+        /// </summary>
+        string FileName { get; }
+
+        /// <summary>
+        /// Gets opened file with path.
+        /// </summary>
+        string FileWithPath { get; }
     }
 }
