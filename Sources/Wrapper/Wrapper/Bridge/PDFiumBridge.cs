@@ -45,11 +45,14 @@
                 throw PDFiumLibraryNotLoadedException.CreateException(libraryName, Marshal.GetLastWin32Error());
             }
 
-            // Load the functions declared in view header.
+            // Load the functions declared in view header - fpdfview.h.
             LoadDllViewPart(libraryName);
 
-            // Load the functions declared in doc header.
+            // Load the functions declared in doc header - fpdf_doc.h.
             LoadDllDocPart(libraryName);
+
+            // Load the functions declared in text header - fpdf_text.h.
+            LoadDllTextPart(libraryName);
         }
 
         /// <summary>

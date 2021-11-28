@@ -188,7 +188,7 @@
         }
 
         /// <summary>
-        /// Action handler struct.
+        /// Action handle struct.
         /// </summary>
         internal struct FPDF_ACTION
         {
@@ -218,7 +218,7 @@
         }
 
         /// <summary>
-        /// Link handler struct.
+        /// Link handle struct.
         /// </summary>
         internal struct FPDF_LINK
         {
@@ -248,7 +248,7 @@
         }
 
         /// <summary>
-        /// Annotation handler struct.
+        /// Annotation handle struct.
         /// </summary>
         internal struct FPDF_ANNOTATION
         {
@@ -275,6 +275,96 @@
             /// Gets a value indicating whether the annotation handle is valid.
             /// </summary>
             public bool IsValid => _annotation != IntPtr.Zero;
+        }
+
+        /// <summary>
+        /// Text page handle struct.
+        /// </summary>
+        internal struct FPDF_TEXTPAGE
+        {
+            /// <summary>
+            /// Gets invalid handle.
+            /// </summary>
+            public static FPDF_TEXTPAGE InvalidHandle => new FPDF_TEXTPAGE();
+
+            /// <summary>
+            /// Annotation handle.
+            /// </summary>
+            private readonly IntPtr _textPage;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="FPDF_TEXTPAGE"/> struct.
+            /// </summary>
+            /// <param name="textPage">Text page handle to use.</param>
+            public FPDF_TEXTPAGE(IntPtr textPage)
+            {
+                _textPage = textPage;
+            }
+
+            /// <summary>
+            /// Gets a value indicating whether the annotation handle is valid.
+            /// </summary>
+            public bool IsValid => _textPage != IntPtr.Zero;
+        }
+
+        /// <summary>
+        /// Search context handle struct.
+        /// </summary>
+        internal struct FPDF_SCHHANDLE
+        {
+            /// <summary>
+            /// Gets invalid handle.
+            /// </summary>
+            public static FPDF_SCHHANDLE InvalidHandle => new FPDF_SCHHANDLE();
+
+            /// <summary>
+            /// Search context handle.
+            /// </summary>
+            private readonly IntPtr _schHandle;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="FPDF_SCHHANDLE"/> struct.
+            /// </summary>
+            /// <param name="schHandle">Search context handle to use.</param>
+            public FPDF_SCHHANDLE(IntPtr schHandle)
+            {
+                _schHandle = schHandle;
+            }
+
+            /// <summary>
+            /// Gets a value indicating whether the search context handle is valid.
+            /// </summary>
+            public bool IsValid => _schHandle != IntPtr.Zero;
+        }
+
+        /// <summary>
+        /// Web link in page handle struct.
+        /// </summary>
+        internal struct FPDF_PAGELINK
+        {
+            /// <summary>
+            /// Gets invalid handle.
+            /// </summary>
+            public static FPDF_PAGELINK InvalidHandle => new FPDF_PAGELINK();
+
+            /// <summary>
+            /// Web link in page handle.
+            /// </summary>
+            private readonly IntPtr _webLinkHandle;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="FPDF_PAGELINK"/> struct.
+            /// </summary>
+            /// <param name="webLinkHandle">Web link in page handle to use.</param>
+            public FPDF_PAGELINK(IntPtr webLinkHandle)
+            {
+                _webLinkHandle = webLinkHandle;
+            }
+
+            /// <summary>
+            /// Gets a value indicating whether the web link in page handle is valid.
+            /// </summary>
+            public bool IsValid => _webLinkHandle != IntPtr.Zero;
         }
     }
 }
