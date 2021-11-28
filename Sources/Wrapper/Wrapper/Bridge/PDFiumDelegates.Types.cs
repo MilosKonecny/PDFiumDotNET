@@ -237,6 +237,24 @@
         public const int PDFACTION_LAUNCH = 4;
 
         /// <summary>
+        /// Flags used by FPDFText_FindStart function.
+        /// If not set, it will not match case by default.
+        /// </summary>
+        public const int FPDF_MATCHCASE = 0x00000001;
+
+        /// <summary>
+        /// Flags used by FPDFText_FindStart function.
+        /// If not set, it will not match the whole word by default.
+        /// </summary>
+        public const int FPDF_MATCHWHOLEWORD = 0x00000002;
+
+        /// <summary>
+        /// Flags used by FPDFText_FindStart function.
+        /// If not set, it will skip past the current match to look for the next match.
+        /// </summary>
+        public const int FPDF_CONSECUTIVE = 0x00000004;
+
+        /// <summary>
         /// The file identifier entry type. See section 14.4 "File Identifiers" of the ISO 32000-1 standard.
         /// </summary>
         public enum FPDF_FILEIDTYPE
@@ -308,6 +326,62 @@
             /// 4 bytes per pixel, byte order: blue, green, red, alpha.
             /// </summary>
             FPDFBitmap_BGRA = 4,
+        }
+
+        /// <summary>
+        /// Enumeration defines PDF text rendering modes.
+        /// </summary>
+        internal enum FPDF_TEXT_RENDERMODE
+        {
+            /// <summary>
+            /// PDF text rendering mode.
+            /// </summary>
+            FPDF_TEXTRENDERMODE_UNKNOWN = -1,
+
+            /// <summary>
+            /// PDF text rendering mode.
+            /// </summary>
+            FPDF_TEXTRENDERMODE_FILL = 0,
+
+            /// <summary>
+            /// PDF text rendering mode.
+            /// </summary>
+            FPDF_TEXTRENDERMODE_STROKE = 1,
+
+            /// <summary>
+            /// PDF text rendering mode.
+            /// </summary>
+            FPDF_TEXTRENDERMODE_FILL_STROKE = 2,
+
+            /// <summary>
+            /// PDF text rendering mode.
+            /// </summary>
+            FPDF_TEXTRENDERMODE_INVISIBLE = 3,
+
+            /// <summary>
+            /// PDF text rendering mode.
+            /// </summary>
+            FPDF_TEXTRENDERMODE_FILL_CLIP = 4,
+
+            /// <summary>
+            /// PDF text rendering mode.
+            /// </summary>
+            FPDF_TEXTRENDERMODE_STROKE_CLIP = 5,
+
+            /// <summary>
+            /// PDF text rendering mode.
+            /// </summary>
+            FPDF_TEXTRENDERMODE_FILL_STROKE_CLIP = 6,
+
+            /// <summary>
+            /// PDF text rendering mode.
+            /// </summary>
+            FPDF_TEXTRENDERMODE_CLIP = 7,
+
+            /// <summary>
+            /// PDF text rendering mode.
+            /// </summary>
+            FPDF_TEXTRENDERMODE_LAST = FPDF_TEXTRENDERMODE_CLIP,
         }
 
         /// <summary>
