@@ -1,5 +1,6 @@
 ﻿namespace PDFiumDotNET.Wrapper.Bridge
 {
+    using System;
     using System.Runtime.InteropServices;
 
     // Disable "Field 'xxxx' should not contain an underscore" to preserve PDFium names.
@@ -11,248 +12,281 @@
     internal partial class PDFiumDelegates
     {
         /// <summary>
-        /// Error value - no error.
-        /// Return value of <see cref="FPDF_GetLastError"/>.
+        /// Enumeration of all errors.
         /// </summary>
-        internal const int FPDF_ERR_SUCCESS = 0;
+        internal enum FPDF_ERROR : int
+        {
+            /// <summary>
+            /// Error value - no error.
+            /// Return value of <see cref="FPDF_GetLastError"/>.
+            /// </summary>
+            FPDF_ERR_SUCCESS = 0,
+
+            /// <summary>
+            /// Error value - unknown error.
+            /// Return value of <see cref="FPDF_GetLastError"/>.
+            /// </summary>
+            FPDF_ERR_UNKNOWN = 1,
+
+            /// <summary>
+            /// Error value - file not found or could not be opened.
+            /// Return value of <see cref="FPDF_GetLastError"/>.
+            /// </summary>
+            FPDF_ERR_FILE = 2,
+
+            /// <summary>
+            /// Error value - file not in PDF format or corrupted.
+            /// Return value of <see cref="FPDF_GetLastError"/>.
+            /// </summary>
+            FPDF_ERR_FORMAT = 3,
+
+            /// <summary>
+            /// Error value - password required or incorrect password.
+            /// Return value of <see cref="FPDF_GetLastError"/>.
+            /// </summary>
+            FPDF_ERR_PASSWORD = 4,
+
+            /// <summary>
+            /// Error value - unsupported security scheme.
+            /// Return value of <see cref="FPDF_GetLastError"/>.
+            /// </summary>
+            FPDF_ERR_SECURITY = 5,
+
+            /// <summary>
+            /// Error value - page not found or content error.
+            /// Return value of <see cref="FPDF_GetLastError"/>.
+            /// </summary>
+            FPDF_ERR_PAGE = 6,
+
+            /// <summary>
+            /// Error value - load XFA error.
+            /// Return value of <see cref="FPDF_GetLastError"/>.
+            /// </summary>
+            FPDF_ERR_XFALOAD = 7,
+
+            /// <summary>
+            /// Error value - layout XFA error.
+            /// Return value of <see cref="FPDF_GetLastError"/>.
+            /// </summary>
+            FPDF_ERR_XFALAYOUT = 8,
+        }
 
         /// <summary>
-        /// Error value - unknown error.
-        /// Return value of <see cref="FPDF_GetLastError"/>.
+        /// Enumeration of available permission flags.
         /// </summary>
-        internal const int FPDF_ERR_UNKNOWN = 1;
+        [Flags]
+        internal enum FPDF_PERMISSIONS : int
+        {
+            /// <summary>
+            /// Permission bit - allow print - 3. bit of permission value.
+            /// Return value of <see cref="FPDF_GetDocPermissions"/>.
+            /// </summary>
+            FPDF_PERMISSION_ALLOWPRINT = 0b100,
+
+            /// <summary>
+            /// Permission bit - allow content change - 4. bit of permission value.
+            /// Return value of <see cref="FPDF_GetDocPermissions"/>.
+            /// </summary>
+            FPDF_PERMISSION_ALLOWCONTENTCHANGE = 0b1000,
+
+            /// <summary>
+            /// Permission bit - allow extract text and graphics 1 - 5. bit of permission value.
+            /// Return value of <see cref="FPDF_GetDocPermissions"/>.
+            /// </summary>
+            FPDF_PERMISSION_ALLOWEXTRACTTEXTANDGRAPHICS1 = 0b10000,
+
+            /// <summary>
+            /// Permission bit - allow anotations - 6. bit of permission value.
+            /// Return value of <see cref="FPDF_GetDocPermissions"/>.
+            /// </summary>
+            FPDF_PERMISSION_ALLOWANNOTATIONS = 0b100000,
+
+            /// <summary>
+            /// Permission bit - allow fill form fields - 9. bit of permission value.
+            /// Return value of <see cref="FPDF_GetDocPermissions"/>.
+            /// </summary>
+            FPDF_PERMISSION_ALLOWFILLFORMFIELDS = 0b100000000,
+
+            /// <summary>
+            /// Permission bit - allow extract text and graphics 2 - 10. bit of permission value.
+            /// Return value of <see cref="FPDF_GetDocPermissions"/>.
+            /// </summary>
+            FPDF_PERMISSION_ALLOWEXTRACTTEXTANDGRAPHICS2 = 0b1000000000,
+
+            /// <summary>
+            /// Permission bit - allow assemble document - 11. bit of permission value.
+            /// Return value of <see cref="FPDF_GetDocPermissions"/>.
+            /// </summary>
+            FPDF_PERMISSION_ALLOWASSEMBLEDOCUMENT = 0b10000000000,
+
+            /// <summary>
+            /// Permission bit - allow print in high quality - 12. bit of permission value.
+            /// Return value of <see cref="FPDF_GetDocPermissions"/>.
+            /// </summary>
+            FPDF_PERMISSION_ALLOWPRINTHIGHQUALITY = 0b100000000000,
+        }
 
         /// <summary>
-        /// Error value - file not found or could not be opened.
-        /// Return value of <see cref="FPDF_GetLastError"/>.
+        /// Enumeration of available rendering flags.
         /// </summary>
-        internal const int FPDF_ERR_FILE = 2;
+        [Flags]
+        internal enum FPDF_RENDERING_FLAGS : int
+        {
+            /// <summary>
+            /// Page rendering flags. They can be combined with bit-wise OR.
+            /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
+            /// Set if annotations are to be rendered.
+            /// </summary>
+            FPDF_ANNOT = 0x01,
+
+            /// <summary>
+            /// Page rendering flags. They can be combined with bit-wise OR.
+            /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
+            /// Set if using text rendering optimized for LCD display. This flag will only take effect if anti-aliasing is enabled for text.
+            /// </summary>
+            FPDF_LCD_TEXT = 0x02,
+
+            /// <summary>
+            /// Page rendering flags. They can be combined with bit-wise OR.
+            /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
+            /// Don't use the native text output available on some platforms.
+            /// </summary>
+            FPDF_NO_NATIVETEXT = 0x04,
+
+            /// <summary>
+            /// Page rendering flags. They can be combined with bit-wise OR.
+            /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
+            /// Grayscale output.
+            /// </summary>
+            FPDF_GRAYSCALE = 0x08,
+
+            /// <summary>
+            /// Page rendering flags. They can be combined with bit-wise OR.
+            /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
+            /// Obsolete, has no effect, retained for compatibility.
+            /// </summary>
+            FPDF_DEBUG_INFO = 0x80,
+
+            /// <summary>
+            /// Page rendering flags. They can be combined with bit-wise OR.
+            /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
+            /// Obsolete, has no effect, retained for compatibility.
+            /// </summary>
+            FPDF_NO_CATCH = 0x100,
+
+            /// <summary>
+            /// Page rendering flags. They can be combined with bit-wise OR.
+            /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
+            /// Limit image cache size.
+            /// </summary>
+            FPDF_RENDER_LIMITEDIMAGECACHE = 0x200,
+
+            /// <summary>
+            /// Page rendering flags. They can be combined with bit-wise OR.
+            /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
+            /// Always use halftone for image stretching.
+            /// </summary>
+            FPDF_RENDER_FORCEHALFTONE = 0x400,
+
+            /// <summary>
+            /// Page rendering flags. They can be combined with bit-wise OR.
+            /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
+            /// Render for printing.
+            /// </summary>
+            FPDF_PRINTING = 0x800,
+
+            /// <summary>
+            /// Page rendering flags. They can be combined with bit-wise OR.
+            /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
+            /// Set to disable anti-aliasing on text. This flag will also disable LCD optimization for text rendering.
+            /// </summary>
+            FPDF_RENDER_NO_SMOOTHTEXT = 0x1000,
+
+            /// <summary>
+            /// Page rendering flags. They can be combined with bit-wise OR.
+            /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
+            /// Set to disable anti-aliasing on images.
+            /// </summary>
+            FPDF_RENDER_NO_SMOOTHIMAGE = 0x2000,
+
+            /// <summary>
+            /// Page rendering flags. They can be combined with bit-wise OR.
+            /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
+            /// Set to disable anti-aliasing on paths.
+            /// </summary>
+            FPDF_RENDER_NO_SMOOTHPATH = 0x4000,
+
+            /// <summary>
+            /// Page rendering flags. They can be combined with bit-wise OR.
+            /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
+            /// Set whether to render in a reverse Byte order, this flag is only used when rendering to a bitmap.
+            /// </summary>
+            FPDF_REVERSE_BYTE_ORDER = 0x10,
+
+            /// <summary>
+            /// Page rendering flags. They can be combined with bit-wise OR.
+            /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
+            /// Set whether fill paths need to be stroked. This flag is only used when FPDF_COLORSCHEME is passed in,
+            /// since with a single fill color for paths the boundaries of adjacent fill paths are less visible.
+            /// </summary>
+            FPDF_CONVERT_FILL_TO_STROKE = 0x20,
+        }
 
         /// <summary>
-        /// Error value - file not in PDF format or corrupted.
-        /// Return value of <see cref="FPDF_GetLastError"/>.
+        /// Enumeration of available action types.
         /// </summary>
-        internal const int FPDF_ERR_FORMAT = 3;
+        internal enum FPDF_ACTION_TYPES : int
+        {
+            /// <summary>
+            /// Action type: Unsupported action type.
+            /// </summary>
+            PDFACTION_UNSUPPORTED = 0,
+
+            /// <summary>
+            /// Action type: Go to a destination within current document.
+            /// </summary>
+            PDFACTION_GOTO = 1,
+
+            /// <summary>
+            /// Action type: Go to a destination within another document.
+            /// </summary>
+            PDFACTION_REMOTEGOTO = 2,
+
+            /// <summary>
+            /// Action type: URI, including web pages and other Internet resources.
+            /// </summary>
+            PDFACTION_URI = 3,
+
+            /// <summary>
+            /// Action type: Launch an application or open a file.
+            /// </summary>
+            PDFACTION_LAUNCH = 4,
+        }
 
         /// <summary>
-        /// Error value - password required or incorrect password.
-        /// Return value of <see cref="FPDF_GetLastError"/>.
+        /// Enumeration of available flags for find.
         /// </summary>
-        internal const int FPDF_ERR_PASSWORD = 4;
+        [Flags]
+        internal enum FPDF_FIND_FLAGS : int
+        {
+            /// <summary>
+            /// Flags used by FPDFText_FindStart function.
+            /// If not set, it will not match case by default.
+            /// </summary>
+            FPDF_MATCHCASE = 0x00000001,
 
-        /// <summary>
-        /// Error value - unsupported security scheme.
-        /// Return value of <see cref="FPDF_GetLastError"/>.
-        /// </summary>
-        internal const int FPDF_ERR_SECURITY = 5;
+            /// <summary>
+            /// Flags used by FPDFText_FindStart function.
+            /// If not set, it will not match the whole word by default.
+            /// </summary>
+            FPDF_MATCHWHOLEWORD = 0x00000002,
 
-        /// <summary>
-        /// Error value - page not found or content error.
-        /// Return value of <see cref="FPDF_GetLastError"/>.
-        /// </summary>
-        internal const int FPDF_ERR_PAGE = 6;
-
-        /// <summary>
-        /// Error value - load XFA error.
-        /// Return value of <see cref="FPDF_GetLastError"/>.
-        /// </summary>
-        internal const int FPDF_ERR_XFALOAD = 7;
-
-        /// <summary>
-        /// Error value - layout XFA error.
-        /// Return value of <see cref="FPDF_GetLastError"/>.
-        /// </summary>
-        internal const int FPDF_ERR_XFALAYOUT = 8;
-
-        /// <summary>
-        /// Permission bit - allow print - 3. bit of permission value.
-        /// Return value of <see cref="FPDF_GetDocPermissions"/>.
-        /// </summary>
-        internal const uint FPDF_PERMISSION_ALLOWPRINT = 0b100;
-
-        /// <summary>
-        /// Permission bit - allow content change - 4. bit of permission value.
-        /// Return value of <see cref="FPDF_GetDocPermissions"/>.
-        /// </summary>
-        internal const uint FPDF_PERMISSION_ALLOWCONTENTCHANGE = 0b1000;
-
-        /// <summary>
-        /// Permission bit - allow extract text and graphics 1 - 5. bit of permission value.
-        /// Return value of <see cref="FPDF_GetDocPermissions"/>.
-        /// </summary>
-        internal const uint FPDF_PERMISSION_ALLOWEXTRACTTEXTANDGRAPHICS1 = 0b10000;
-
-        /// <summary>
-        /// Permission bit - allow anotations - 6. bit of permission value.
-        /// Return value of <see cref="FPDF_GetDocPermissions"/>.
-        /// </summary>
-        internal const uint FPDF_PERMISSION_ALLOWANNOTATIONS = 0b100000;
-
-        /// <summary>
-        /// Permission bit - allow fill form fields - 9. bit of permission value.
-        /// Return value of <see cref="FPDF_GetDocPermissions"/>.
-        /// </summary>
-        internal const uint FPDF_PERMISSION_ALLOWFILLFORMFIELDS = 0b100000000;
-
-        /// <summary>
-        /// Permission bit - allow extract text and graphics 2 - 10. bit of permission value.
-        /// Return value of <see cref="FPDF_GetDocPermissions"/>.
-        /// </summary>
-        internal const uint FPDF_PERMISSION_ALLOWEXTRACTTEXTANDGRAPHICS2 = 0b1000000000;
-
-        /// <summary>
-        /// Permission bit - allow assemble document - 11. bit of permission value.
-        /// Return value of <see cref="FPDF_GetDocPermissions"/>.
-        /// </summary>
-        internal const uint FPDF_PERMISSION_ALLOWASSEMBLEDOCUMENT = 0b10000000000;
-
-        /// <summary>
-        /// Permission bit - allow print in high quality - 12. bit of permission value.
-        /// Return value of <see cref="FPDF_GetDocPermissions"/>.
-        /// </summary>
-        internal const uint FPDF_PERMISSION_ALLOWPRINTHIGHQUALITY = 0b1000000000;
-
-        /// <summary>
-        /// Page rendering flags. They can be combined with bit-wise OR.
-        /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
-        /// Set if annotations are to be rendered.
-        /// </summary>
-        internal const int FPDF_ANNOT = 0x01;
-
-        /// <summary>
-        /// Page rendering flags. They can be combined with bit-wise OR.
-        /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
-        /// Set if using text rendering optimized for LCD display. This flag will only take effect if anti-aliasing is enabled for text.
-        /// </summary>
-        internal const int FPDF_LCD_TEXT = 0x02;
-
-        /// <summary>
-        /// Page rendering flags. They can be combined with bit-wise OR.
-        /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
-        /// Don't use the native text output available on some platforms.
-        /// </summary>
-        internal const int FPDF_NO_NATIVETEXT = 0x04;
-
-        /// <summary>
-        /// Page rendering flags. They can be combined with bit-wise OR.
-        /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
-        /// Grayscale output.
-        /// </summary>
-        internal const int FPDF_GRAYSCALE = 0x08;
-
-        /// <summary>
-        /// Page rendering flags. They can be combined with bit-wise OR.
-        /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
-        /// Obsolete, has no effect, retained for compatibility.
-        /// </summary>
-        internal const int FPDF_DEBUG_INFO = 0x80;
-
-        /// <summary>
-        /// Page rendering flags. They can be combined with bit-wise OR.
-        /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
-        /// Obsolete, has no effect, retained for compatibility.
-        /// </summary>
-        internal const int FPDF_NO_CATCH = 0x100;
-
-        /// <summary>
-        /// Page rendering flags. They can be combined with bit-wise OR.
-        /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
-        /// Limit image cache size.
-        /// </summary>
-        internal const int FPDF_RENDER_LIMITEDIMAGECACHE = 0x200;
-
-        /// <summary>
-        /// Page rendering flags. They can be combined with bit-wise OR.
-        /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
-        /// Always use halftone for image stretching.
-        /// </summary>
-        internal const int FPDF_RENDER_FORCEHALFTONE = 0x400;
-
-        /// <summary>
-        /// Page rendering flags. They can be combined with bit-wise OR.
-        /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
-        /// Render for printing.
-        /// </summary>
-        internal const int FPDF_PRINTING = 0x800;
-
-        /// <summary>
-        /// Page rendering flags. They can be combined with bit-wise OR.
-        /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
-        /// Set to disable anti-aliasing on text. This flag will also disable LCD optimization for text rendering.
-        /// </summary>
-        internal const int FPDF_RENDER_NO_SMOOTHTEXT = 0x1000;
-
-        /// <summary>
-        /// Page rendering flags. They can be combined with bit-wise OR.
-        /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
-        /// Set to disable anti-aliasing on images.
-        /// </summary>
-        internal const int FPDF_RENDER_NO_SMOOTHIMAGE = 0x2000;
-
-        /// <summary>
-        /// Page rendering flags. They can be combined with bit-wise OR.
-        /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
-        /// Set to disable anti-aliasing on paths.
-        /// </summary>
-        internal const int FPDF_RENDER_NO_SMOOTHPATH = 0x4000;
-
-        /// <summary>
-        /// Page rendering flags. They can be combined with bit-wise OR.
-        /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
-        /// Set whether to render in a reverse Byte order, this flag is only used when rendering to a bitmap.
-        /// </summary>
-        internal const int FPDF_REVERSE_BYTE_ORDER = 0x10;
-
-        /// <summary>
-        /// Page rendering flags. They can be combined with bit-wise OR.
-        /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
-        /// Set whether fill paths need to be stroked. This flag is only used when FPDF_COLORSCHEME is passed in,
-        /// since with a single fill color for paths the boundaries of adjacent fill paths are less visible.
-        /// </summary>
-        internal const int FPDF_CONVERT_FILL_TO_STROKE = 0x20;
-
-        /// <summary>
-        /// Action type: Unsupported action type.
-        /// </summary>
-        internal const int PDFACTION_UNSUPPORTED = 0;
-
-        /// <summary>
-        /// Action type: Go to a destination within current document.
-        /// </summary>
-        internal const int PDFACTION_GOTO = 1;
-
-        /// <summary>
-        /// Action type: Go to a destination within another document.
-        /// </summary>
-        internal const int PDFACTION_REMOTEGOTO = 2;
-
-        /// <summary>
-        /// Action type: URI, including web pages and other Internet resources.
-        /// </summary>
-        internal const int PDFACTION_URI = 3;
-
-        /// <summary>
-        /// Action type: Launch an application or open a file.
-        /// </summary>
-        internal const int PDFACTION_LAUNCH = 4;
-
-        /// <summary>
-        /// Flags used by FPDFText_FindStart function.
-        /// If not set, it will not match case by default.
-        /// </summary>
-        internal const int FPDF_MATCHCASE = 0x00000001;
-
-        /// <summary>
-        /// Flags used by FPDFText_FindStart function.
-        /// If not set, it will not match the whole word by default.
-        /// </summary>
-        internal const int FPDF_MATCHWHOLEWORD = 0x00000002;
-
-        /// <summary>
-        /// Flags used by FPDFText_FindStart function.
-        /// If not set, it will skip past the current match to look for the next match.
-        /// </summary>
-        internal const int FPDF_CONSECUTIVE = 0x00000004;
+            /// <summary>
+            /// Flags used by FPDFText_FindStart function.
+            /// If not set, it will skip past the current match to look for the next match.
+            /// </summary>
+            FPDF_CONSECUTIVE = 0x00000004,
+        }
 
         /// <summary>
         /// The file identifier entry type. See section 14.4 "File Identifiers" of the ISO 32000-1 standard.
@@ -538,6 +572,7 @@
         /// <summary>
         /// Annotation flags.
         /// </summary>
+        [Flags]
         internal enum FPDF_ANNOT_FLAGS : int
         {
             /// <summary>
@@ -620,6 +655,7 @@
         /// <summary>
         /// Available form flags.
         /// </summary>
+        [Flags]
         internal enum FPDF_FORMFLAGS : int
         {
             /// <summary>

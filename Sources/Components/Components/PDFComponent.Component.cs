@@ -158,7 +158,7 @@
             if (!PDFiumDocument.IsValid)
             {
                 // Something went wrong. Check password...
-                if (PDFiumBridge.FPDF_GetLastError() == FPDF_ERR_PASSWORD && getPassword != null)
+                if (PDFiumBridge.FPDF_GetLastError() == FPDF_ERROR.FPDF_ERR_PASSWORD && getPassword != null)
                 {
                     PDFiumDocument = PDFiumBridge.FPDF_LoadDocument(file, getPassword());
                 }
@@ -234,6 +234,9 @@
 
                 // ModDate
                 retValue.ModDate = DataConverter.Asn1DateTimeToToDateTime(ReadMetaText(nameof(PDFInformation.ModDate)));
+
+                // Permissions
+                retValue.DocumentPermissions = PDFPermissions.AllFlags & (PDFPermissions)PDFiumBridge.FPDF_GetDocPermissions(PDFiumDocument);
 
                 return retValue;
             }

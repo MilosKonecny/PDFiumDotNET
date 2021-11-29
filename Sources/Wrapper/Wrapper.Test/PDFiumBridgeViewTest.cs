@@ -62,7 +62,7 @@
             var document = bridge.FPDF_LoadDocument(@"FileDoesNotExist.pdf", null);
             Assert.IsFalse(document.IsValid);
             var lastError = bridge.FPDF_GetLastError();
-            Assert.AreEqual(PDFiumDelegates.FPDF_ERR_FILE, lastError);
+            Assert.AreEqual(PDFiumDelegates.FPDF_ERROR.FPDF_ERR_FILE, lastError);
             bridge.Dispose();
         }
 
@@ -98,7 +98,6 @@
         [TestMethod]
         public void FPDFVIEW_LoadDocument_ProtectedDocument_Success()
         {
-#if NET48
             var pdfFile = Path.Combine(_pdfFilesFolder, "PwdProtected(Pwd is pwd).pdf");
             var bridge = new PDFiumBridge();
 
@@ -106,14 +105,13 @@
             Assert.IsFalse(document.IsValid);
 
             var lastError = bridge.FPDF_GetLastError();
-            Assert.AreEqual(PDFiumDelegates.FPDF_ERR_PASSWORD, lastError);
+            Assert.AreEqual(PDFiumDelegates.FPDF_ERROR.FPDF_ERR_PASSWORD, lastError);
 
             document = bridge.FPDF_LoadDocument(pdfFile, "pwd");
             Assert.IsTrue(document.IsValid);
 
             bridge.FPDF_CloseDocument(document);
             bridge.Dispose();
-#endif // NET48
         }
 
         /// <summary>

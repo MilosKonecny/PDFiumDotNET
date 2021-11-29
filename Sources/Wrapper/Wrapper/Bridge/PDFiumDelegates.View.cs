@@ -84,7 +84,7 @@
         /// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDF_GetLastError();.
         /// </remarks>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate int FPDF_GetLastError();
+        internal delegate FPDF_ERROR FPDF_GetLastError();
 
         /// <summary>
         /// Whether the document's cross reference table is valid or not. Experimental API.
@@ -111,7 +111,8 @@
         /// <remarks>
         /// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDF_GetDocPermissions(FPDF_DOCUMENT document);.
         /// </remarks>
-        internal delegate uint FPDF_GetDocPermissions(FPDF_DOCUMENT document);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate FPDF_PERMISSIONS FPDF_GetDocPermissions(FPDF_DOCUMENT document);
 
         // FPDF_EXPORT int FPDF_CALLCONV FPDF_GetSecurityHandlerRevision(FPDF_DOCUMENT document);
 
