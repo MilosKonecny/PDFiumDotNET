@@ -53,6 +53,9 @@
 
             // Load the functions declared in text header - fpdf_text.h.
             LoadDllTextPart(libraryName);
+
+            // Load the functions declared in annot header - fpdf_annot.h.
+            LoadDllAnnotPart(libraryName);
         }
 
         /// <summary>

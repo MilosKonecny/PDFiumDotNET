@@ -366,5 +366,65 @@
             /// </summary>
             public bool IsValid => _webLinkHandle != IntPtr.Zero;
         }
+
+        /// <summary>
+        /// Page object handle struct.
+        /// </summary>
+        internal struct FPDF_PAGEOBJECT
+        {
+            /// <summary>
+            /// Gets invalid handle.
+            /// </summary>
+            public static FPDF_PAGEOBJECT InvalidHandle => new FPDF_PAGEOBJECT();
+
+            /// <summary>
+            /// Page object handle.
+            /// </summary>
+            private readonly IntPtr _pageObjectHandle;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="FPDF_PAGEOBJECT"/> struct.
+            /// </summary>
+            /// <param name="pageObjectHandle">Page object handle to use.</param>
+            public FPDF_PAGEOBJECT(IntPtr pageObjectHandle)
+            {
+                _pageObjectHandle = pageObjectHandle;
+            }
+
+            /// <summary>
+            /// Gets a value indicating whether the page link handle is valid.
+            /// </summary>
+            public bool IsValid => _pageObjectHandle != IntPtr.Zero;
+        }
+
+        /// <summary>
+        /// Form handle struct.
+        /// </summary>
+        internal struct FPDF_FORMHANDLE
+        {
+            /// <summary>
+            /// Gets invalid handle.
+            /// </summary>
+            public static FPDF_FORMHANDLE InvalidHandle => new FPDF_FORMHANDLE();
+
+            /// <summary>
+            /// Form handle.
+            /// </summary>
+            private readonly IntPtr _formHandle;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="FPDF_FORMHANDLE"/> struct.
+            /// </summary>
+            /// <param name="formHandle">Form handle to use.</param>
+            public FPDF_FORMHANDLE(IntPtr formHandle)
+            {
+                _formHandle = formHandle;
+            }
+
+            /// <summary>
+            /// Gets a value indicating whether the page link handle is valid.
+            /// </summary>
+            public bool IsValid => _formHandle != IntPtr.Zero;
+        }
     }
 }

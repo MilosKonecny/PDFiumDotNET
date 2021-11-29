@@ -344,6 +344,12 @@
 
         private static void LoadDllTextPart(string libraryName)
         {
+            LoadDllTextPart1(libraryName);
+            LoadDllTextPart2(libraryName);
+        }
+
+        private static void LoadDllTextPart1(string libraryName)
+        {
             // FPDFText_LoadPage
             var functionName = nameof(PDFiumDelegates.FPDFText_LoadPage);
             var address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
@@ -513,10 +519,13 @@
             }
 
             FPDFText_GetTextStatic = (PDFiumDelegates.FPDFText_GetText)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFText_GetText));
+        }
 
+        private static void LoadDllTextPart2(string libraryName)
+        {
             // FPDFText_CountRects
-            functionName = nameof(PDFiumDelegates.FPDFText_CountRects);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
+            var functionName = nameof(PDFiumDelegates.FPDFText_CountRects);
+            var address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
             if (address == IntPtr.Zero)
             {
                 throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());

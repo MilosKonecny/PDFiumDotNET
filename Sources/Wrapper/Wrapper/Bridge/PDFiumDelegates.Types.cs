@@ -214,45 +214,45 @@
         /// <summary>
         /// Action type: Unsupported action type.
         /// </summary>
-        public const int PDFACTION_UNSUPPORTED = 0;
+        internal const int PDFACTION_UNSUPPORTED = 0;
 
         /// <summary>
         /// Action type: Go to a destination within current document.
         /// </summary>
-        public const int PDFACTION_GOTO = 1;
+        internal const int PDFACTION_GOTO = 1;
 
         /// <summary>
         /// Action type: Go to a destination within another document.
         /// </summary>
-        public const int PDFACTION_REMOTEGOTO = 2;
+        internal const int PDFACTION_REMOTEGOTO = 2;
 
         /// <summary>
         /// Action type: URI, including web pages and other Internet resources.
         /// </summary>
-        public const int PDFACTION_URI = 3;
+        internal const int PDFACTION_URI = 3;
 
         /// <summary>
         /// Action type: Launch an application or open a file.
         /// </summary>
-        public const int PDFACTION_LAUNCH = 4;
+        internal const int PDFACTION_LAUNCH = 4;
 
         /// <summary>
         /// Flags used by FPDFText_FindStart function.
         /// If not set, it will not match case by default.
         /// </summary>
-        public const int FPDF_MATCHCASE = 0x00000001;
+        internal const int FPDF_MATCHCASE = 0x00000001;
 
         /// <summary>
         /// Flags used by FPDFText_FindStart function.
         /// If not set, it will not match the whole word by default.
         /// </summary>
-        public const int FPDF_MATCHWHOLEWORD = 0x00000002;
+        internal const int FPDF_MATCHWHOLEWORD = 0x00000002;
 
         /// <summary>
         /// Flags used by FPDFText_FindStart function.
         /// If not set, it will skip past the current match to look for the next match.
         /// </summary>
-        public const int FPDF_CONSECUTIVE = 0x00000004;
+        internal const int FPDF_CONSECUTIVE = 0x00000004;
 
         /// <summary>
         /// The file identifier entry type. See section 14.4 "File Identifiers" of the ISO 32000-1 standard.
@@ -382,6 +382,306 @@
             /// PDF text rendering mode.
             /// </summary>
             FPDF_TEXTRENDERMODE_LAST = FPDF_TEXTRENDERMODE_CLIP,
+        }
+
+        /// <summary>
+        /// Available annotation subtypes.
+        /// </summary>
+        internal enum FPDF_ANNOTATION_SUBTYPE : int
+        {
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_UNKNOWN = 0,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_TEXT = 1,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_LINK = 2,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_FREETEXT = 3,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_LINE = 4,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_SQUARE = 5,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_CIRCLE = 6,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_POLYGON = 7,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_POLYLINE = 8,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_HIGHLIGHT = 9,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_UNDERLINE = 10,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_SQUIGGLY = 11,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_STRIKEOUT = 12,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_STAMP = 13,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_CARET = 14,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_INK = 15,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_POPUP = 16,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_FILEATTACHMENT = 17,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_SOUND = 18,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_MOVIE = 19,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_WIDGET = 20,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_SCREEN = 21,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_PRINTERMARK = 22,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_TRAPNET = 23,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_WATERMARK = 24,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_THREED = 25,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_RICHMEDIA = 26,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_XFAWIDGET = 27,
+
+            /// <summary>
+            /// Annotation subtype.
+            /// </summary>
+            FPDF_ANNOT_REDACT = 28,
+        }
+
+        /// <summary>
+        /// Annotation flags.
+        /// </summary>
+        internal enum FPDF_ANNOT_FLAGS : int
+        {
+            /// <summary>
+            /// Annotation flag.
+            /// </summary>
+            FPDF_ANNOT_FLAG_NONE = 0,
+
+            /// <summary>
+            /// Annotation flag.
+            /// </summary>
+            FPDF_ANNOT_FLAG_INVISIBLE = 1 << 0,
+
+            /// <summary>
+            /// Annotation flag.
+            /// </summary>
+            FPDF_ANNOT_FLAG_HIDDEN = 1 << 1,
+
+            /// <summary>
+            /// Annotation flag.
+            /// </summary>
+            FPDF_ANNOT_FLAG_PRINT = 1 << 2,
+
+            /// <summary>
+            /// Annotation flag.
+            /// </summary>
+            FPDF_ANNOT_FLAG_NOZOOM = 1 << 3,
+
+            /// <summary>
+            /// Annotation flag.
+            /// </summary>
+            FPDF_ANNOT_FLAG_NOROTATE = 1 << 4,
+
+            /// <summary>
+            /// Annotation flag.
+            /// </summary>
+            FPDF_ANNOT_FLAG_NOVIEW = 1 << 5,
+
+            /// <summary>
+            /// Annotation flag.
+            /// </summary>
+            FPDF_ANNOT_FLAG_READONLY = 1 << 6,
+
+            /// <summary>
+            /// Annotation flag.
+            /// </summary>
+            FPDF_ANNOT_FLAG_LOCKED = 1 << 7,
+
+            /// <summary>
+            /// Annotation flag.
+            /// </summary>
+            FPDF_ANNOT_FLAG_TOGGLENOVIEW = 1 << 8,
+        }
+
+        /// <summary>
+        /// Annotation appearance modes.
+        /// </summary>
+        internal enum FPDF_ANNOT_APPEARANCEMODES : int
+        {
+            /// <summary>
+            /// Annotation appearance mode.
+            /// </summary>
+            FPDF_ANNOT_APPEARANCEMODE_NORMAL = 0,
+
+            /// <summary>
+            /// Annotation appearance mode.
+            /// </summary>
+            FPDF_ANNOT_APPEARANCEMODE_ROLLOVER = 1,
+
+            /// <summary>
+            /// Annotation appearance mode.
+            /// </summary>
+            FPDF_ANNOT_APPEARANCEMODE_DOWN = 2,
+
+            /// <summary>
+            /// Annotation appearance mode.
+            /// </summary>
+            FPDF_ANNOT_APPEARANCEMODE_COUNT = 3,
+        }
+
+        /// <summary>
+        /// Available form flags.
+        /// </summary>
+        internal enum FPDF_FORMFLAGS : int
+        {
+            /// <summary>
+            /// Form flag.
+            /// </summary>
+            FPDF_FORMFLAG_NONE = 0,
+
+            /// <summary>
+            /// Form flag.
+            /// </summary>
+            FPDF_FORMFLAG_READONLY = 1 << 0,
+
+            /// <summary>
+            /// Form flag.
+            /// </summary>
+            FPDF_FORMFLAG_REQUIRED = 1 << 1,
+
+            /// <summary>
+            /// Form flag.
+            /// </summary>
+            FPDF_FORMFLAG_NOEXPORT = 1 << 2,
+
+            /// <summary>
+            /// Form flag.
+            /// </summary>
+            FPDF_FORMFLAG_TEXT_MULTILINE = 1 << 12,
+
+            /// <summary>
+            /// Form flag.
+            /// </summary>
+            FPDF_FORMFLAG_TEXT_PASSWORD = 1 << 13,
+
+            /// <summary>
+            /// Form flag.
+            /// </summary>
+            FPDF_FORMFLAG_CHOICE_COMBO = 1 << 17,
+
+            /// <summary>
+            /// Form flag.
+            /// </summary>
+            FPDF_FORMFLAG_CHOICE_EDIT = 1 << 18,
+
+            /// <summary>
+            /// Form flag.
+            /// </summary>
+            FPDF_FORMFLAG_CHOICE_MULTI_SELECT = 1 << 21,
+        }
+
+        /// <summary>
+        /// Annotation color types.
+        /// </summary>
+        internal enum FPDFANNOT_COLORTYPES
+        {
+            /// <summary>
+            /// Annotation color type.
+            /// </summary>
+            FPDFANNOT_COLORTYPE_Color = 0,
+
+            /// <summary>
+            /// Annotation color type.
+            /// </summary>
+            FPDFANNOT_COLORTYPE_InteriorColor,
         }
 
         /// <summary>
@@ -599,6 +899,22 @@
             /// Y position of point 4.
             /// </summary>
             public float Y4;
+        }
+
+        /// <summary>
+        /// 2D Point. Coordinate system agnostic.
+        /// </summary>
+        public struct FS_POINTF
+        {
+            /// <summary>
+            /// X coordinate of point.
+            /// </summary>
+            public float X;
+
+            /// <summary>
+            /// Y coordinate of point.
+            /// </summary>
+            public float Y;
         }
     }
 }
