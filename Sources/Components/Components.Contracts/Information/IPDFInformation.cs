@@ -52,5 +52,10 @@
         /// Gets the date the document was most recently modified.
         /// </summary>
         DateTimeOffset ModDate { get; }
+
+        /// <summary>
+        /// Gets the document permisions.
+        /// </summary>
+        PDFPermissions DocumentPermissions { get; }
     }
 }

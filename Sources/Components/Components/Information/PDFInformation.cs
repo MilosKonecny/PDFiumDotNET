@@ -56,6 +56,11 @@
         /// </summary>
         public DateTimeOffset ModDate { get; internal set; }
 
+        /// <summary>
+        /// Gets the document permisions.
+        /// </summary>
+        public PDFPermissions DocumentPermissions { get; internal set; }
+
         #endregion Implementation of IPDFInformation
     }
 }

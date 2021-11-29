@@ -7,40 +7,81 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type={x:Type local:DocumentInformation}}"
         Title="{Binding Path=PDFFFileName}"
-        Height="200" Width="500"
+        Height="250" Width="500"
         ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <Grid Margin="5">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="4*"/>
-        </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Title" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding Path=PdfInformation.Title, Mode=OneTime}" IsReadOnly="True"/>
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Author" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Path=PdfInformation.Author, Mode=OneTime}" IsReadOnly="True"/>
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="Subject" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Path=PdfInformation.Subject, Mode=OneTime}" IsReadOnly="True"/>
-        <TextBlock Grid.Row="3" Grid.Column="0" Text="Keywords" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding Path=PdfInformation.Keywords, Mode=OneTime}" IsReadOnly="True"/>
-        <TextBlock Grid.Row="4" Grid.Column="0" Text="Creator" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Path=PdfInformation.Creator, Mode=OneTime}" IsReadOnly="True"/>
-        <TextBlock Grid.Row="5" Grid.Column="0" Text="Producer" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding Path=PdfInformation.Producer, Mode=OneTime}" IsReadOnly="True"/>
-        <TextBlock Grid.Row="6" Grid.Column="0" Text="CreationDate" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="6" Grid.Column="2" Text="{Binding Path=PdfInformation.CreationDate.LocalDateTime, Mode=OneTime}" IsReadOnly="True"/>
-        <TextBlock Grid.Row="7" Grid.Column="0" Text="ModDate" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="7" Grid.Column="2" Text="{Binding Path=PdfInformation.ModDate.LocalDateTime, Mode=OneTime}" IsReadOnly="True"/>
+        <TabControl>
+            <TabItem Header="Properties">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Title:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding Path=PdfInformation.Title, Mode=OneTime}" IsReadOnly="True"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Author:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Path=PdfInformation.Author, Mode=OneTime}" IsReadOnly="True"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Subject:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Path=PdfInformation.Subject, Mode=OneTime}" IsReadOnly="True"/>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Keywords:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding Path=PdfInformation.Keywords, Mode=OneTime}" IsReadOnly="True"/>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Creator:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Path=PdfInformation.Creator, Mode=OneTime}" IsReadOnly="True"/>
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="Producer:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding Path=PdfInformation.Producer, Mode=OneTime}" IsReadOnly="True"/>
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="CreationDate:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="6" Grid.Column="2" Text="{Binding Path=PdfInformation.CreationDate.LocalDateTime, Mode=OneTime}" IsReadOnly="True"/>
+                    <TextBlock Grid.Row="7" Grid.Column="0" Text="ModDate:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="7" Grid.Column="2" Text="{Binding Path=PdfInformation.ModDate.LocalDateTime, Mode=OneTime}" IsReadOnly="True"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Permissions">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Print document:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Path=PermissionPrintDocument, Mode=OneTime}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Modify contents:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Path=PermissionModifyContents, Mode=OneTime}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Extract text and graphics:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Path=PermissionExtractTextAndGraphics, Mode=OneTime}"/>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Add or modify text annotations:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding Path=PermissionAddOrModifyTextAnnotations, Mode=OneTime}"/>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Fill form fields:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding Path=PermissionFillFormFields, Mode=OneTime}"/>
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="Extract text and graphics (disabilities):" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="5" Grid.Column="2" Text="{Binding Path=PermissionExtractTextAndGraphicsDisabilities, Mode=OneTime}"/>
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="Assemble document:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="6" Grid.Column="2" Text="{Binding Path=PermissionAssembleDocument, Mode=OneTime}"/>
+                    <TextBlock Grid.Row="7" Grid.Column="0" Text="Print document high quality:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="7" Grid.Column="2" Text="{Binding Path=PermissionPrintDocumentHighQuality, Mode=OneTime}"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
