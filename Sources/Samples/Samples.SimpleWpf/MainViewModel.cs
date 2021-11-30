@@ -6,6 +6,7 @@
     using System.Globalization;
     using System.Runtime.CompilerServices;
     using System.Windows;
+    using System.Windows.Controls.Primitives;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Bookmark;
     using PDFiumDotNET.Components.Contracts.Page;
@@ -133,7 +134,8 @@
 
             set
             {
-                if (!string.Equals(_currentPageLabel, value, StringComparison.OrdinalIgnoreCase))
+                if (!string.Equals(_currentPageLabel, value, StringComparison.OrdinalIgnoreCase)
+                    && _pdfComponent != null)
                 {
                     _pdfComponent.PageComponent.NavigateToPage(value);
                 }
@@ -152,7 +154,8 @@
 
             set
             {
-                if (_currentPageIndex != value)
+                if (_currentPageIndex != value
+                    && _pdfComponent != null)
                 {
                     _pdfComponent.PageComponent.NavigateToPage(value);
                 }
@@ -166,7 +169,8 @@
         {
             get
             {
-                return !_pdfComponent.IsDocumentOpened;
+                return _pdfComponent == null
+                    || !_pdfComponent.IsDocumentOpened;
             }
         }
 
@@ -220,6 +224,7 @@
             OpenCommand = new ViewModelCommand(ExecuteOpenCommand, CanExecuteOpenCommand);
             CloseCommand = new ViewModelCommand(ExecuteCloseCommand, CanExecuteCloseCommand);
             InformationCommand = new ViewModelCommand(ExecuteInformationCommand, CanExecuteInformationCommand);
+            ShowAnnotationsCommand = new ViewModelExtCommand<ToggleButton>(ExecuteShowAnnotationsCommand, CanExecuteShowAnnotationsCommand);
             // Zoom commands
             ZoomWidthCommand = new ViewModelCommand(ExecuteZoomWidthCommand, CanExecuteZoomWidthCommand);
             ZoomHeightCommand = new ViewModelCommand(ExecuteZoomHeightCommand, CanExecuteZoomHeightCommand);

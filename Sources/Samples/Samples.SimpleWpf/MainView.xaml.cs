@@ -74,6 +74,15 @@
         /// </summary>
         public double PDFPageMargin => _pdfView.PDFPageMargin;
 
+        /// <summary>
+        /// Invalidates PDF control.
+        /// </summary>
+        public void InvalidatePDFControl()
+        {
+            _pdfView.InvalidateVisual();
+            _pdfThumbnailView.InvalidateVisual();
+        }
+
         #endregion Implementation of IView
 
     }

@@ -41,7 +41,7 @@
 
         #endregion Private methods - invoke event
 
-        #region Implementation of IookmarkProvider
+        #region Implementation of IBookmarkProvider
 
         /// <summary>
         /// <inheritdoc/>
