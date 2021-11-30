@@ -23,6 +23,10 @@
                 <Setter Property="Width" Value="40"/>
                 <Setter Property="Height" Value="40"/>
             </Style>
+            <Style TargetType="ToggleButton">
+                <Setter Property="Width" Value="40"/>
+                <Setter Property="Height" Value="40"/>
+            </Style>
             <Style TargetType="wpfControl:AutoDisabledImage">
                 <Setter Property="Width" Value="32"/>
                 <Setter Property="Height" Value="32"/>
@@ -110,6 +114,10 @@
                 <Button Command="{Binding Path=InformationCommand}" ToolTip="Document information">
                     <wpfControl:AutoDisabledImage Source="Resources\show_property_40px.png"/>
                 </Button>
+                <ToggleButton x:Name="_showAnnotationsToggleButton"
+                              Command="{Binding Path=ShowAnnotationsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" ToolTip="Show document annotations">
+                    <wpfControl:AutoDisabledImage Source="Resources\note_40px.png"/>
+                </ToggleButton>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,10,5">
                 <Button Command="{Binding Path=ZoomWidthCommand}" ToolTip="Zoom to width of widest page">
@@ -213,33 +221,7 @@
                     </TreeView.ItemTemplate>
                 </TreeView>
             </TabItem>
-            <TabItem Header="Thumbnails I">
-                <ListBox ItemsSource="{Binding Path=PageComponent.Pages}" SelectedItem="{Binding Path=SelectedThumbnail, Mode=OneWayToSource}"
-                         VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Standard"
-                         ScrollViewer.CanContentScroll="True">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel Orientation="Vertical"/>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <wpfControl:ThumbnailControl Page="{Binding}"
-                                                             Width="{Binding Path=ThumbnailWidth}" Height="{Binding Path=ThumbnailHeight}"
-                                                             BorderBrush="Black" BorderThickness="0.5" Background="Transparent"/>
-                                <TextBlock Text="{Binding Path=PageLabel}" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </TabItem>
-            <TabItem Header="Thumbnails II">
+            <TabItem Header="Thumbnails">
                 <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
                     <wpfControl:PDFThumbnailView x:Name="_pdfThumbnailView"
                                                  PDFPageComponent="{Binding Path=PageComponent}"/>

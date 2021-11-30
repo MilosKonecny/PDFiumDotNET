@@ -44,6 +44,11 @@
         ObservableCollection<IPDFPage> Pages { get; }
 
         /// <summary>
+        /// Gets or sets the information whether the annotation objects ar to render.
+        /// </summary>
+        bool IsAnnotationToRender { get; set; }
+
+        /// <summary>
         /// Peforms the action defined in given <see cref="IPDFAction"/>.
         /// </summary>
         /// <param name="action"><see cref="IPDFAction"/> defines action to perform.</param>
