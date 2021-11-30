@@ -251,7 +251,7 @@
         /// FPDF_EXPORT void FPDF_CALLCONV FPDF_RenderPageBitmap(FPDF_BITMAP bitmap, FPDF_PAGE page, int start_x, int start_y, int size_x, int size_y, int rotate, int flags);.
         /// </remarks>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate void FPDF_RenderPageBitmap(FPDF_BITMAP bitmap, FPDF_PAGE page, int start_x, int start_y, int size_x, int size_y, int rotate, int flags);
+        internal delegate void FPDF_RenderPageBitmap(FPDF_BITMAP bitmap, FPDF_PAGE page, int start_x, int start_y, int size_x, int size_y, int rotate, FPDF_RENDERING_FLAGS flags);
 
         /// <summary>
         /// Render contents of a page to a device independent bitmap.
@@ -268,7 +268,7 @@
         /// FPDF_EXPORT void FPDF_CALLCONV FPDF_RenderPageBitmapWithMatrix(FPDF_BITMAP bitmap, FPDF_PAGE page, const FS_MATRIX* matrix, const FS_RECTF* clipping, int flags);.
         /// </remarks>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate void FPDF_RenderPageBitmapWithMatrix(FPDF_BITMAP bitmap, FPDF_PAGE page, ref FS_MATRIX matrix, ref FS_RECTF clipping, int flags);
+        internal delegate void FPDF_RenderPageBitmapWithMatrix(FPDF_BITMAP bitmap, FPDF_PAGE page, ref FS_MATRIX matrix, ref FS_RECTF clipping, FPDF_RENDERING_FLAGS flags);
 
         // FPDF_EXPORT FPDF_RECORDER FPDF_CALLCONV FPDF_RenderPageSkp(FPDF_PAGE page, int size_x, int size_y);
 

@@ -159,6 +159,11 @@
         public ObservableCollection<IPDFPage> Pages { get; private set; }
 
         /// <summary>
+        /// Gets or sets the information whether the annotation objects ar to render.
+        /// </summary>
+        public bool IsAnnotationToRender { get; set; }
+
+        /// <summary>
         /// <inheritdoc/>
         /// </summary>
         public void PerformAction(IPDFAction action)

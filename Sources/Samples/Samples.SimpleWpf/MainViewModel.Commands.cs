@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using System.Windows.Controls.Primitives;
     using Microsoft.Win32;
     using PDFiumDotNET.Components.Contracts.Adapters;
     using PDFiumDotNET.Samples.SimpleWpf.CommonDialogs;
@@ -37,6 +38,15 @@
         /// Gets the document information command.
         /// </summary>
         public ViewModelCommand InformationCommand
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the show annotations command.
+        /// </summary>
+        public ViewModelExtCommand<ToggleButton> ShowAnnotationsCommand
         {
             get;
             private set;
@@ -184,6 +194,27 @@
         private bool CanExecuteInformationCommand()
         {
             return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+        }
+
+        private void ExecuteShowAnnotationsCommand(ToggleButton relatedButton)
+        {
+            if (_pdfComponent != null && _pdfComponent.IsDocumentOpened && relatedButton != null)
+            {
+                _pdfComponent.PageComponent.IsAnnotationToRender = !_pdfComponent.PageComponent.IsAnnotationToRender;
+                InvokePropertyChangedEvent();
+                _view.InvalidatePDFControl();
+            }
+        }
+
+        private bool CanExecuteShowAnnotationsCommand(ToggleButton relatedButton)
+        {
+            if (_pdfComponent == null || !_pdfComponent.IsDocumentOpened || relatedButton == null)
+            {
+                return false;
+            }
+
+            relatedButton.IsChecked = _pdfComponent.PageComponent.IsAnnotationToRender;
+            return true;
         }
 
         private void ExecuteZoomWidthCommand()

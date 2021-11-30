@@ -138,7 +138,14 @@
             bmp.Create(width, height, format, buffer, stride);
 
             var pageHandle = _mainComponent.PDFiumBridge.FPDF_LoadPage(_mainComponent.PDFiumDocument, PageIndex);
-            bmp.RenderWithTransformation(pageHandle, zoomFactor, startX, startY, sizeX, sizeY);
+            bmp.RenderWithTransformation(
+                pageHandle,
+                zoomFactor,
+                startX,
+                startY,
+                sizeX,
+                sizeY,
+                _mainComponent.PageComponent.IsAnnotationToRender ? FPDF_RENDERING_FLAGS.FPDF_ANNOT : FPDF_RENDERING_FLAGS.FPDF_NONE);
             _mainComponent.PDFiumBridge.FPDF_ClosePage(pageHandle);
 
             bmp.Destroy();
@@ -153,7 +160,13 @@
             bmp.Create((int)ThumbnailWidth, (int)ThumbnailHeight, format, buffer, stride);
 
             var pageHandle = _mainComponent.PDFiumBridge.FPDF_LoadPage(_mainComponent.PDFiumDocument, PageIndex);
-            bmp.RenderWithoutTransformation(pageHandle, 0, 0, (int)ThumbnailWidth, (int)ThumbnailHeight);
+            bmp.RenderWithoutTransformation(
+                pageHandle,
+                0,
+                0,
+                (int)ThumbnailWidth,
+                (int)ThumbnailHeight,
+                FPDF_RENDERING_FLAGS.FPDF_NONE);
             _mainComponent.PDFiumBridge.FPDF_ClosePage(pageHandle);
 
             bmp.Destroy();

@@ -26,5 +26,10 @@
         /// Gets the margin between pages.
         /// </summary>
         double PDFPageMargin { get; }
+
+        /// <summary>
+        /// Invalidates PDF control.
+        /// </summary>
+        void InvalidatePDFControl();
     }
 }

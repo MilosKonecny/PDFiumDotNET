@@ -133,6 +133,11 @@
         internal enum FPDF_RENDERING_FLAGS : int
         {
             /// <summary>
+            /// No rendering flag.
+            /// </summary>
+            FPDF_NONE = 0,
+
+            /// <summary>
             /// Page rendering flags. They can be combined with bit-wise OR.
             /// Used in <see cref="FPDF_RenderPageBitmap"/> or <see cref="FPDF_RenderPageBitmapWithMatrix"/>.
             /// Set if annotations are to be rendered.
