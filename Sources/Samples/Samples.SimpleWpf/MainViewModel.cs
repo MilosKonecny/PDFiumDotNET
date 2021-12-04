@@ -1,6 +1,7 @@
 ﻿namespace PDFiumDotNET.Samples.SimpleWpf
 {
     using System;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Globalization;
@@ -9,6 +10,7 @@
     using System.Windows.Controls.Primitives;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Bookmark;
+    using PDFiumDotNET.Components.Contracts.Find;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Zoom;
     using PDFiumDotNET.Components.Factory;
@@ -27,6 +29,8 @@
         private IPDFPage _selectedThumbnail;
         private string _currentPageLabel;
         private int _currentPageIndex;
+        private bool _isFindActive;
+        private int _activeFindPage;
 
         #endregion Private fields
 
@@ -37,6 +41,7 @@
         /// </summary>
         public MainViewModel()
         {
+            FindResult = new ObservableCollection<IPDFFindPage>();
         }
 
         #endregion Constructors
@@ -163,6 +168,18 @@
         }
 
         /// <summary>
+        /// Gets the information whether the PDF document is opened.
+        /// </summary>
+        public bool IsDocumentOpened
+        {
+            get
+            {
+                return _pdfComponent != null
+                    && _pdfComponent.IsDocumentOpened;
+            }
+        }
+
+        /// <summary>
         /// Gets the information whether the PDF document is closed.
         /// </summary>
         public bool IsDocumentClosed
@@ -173,6 +190,66 @@
                     || !_pdfComponent.IsDocumentOpened;
             }
         }
+
+        /// <summary>
+        /// Gets flag whether find process is active or not.
+        /// </summary>
+        public bool IsFindActive
+        {
+            get
+            {
+                return _isFindActive;
+            }
+
+            private set
+            {
+                if (value != _isFindActive)
+                {
+                    _isFindActive = value;
+                    InvokePropertyChangedEvent();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the page where is find text active.
+        /// </summary>
+        public int ActiveFindPage
+        {
+            get
+            {
+                return _activeFindPage;
+            }
+
+            private set
+            {
+                if (value != _activeFindPage)
+                {
+                    _activeFindPage = value;
+                    InvokePropertyChangedEvent();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the text to find.
+        /// </summary>
+        public string FindText { get; set; }
+
+        /// <summary>
+        /// Gets or sets the find filter.
+        /// </summary>
+        public bool IsFindCaseSensitive { get; set; }
+
+        /// <summary>
+        /// Gets or sets the find filter.
+        /// </summary>
+        public bool IsFindWholeWords { get; set; }
+
+        /// <summary>
+        /// Gets the collection of find result.
+        /// </summary>
+        public ObservableCollection<IPDFFindPage> FindResult { get; private set; }
 
         #endregion Public properties
 
@@ -235,6 +312,10 @@
             GoToPreviousPageCommand = new ViewModelCommand(ExecuteGoToPreviousPageCommand, CanExecuteGoToPreviousPageCommand);
             GoToNextPageCommand = new ViewModelCommand(ExecuteGoToNextPageCommand, CanExecuteGoToNextPageCommand);
             GoToLastPageCommand = new ViewModelCommand(ExecuteGoToLastPageCommand, CanExecuteGoToLastPageCommand);
+            // Find commands
+            FindCommand = new ViewModelCommand(ExecuteFindCommand, CanExecuteFindCommand);
+            FindClearResultCommand = new ViewModelCommand(ExecuteFindClearResultCommand, CanExecuteFindClearResultCommand);
+            FindCancelCommand = new ViewModelCommand(ExecuteFindCancelCommand, CanExecuteFindCancelCommand);
 
             // Initialize pdf component
             _pdfComponent = PDFFactory.PDFComponent;
@@ -243,6 +324,9 @@
             {
                 if (string.Equals(nameof(IPDFComponent.IsDocumentOpened), e?.PropertyName))
                 {
+                    IsFindActive = false;
+                    FindResult.Clear();
+                    InvokePropertyChangedEvent(nameof(IsDocumentOpened));
                     InvokePropertyChangedEvent(nameof(IsDocumentClosed));
                 }
             };
@@ -293,6 +377,33 @@
                     }
                 }
             };
+        }
+
+        /// <summary>
+        /// Gets or sets the selected find object.
+        /// </summary>
+        public object SelectedFindObject
+        {
+            get
+            {
+                return null;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    return;
+                }
+
+                if (value is IPDFFindPage page)
+                {
+                    _pdfComponent.PageComponent.NavigateToFindPlace(page);
+                }
+                else if (value is IPDFFindPosition position)
+                {
+                    _pdfComponent.PageComponent.NavigateToFindPlace(position);
+                }
+            }
         }
 
         #endregion Implementation of IViewModel

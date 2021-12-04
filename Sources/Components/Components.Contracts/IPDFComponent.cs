@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using PDFiumDotNET.Components.Contracts.Bookmark;
+    using PDFiumDotNET.Components.Contracts.Find;
     using PDFiumDotNET.Components.Contracts.Information;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Zoom;
@@ -28,6 +29,11 @@
         /// Gets the zoom component.
         /// </summary>
         IPDFZoomComponent ZoomComponent { get; }
+
+        /// <summary>
+        /// Gets the find component.
+        /// </summary>
+        IPDFFindComponent FindComponent { get; }
 
         /// <summary>
         /// Gets all child components attached to this main component.

@@ -32,13 +32,89 @@
         #region Public methods
 
         /// <summary>
+        /// Render the rectangle to the bitmap.
+        /// </summary>
+        /// <param name="zoomFactor">Zoom factor to use for transformation.</param>
+        /// <param name="startX">Left pixel position of the page area to render.</param>
+        /// <param name="startY">Top pixel position of the page area to render.</param>
+        /// <param name="sizeY">Height of the page area to render.</param>
+        /// <param name="rectStartX">Left pixel position of the rectangle to render.</param>
+        /// <param name="rectStartY">Top pixel position of the rectangle to render.</param>
+        /// <param name="rectSizeX">Width of the rectangle to render.</param>
+        /// <param name="rectSizeY">Height of the rectangle to render.</param>
+        public void RenderSelectionRectangle(
+            double zoomFactor,
+            int startX,
+            int startY,
+            int sizeY,
+            double rectStartX,
+            double rectStartY,
+            double rectSizeX,
+            double rectSizeY)
+        {
+            int left = (int)Math.Round(rectStartX * zoomFactor, 0) + startX - 2;
+            int top = sizeY - (int)Math.Round(rectStartY * zoomFactor, 0) + startY - 2;
+            int width = (int)Math.Round(rectSizeX * zoomFactor, 0) + 4;
+            int height = -(int)Math.Round(rectSizeY * zoomFactor, 0) + 4;
+
+            // Light blue: 0xADD8E6
+            var color1 = new FPDF_COLOR(0xFF, 0xFF, 0xA0, 0x3F);
+            _mainComponent.PDFiumBridge.FPDFBitmap_FillRect(
+                _bitmapHandle,
+                left,
+                top,
+                width,
+                height,
+                color1);
+
+            // Border color
+            var color2 = new FPDF_COLOR(0xFF, 0x00, 0x00, 0xFF);
+
+            // Bottom border
+            _mainComponent.PDFiumBridge.FPDFBitmap_FillRect(
+                _bitmapHandle,
+                left - 2,
+                top + height,
+                width + 4,
+                2,
+                color2);
+
+            // Top border
+            _mainComponent.PDFiumBridge.FPDFBitmap_FillRect(
+                _bitmapHandle,
+                left - 2,
+                top - 2,
+                width + 2,
+                2,
+                color2);
+
+            // Left border
+            _mainComponent.PDFiumBridge.FPDFBitmap_FillRect(
+                _bitmapHandle,
+                left - 2,
+                top - 2,
+                2,
+                height + 2,
+                color2);
+
+            // Right border
+            _mainComponent.PDFiumBridge.FPDFBitmap_FillRect(
+                _bitmapHandle,
+                left + width,
+                top - 2,
+                2,
+                height + 2,
+                color2);
+        }
+
+        /// <summary>
         /// Render the page to the bitmap.
         /// </summary>
         /// <param name="page">Page to render.</param>
-        /// <param name="startX">Left pixel position of the page area to be rendered.</param>
-        /// <param name="startY">Top pixel position of the page area to be rendered.</param>
-        /// <param name="sizeX">Width of the page area to be rendered.</param>
-        /// <param name="sizeY">Height of the page area to be rendered.</param>
+        /// <param name="startX">Left pixel position of the page area to render.</param>
+        /// <param name="startY">Top pixel position of the page area to render.</param>
+        /// <param name="sizeX">Width of the page area to render.</param>
+        /// <param name="sizeY">Height of the page area to render.</param>
         /// <param name="flags">Rendering flags to use for rendering.</param>
         public void RenderWithoutTransformation(FPDF_PAGE page, int startX, int startY, int sizeX, int sizeY, FPDF_RENDERING_FLAGS flags)
         {
@@ -50,10 +126,10 @@
         /// </summary>
         /// <param name="page">Page to render.</param>
         /// <param name="zoomFactor">Zoom factor to use for transformation.</param>
-        /// <param name="startX">Left pixel position of the page area to be rendered.</param>
-        /// <param name="startY">Top pixel position of the page area to be rendered.</param>
-        /// <param name="sizeX">Width of the page area to be rendered.</param>
-        /// <param name="sizeY">Height of the page area to be rendered.</param>
+        /// <param name="startX">Left pixel position of the page area to render.</param>
+        /// <param name="startY">Top pixel position of the page area to render.</param>
+        /// <param name="sizeX">Width of the page area to render.</param>
+        /// <param name="sizeY">Height of the page area to render.</param>
         /// <param name="flags">Rendering flags to use for rendering.</param>
         public void RenderWithTransformation(FPDF_PAGE page, double zoomFactor, int startX, int startY, int sizeX, int sizeY, FPDF_RENDERING_FLAGS flags)
         {

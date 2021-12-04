@@ -494,7 +494,7 @@
         /// FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_SetStringValue(FPDF_ANNOTATION annot, FPDF_BYTESTRING key, FPDF_WIDESTRING value);.
         /// </remarks>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate bool FPDFAnnot_SetStringValue(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key, string value);
+        internal delegate bool FPDFAnnot_SetStringValue(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key, IntPtr value);
 
         /// <summary>
         /// Experimental API.
@@ -543,7 +543,7 @@
         /// FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_SetAP(FPDF_ANNOTATION annot, FPDF_ANNOT_APPEARANCEMODE appearanceMode, FPDF_WIDESTRING value);.
         /// </remarks>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate bool FPDFAnnot_SetAP(FPDF_ANNOTATION annot, FPDF_ANNOT_APPEARANCEMODES appearanceMode, string value);
+        internal delegate bool FPDFAnnot_SetAP(FPDF_ANNOTATION annot, FPDF_ANNOT_APPEARANCEMODES appearanceMode, IntPtr value);
 
         /// <summary>
         /// Experimental API.

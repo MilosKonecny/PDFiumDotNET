@@ -64,6 +64,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helper\ViewModelExtCommand.cs" />
+    <Compile Include="Templates\FindTemplateSelector.cs" />
     <Compile Include="Windows\DocumentInformation.xaml.cs">
       <DependentUpon>DocumentInformation.xaml</DependentUpon>
     </Compile>

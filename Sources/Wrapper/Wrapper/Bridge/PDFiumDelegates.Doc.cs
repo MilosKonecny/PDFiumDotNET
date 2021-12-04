@@ -59,7 +59,7 @@
         /// FPDF_EXPORT FPDF_BOOKMARK FPDF_CALLCONV FPDFBookmark_Find(FPDF_DOCUMENT document, FPDF_WIDESTRING title);.
         /// </remarks>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate FPDF_BOOKMARK FPDFBookmark_Find(FPDF_DOCUMENT document, string title);
+        internal delegate FPDF_BOOKMARK FPDFBookmark_Find(FPDF_DOCUMENT document, IntPtr title);
 
         /// <summary>
         /// Get the destination associated with |bookmark|.

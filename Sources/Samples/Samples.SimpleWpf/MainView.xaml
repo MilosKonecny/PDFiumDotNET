@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:PDFiumDotNET.Samples.SimpleWpf"
         xmlns:wpfControl="clr-namespace:PDFiumDotNET.WpfControls;assembly=PDFiumDotNET.WpfControls"
         xmlns:behaviors="clr-namespace:PDFiumDotNET.Samples.SimpleWpf.Behaviors"
-        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors" xmlns:templates="clr-namespace:PDFiumDotNET.Samples.SimpleWpf.Templates"
         mc:Ignorable="d" 
         d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type local:MainViewModel}}"
         d:DesignHeight="300" d:DesignWidth="500"
@@ -18,10 +18,12 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityKey" />
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverterKey"/>
             <Style TargetType="Button">
                 <Setter Property="Width" Value="40"/>
                 <Setter Property="Height" Value="40"/>
+            </Style>
+            <Style x:Key="NoStyles" TargetType="Button">
             </Style>
             <Style TargetType="ToggleButton">
                 <Setter Property="Width" Value="40"/>
@@ -198,34 +200,96 @@
             </StackPanel>
         </WrapPanel>
         <!-- Bookmarks & Thumbnails -->
-        <TabControl Grid.Row="2" Grid.Column="0">
+        <TabControl x:Name="_tabControl" Grid.Row="2" Grid.Column="0">
             <TabItem Header="Bookmarks">
-                <TreeView ItemsSource="{Binding Path=BookmarkComponent.Bookmarks}" SelectedItemChanged="HandleTreeViewSelectedItemChangedEvent"
+                <Border Margin="3" BorderThickness="1" BorderBrush="{Binding ElementName=_tabControl, Path=BorderBrush}">
+                    <TreeView BorderThickness="0"
+                          ItemsSource="{Binding Path=BookmarkComponent.Bookmarks}" SelectedItemChanged="HandleTreeViewSelectedItemChangedEvent"
                           VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Standard">
-                    <TreeView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel Orientation="Vertical"/>
-                        </ItemsPanelTemplate>
-                    </TreeView.ItemsPanel>
-                    <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding Path=Bookmarks}">
-                            <TextBlock Grid.Column="0" Text="{Binding Path=Text}" >
-                                <TextBlock.ToolTip>
-                                    <StackPanel>
-                                        <TextBlock Text="{Binding Path=Destination.Info, StringFormat=Destination: {0}}"/>
-                                        <TextBlock Text="{Binding Path=Action.Info, StringFormat=Action: {0}}"/>
-                                    </StackPanel>
-                                </TextBlock.ToolTip>
+                        <TreeView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel Orientation="Vertical"/>
+                            </ItemsPanelTemplate>
+                        </TreeView.ItemsPanel>
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Path=Bookmarks}">
+                                <TextBlock Grid.Column="0" Text="{Binding Path=Text}" >
+                                    <TextBlock.ToolTip>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Path=Destination.Info, StringFormat=Destination: {0}}"/>
+                                            <TextBlock Text="{Binding Path=Action.Info, StringFormat=Action: {0}}"/>
+                                        </StackPanel>
+                                    </TextBlock.ToolTip>
                             </TextBlock>
-                        </HierarchicalDataTemplate>
-                    </TreeView.ItemTemplate>
-                </TreeView>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </Border>
             </TabItem>
             <TabItem Header="Thumbnails">
-                <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
-                    <wpfControl:PDFThumbnailView x:Name="_pdfThumbnailView"
+                <Border Margin="3" BorderThickness="1" BorderBrush="{Binding ElementName=_tabControl, Path=BorderBrush}">
+                    <ScrollViewer BorderThickness="0"
+                              CanContentScroll="True" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+                        <wpfControl:PDFThumbnailView x:Name="_pdfThumbnailView"
+                                                 BorderThickness="0"
                                                  PDFPageComponent="{Binding Path=PageComponent}"/>
-                </ScrollViewer>
+                    </ScrollViewer>
+                </Border>
+            </TabItem>
+            <TabItem Header="Find text">
+                <Border Margin="3" BorderThickness="1" BorderBrush="{Binding ElementName=_tabControl, Path=BorderBrush}">
+                    <Grid Margin="3">
+                        <Grid.Resources>
+                            <HierarchicalDataTemplate x:Key="FindTemplatePageKey" ItemsSource="{Binding Positions}">
+                                <TextBlock Text="{Binding Mode=OneTime, Path=RelatedPage.PageLabel, StringFormat=Page {0}}" />
+                            </HierarchicalDataTemplate>
+                            <DataTemplate x:Key="FindTemplatePositionKey">
+                                <TextBlock Text="{Binding Mode=OneTime, Path=Context}" />
+                            </DataTemplate>
+                            <templates:FindTemplateSelector x:Key="FindTemplateSelectorKey"
+                                                            PageTemplate="{StaticResource ResourceKey=FindTemplatePageKey}"
+                                                            PositionTemplate="{StaticResource ResourceKey=FindTemplatePositionKey}"/>
+                        </Grid.Resources>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="3"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="3"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="3"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="3"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBox Grid.Row="0" Text="{Binding Path=FindText, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=IsDocumentOpened}">
+                            <TextBox.InputBindings>
+                                <KeyBinding Command="{Binding Path=FindCommand}" Key="Return" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+                        <CheckBox Grid.Row="2" IsChecked="{Binding Path=IsFindCaseSensitive}" IsEnabled="{Binding Path=IsDocumentOpened}">
+                            <TextBlock Text="Case sensitive"/>
+                        </CheckBox>
+                        <CheckBox Grid.Row="4" IsChecked="{Binding Path=IsFindWholeWords}" IsEnabled="{Binding Path=IsDocumentOpened}">
+                            <TextBlock Text="Whole words"/>
+                        </CheckBox>
+                        <Button Grid.Row="6" HorizontalAlignment="Left" Style="{StaticResource ResourceKey=NoStyles}" Width="50" Command="{Binding Path=FindCommand}">
+                            <TextBlock Text="Find"/>
+                        </Button>
+                        <Button Grid.Row="6" HorizontalAlignment="Right" Style="{StaticResource ResourceKey=NoStyles}" Width="50" Command="{Binding Path=FindClearResultCommand}">
+                            <TextBlock Text="Clear"/>
+                        </Button>
+                        <TreeView Grid.Row="8"
+                                  ItemsSource="{Binding Path=FindResult}"
+                                  SelectedItemChanged="TreeView_SelectedItemChanged"
+                                  ItemTemplateSelector="{StaticResource ResourceKey=FindTemplateSelectorKey}">
+                            <TreeView.ItemContainerStyle>
+                                <Style TargetType="{x:Type TreeViewItem}">
+                                    <Setter Property="IsExpanded" Value="True" />
+                                </Style>
+                            </TreeView.ItemContainerStyle>
+                        </TreeView>
+                    </Grid>
+                </Border>
             </TabItem>
         </TabControl>
         <!-- PDF -->
@@ -234,5 +298,16 @@
                                 PDFPageComponent="{Binding Path=PageComponent}"
                                 PDFZoomComponent="{Binding Path=ZoomComponent}" />
         </ScrollViewer>
+        <!-- Find active -->
+        <Grid Grid.Row="0" Grid.RowSpan="10" Grid.Column="0" Grid.ColumnSpan="10"
+              Background="White" Opacity="0.8"
+              Visibility="{Binding Path=IsFindActive, Converter={StaticResource ResourceKey=BooleanToVisibilityConverterKey}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock FontWeight="Bold" Text="{Binding Path=ActiveFindPage, StringFormat=Find text on page {0:#}}"/>
+                <Button Style="{StaticResource ResourceKey=NoStyles}" Command="{Binding Path=FindCancelCommand}">
+                    <TextBlock Text="Cancel"/>
+                </Button>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

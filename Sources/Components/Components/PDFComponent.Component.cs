@@ -2,16 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
     using PDFiumDotNET.Components.Bookmark;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Bookmark;
+    using PDFiumDotNET.Components.Contracts.Find;
     using PDFiumDotNET.Components.Contracts.Information;
     using PDFiumDotNET.Components.Contracts.Observers;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Zoom;
+    using PDFiumDotNET.Components.Find;
     using PDFiumDotNET.Components.Helper;
     using PDFiumDotNET.Components.Information;
     using PDFiumDotNET.Components.Page;
@@ -87,6 +88,29 @@
                 if (component == null)
                 {
                     component = new PDFZoomComponent();
+                    Attach(component);
+                }
+
+                return component;
+            }
+        }
+
+        /// <summary>
+        /// Gets the find component.
+        /// </summary>
+        public IPDFFindComponent FindComponent
+        {
+            get
+            {
+                if (IsDisposed)
+                {
+                    return null;
+                }
+
+                var component = _childComponents.OfType<IPDFFindComponent>().FirstOrDefault();
+                if (component == null)
+                {
+                    component = new PDFFindComponent();
                     Attach(component);
                 }
 
