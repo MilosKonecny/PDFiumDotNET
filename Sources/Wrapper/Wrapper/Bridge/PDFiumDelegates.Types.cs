@@ -275,6 +275,11 @@
         internal enum FPDF_FIND_FLAGS : int
         {
             /// <summary>
+            /// Flags used by FPDFText_FindStart to define no restriction is required.
+            /// </summary>
+            FPDF_NONE = 0,
+
+            /// <summary>
             /// Flags used by FPDFText_FindStart function.
             /// If not set, it will not match case by default.
             /// </summary>
@@ -732,13 +737,13 @@
         internal struct FPDF_COLOR
         {
             [FieldOffset(0)]
-            private readonly byte _alpha;
-            [FieldOffset(1)]
-            private readonly byte _red;
-            [FieldOffset(2)]
-            private readonly byte _green;
-            [FieldOffset(3)]
             private readonly byte _blue;
+            [FieldOffset(1)]
+            private readonly byte _green;
+            [FieldOffset(2)]
+            private readonly byte _red;
+            [FieldOffset(3)]
+            private readonly byte _alpha;
             [FieldOffset(0)]
             private readonly uint _argb;
 
@@ -803,7 +808,7 @@
             /// <summary>
             /// Gets the 32 bit ARGB value of color.
             /// </summary>
-            public int ARGB => unchecked((int)_argb);
+            public uint ARGB => unchecked(_argb);
 
             /// <summary>
             /// Implicit operator.

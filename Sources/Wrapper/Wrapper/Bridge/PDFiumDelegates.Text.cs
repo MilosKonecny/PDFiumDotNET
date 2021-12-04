@@ -318,7 +318,7 @@
         /// FPDF_EXPORT FPDF_SCHHANDLE FPDF_CALLCONV FPDFText_FindStart(FPDF_TEXTPAGE text_page, FPDF_WIDESTRING findwhat, unsigned long flags, int start_index);.
         /// </remarks>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate FPDF_SCHHANDLE FPDFText_FindStart(FPDF_TEXTPAGE text_page, string findwhat, ulong flags, int start_index);
+        internal delegate FPDF_SCHHANDLE FPDFText_FindStart(FPDF_TEXTPAGE text_page, IntPtr findwhat, FPDF_FIND_FLAGS flags, int start_index);
 
         /// <summary>
         /// Search in the direction from page start to end.

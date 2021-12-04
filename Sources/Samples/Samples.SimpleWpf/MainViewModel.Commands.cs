@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Windows.Controls.Primitives;
     using Microsoft.Win32;
     using PDFiumDotNET.Components.Contracts.Adapters;
@@ -19,110 +20,77 @@
         /// <summary>
         /// Gets the open pdf command.
         /// </summary>
-        public ViewModelCommand OpenCommand
-        {
-            get;
-            private set;
-        }
+        public ViewModelCommand OpenCommand { get; private set; }
 
         /// <summary>
         /// Gets the close pdf command.
         /// </summary>
-        public ViewModelCommand CloseCommand
-        {
-            get;
-            private set;
-        }
+        public ViewModelCommand CloseCommand { get; private set; }
 
         /// <summary>
         /// Gets the document information command.
         /// </summary>
-        public ViewModelCommand InformationCommand
-        {
-            get;
-            private set;
-        }
+        public ViewModelCommand InformationCommand { get; private set; }
 
         /// <summary>
         /// Gets the show annotations command.
         /// </summary>
-        public ViewModelExtCommand<ToggleButton> ShowAnnotationsCommand
-        {
-            get;
-            private set;
-        }
+        public ViewModelExtCommand<ToggleButton> ShowAnnotationsCommand { get; private set; }
 
         /// <summary>
         /// Gets the 'zoom width' command.
         /// </summary>
-        public ViewModelCommand ZoomWidthCommand
-        {
-            get;
-            private set;
-        }
+        public ViewModelCommand ZoomWidthCommand { get; private set; }
 
         /// <summary>
         /// Gets the 'zoom height' command.
         /// </summary>
-        public ViewModelCommand ZoomHeightCommand
-        {
-            get;
-            private set;
-        }
+        public ViewModelCommand ZoomHeightCommand { get; private set; }
 
         /// <summary>
         /// Gets the 'zoom in' command.
         /// </summary>
-        public ViewModelCommand ZoomInCommand
-        {
-            get;
-            private set;
-        }
+        public ViewModelCommand ZoomInCommand { get; private set; }
 
         /// <summary>
         /// Gets the 'zoom out' command.
         /// </summary>
-        public ViewModelCommand ZoomOutCommand
-        {
-            get;
-            private set;
-        }
+        public ViewModelCommand ZoomOutCommand { get; private set; }
 
         /// <summary>
         /// Gets the 'go to first page' command.
         /// </summary>
-        public ViewModelCommand GoToFirstPageCommand
-        {
-            get;
-            private set;
-        }
+        public ViewModelCommand GoToFirstPageCommand { get; private set; }
 
         /// <summary>
         /// Gets the 'go to previous page' command.
         /// </summary>
-        public ViewModelCommand GoToPreviousPageCommand
-        {
-            get;
-            private set;
-        }
+        public ViewModelCommand GoToPreviousPageCommand { get; private set; }
 
         /// <summary>
         /// Gets the 'go to next page' command.
         /// </summary>
-        public ViewModelCommand GoToNextPageCommand
-        {
-            get;
-            private set;
-        }
+        public ViewModelCommand GoToNextPageCommand { get; private set; }
 
         /// <summary>
         /// Gets the 'go to last page' command.
         /// </summary>
-        public ViewModelCommand GoToLastPageCommand
-        {
-            get;
-            private set;
-        }
+        public ViewModelCommand GoToLastPageCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the find command.
+        /// </summary>
+        public ViewModelCommand FindCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the clear find result command.
+        /// </summary>
+        public ViewModelCommand FindClearResultCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the cancel find command.
+        /// </summary>
+        public ViewModelCommand FindCancelCommand { get; private set; }
 
         #endregion Public properties - commands
 
@@ -329,6 +297,81 @@
         private bool CanExecuteGoToLastPageCommand()
         {
             return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+        }
+
+        private async void ExecuteFindCommand()
+        {
+            ActiveFindPage = 1;
+            FindResult.Clear();
+            IsFindActive = true;
+            await Task.Factory.StartNew(() =>
+            {
+                _pdfComponent.FindComponent.FindText(
+                    FindText,
+                    IsFindCaseSensitive,
+                    IsFindWholeWords,
+                    (pageIndex) =>
+                    {
+                        ActiveFindPage = pageIndex + 1;
+                        return IsFindActive;
+                    },
+                    (page) =>
+                    {
+                        if (page != null)
+                        {
+                            App.Current.Dispatcher.Invoke(() =>
+                            {
+                                FindResult.Add(page);
+                            });
+                        }
+
+                        return IsFindActive;
+                    },
+                    (page, position) =>
+                    {
+                        if (page != null && position != null)
+                        {
+                            App.Current.Dispatcher.Invoke(() =>
+                            {
+                                page.Positions.Add(position);
+                            });
+                        }
+
+                        return IsFindActive;
+                    });
+            });
+
+            IsFindActive = false;
+        }
+
+        private bool CanExecuteFindCommand()
+        {
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+        }
+
+
+        private void ExecuteFindClearResultCommand()
+        {
+            FindResult.Clear();
+            if (_pdfComponent != null && _pdfComponent.IsDocumentOpened)
+            {
+                _pdfComponent.FindComponent.ClearFindSelections();
+            }
+        }
+
+        private bool CanExecuteFindClearResultCommand()
+        {
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+        }
+
+        private void ExecuteFindCancelCommand()
+        {
+            IsFindActive = false;
+        }
+
+        private bool CanExecuteFindCancelCommand()
+        {
+            return IsFindActive;
         }
 
         #endregion Private methods - command related

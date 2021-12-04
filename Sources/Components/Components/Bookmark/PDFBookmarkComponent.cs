@@ -50,7 +50,7 @@
 
         #endregion Implementation of IBookmarkProvider
 
-        #region Implementation of IComponent
+        #region Implementation of IPDFChildComponent
 
         /// <summary>
         /// <inheritdoc/>
@@ -73,7 +73,7 @@
                 string.Format(CultureInfo.InvariantCulture, "The parameter {0} is not of expected type.", nameof(mainComponent)));
         }
 
-        #endregion Implementation of IComponent
+        #endregion Implementation of IPDFChildComponent
 
         #region Implementation of INotifyPropertyChanged
 

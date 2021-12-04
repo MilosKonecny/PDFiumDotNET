@@ -6,6 +6,7 @@
     using PDFiumDotNET.Components.Contracts.Adapters;
     using PDFiumDotNET.Components.Contracts.Destination;
     using PDFiumDotNET.Components.Contracts.EventArguments;
+    using PDFiumDotNET.Components.Contracts.Find;
 
     /// <summary>
     /// Interface defines functionality of page component.
@@ -78,6 +79,18 @@
         void NavigateToPage(string pageLabel);
 
         /// <summary>
+        /// Navigates to the place where the searched text was found.
+        /// </summary>
+        /// <param name="page">This definition contains only page where the searched text was found.</param>
+        void NavigateToFindPlace(IPDFFindPage page);
+
+        /// <summary>
+        /// Navigates to the place where searched text was found.
+        /// </summary>
+        /// <param name="position">This definition contains whole information where the searched text was found.</param>
+        void NavigateToFindPlace(IPDFFindPosition position);
+
+        /// <summary>
         /// Occurs whenever some of 'navigate' / 'perform' methods was called and <see cref="CurrentPageIndex"/> was changed.
         /// </summary>
         event EventHandler<NavigatedToPageEventArgs> NavigatedToPage;
@@ -86,5 +99,12 @@
         /// Occurs whenever an action outside of the current pdf document is to perform.
         /// </summary>
         event EventHandler<PerformActionEventArgs> PerformOutsideAction;
+
+        /// <summary>
+        /// Occurs whenever text selections were removed.
+        /// </summary>
+        /// <remarks>For example. It was some text selected to show found text.
+        /// When the new find is started, this event is called.</remarks>
+        event EventHandler<EventArgs> TextSelectionsRemoved;
     }
 }

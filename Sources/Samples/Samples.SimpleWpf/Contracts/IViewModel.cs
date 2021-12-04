@@ -10,5 +10,10 @@
         /// </summary>
         /// <param name="view">View where is view model assigned.</param>
         void AssignedToView(IView view);
+
+        /// <summary>
+        /// Gets or sets the selected find object.
+        /// </summary>
+        object SelectedFindObject { get;  set; }
     }
 }

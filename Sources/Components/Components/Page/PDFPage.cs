@@ -26,7 +26,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="PDFPage"/> class.
         /// </summary>
-        /// <param name="mainComponent">Main component where this bookmark belongs.</param>
+        /// <param name="mainComponent">Main component where this page belongs.</param>
         /// <param name="pageIndex">Index of associated page.</param>
         public PDFPage(PDFComponent mainComponent, int pageIndex)
         {
@@ -51,7 +51,7 @@
         #region Public methods
 
         /// <summary>
-        /// Builds bookmark object.
+        /// Builds page object.
         /// </summary>
         public void Build()
         {
@@ -85,7 +85,7 @@
 
         #endregion Public methods
 
-        #region Implementation of IPDFBookmark
+        #region Implementation of IPDFPage
 
         /// <summary>
         /// <inheritdoc/>
@@ -148,6 +148,16 @@
                 _mainComponent.PageComponent.IsAnnotationToRender ? FPDF_RENDERING_FLAGS.FPDF_ANNOT : FPDF_RENDERING_FLAGS.FPDF_NONE);
             _mainComponent.PDFiumBridge.FPDF_ClosePage(pageHandle);
 
+            if (_mainComponent.PageComponent is PDFPageComponent pageComponent
+                && pageComponent.PageIndexWithSelections == PageIndex
+                && pageComponent.SelectionRectangles.Count != 0)
+            {
+                foreach (var rect in pageComponent.SelectionRectangles)
+                {
+                    bmp.RenderSelectionRectangle(zoomFactor, startX, startY, sizeY, rect.Left, rect.Top, rect.Width, rect.Height);
+                }
+            }
+
             bmp.Destroy();
         }
 
@@ -197,6 +207,6 @@
             _mainComponent.PageComponent.NavigateToPage(PageIndex + 1);
         }
 
-        #endregion Implementation of IPDFBookmark
+        #endregion Implementation of IPDFPage
     }
 }

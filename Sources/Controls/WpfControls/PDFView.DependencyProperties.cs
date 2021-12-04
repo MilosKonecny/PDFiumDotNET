@@ -10,6 +10,7 @@ namespace PDFiumDotNET.WpfCoreControls
     using System.Windows.Media;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Adapters;
+    using PDFiumDotNET.Components.Contracts.EventArguments;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Zoom;
 
@@ -185,6 +186,7 @@ namespace PDFiumDotNET.WpfCoreControls
 
             component.MainComponent.PropertyChanged += HandlePDFComponentPropertyChangedEvent;
             component.NavigatedToPage += HandlePDFPageComponentNavigatedToPageEvent;
+            component.TextSelectionsRemoved += HandlePDFPageComponentTextSelectionsRemovedEvent;
             ScrollOwner?.InvalidateScrollInfo();
         }
 
@@ -197,6 +199,7 @@ namespace PDFiumDotNET.WpfCoreControls
 
             component.MainComponent.PropertyChanged -= HandlePDFComponentPropertyChangedEvent;
             component.NavigatedToPage -= HandlePDFPageComponentNavigatedToPageEvent;
+            component.TextSelectionsRemoved -= HandlePDFPageComponentTextSelectionsRemovedEvent;
             ScrollOwner?.InvalidateScrollInfo();
         }
 
@@ -239,15 +242,43 @@ namespace PDFiumDotNET.WpfCoreControls
             }
         }
 
-        private void HandlePDFPageComponentNavigatedToPageEvent(object sender, System.EventArgs e)
+        private void HandlePDFPageComponentNavigatedToPageEvent(object sender, NavigatedToPageEventArgs e)
         {
             // Current page is changed. Scroll to this page.
-            VerticalOffset = PDFPageComponent[PageLayoutType.Standard].GetPageTopLine(PDFPageComponent.CurrentPageIndex - 1, PDFPageMargin, PDFZoomComponent.CurrentZoomFactor);
+            var verticalOffset = PDFPageComponent[PageLayoutType.Standard].GetPageTopLine(e.CurrentPageIndex - 1, PDFPageMargin, PDFZoomComponent.CurrentZoomFactor);
+            var horizontalOffset = double.NaN;
+            if (e.IsDetailedNavigation)
+            {
+                // Get target page
+                var page = PDFPageComponent.Pages[e.CurrentPageIndex - 1];
+
+                // Center vertically
+                var pageHeight = page.Height * PDFZoomComponent.CurrentZoomFactor;
+                var detailedPositionYFromTop = pageHeight - e.DetailedPositionY * PDFZoomComponent.CurrentZoomFactor;
+                verticalOffset += detailedPositionYFromTop - ActualHeight / 2;
+
+                // Center horizontally
+                var pageWidth = page.Width * PDFZoomComponent.CurrentZoomFactor;
+                var detailedPositionXFromLeft = e.DetailedPositionX * PDFZoomComponent.CurrentZoomFactor;
+                horizontalOffset = (_workArea.Width - pageWidth) / 2 + detailedPositionXFromLeft - ActualWidth / 2;
+            }
+
+            VerticalOffset = verticalOffset;
+            if (!double.IsNaN(horizontalOffset))
+            {
+                HorizontalOffset = horizontalOffset;
+            }
+
+        }
+
+        private void HandlePDFPageComponentTextSelectionsRemovedEvent(object sender, EventArgs e)
+        {
+            // Application.Current.Dispatcher.Invoke(() => InvalidateVisual());
         }
 
         private void HandlePDFZoomComponentPropertyChangedEvent(object sender, PropertyChangedEventArgs e)
         {
-            InvalidateVisual();
+            Application.Current.Dispatcher.Invoke(() => InvalidateVisual());
         }
 
         #endregion Private event handler methods
