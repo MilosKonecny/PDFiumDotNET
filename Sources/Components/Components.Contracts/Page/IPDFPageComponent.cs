@@ -50,6 +50,16 @@
         bool IsAnnotationToRender { get; set; }
 
         /// <summary>
+        /// Gets or set the function to obtain color to use to draw find selection rectangle.
+        /// </summary>
+        Func<int> FindSelectionBackgroundFunc { get; set; }
+
+        /// <summary>
+        /// Gets or set the function to obtain color to use to draw find selection rectangle.
+        /// </summary>
+        Func<int> FindSelectionBorderFunc { get; set; }
+
+        /// <summary>
         /// Peforms the action defined in given <see cref="IPDFAction"/>.
         /// </summary>
         /// <param name="action"><see cref="IPDFAction"/> defines action to perform.</param>

@@ -22,6 +22,20 @@ namespace PDFiumDotNET.WpfCoreControls
         #region Dependency properties - register
 
         /// <summary>
+        /// Dependency property for 'PDFFindSelectionBorder' - source of information to draw find selection border.
+        /// </summary>
+        public static readonly DependencyProperty PDFFindSelectionBorderProperty
+            = DependencyProperty.Register("PDFFindSelectionBorder", typeof(Color), typeof(PDFView),
+                new PropertyMetadata(new Color() { R = 0x00, G = 0x00, B = 0xFF, A = 0xFF }));
+
+        /// <summary>
+        /// Dependency property for 'PDFFindSelectionBackground' - source of information to draw find selection background.
+        /// </summary>
+        public static readonly DependencyProperty PDFFindSelectionBackgroundProperty
+            = DependencyProperty.Register("PDFFindSelectionBackground", typeof(Color), typeof(PDFView),
+                new PropertyMetadata(new Color() { R = 0xFF, G = 0xFF, B = 0xA0, A = 0x3F }));
+
+        /// <summary>
         /// Dependency property for 'PDFPageMargin' - source of information to draw content.
         /// </summary>
         public static readonly DependencyProperty PDFPageMarginProperty
@@ -52,6 +66,24 @@ namespace PDFiumDotNET.WpfCoreControls
         #endregion Dependency properties - register
 
         #region Dependency properties - properties
+
+        /// <summary>
+        /// Gets or sets the value of dependency property.
+        /// </summary>
+        public Color PDFFindSelectionBorder
+        {
+            get { return (Color)GetValue(PDFFindSelectionBorderProperty); }
+            set { SetValue(PDFFindSelectionBorderProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the value of dependency property.
+        /// </summary>
+        public Color PDFFindSelectionBackground
+        {
+            get { return (Color)GetValue(PDFFindSelectionBackgroundProperty); }
+            set { SetValue(PDFFindSelectionBackgroundProperty, value); }
+        }
 
         /// <summary>
         /// Gets or sets the value of dependency property.
@@ -184,6 +216,10 @@ namespace PDFiumDotNET.WpfCoreControls
                 return;
             }
 
+            component.FindSelectionBackgroundFunc = () =>
+            BitConverter.ToInt32(new byte[] { PDFFindSelectionBackground.B, PDFFindSelectionBackground.G, PDFFindSelectionBackground.R, PDFFindSelectionBackground.A }, 0);
+            component.FindSelectionBorderFunc = () =>
+            BitConverter.ToInt32(new byte[] { PDFFindSelectionBorder.B, PDFFindSelectionBorder.G, PDFFindSelectionBorder.R, PDFFindSelectionBorder.A }, 0);
             component.MainComponent.PropertyChanged += HandlePDFComponentPropertyChangedEvent;
             component.NavigatedToPage += HandlePDFPageComponentNavigatedToPageEvent;
             component.TextSelectionsRemoved += HandlePDFPageComponentTextSelectionsRemovedEvent;
@@ -197,6 +233,8 @@ namespace PDFiumDotNET.WpfCoreControls
                 return;
             }
 
+            component.FindSelectionBackgroundFunc = null;
+            component.FindSelectionBorderFunc = null;
             component.MainComponent.PropertyChanged -= HandlePDFComponentPropertyChangedEvent;
             component.NavigatedToPage -= HandlePDFPageComponentNavigatedToPageEvent;
             component.TextSelectionsRemoved -= HandlePDFPageComponentTextSelectionsRemovedEvent;

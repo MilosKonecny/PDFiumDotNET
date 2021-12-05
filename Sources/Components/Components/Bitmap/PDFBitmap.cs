@@ -2,6 +2,7 @@
 {
     using System;
     using PDFiumDotNET.Components.Contracts.Bitmap;
+    using PDFiumDotNET.Components.Contracts.Page;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates;
 
     /// <summary>
@@ -57,54 +58,36 @@
             int width = (int)Math.Round(rectSizeX * zoomFactor, 0) + 4;
             int height = -(int)Math.Round(rectSizeY * zoomFactor, 0) + 4;
 
-            // Light blue: 0xADD8E6
-            var color1 = new FPDF_COLOR(0xFF, 0xFF, 0xA0, 0x3F);
-            _mainComponent.PDFiumBridge.FPDFBitmap_FillRect(
-                _bitmapHandle,
-                left,
-                top,
-                width,
-                height,
-                color1);
+            // Colors
+            var colorBackground = new FPDF_COLOR(0xFF, 0xFF, 0xA0, 0x3F);
+            var colorBorder = new FPDF_COLOR(0x00, 0x00, 0xFF, 0xFF);
+            if (_mainComponent.PageComponent is IPDFPageComponent pageComponent)
+            {
+                if (_mainComponent.PageComponent.FindSelectionBackgroundFunc != null)
+                {
+                    colorBackground = new FPDF_COLOR(_mainComponent.PageComponent.FindSelectionBackgroundFunc());
+                }
 
-            // Border color
-            var color2 = new FPDF_COLOR(0xFF, 0x00, 0x00, 0xFF);
+                if (_mainComponent.PageComponent.FindSelectionBorderFunc != null)
+                {
+                    colorBorder = new FPDF_COLOR(_mainComponent.PageComponent.FindSelectionBorderFunc());
+                }
+            }
+
+            // Background
+            _mainComponent.PDFiumBridge.FPDFBitmap_FillRect(_bitmapHandle, left, top, width, height, colorBackground);
 
             // Bottom border
-            _mainComponent.PDFiumBridge.FPDFBitmap_FillRect(
-                _bitmapHandle,
-                left - 2,
-                top + height,
-                width + 4,
-                2,
-                color2);
+            _mainComponent.PDFiumBridge.FPDFBitmap_FillRect(_bitmapHandle, left - 2, top + height, width + 4, 2, colorBorder);
 
             // Top border
-            _mainComponent.PDFiumBridge.FPDFBitmap_FillRect(
-                _bitmapHandle,
-                left - 2,
-                top - 2,
-                width + 2,
-                2,
-                color2);
+            _mainComponent.PDFiumBridge.FPDFBitmap_FillRect(_bitmapHandle, left - 2, top - 2, width + 2, 2, colorBorder);
 
             // Left border
-            _mainComponent.PDFiumBridge.FPDFBitmap_FillRect(
-                _bitmapHandle,
-                left - 2,
-                top - 2,
-                2,
-                height + 2,
-                color2);
+            _mainComponent.PDFiumBridge.FPDFBitmap_FillRect(_bitmapHandle, left - 2, top - 2, 2, height + 2, colorBorder);
 
             // Right border
-            _mainComponent.PDFiumBridge.FPDFBitmap_FillRect(
-                _bitmapHandle,
-                left + width,
-                top - 2,
-                2,
-                height + 2,
-                color2);
+            _mainComponent.PDFiumBridge.FPDFBitmap_FillRect(_bitmapHandle, left + width, top - 2, 2, height + 2, colorBorder);
         }
 
         /// <summary>
