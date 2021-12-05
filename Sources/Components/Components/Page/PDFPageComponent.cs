@@ -32,6 +32,8 @@
         private PDFComponent _mainComponent;
         private StandardPageLayout _standardPageLayout;
         private ThumbnailPageLayout _thumbnailPageLayout;
+        private Func<int> _findSelectionBackgroundFunc;
+        private Func<int> _findSelectionBorderFunc;
 
         #endregion Private fields
 
@@ -221,6 +223,46 @@
         /// Gets or sets the information whether the annotation objects ar to render.
         /// </summary>
         public bool IsAnnotationToRender { get; set; }
+
+        /// <summary>
+        /// Gets or set the function to obtain color to use to draw find selection rectangle.
+        /// </summary>
+        public Func<int> FindSelectionBackgroundFunc
+        {
+            get
+            {
+                return _findSelectionBackgroundFunc;
+            }
+
+            set
+            {
+                if (_findSelectionBackgroundFunc != value)
+                {
+                    _findSelectionBackgroundFunc = value;
+                    InvokePropertyChangedEvent();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or set the function to obtain color to use to draw find selection rectangle.
+        /// </summary>
+        public Func<int> FindSelectionBorderFunc
+        {
+            get
+            {
+                return _findSelectionBorderFunc;
+            }
+
+            set
+            {
+                if (_findSelectionBorderFunc != value)
+                {
+                    _findSelectionBorderFunc = value;
+                    InvokePropertyChangedEvent();
+                }
+            }
+        }
 
         /// <summary>
         /// <inheritdoc/>
