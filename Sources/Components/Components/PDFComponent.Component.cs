@@ -17,7 +17,7 @@
     using PDFiumDotNET.Components.Information;
     using PDFiumDotNET.Components.Page;
     using PDFiumDotNET.Components.Zoom;
-    using static PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates;
+    using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
     /// <summary>
     /// <inheritdoc cref="IPDFComponent"/>

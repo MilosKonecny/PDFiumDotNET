@@ -9,7 +9,7 @@
     using PDFiumDotNET.Components.Contracts.Find;
     using PDFiumDotNET.Components.Contracts.Observers;
     using PDFiumDotNET.Components.Page;
-    using static PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates;
+    using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
     /// <summary>
     /// Implemeents <see cref="IPDFFindComponent"/>.

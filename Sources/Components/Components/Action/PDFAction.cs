@@ -6,7 +6,7 @@
     using PDFiumDotNET.Components.Contracts.Action;
     using PDFiumDotNET.Components.Contracts.Destination;
     using PDFiumDotNET.Components.Destination;
-    using static PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates;
+    using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
     /// <summary>
     /// <inheritdoc cref="IPDFAction"/>

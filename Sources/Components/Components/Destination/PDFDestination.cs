@@ -2,7 +2,7 @@
 {
     using System;
     using PDFiumDotNET.Components.Contracts.Destination;
-    using static PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates;
+    using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
     /// <summary>
     /// <inheritdoc cref="IPDFDestination"/>

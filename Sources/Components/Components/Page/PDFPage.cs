@@ -8,7 +8,7 @@
     using PDFiumDotNET.Components.Contracts.Link;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Link;
-    using static PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates;
+    using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
     /// <summary>
     /// <inheritdoc cref="IPDFPage"/>

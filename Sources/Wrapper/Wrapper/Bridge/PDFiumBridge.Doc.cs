@@ -2,7 +2,6 @@
 {
     using System;
     using System.Runtime.InteropServices;
-    using PDFiumDotNET.Wrapper.Exceptions;
 
     // Disable "Member 'xxxx' does not access instance data and can be marked as static."
 #pragma warning disable CA1822
@@ -12,481 +11,617 @@
     /// </summary>
     internal sealed partial class PDFiumBridge
     {
-        /*
-        private static PDFiumDelegates.FPDF_NewFunction FPDF_NewFunctionStatic { get; set; }
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate FPDF_BOOKMARK FPDFBookmark_GetFirstChild_Delegate(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark);
 
-            // FPDF_NewFunction
-            functionName = nameof(PDFiumDelegates.FPDF_NewFunction);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
-            {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
-            }
-            FPDF_NewFunction = (PDFiumDelegates.FPDF_NewFunction)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDF_NewFunction));
-
-         */
+        private static FPDFBookmark_GetFirstChild_Delegate FPDFBookmark_GetFirstChildStatic { get; set; }
 
         /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFBookmark_GetFirstChild"/>.
+        /// Get the first child of |bookmark|, or the first top-level bookmark item.
         /// </summary>
-        private static PDFiumDelegates.FPDFBookmark_GetFirstChild FPDFBookmark_GetFirstChildStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFBookmark_GetFirstChild"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFBookmark_GetFirstChild FPDFBookmark_GetFirstChild => FPDFBookmark_GetFirstChildStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFBookmark_GetNextSibling"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFBookmark_GetNextSibling FPDFBookmark_GetNextSiblingStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFBookmark_GetNextSibling"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFBookmark_GetNextSibling FPDFBookmark_GetNextSibling => FPDFBookmark_GetNextSiblingStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFBookmark_GetTitle"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFBookmark_GetTitle FPDFBookmark_GetTitleStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFBookmark_GetTitle"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFBookmark_GetTitle FPDFBookmark_GetTitle => FPDFBookmark_GetTitleStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFBookmark_Find"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFBookmark_Find FPDFBookmark_FindStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFBookmark_Find"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFBookmark_Find FPDFBookmark_Find => FPDFBookmark_FindStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFBookmark_GetDest"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFBookmark_GetDest FPDFBookmark_GetDestStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFBookmark_GetDest"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFBookmark_GetDest FPDFBookmark_GetDest => FPDFBookmark_GetDestStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFBookmark_GetAction"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFBookmark_GetAction FPDFBookmark_GetActionStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFBookmark_GetAction"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFBookmark_GetAction FPDFBookmark_GetAction => FPDFBookmark_GetActionStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFAction_GetType"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFAction_GetType FPDFAction_GetTypeStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFAction_GetType"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFAction_GetType FPDFAction_GetType => FPDFAction_GetTypeStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFAction_GetDest"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFAction_GetDest FPDFAction_GetDestStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFAction_GetDest"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFAction_GetDest FPDFAction_GetDest => FPDFAction_GetDestStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFAction_GetFilePath"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFAction_GetFilePath FPDFAction_GetFilePathStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFAction_GetFilePath"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFAction_GetFilePath FPDFAction_GetFilePath => FPDFAction_GetFilePathStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFAction_GetURIPath"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFAction_GetURIPath FPDFAction_GetURIPathStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFAction_GetURIPath"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFAction_GetURIPath FPDFAction_GetURIPath => FPDFAction_GetURIPathStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFDest_GetDestPageIndex"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFDest_GetDestPageIndex FPDFDest_GetDestPageIndexStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFDest_GetDestPageIndex"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFDest_GetDestPageIndex FPDFDest_GetDestPageIndex => FPDFDest_GetDestPageIndexStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFDest_GetLocationInPage"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFDest_GetLocationInPage FPDFDest_GetLocationInPageStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFDest_GetLocationInPage"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFDest_GetLocationInPage FPDFDest_GetLocationInPage => FPDFDest_GetLocationInPageStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFLink_GetLinkAtPoint"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFLink_GetLinkAtPoint FPDFLink_GetLinkAtPointStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFLink_GetLinkAtPoint"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFLink_GetLinkAtPoint FPDFLink_GetLinkAtPoint => FPDFLink_GetLinkAtPointStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFLink_GetLinkZOrderAtPoint"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFLink_GetLinkZOrderAtPoint FPDFLink_GetLinkZOrderAtPointStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFLink_GetLinkZOrderAtPoint"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFLink_GetLinkZOrderAtPoint FPDFLink_GetLinkZOrderAtPoint => FPDFLink_GetLinkZOrderAtPointStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFLink_GetDest"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFLink_GetDest FPDFLink_GetDestStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFLink_GetDest"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFLink_GetDest FPDFLink_GetDest => FPDFLink_GetDestStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFLink_GetAction"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFLink_GetAction FPDFLink_GetActionStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFLink_GetAction"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFLink_GetAction FPDFLink_GetAction => FPDFLink_GetActionStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFLink_Enumerate"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFLink_Enumerate FPDFLink_EnumerateStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFLink_Enumerate"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFLink_Enumerate FPDFLink_Enumerate => FPDFLink_EnumerateStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFLink_GetAnnot"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFLink_GetAnnot FPDFLink_GetAnnotStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFLink_GetAnnot"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFLink_GetAnnot FPDFLink_GetAnnot => FPDFLink_GetAnnotStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFLink_GetAnnotRect"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFLink_GetAnnotRect FPDFLink_GetAnnotRectStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFLink_GetAnnotRect"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFLink_GetAnnotRect FPDFLink_GetAnnotRect => FPDFLink_GetAnnotRectStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFLink_CountQuadPoints"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFLink_CountQuadPoints FPDFLink_CountQuadPointsStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFLink_CountQuadPoints"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFLink_CountQuadPoints FPDFLink_CountQuadPoints => FPDFLink_CountQuadPointsStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDFLink_GetQuadPoints"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDFLink_GetQuadPoints FPDFLink_GetQuadPointsStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDFLink_GetQuadPoints"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDFLink_GetQuadPoints FPDFLink_GetQuadPoints => FPDFLink_GetQuadPointsStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDF_GetMetaText"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDF_GetMetaText FPDF_GetMetaTextStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDF_GetMetaText"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDF_GetMetaText FPDF_GetMetaText => FPDF_GetMetaTextStatic;
-
-        /// <summary>
-        /// Gets or sets the loaded method <see cref="PDFiumDelegates.FPDF_GetPageLabel"/>.
-        /// </summary>
-        private static PDFiumDelegates.FPDF_GetPageLabel FPDF_GetPageLabelStatic { get; set; }
-
-        /// <summary>
-        /// Gets the loaded method <see cref="PDFiumDelegates.FPDF_GetPageLabel"/>.
-        /// </summary>
-        internal PDFiumDelegates.FPDF_GetPageLabel FPDF_GetPageLabel => FPDF_GetPageLabelStatic;
-
-        private static void LoadDllDocPart(string libraryName)
+        /// <param name="document">Handle to the document.</param>
+        /// <param name="bookmark">Handle to the current bookmark. Pass NULL for the first top level item.</param>
+        /// <returns>Returns a handle to the first child of |bookmark| or the first top-level bookmark item. NULL if no child or top-level bookmark found.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT FPDF_BOOKMARK FPDF_CALLCONV FPDFBookmark_GetFirstChild(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark);.
+        /// </remarks>
+        public FPDF_BOOKMARK FPDFBookmark_GetFirstChild(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark)
         {
-            // FPDFBookmark_GetFirstChild
-            var functionName = nameof(PDFiumDelegates.FPDFBookmark_GetFirstChild);
-            var address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFBookmark_GetFirstChildStatic(document, bookmark);
             }
+        }
 
-            FPDFBookmark_GetFirstChildStatic = (PDFiumDelegates.FPDFBookmark_GetFirstChild)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFBookmark_GetFirstChild));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate FPDF_BOOKMARK FPDFBookmark_GetNextSibling_Delegate(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark);
 
-            // FPDFBookmark_GetNextSibling
-            functionName = nameof(PDFiumDelegates.FPDFBookmark_GetNextSibling);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFBookmark_GetNextSibling_Delegate FPDFBookmark_GetNextSiblingStatic { get; set; }
+
+        /// <summary>
+        /// Get the next sibling of |bookmark|.
+        /// </summary>
+        /// <param name="document">Handle to the document.</param>
+        /// <param name="bookmark">Handle to the current bookmark.</param>
+        /// <returns>Returns a handle to the next sibling of |bookmark|, or NULL if this is the last bookmark at this level.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT FPDF_BOOKMARK FPDF_CALLCONV FPDFBookmark_GetNextSibling(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark);.
+        /// </remarks>
+        public FPDF_BOOKMARK FPDFBookmark_GetNextSibling(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFBookmark_GetNextSiblingStatic(document, bookmark);
             }
+        }
 
-            FPDFBookmark_GetNextSiblingStatic = (PDFiumDelegates.FPDFBookmark_GetNextSibling)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFBookmark_GetNextSibling));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate int FPDFBookmark_GetTitle_Delegate(FPDF_BOOKMARK bookmark, IntPtr buffer, ulong buflen);
 
-            // FPDFBookmark_GetTitle
-            functionName = nameof(PDFiumDelegates.FPDFBookmark_GetTitle);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFBookmark_GetTitle_Delegate FPDFBookmark_GetTitleStatic { get; set; }
+
+        /// <summary>
+        /// Get the title of |bookmark|.
+        /// </summary>
+        /// <param name="bookmark">Handle to the bookmark.</param>
+        /// <param name="buffer">Buffer for the title. May be NULL.</param>
+        /// <param name="buflen">The length of the buffer in bytes. May be 0.</param>
+        /// <returns>Returns the number of bytes in the title, including the terminating NUL character.
+        /// The number of bytes is returned regardless of the |buffer| and |buflen| parameters.</returns>
+        /// <remarks>
+        /// Regardless of the platform, the |buffer| is always in UTF-16LE encoding. The string is terminated by a UTF16 NUL character.
+        /// If |buflen| is less than the required length, or |buffer| is NULL, |buffer| will not be modified.
+        /// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDFBookmark_GetTitle(FPDF_BOOKMARK bookmark, void* buffer, unsigned long buflen);.
+        /// </remarks>
+        public int FPDFBookmark_GetTitle(FPDF_BOOKMARK bookmark, IntPtr buffer, ulong buflen)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFBookmark_GetTitleStatic(bookmark, buffer, buflen);
             }
+        }
 
-            FPDFBookmark_GetTitleStatic = (PDFiumDelegates.FPDFBookmark_GetTitle)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFBookmark_GetTitle));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate FPDF_BOOKMARK FPDFBookmark_Find_Delegate(FPDF_DOCUMENT document, IntPtr title);
 
-            // FPDFBookmark_Find
-            functionName = nameof(PDFiumDelegates.FPDFBookmark_Find);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFBookmark_Find_Delegate FPDFBookmark_FindStatic { get; set; }
+
+        /// <summary>
+        /// Find the bookmark with |title| in |document|.
+        /// </summary>
+        /// <param name="document">Handle to the document.</param>
+        /// <param name="title">The UTF-16LE encoded Unicode title for which to search.</param>
+        /// <returns>Returns the handle to the bookmark, or NULL if |title| can't be found.</returns>
+        /// <remarks>
+        /// FPDFBookmark_Find() will always return the first bookmark found even if multiple bookmarks have the same |title|.
+        /// FPDF_EXPORT FPDF_BOOKMARK FPDF_CALLCONV FPDFBookmark_Find(FPDF_DOCUMENT document, FPDF_WIDESTRING title);.
+        /// </remarks>
+        public FPDF_BOOKMARK FPDFBookmark_Find(FPDF_DOCUMENT document, IntPtr title)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFBookmark_FindStatic(document, title);
             }
+        }
 
-            FPDFBookmark_FindStatic = (PDFiumDelegates.FPDFBookmark_Find)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFBookmark_Find));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate FPDF_DEST FPDFBookmark_GetDest_Delegate(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark);
 
-            // FPDFBookmark_GetDest
-            functionName = nameof(PDFiumDelegates.FPDFBookmark_GetDest);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFBookmark_GetDest_Delegate FPDFBookmark_GetDestStatic { get; set; }
+
+        /// <summary>
+        /// Get the destination associated with |bookmark|.
+        /// </summary>
+        /// <param name="document">Handle to the document.</param>
+        /// <param name="bookmark">Handle to the bookmark.</param>
+        /// <returns>Returns the handle to the destination data,  NULL if no destination is associated with |bookmark|.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT FPDF_DEST FPDF_CALLCONV FPDFBookmark_GetDest(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark);.
+        /// </remarks>
+        public FPDF_DEST FPDFBookmark_GetDest(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFBookmark_GetDestStatic(document, bookmark);
             }
+        }
 
-            FPDFBookmark_GetDestStatic = (PDFiumDelegates.FPDFBookmark_GetDest)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFBookmark_GetDest));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate FPDF_ACTION FPDFBookmark_GetAction_Delegate(FPDF_BOOKMARK bookmark);
 
-            // FPDFBookmark_GetAction
-            functionName = nameof(PDFiumDelegates.FPDFBookmark_GetAction);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFBookmark_GetAction_Delegate FPDFBookmark_GetActionStatic { get; set; }
+
+        /// <summary>
+        /// Get the action associated with |bookmark|.
+        /// </summary>
+        /// <param name="bookmark">Handle to the bookmark.</param>
+        /// <returns>Returns the handle to the action data, or NULL if no action is associated with |bookmark|.
+        /// When NULL is returned, FPDFBookmark_GetDest() should be called to get the |bookmark| destination data.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT FPDF_ACTION FPDF_CALLCONV FPDFBookmark_GetAction(FPDF_BOOKMARK bookmark);.
+        /// </remarks>
+        public FPDF_ACTION FPDFBookmark_GetAction(FPDF_BOOKMARK bookmark)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFBookmark_GetActionStatic(bookmark);
             }
+        }
 
-            FPDFBookmark_GetActionStatic = (PDFiumDelegates.FPDFBookmark_GetAction)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFBookmark_GetAction));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate uint FPDFAction_GetType_Delegate(FPDF_ACTION action);
 
-            // FPDFAction_GetType
-            functionName = nameof(PDFiumDelegates.FPDFAction_GetType);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFAction_GetType_Delegate FPDFAction_GetTypeStatic { get; set; }
+
+        /// <summary>
+        /// Get the type of |action|.
+        /// </summary>
+        /// <param name="action">Handle to the action.</param>
+        /// <returns>Returns one of: PDFACTION_UNSUPPORTED, PDFACTION_GOTO, PDFACTION_REMOTEGOTO, PDFACTION_URI, PDFACTION_LAUNCH.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDFAction_GetType(FPDF_ACTION action);.
+        /// </remarks>
+        public uint FPDFAction_GetType(FPDF_ACTION action)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFAction_GetTypeStatic(action);
             }
+        }
 
-            FPDFAction_GetTypeStatic = (PDFiumDelegates.FPDFAction_GetType)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFAction_GetType));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate FPDF_DEST FPDFAction_GetDest_Delegate(FPDF_DOCUMENT document, FPDF_ACTION action);
 
-            // FPDFAction_GetDest
-            functionName = nameof(PDFiumDelegates.FPDFAction_GetDest);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFAction_GetDest_Delegate FPDFAction_GetDestStatic { get; set; }
+
+        /// <summary>
+        /// Get the destination of |action|.
+        /// </summary>
+        /// <param name="document">Handle to the document.</param>
+        /// <param name="action">Handle to the action. |action| must be a |PDFACTION_GOTO| or |PDFACTION_REMOTEGOTO|.</param>
+        /// <returns>Returns a handle to the destination data, or NULL on error,
+        /// typically because the arguments were bad or the action was of the wrong type.</returns>
+        /// <remarks>
+        /// In the case of |PDFACTION_REMOTEGOTO|, you must first call FPDFAction_GetFilePath(), then load the document at that path,
+        /// then pass the document handle from that document as |document| to FPDFAction_GetDest().
+        /// FPDF_EXPORT FPDF_DEST FPDF_CALLCONV FPDFAction_GetDest(FPDF_DOCUMENT document, FPDF_ACTION action);.
+        /// </remarks>
+        public FPDF_DEST FPDFAction_GetDest(FPDF_DOCUMENT document, FPDF_ACTION action)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFAction_GetDestStatic(document, action);
             }
+        }
 
-            FPDFAction_GetDestStatic = (PDFiumDelegates.FPDFAction_GetDest)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFAction_GetDest));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate int FPDFAction_GetFilePath_Delegate(FPDF_ACTION action, IntPtr buffer, ulong buflen);
 
-            // FPDFAction_GetFilePath
-            functionName = nameof(PDFiumDelegates.FPDFAction_GetFilePath);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFAction_GetFilePath_Delegate FPDFAction_GetFilePathStatic { get; set; }
+
+        /// <summary>
+        /// Get the file path of |action|.
+        /// </summary>
+        /// <param name="action">Handle to the action. |action| must be a |PDFACTION_LAUNCH| or |PDFACTION_REMOTEGOTO|.</param>
+        /// <param name="buffer">A buffer for output the path string. May be NULL.</param>
+        /// <param name="buflen">The length of the buffer, in bytes. May be 0.</param>
+        /// <returns>Returns the number of bytes in the file path, including the trailing NUL character, or 0 on error,
+        /// typically because the arguments were bad or the action was of the wrong type.</returns>
+        /// <remarks>
+        /// Regardless of the platform, the |buffer| is always in UTF-8 encoding.
+        /// If |buflen| is less than the returned length, or |buffer| is NULL, |buffer| will not be modified.
+        /// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDFAction_GetFilePath(FPDF_ACTION action, void* buffer, unsigned long buflen);.
+        /// </remarks>
+        public int FPDFAction_GetFilePath(FPDF_ACTION action, IntPtr buffer, ulong buflen)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFAction_GetFilePathStatic(action, buffer, buflen);
             }
+        }
 
-            FPDFAction_GetFilePathStatic = (PDFiumDelegates.FPDFAction_GetFilePath)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFAction_GetFilePath));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate int FPDFAction_GetURIPath_Delegate(FPDF_DOCUMENT document, FPDF_ACTION action, IntPtr buffer, ulong buflen);
 
-            // FPDFAction_GetURIPath
-            functionName = nameof(PDFiumDelegates.FPDFAction_GetURIPath);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFAction_GetURIPath_Delegate FPDFAction_GetURIPathStatic { get; set; }
+
+        /// <summary>
+        /// Get the URI path of |action|.
+        /// </summary>
+        /// <param name="document">Handle to the document.</param>
+        /// <param name="action">Handle to the action. Must be a |PDFACTION_URI|.</param>
+        /// <param name="buffer">A buffer for the path string. May be NULL.</param>
+        /// <param name="buflen">The length of the buffer, in bytes. May be 0.</param>
+        /// <returns>Returns the number of bytes in the URI path, including the trailing NUL character, or 0 on error,
+        /// typically because the arguments were bad or the action was of the wrong type.</returns>
+        /// <remarks>
+        /// The |buffer| is always encoded in 7-bit ASCII. If |buflen| is less than the returned length,
+        /// or |buffer| is NULL, |buffer| will not be modified.
+        /// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDFAction_GetURIPath(FPDF_DOCUMENT document, FPDF_ACTION action, void* buffer, unsigned long buflen);.
+        /// </remarks>
+        public int FPDFAction_GetURIPath(FPDF_DOCUMENT document, FPDF_ACTION action, IntPtr buffer, ulong buflen)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFAction_GetURIPathStatic(document, action, buffer, buflen);
             }
+        }
 
-            FPDFAction_GetURIPathStatic = (PDFiumDelegates.FPDFAction_GetURIPath)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFAction_GetURIPath));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate int FPDFDest_GetDestPageIndex_Delegate(FPDF_DOCUMENT document, FPDF_DEST dest);
 
-            // FPDFDest_GetDestPageIndex
-            functionName = nameof(PDFiumDelegates.FPDFDest_GetDestPageIndex);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFDest_GetDestPageIndex_Delegate FPDFDest_GetDestPageIndexStatic { get; set; }
+
+        /// <summary>
+        /// Get the page index of |dest|.
+        /// </summary>
+        /// <param name="document">Handle to the document.</param>
+        /// <param name="dest">Handle to the destination.</param>
+        /// <returns>Returns the 0-based page index containing |dest|. Returns -1 on error.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT int FPDF_CALLCONV FPDFDest_GetDestPageIndex(FPDF_DOCUMENT document, FPDF_DEST dest);.
+        /// </remarks>
+        public int FPDFDest_GetDestPageIndex(FPDF_DOCUMENT document, FPDF_DEST dest)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFDest_GetDestPageIndexStatic(document, dest);
             }
+        }
 
-            FPDFDest_GetDestPageIndexStatic = (PDFiumDelegates.FPDFDest_GetDestPageIndex)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFDest_GetDestPageIndex));
+        ////// Experimental API.
+        ////// Get the view (fit type) specified by |dest|.
+        //////
+        //////   dest         - handle to the destination.
+        //////   pNumParams   - receives the number of view parameters, which is at most 4.
+        //////   pParams      - buffer to write the view parameters. Must be at least 4
+        //////                  FS_FLOATs long.
+        ////// Returns one of the PDFDEST_VIEW_* constants, PDFDEST_VIEW_UNKNOWN_MODE if
+        ////// |dest| does not specify a view.
+        //// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDFDest_GetView(FPDF_DEST dest, unsigned long* pNumParams, FS_FLOAT* pParams);
 
-            // FPDFDest_GetLocationInPage
-            functionName = nameof(PDFiumDelegates.FPDFDest_GetLocationInPage);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate bool FPDFDest_GetLocationInPage_Delegate(FPDF_DEST dest, out bool hasXVal, out bool hasYVal, out bool hasZoomVal, out float x, out float y, out float zoom);
+
+        private static FPDFDest_GetLocationInPage_Delegate FPDFDest_GetLocationInPageStatic { get; set; }
+
+        /// <summary>
+        /// Get the (x, y, zoom) location of |dest| in the destination page, if the destination is in [page /XYZ x y zoom] syntax.
+        /// </summary>
+        /// <param name="dest">Handle to the destination.</param>
+        /// <param name="hasXVal">Out parameter; true if the x value is not null.</param>
+        /// <param name="hasYVal">Out parameter; true if the y value is not null.</param>
+        /// <param name="hasZoomVal">Out parameter; true if the zoom value is not null.</param>
+        /// <param name="x">Out parameter; the x coordinate, in page coordinates.</param>
+        /// <param name="y">Out parameter; the y coordinate, in page coordinates.</param>
+        /// <param name="zoom">Out parameter; the zoom value.</param>
+        /// <returns>Returns TRUE on successfully reading the /XYZ value.</returns>
+        /// <remarks>
+        /// Note the [x, y, zoom] values are only set if the corresponding hasXVal, hasYVal or hasZoomVal flags are true.
+        /// FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFDest_GetLocationInPage(FPDF_DEST dest, FPDF_BOOL* hasXVal, FPDF_BOOL* hasYVal, FPDF_BOOL* hasZoomVal, FS_FLOAT* x, FS_FLOAT* y, FS_FLOAT* zoom);.
+        /// </remarks>
+        public bool FPDFDest_GetLocationInPage(FPDF_DEST dest, out bool hasXVal, out bool hasYVal, out bool hasZoomVal, out float x, out float y, out float zoom)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFDest_GetLocationInPageStatic(dest, out hasXVal, out hasYVal, out hasZoomVal, out x, out y, out zoom);
             }
+        }
 
-            FPDFDest_GetLocationInPageStatic = (PDFiumDelegates.FPDFDest_GetLocationInPage)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFDest_GetLocationInPage));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate FPDF_LINK FPDFLink_GetLinkAtPoint_Delegate(FPDF_PAGE page, double x, double y);
 
-            // FPDFLink_GetLinkAtPoint
-            functionName = nameof(PDFiumDelegates.FPDFLink_GetLinkAtPoint);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFLink_GetLinkAtPoint_Delegate FPDFLink_GetLinkAtPointStatic { get; set; }
+
+        /// <summary>
+        /// Find a link at point (|x|,|y|) on |page|.
+        /// </summary>
+        /// <param name="page">Handle to the document page.</param>
+        /// <param name="x">The x coordinate, in the page coordinate system.</param>
+        /// <param name="y">The y coordinate, in the page coordinate system.</param>
+        /// <returns>Returns a handle to the link, or NULL if no link found at the given point.</returns>
+        /// <remarks>
+        /// You can convert coordinates from screen coordinates to page coordinates using FPDF_DeviceToPage().
+        /// FPDF_EXPORT FPDF_LINK FPDF_CALLCONV FPDFLink_GetLinkAtPoint(FPDF_PAGE page, double x, double y);.
+        /// </remarks>
+        public FPDF_LINK FPDFLink_GetLinkAtPoint(FPDF_PAGE page, double x, double y)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFLink_GetLinkAtPointStatic(page, x, y);
             }
+        }
 
-            FPDFLink_GetLinkAtPointStatic = (PDFiumDelegates.FPDFLink_GetLinkAtPoint)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFLink_GetLinkAtPoint));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate int FPDFLink_GetLinkZOrderAtPoint_Delegate(FPDF_PAGE page, double x, double y);
 
-            // FPDFLink_GetLinkZOrderAtPoint
-            functionName = nameof(PDFiumDelegates.FPDFLink_GetLinkZOrderAtPoint);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFLink_GetLinkZOrderAtPoint_Delegate FPDFLink_GetLinkZOrderAtPointStatic { get; set; }
+
+        /// <summary>
+        /// Find the Z-order of link at point (|x|,|y|) on |page|.
+        /// </summary>
+        /// <param name="page">Handle to the document page.</param>
+        /// <param name="x">The x coordinate, in the page coordinate system.</param>
+        /// <param name="y">The y coordinate, in the page coordinate system.</param>
+        /// <returns>Returns the Z-order of the link, or -1 if no link found at the given point.
+        /// Larger Z-order numbers are closer to the front.</returns>
+        /// <remarks>
+        /// You can convert coordinates from screen coordinates to page coordinates using FPDF_DeviceToPage().
+        /// FPDF_EXPORT int FPDF_CALLCONV FPDFLink_GetLinkZOrderAtPoint(FPDF_PAGE page, double x, double y);.
+        /// </remarks>
+        public int FPDFLink_GetLinkZOrderAtPoint(FPDF_PAGE page, double x, double y)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFLink_GetLinkZOrderAtPointStatic(page, x, y);
             }
+        }
 
-            FPDFLink_GetLinkZOrderAtPointStatic = (PDFiumDelegates.FPDFLink_GetLinkZOrderAtPoint)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFLink_GetLinkZOrderAtPoint));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate FPDF_DEST FPDFLink_GetDest_Delegate(FPDF_DOCUMENT document, FPDF_LINK link);
 
-            // FPDFLink_GetDest
-            functionName = nameof(PDFiumDelegates.FPDFLink_GetDest);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFLink_GetDest_Delegate FPDFLink_GetDestStatic { get; set; }
+
+        /// <summary>
+        /// Get destination info for |link|.
+        /// </summary>
+        /// <param name="document">Handle to the document.</param>
+        /// <param name="link">Handle to the link.</param>
+        /// <returns>Returns a handle to the destination, or NULL if there is no destination associated with the link.
+        /// In this case, you should call FPDFLink_GetAction() to retrieve the action associated with |link|.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT FPDF_DEST FPDF_CALLCONV FPDFLink_GetDest(FPDF_DOCUMENT document, FPDF_LINK link);.
+        /// </remarks>
+        public FPDF_DEST FPDFLink_GetDest(FPDF_DOCUMENT document, FPDF_LINK link)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFLink_GetDestStatic(document, link);
             }
+        }
 
-            FPDFLink_GetDestStatic = (PDFiumDelegates.FPDFLink_GetDest)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFLink_GetDest));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate FPDF_ACTION FPDFLink_GetAction_Delegate(FPDF_LINK link);
 
-            // FPDFLink_GetAction
-            functionName = nameof(PDFiumDelegates.FPDFLink_GetAction);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFLink_GetAction_Delegate FPDFLink_GetActionStatic { get; set; }
+
+        /// <summary>
+        /// Get action info for |link|.
+        /// </summary>
+        /// <param name="link">Handle to the link.</param>
+        /// <returns>Returns a handle to the action associated to |link|, or NULL if no action.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT FPDF_ACTION FPDF_CALLCONV FPDFLink_GetAction(FPDF_LINK link);.
+        /// </remarks>
+        public FPDF_ACTION FPDFLink_GetAction(FPDF_LINK link)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFLink_GetActionStatic(link);
             }
+        }
 
-            FPDFLink_GetActionStatic = (PDFiumDelegates.FPDFLink_GetAction)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFLink_GetAction));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate bool FPDFLink_Enumerate_Delegate(FPDF_PAGE page, ref int start_pos, ref FPDF_LINK link_annot);
 
-            // FPDFLink_Enumerate
-            functionName = nameof(PDFiumDelegates.FPDFLink_Enumerate);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFLink_Enumerate_Delegate FPDFLink_EnumerateStatic { get; set; }
+
+        /// <summary>
+        /// Enumerates all the link annotations in |page|.
+        /// </summary>
+        /// <param name="page">Handle to the page.</param>
+        /// <param name="start_pos">The start position, should initially be 0 and is updated with the next start position on return.</param>
+        /// <param name="link_annot">The link handle for |startPos|.</param>
+        /// <returns>Returns TRUE on success.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFLink_Enumerate(FPDF_PAGE page, int* start_pos, FPDF_LINK* link_annot);.
+        /// </remarks>
+        public bool FPDFLink_Enumerate(FPDF_PAGE page, ref int start_pos, ref FPDF_LINK link_annot)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFLink_EnumerateStatic(page, ref start_pos, ref link_annot);
             }
+        }
 
-            FPDFLink_EnumerateStatic = (PDFiumDelegates.FPDFLink_Enumerate)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFLink_Enumerate));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate FPDF_ANNOTATION FPDFLink_GetAnnot_Delegate(FPDF_PAGE page, FPDF_LINK link_annot);
 
-            // FPDFLink_GetAnnot
-            functionName = nameof(PDFiumDelegates.FPDFLink_GetAnnot);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFLink_GetAnnot_Delegate FPDFLink_GetAnnotStatic { get; set; }
+
+        /// <summary>
+        /// Gets FPDF_ANNOTATION object for |link_annot|. Experimental API.
+        /// </summary>
+        /// <param name="page">Handle to the page in which FPDF_LINK object is present.</param>
+        /// <param name="link_annot">Handle to link annotation.</param>
+        /// <returns>Returns FPDF_ANNOTATION from the FPDF_LINK and NULL on failure, if the input link annot or page is NULL.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT FPDF_ANNOTATION FPDF_CALLCONV FPDFLink_GetAnnot(FPDF_PAGE page, FPDF_LINK link_annot);.
+        /// </remarks>
+        public FPDF_ANNOTATION FPDFLink_GetAnnot(FPDF_PAGE page, FPDF_LINK link_annot)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFLink_GetAnnotStatic(page, link_annot);
             }
+        }
 
-            FPDFLink_GetAnnotStatic = (PDFiumDelegates.FPDFLink_GetAnnot)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFLink_GetAnnot));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate bool FPDFLink_GetAnnotRect_Delegate(FPDF_LINK link_annot, ref FS_RECTF rect);
 
-            // FPDFLink_GetAnnotRect
-            functionName = nameof(PDFiumDelegates.FPDFLink_GetAnnotRect);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFLink_GetAnnotRect_Delegate FPDFLink_GetAnnotRectStatic { get; set; }
+
+        /// <summary>
+        /// Get the rectangle for |link_annot|.
+        /// </summary>
+        /// <param name="link_annot">Handle to the link annotation.</param>
+        /// <param name="rect">The annotation rectangle.</param>
+        /// <returns>Returns true on success.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFLink_GetAnnotRect(FPDF_LINK link_annot, FS_RECTF* rect);.
+        /// </remarks>
+        public bool FPDFLink_GetAnnotRect(FPDF_LINK link_annot, ref FS_RECTF rect)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFLink_GetAnnotRectStatic(link_annot, ref rect);
             }
+        }
 
-            FPDFLink_GetAnnotRectStatic = (PDFiumDelegates.FPDFLink_GetAnnotRect)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFLink_GetAnnotRect));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate int FPDFLink_CountQuadPoints_Delegate(FPDF_LINK link_annot);
 
-            // FPDFLink_CountQuadPoints
-            functionName = nameof(PDFiumDelegates.FPDFLink_CountQuadPoints);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFLink_CountQuadPoints_Delegate FPDFLink_CountQuadPointsStatic { get; set; }
+
+        /// <summary>
+        /// Get the count of quadrilateral points to the |link_annot|.
+        /// </summary>
+        /// <param name="link_annot">Handle to the link annotation.</param>
+        /// <returns>Returns the count of quadrilateral points.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT int FPDF_CALLCONV FPDFLink_CountQuadPoints(FPDF_LINK link_annot);.
+        /// </remarks>
+        public int FPDFLink_CountQuadPoints(FPDF_LINK link_annot)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFLink_CountQuadPointsStatic(link_annot);
             }
+        }
 
-            FPDFLink_CountQuadPointsStatic = (PDFiumDelegates.FPDFLink_CountQuadPoints)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFLink_CountQuadPoints));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate bool FPDFLink_GetQuadPoints_Delegate(FPDF_LINK link_annot, int quad_index, ref FS_QUADPOINTSF quad_points);
 
-            // FPDFLink_GetQuadPoints
-            functionName = nameof(PDFiumDelegates.FPDFLink_GetQuadPoints);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDFLink_GetQuadPoints_Delegate FPDFLink_GetQuadPointsStatic { get; set; }
+
+        /// <summary>
+        /// Get the quadrilateral points for the specified |quad_index| in |link_annot|.
+        /// </summary>
+        /// <param name="link_annot">Handle to the link annotation.</param>
+        /// <param name="quad_index">The specified quad point index.</param>
+        /// <param name="quad_points">Receives the quadrilateral points.</param>
+        /// <returns>Returns true on success.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFLink_GetQuadPoints(FPDF_LINK link_annot, int quad_index, FS_QUADPOINTSF* quad_points);.
+        /// </remarks>
+        public bool FPDFLink_GetQuadPoints(FPDF_LINK link_annot, int quad_index, ref FS_QUADPOINTSF quad_points)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDFLink_GetQuadPointsStatic(link_annot, quad_index, ref quad_points);
             }
+        }
 
-            FPDFLink_GetQuadPointsStatic = (PDFiumDelegates.FPDFLink_GetQuadPoints)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDFLink_GetQuadPoints));
+        ////// Experimental API
+        ////// Gets an additional-action from |page|.
+        //////
+        //////   page      - handle to the page, as returned by FPDF_LoadPage().
+        //////   aa_type   - the type of the page object's addtional-action, defined
+        //////               in public/fpdf_formfill.h
+        //////
+        //////   Returns the handle to the action data, or NULL if there is no
+        //////   additional-action of type |aa_type|.
+        //// FPDF_EXPORT FPDF_ACTION FPDF_CALLCONV FPDF_GetPageAAction(FPDF_PAGE page, int aa_type);
 
-            // FPDF_GetMetaText
-            functionName = nameof(PDFiumDelegates.FPDF_GetMetaText);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        ////// Experimental API.
+        ////// Get the file identifer defined in the trailer of |document|.
+        //////
+        //////   document - handle to the document.
+        //////   id_type  - the file identifier type to retrieve.
+        //////   buffer   - a buffer for the file identifier. May be NULL.
+        //////   buflen   - the length of the buffer, in bytes. May be 0.
+        //////
+        ////// Returns the number of bytes in the file identifier, including the NUL
+        ////// terminator.
+        //////
+        ////// The |buffer| is always a byte string. The |buffer| is followed by a NUL
+        ////// terminator.  If |buflen| is less than the returned length, or |buffer| is
+        ////// NULL, |buffer| will not be modified.
+        //// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDF_GetFileIdentifier(FPDF_DOCUMENT document, FPDF_FILEIDTYPE id_type, void* buffer, unsigned long buflen);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate int FPDF_GetMetaText_Delegate(FPDF_DOCUMENT document, [MarshalAs(UnmanagedType.LPStr)] string tag, IntPtr buffer, ulong buflen);
+
+        private static FPDF_GetMetaText_Delegate FPDF_GetMetaTextStatic { get; set; }
+
+        /// <summary>
+        /// Get meta-data |tag| content from |document|.
+        /// </summary>
+        /// <param name="document">Handle to the document.</param>
+        /// <param name="tag">The tag to retrieve. The tag can be one of: Title, Author, Subject, Keywords, Creator, Producer, CreationDate, or ModDate.
+        /// For detailed explanations of these tags and their respective values, please refer to PDF Reference 1.6, section 10.2.1, 'Document Information Dictionary'.</param>
+        /// <param name="buffer">A buffer for the tag. May be NULL.</param>
+        /// <param name="buflen">The length of the buffer, in bytes. May be 0.</param>
+        /// <returns>Returns the number of bytes in the tag, including trailing zeros.</returns>
+        /// <remarks>
+        /// The |buffer| is always encoded in UTF-16LE. The |buffer| is followed by two bytes of zeros indicating the end of the string.
+        /// If |buflen| is less than the returned length, or |buffer| is NULL, |buffer| will not be modified.
+        /// For linearized files, FPDFAvail_IsFormAvail must be called before this, and it must have returned PDF_FORM_AVAIL or PDF_FORM_NOTEXIST.
+        /// Before that, there is no guarantee the metadata has been loaded.
+        /// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDF_GetMetaText(FPDF_DOCUMENT document, FPDF_BYTESTRING tag, void* buffer, unsigned long buflen);.
+        /// </remarks>
+        public int FPDF_GetMetaText(FPDF_DOCUMENT document, [MarshalAs(UnmanagedType.LPStr)] string tag, IntPtr buffer, ulong buflen)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDF_GetMetaTextStatic(document, tag, buffer, buflen);
             }
+        }
 
-            FPDF_GetMetaTextStatic = (PDFiumDelegates.FPDF_GetMetaText)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDF_GetMetaText));
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate int FPDF_GetPageLabel_Delegate(FPDF_DOCUMENT document, int page_index, IntPtr buffer, ulong buflen);
 
-            // FPDF_GetPageLabel
-            functionName = nameof(PDFiumDelegates.FPDF_GetPageLabel);
-            address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
-            if (address == IntPtr.Zero)
+        private static FPDF_GetPageLabel_Delegate FPDF_GetPageLabelStatic { get; set; }
+
+        /// <summary>
+        /// Get the page label for |page_index| from |document|.
+        /// </summary>
+        /// <param name="document">Handle to the document.</param>
+        /// <param name="page_index">The 0-based index of the page.</param>
+        /// <param name="buffer">A buffer for the page label. May be NULL.</param>
+        /// <param name="buflen">The length of the buffer, in bytes. May be 0.</param>
+        /// <returns>Returns the number of bytes in the page label, including trailing zeros.</returns>
+        /// <remarks>
+        /// The |buffer| is always encoded in UTF-16LE. The |buffer| is followed by two bytes of zeros indicating the end of the string.
+        /// If |buflen| is less than the returned length, or |buffer| is NULL, |buffer| will not be modified.
+        /// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDF_GetPageLabel(FPDF_DOCUMENT document, int page_index, void* buffer, unsigned long buflen);.
+        /// </remarks>
+        public int FPDF_GetPageLabel(FPDF_DOCUMENT document, int page_index, IntPtr buffer, ulong buflen)
+        {
+            lock (_syncObject)
             {
-                throw PDFiumFunctionNotFoundException.CreateException(libraryName, functionName, Marshal.GetLastWin32Error());
+                return FPDF_GetPageLabelStatic(document, page_index, buffer, buflen);
             }
+        }
 
-            FPDF_GetPageLabelStatic = (PDFiumDelegates.FPDF_GetPageLabel)Marshal.GetDelegateForFunctionPointer(address, typeof(PDFiumDelegates.FPDF_GetPageLabel));
+        private static void LoadDllDocPart()
+        {
+            FPDFBookmark_GetFirstChildStatic = GetPDFiumFunction<FPDFBookmark_GetFirstChild_Delegate>(nameof(FPDFBookmark_GetFirstChild));
+            FPDFBookmark_GetNextSiblingStatic = GetPDFiumFunction<FPDFBookmark_GetNextSibling_Delegate>(nameof(FPDFBookmark_GetNextSibling));
+            FPDFBookmark_GetTitleStatic = GetPDFiumFunction<FPDFBookmark_GetTitle_Delegate>(nameof(FPDFBookmark_GetTitle));
+            FPDFBookmark_FindStatic = GetPDFiumFunction<FPDFBookmark_Find_Delegate>(nameof(FPDFBookmark_Find));
+            FPDFBookmark_GetDestStatic = GetPDFiumFunction<FPDFBookmark_GetDest_Delegate>(nameof(FPDFBookmark_GetDest));
+            FPDFBookmark_GetActionStatic = GetPDFiumFunction<FPDFBookmark_GetAction_Delegate>(nameof(FPDFBookmark_GetAction));
+            FPDFAction_GetTypeStatic = GetPDFiumFunction<FPDFAction_GetType_Delegate>(nameof(FPDFAction_GetType));
+            FPDFAction_GetDestStatic = GetPDFiumFunction<FPDFAction_GetDest_Delegate>(nameof(FPDFAction_GetDest));
+            FPDFAction_GetFilePathStatic = GetPDFiumFunction<FPDFAction_GetFilePath_Delegate>(nameof(FPDFAction_GetFilePath));
+            FPDFAction_GetURIPathStatic = GetPDFiumFunction<FPDFAction_GetURIPath_Delegate>(nameof(FPDFAction_GetURIPath));
+            FPDFDest_GetDestPageIndexStatic = GetPDFiumFunction<FPDFDest_GetDestPageIndex_Delegate>(nameof(FPDFDest_GetDestPageIndex));
+            //// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDFDest_GetView(FPDF_DEST dest, unsigned long* pNumParams, FS_FLOAT* pParams);
+            FPDFDest_GetLocationInPageStatic = GetPDFiumFunction<FPDFDest_GetLocationInPage_Delegate>(nameof(FPDFDest_GetLocationInPage));
+            FPDFLink_GetLinkAtPointStatic = GetPDFiumFunction<FPDFLink_GetLinkAtPoint_Delegate>(nameof(FPDFLink_GetLinkAtPoint));
+            FPDFLink_GetLinkZOrderAtPointStatic = GetPDFiumFunction<FPDFLink_GetLinkZOrderAtPoint_Delegate>(nameof(FPDFLink_GetLinkZOrderAtPoint));
+            FPDFLink_GetDestStatic = GetPDFiumFunction<FPDFLink_GetDest_Delegate>(nameof(FPDFLink_GetDest));
+            FPDFLink_GetActionStatic = GetPDFiumFunction<FPDFLink_GetAction_Delegate>(nameof(FPDFLink_GetAction));
+            FPDFLink_EnumerateStatic = GetPDFiumFunction<FPDFLink_Enumerate_Delegate>(nameof(FPDFLink_Enumerate));
+            FPDFLink_GetAnnotStatic = GetPDFiumFunction<FPDFLink_GetAnnot_Delegate>(nameof(FPDFLink_GetAnnot));
+            FPDFLink_GetAnnotRectStatic = GetPDFiumFunction<FPDFLink_GetAnnotRect_Delegate>(nameof(FPDFLink_GetAnnotRect));
+            FPDFLink_CountQuadPointsStatic = GetPDFiumFunction<FPDFLink_CountQuadPoints_Delegate>(nameof(FPDFLink_CountQuadPoints));
+            FPDFLink_GetQuadPointsStatic = GetPDFiumFunction<FPDFLink_GetQuadPoints_Delegate>(nameof(FPDFLink_GetQuadPoints));
+            //// FPDF_EXPORT FPDF_ACTION FPDF_CALLCONV FPDF_GetPageAAction(FPDF_PAGE page, int aa_type);
+            //// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDF_GetFileIdentifier(FPDF_DOCUMENT document, FPDF_FILEIDTYPE id_type, void* buffer, unsigned long buflen);
+            FPDF_GetMetaTextStatic = GetPDFiumFunction<FPDF_GetMetaText_Delegate>(nameof(FPDF_GetMetaText));
+            FPDF_GetPageLabelStatic = GetPDFiumFunction<FPDF_GetPageLabel_Delegate>(nameof(FPDF_GetPageLabel));
         }
     }
 }

@@ -3,7 +3,7 @@
     using System;
     using PDFiumDotNET.Components.Contracts.Bitmap;
     using PDFiumDotNET.Components.Contracts.Page;
-    using static PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates;
+    using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
     /// <summary>
     /// <inheritdoc cref="IPDFBitmap"/>

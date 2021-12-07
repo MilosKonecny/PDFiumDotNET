@@ -5,7 +5,7 @@
     using System.Runtime.InteropServices;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using PDFiumDotNET.Wrapper.Bridge;
-    using static PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates;
+    using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
     // Disable "Remove the underscores from member name"
 #pragma warning disable CA1707

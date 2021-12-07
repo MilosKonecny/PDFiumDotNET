@@ -1,7 +1,7 @@
 ﻿namespace PDFiumDotNET.Components.Bookmark
 {
     using PDFiumDotNET.Components.Contracts.Bookmark;
-    using static PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates;
+    using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
     /// <summary>
     /// <inheritdoc cref="IPDFBookmarkComponent"/>

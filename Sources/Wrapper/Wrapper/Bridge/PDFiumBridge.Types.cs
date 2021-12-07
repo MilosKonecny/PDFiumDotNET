@@ -9,7 +9,7 @@
     /// <summary>
     /// The class contains all delegates of methods in pdfium dll.
     /// </summary>
-    internal partial class PDFiumDelegates
+    internal partial class PDFiumBridge
     {
         /// <summary>
         /// Enumeration of all errors.

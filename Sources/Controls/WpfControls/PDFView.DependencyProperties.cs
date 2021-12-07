@@ -311,7 +311,7 @@ namespace PDFiumDotNET.WpfCoreControls
 
         private void HandlePDFPageComponentTextSelectionsRemovedEvent(object sender, EventArgs e)
         {
-            // Application.Current.Dispatcher.Invoke(() => InvalidateVisual());
+            Application.Current.Dispatcher.Invoke(() => InvalidateVisual());
         }
 
         private void HandlePDFZoomComponentPropertyChangedEvent(object sender, PropertyChangedEventArgs e)
