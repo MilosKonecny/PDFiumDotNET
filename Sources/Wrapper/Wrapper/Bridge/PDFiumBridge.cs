@@ -11,6 +11,7 @@
     {
         private static readonly object _syncObject = new object();
         private static IntPtr _libraryHandle;
+        private static string _libraryName;
 
         #region Constructors
 
@@ -38,24 +39,24 @@
         private static void LoadDll()
         {
             // Determine and load pdfium library
-            var libraryName = Environment.Is64BitProcess ? "PDFium\\x64\\pdfium.dll" : "PDFium\\x86\\pdfium.dll";
-            _libraryHandle = NativeMethods.LoadLibrary(libraryName);
+            _libraryName = Environment.Is64BitProcess ? "PDFium\\x64\\pdfium.dll" : "PDFium\\x86\\pdfium.dll";
+            _libraryHandle = NativeMethods.LoadLibrary(_libraryName);
             if (_libraryHandle == IntPtr.Zero)
             {
-                throw PDFiumLibraryNotLoadedException.CreateException(libraryName, Marshal.GetLastWin32Error());
+                throw PDFiumLibraryNotLoadedException.CreateException(_libraryName, Marshal.GetLastWin32Error());
             }
 
             // Load the functions declared in view header - fpdfview.h.
-            LoadDllViewPart(libraryName);
+            LoadDllViewPart();
 
             // Load the functions declared in doc header - fpdf_doc.h.
-            LoadDllDocPart(libraryName);
+            LoadDllDocPart();
 
             // Load the functions declared in text header - fpdf_text.h.
-            LoadDllTextPart(libraryName);
+            LoadDllTextPart();
 
             // Load the functions declared in annot header - fpdf_annot.h.
-            LoadDllAnnotPart(libraryName);
+            LoadDllAnnotPart();
         }
 
         /// <summary>
@@ -90,6 +91,17 @@
                     _libraryHandle = IntPtr.Zero;
                 }
             }
+        }
+
+        private static T GetPDFiumFunction<T>(string functionName)
+        {
+            var address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
+            if (address == IntPtr.Zero)
+            {
+                throw PDFiumFunctionNotFoundException.CreateException(_libraryName, functionName, Marshal.GetLastWin32Error());
+            }
+
+            return Marshal.GetDelegateForFunctionPointer<T>(address);
         }
 
         #endregion Private static methods

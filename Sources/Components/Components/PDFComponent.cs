@@ -7,7 +7,7 @@
     using System.Runtime.InteropServices;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Wrapper.Bridge;
-    using static PDFiumDotNET.Wrapper.Bridge.PDFiumDelegates;
+    using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
     /// <summary>
     /// <inheritdoc cref="IPDFComponent"/>

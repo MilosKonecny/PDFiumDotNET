@@ -5,6 +5,7 @@
     using System.Runtime.InteropServices;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using PDFiumDotNET.Wrapper.Bridge;
+    using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
     // Disable "Remove the underscores from member name"
 #pragma warning disable CA1707
@@ -62,7 +63,7 @@
             var document = bridge.FPDF_LoadDocument(@"FileDoesNotExist.pdf", null);
             Assert.IsFalse(document.IsValid);
             var lastError = bridge.FPDF_GetLastError();
-            Assert.AreEqual(PDFiumDelegates.FPDF_ERROR.FPDF_ERR_FILE, lastError);
+            Assert.AreEqual(FPDF_ERROR.FPDF_ERR_FILE, lastError);
             bridge.Dispose();
         }
 
@@ -105,7 +106,7 @@
             Assert.IsFalse(document.IsValid);
 
             var lastError = bridge.FPDF_GetLastError();
-            Assert.AreEqual(PDFiumDelegates.FPDF_ERROR.FPDF_ERR_PASSWORD, lastError);
+            Assert.AreEqual(FPDF_ERROR.FPDF_ERR_PASSWORD, lastError);
 
             document = bridge.FPDF_LoadDocument(pdfFile, "pwd");
             Assert.IsTrue(document.IsValid);
@@ -204,14 +205,14 @@
                 var height = bridge.FPDF_GetPageHeight(page);
                 Assert.AreEqual(792d, height);
 
-                var retBool = bridge.FPDF_GetPageBoundingBox(page, out PDFiumDelegates.FS_RECTF rect);
+                var retBool = bridge.FPDF_GetPageBoundingBox(page, out FS_RECTF rect);
                 Assert.IsTrue(retBool);
                 Assert.AreEqual(0f, rect.Left);
                 Assert.AreEqual(0f, rect.Bottom);
                 Assert.AreEqual(612f, rect.Right);
                 Assert.AreEqual(792f, rect.Top);
 
-                retBool = bridge.FPDF_GetPageSizeByIndexF(document, index, out PDFiumDelegates.FS_SIZEF size);
+                retBool = bridge.FPDF_GetPageSizeByIndexF(document, index, out FS_SIZEF size);
                 Assert.IsTrue(retBool);
                 Assert.AreEqual(612f, size.Width);
                 Assert.AreEqual(792f, size.Height);
@@ -247,7 +248,7 @@
             bitmap = bridge.FPDFBitmap_Create(1000, 2000, false);
             Assert.IsTrue(bitmap.IsValid);
 
-            var matrix = new PDFiumDelegates.FS_MATRIX
+            var matrix = new FS_MATRIX
             {
                 A = 1,
                 B = 0,
@@ -257,7 +258,7 @@
                 F = 1,
             };
 
-            var rect = new PDFiumDelegates.FS_RECTF
+            var rect = new FS_RECTF
             {
                 Left = 0,
                 Right = 612,
@@ -317,9 +318,9 @@
 
             var bitmap = bridge.FPDFBitmap_Create(width, height, false);
             Assert.IsTrue(bitmap.IsValid);
-            bridge.FPDFBitmap_FillRect(bitmap, 0, 0, width, height, new PDFiumDelegates.FPDF_COLOR(10, 20, 30));
+            bridge.FPDFBitmap_FillRect(bitmap, 0, 0, width, height, new FPDF_COLOR(10, 20, 30));
             var format = bridge.FPDFBitmap_GetFormat(bitmap);
-            Assert.AreEqual(PDFiumDelegates.FPDFBitmapFormat.FPDFBitmap_BGRx, format);
+            Assert.AreEqual(FPDFBitmapFormat.FPDFBitmap_BGRx, format);
             var buffer = bridge.FPDFBitmap_GetBuffer(bitmap);
             Assert.IsTrue(buffer != IntPtr.Zero);
             Assert.AreEqual(width, bridge.FPDFBitmap_GetWidth(bitmap));
@@ -327,11 +328,11 @@
             Assert.AreEqual(2448, bridge.FPDFBitmap_GetStride(bitmap));
             bridge.FPDFBitmap_Destroy(bitmap);
 
-            bitmap = bridge.FPDFBitmap_CreateEx(width, height, PDFiumDelegates.FPDFBitmapFormat.FPDFBitmap_Gray, IntPtr.Zero, 0);
+            bitmap = bridge.FPDFBitmap_CreateEx(width, height, FPDFBitmapFormat.FPDFBitmap_Gray, IntPtr.Zero, 0);
             Assert.IsTrue(bitmap.IsValid);
-            bridge.FPDFBitmap_FillRect(bitmap, 0, 0, width, height, new PDFiumDelegates.FPDF_COLOR(10, 20, 30));
+            bridge.FPDFBitmap_FillRect(bitmap, 0, 0, width, height, new FPDF_COLOR(10, 20, 30));
             format = bridge.FPDFBitmap_GetFormat(bitmap);
-            Assert.AreEqual(PDFiumDelegates.FPDFBitmapFormat.FPDFBitmap_Gray, format);
+            Assert.AreEqual(FPDFBitmapFormat.FPDFBitmap_Gray, format);
             buffer = bridge.FPDFBitmap_GetBuffer(bitmap);
             Assert.IsTrue(buffer != IntPtr.Zero);
             Assert.AreEqual(width, bridge.FPDFBitmap_GetWidth(bitmap));
@@ -339,11 +340,11 @@
             Assert.AreEqual(612, bridge.FPDFBitmap_GetStride(bitmap));
             bridge.FPDFBitmap_Destroy(bitmap);
 
-            bitmap = bridge.FPDFBitmap_CreateEx(width, height, PDFiumDelegates.FPDFBitmapFormat.FPDFBitmap_BGR, IntPtr.Zero, 0);
+            bitmap = bridge.FPDFBitmap_CreateEx(width, height, FPDFBitmapFormat.FPDFBitmap_BGR, IntPtr.Zero, 0);
             Assert.IsTrue(bitmap.IsValid);
-            bridge.FPDFBitmap_FillRect(bitmap, 0, 0, width, height, new PDFiumDelegates.FPDF_COLOR(10, 20, 30));
+            bridge.FPDFBitmap_FillRect(bitmap, 0, 0, width, height, new FPDF_COLOR(10, 20, 30));
             format = bridge.FPDFBitmap_GetFormat(bitmap);
-            Assert.AreEqual(PDFiumDelegates.FPDFBitmapFormat.FPDFBitmap_BGR, format);
+            Assert.AreEqual(FPDFBitmapFormat.FPDFBitmap_BGR, format);
             buffer = bridge.FPDFBitmap_GetBuffer(bitmap);
             Assert.IsTrue(buffer != IntPtr.Zero);
             Assert.AreEqual(width, bridge.FPDFBitmap_GetWidth(bitmap));
@@ -351,11 +352,11 @@
             Assert.AreEqual(1836, bridge.FPDFBitmap_GetStride(bitmap));
             bridge.FPDFBitmap_Destroy(bitmap);
 
-            bitmap = bridge.FPDFBitmap_CreateEx(width, height, PDFiumDelegates.FPDFBitmapFormat.FPDFBitmap_BGRx, IntPtr.Zero, 0);
+            bitmap = bridge.FPDFBitmap_CreateEx(width, height, FPDFBitmapFormat.FPDFBitmap_BGRx, IntPtr.Zero, 0);
             Assert.IsTrue(bitmap.IsValid);
-            bridge.FPDFBitmap_FillRect(bitmap, 0, 0, width, height, new PDFiumDelegates.FPDF_COLOR(10, 20, 30));
+            bridge.FPDFBitmap_FillRect(bitmap, 0, 0, width, height, new FPDF_COLOR(10, 20, 30));
             format = bridge.FPDFBitmap_GetFormat(bitmap);
-            Assert.AreEqual(PDFiumDelegates.FPDFBitmapFormat.FPDFBitmap_BGRx, format);
+            Assert.AreEqual(FPDFBitmapFormat.FPDFBitmap_BGRx, format);
             buffer = bridge.FPDFBitmap_GetBuffer(bitmap);
             Assert.IsTrue(buffer != IntPtr.Zero);
             Assert.AreEqual(width, bridge.FPDFBitmap_GetWidth(bitmap));
@@ -363,11 +364,11 @@
             Assert.AreEqual(2448, bridge.FPDFBitmap_GetStride(bitmap));
             bridge.FPDFBitmap_Destroy(bitmap);
 
-            bitmap = bridge.FPDFBitmap_CreateEx(width, height, PDFiumDelegates.FPDFBitmapFormat.FPDFBitmap_BGRA, IntPtr.Zero, 0);
+            bitmap = bridge.FPDFBitmap_CreateEx(width, height, FPDFBitmapFormat.FPDFBitmap_BGRA, IntPtr.Zero, 0);
             Assert.IsTrue(bitmap.IsValid);
-            bridge.FPDFBitmap_FillRect(bitmap, 0, 0, width, height, new PDFiumDelegates.FPDF_COLOR(10, 20, 30));
+            bridge.FPDFBitmap_FillRect(bitmap, 0, 0, width, height, new FPDF_COLOR(10, 20, 30));
             format = bridge.FPDFBitmap_GetFormat(bitmap);
-            Assert.AreEqual(PDFiumDelegates.FPDFBitmapFormat.FPDFBitmap_BGRA, format);
+            Assert.AreEqual(FPDFBitmapFormat.FPDFBitmap_BGRA, format);
             buffer = bridge.FPDFBitmap_GetBuffer(bitmap);
             Assert.IsTrue(buffer != IntPtr.Zero);
             Assert.AreEqual(width, bridge.FPDFBitmap_GetWidth(bitmap));
