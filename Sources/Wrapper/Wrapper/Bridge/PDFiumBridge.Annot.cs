@@ -256,7 +256,7 @@
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate int FPDFAnnot_AddInkStroke_Delegate(FPDF_ANNOTATION annot, ref FS_POINTF points, ulong point_count);
+        private delegate int FPDFAnnot_AddInkStroke_Delegate(FPDF_ANNOTATION annot, ref FS_POINTF[] points, ulong point_count);
 
         private static FPDFAnnot_AddInkStroke_Delegate FPDFAnnot_AddInkStrokeStatic { get; set; }
 
@@ -273,7 +273,7 @@
         /// <remarks>
         /// FPDF_EXPORT int FPDF_CALLCONV FPDFAnnot_AddInkStroke(FPDF_ANNOTATION annot, const FS_POINTF* points, size_t point_count);.
         /// </remarks>
-        public int FPDFAnnot_AddInkStroke(FPDF_ANNOTATION annot, ref FS_POINTF points, ulong point_count)
+        public int FPDFAnnot_AddInkStroke(FPDF_ANNOTATION annot, ref FS_POINTF[] points, ulong point_count)
         {
             lock (_syncObject)
             {
@@ -529,7 +529,7 @@
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate ulong FPDFAnnot_CountAttachmentPoints_Delegate(FPDF_ANNOTATION annot);
+        private delegate int FPDFAnnot_CountAttachmentPoints_Delegate(FPDF_ANNOTATION annot);
 
         private static FPDFAnnot_CountAttachmentPoints_Delegate FPDFAnnot_CountAttachmentPointsStatic { get; set; }
 
@@ -541,7 +541,7 @@
         /// <returns>Returns the number of sets of quadpoints, or 0 on failure.</returns>
         /// <remarks>FPDF_EXPORT size_t FPDF_CALLCONV FPDFAnnot_CountAttachmentPoints(FPDF_ANNOTATION annot);.
         /// </remarks>
-        public ulong FPDFAnnot_CountAttachmentPoints(FPDF_ANNOTATION annot)
+        public int FPDFAnnot_CountAttachmentPoints(FPDF_ANNOTATION annot)
         {
             lock (_syncObject)
             {
@@ -550,7 +550,7 @@
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate bool FPDFAnnot_GetAttachmentPoints_Delegate(FPDF_ANNOTATION annot, ulong quad_index, ref FS_QUADPOINTSF quad_points);
+        private delegate bool FPDFAnnot_GetAttachmentPoints_Delegate(FPDF_ANNOTATION annot, int quad_index, ref FS_QUADPOINTSF quad_points);
 
         private static FPDFAnnot_GetAttachmentPoints_Delegate FPDFAnnot_GetAttachmentPointsStatic { get; set; }
 
@@ -565,7 +565,7 @@
         /// <remarks>
         /// FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_GetAttachmentPoints(FPDF_ANNOTATION annot, size_t quad_index, FS_QUADPOINTSF* quad_points);.
         /// </remarks>
-        public bool FPDFAnnot_GetAttachmentPoints(FPDF_ANNOTATION annot, ulong quad_index, ref FS_QUADPOINTSF quad_points)
+        public bool FPDFAnnot_GetAttachmentPoints(FPDF_ANNOTATION annot, int quad_index, ref FS_QUADPOINTSF quad_points)
         {
             lock (_syncObject)
             {
@@ -621,7 +621,7 @@
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate ulong FPDFAnnot_GetVertices_Delegate(FPDF_ANNOTATION annot, IntPtr buffer, ulong length);
+        private delegate int FPDFAnnot_GetVertices_Delegate(FPDF_ANNOTATION annot, IntPtr buffer, int length);
 
         private static FPDFAnnot_GetVertices_Delegate FPDFAnnot_GetVerticesStatic { get; set; }
 
@@ -637,7 +637,7 @@
         /// <remarks>
         /// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDFAnnot_GetVertices(FPDF_ANNOTATION annot, FS_POINTF* buffer, unsigned long length);.
         /// </remarks>
-        public ulong FPDFAnnot_GetVertices(FPDF_ANNOTATION annot, IntPtr buffer, ulong length)
+        public int FPDFAnnot_GetVertices(FPDF_ANNOTATION annot, IntPtr buffer, int length)
         {
             lock (_syncObject)
             {

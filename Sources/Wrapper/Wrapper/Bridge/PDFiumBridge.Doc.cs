@@ -269,16 +269,29 @@
             }
         }
 
-        ////// Experimental API.
-        ////// Get the view (fit type) specified by |dest|.
-        //////
-        //////   dest         - handle to the destination.
-        //////   pNumParams   - receives the number of view parameters, which is at most 4.
-        //////   pParams      - buffer to write the view parameters. Must be at least 4
-        //////                  FS_FLOATs long.
-        ////// Returns one of the PDFDEST_VIEW_* constants, PDFDEST_VIEW_UNKNOWN_MODE if
-        ////// |dest| does not specify a view.
-        //// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDFDest_GetView(FPDF_DEST dest, unsigned long* pNumParams, FS_FLOAT* pParams);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate ulong FPDFDest_GetView_Delegate(FPDF_DEST dest, ref ulong pNumParams, IntPtr pParams);
+
+        private static FPDFDest_GetView_Delegate FPDFDest_GetViewStatic { get; set; }
+
+        /// <summary>
+        /// Experimental API.
+        /// Get the view (fit type) specified by |dest|.
+        /// </summary>
+        /// <param name="dest">Handle to the destination.</param>
+        /// <param name="pNumParams">Receives the number of view parameters, which is at most 4.</param>
+        /// <param name="pParams">Buffer to write the view parameters. Must be at least 4 FS_FLOATs long.</param>
+        /// <returns>Returns one of the PDFDEST_VIEW_* constants, PDFDEST_VIEW_UNKNOWN_MODE if |dest| does not specify a view.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDFDest_GetView(FPDF_DEST dest, unsigned long* pNumParams, FS_FLOAT* pParams);.
+        /// </remarks>
+        public ulong FPDFDest_GetView(FPDF_DEST dest, ref ulong pNumParams, IntPtr pParams)
+        {
+            lock (_syncObject)
+            {
+                return FPDFDest_GetViewStatic(dest, ref pNumParams, pParams);
+            }
+        }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFDest_GetLocationInPage_Delegate(FPDF_DEST dest, out bool hasXVal, out bool hasYVal, out bool hasZoomVal, out float x, out float y, out float zoom);
@@ -512,32 +525,55 @@
             }
         }
 
-        ////// Experimental API
-        ////// Gets an additional-action from |page|.
-        //////
-        //////   page      - handle to the page, as returned by FPDF_LoadPage().
-        //////   aa_type   - the type of the page object's addtional-action, defined
-        //////               in public/fpdf_formfill.h
-        //////
-        //////   Returns the handle to the action data, or NULL if there is no
-        //////   additional-action of type |aa_type|.
-        //// FPDF_EXPORT FPDF_ACTION FPDF_CALLCONV FPDF_GetPageAAction(FPDF_PAGE page, int aa_type);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate FPDF_ACTION FPDF_GetPageAAction_Delegate(FPDF_PAGE page, int aa_type);
 
-        ////// Experimental API.
-        ////// Get the file identifer defined in the trailer of |document|.
-        //////
-        //////   document - handle to the document.
-        //////   id_type  - the file identifier type to retrieve.
-        //////   buffer   - a buffer for the file identifier. May be NULL.
-        //////   buflen   - the length of the buffer, in bytes. May be 0.
-        //////
-        ////// Returns the number of bytes in the file identifier, including the NUL
-        ////// terminator.
-        //////
-        ////// The |buffer| is always a byte string. The |buffer| is followed by a NUL
-        ////// terminator.  If |buflen| is less than the returned length, or |buffer| is
-        ////// NULL, |buffer| will not be modified.
-        //// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDF_GetFileIdentifier(FPDF_DOCUMENT document, FPDF_FILEIDTYPE id_type, void* buffer, unsigned long buflen);
+        private static FPDF_GetPageAAction_Delegate FPDF_GetPageAActionStatic { get; set; }
+
+        /// <summary>
+        /// Experimental API
+        /// Gets an additional-action from |page|.
+        /// </summary>
+        /// <param name="page">Handle to the page, as returned by FPDF_LoadPage().</param>
+        /// <param name="aa_type">The type of the page object's addtional-action, defined in public/fpdf_formfill.h.</param>
+        /// <returns>Returns the handle to the action data, or NULL if there is no additional-action of type |aa_type|.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT FPDF_ACTION FPDF_CALLCONV FPDF_GetPageAAction(FPDF_PAGE page, int aa_type);.
+        /// </remarks>
+        public FPDF_ACTION FPDF_GetPageAAction(FPDF_PAGE page, int aa_type)
+        {
+            lock (_syncObject)
+            {
+                return FPDF_GetPageAActionStatic(page, aa_type);
+            }
+        }
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate ulong FPDF_GetFileIdentifier_Delegate(FPDF_DOCUMENT document, FPDF_FILEIDTYPE id_type, IntPtr buffer, ulong buflen);
+
+        private static FPDF_GetFileIdentifier_Delegate FPDF_GetFileIdentifierStatic { get; set; }
+
+        /// <summary>
+        /// Experimental API.
+        /// Get the file identifer defined in the trailer of |document|.
+        /// </summary>
+        /// <param name="document">Handle to the document.</param>
+        /// <param name="id_type">The file identifier type to retrieve.</param>
+        /// <param name="buffer">A buffer for the file identifier. May be NULL.</param>
+        /// <param name="buflen">The length of the buffer, in bytes. May be 0.</param>
+        /// <returns>Returns the number of bytes in the file identifier, including the NUL terminator.</returns>
+        /// <remarks>
+        /// The |buffer| is always a byte string. The |buffer| is followed by a NUL terminator.
+        /// If |buflen| is less than the returned length, or |buffer| is NULL, |buffer| will not be modified.
+        /// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDF_GetFileIdentifier(FPDF_DOCUMENT document, FPDF_FILEIDTYPE id_type, void* buffer, unsigned long buflen);.
+        /// </remarks>
+        public ulong FPDF_GetFileIdentifier(FPDF_DOCUMENT document, FPDF_FILEIDTYPE id_type, IntPtr buffer, ulong buflen)
+        {
+            lock (_syncObject)
+            {
+                return FPDF_GetFileIdentifierStatic(document, id_type, buffer, buflen);
+            }
+        }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDF_GetMetaText_Delegate(FPDF_DOCUMENT document, [MarshalAs(UnmanagedType.LPStr)] string tag, IntPtr buffer, ulong buflen);
@@ -607,7 +643,7 @@
             FPDFAction_GetFilePathStatic = GetPDFiumFunction<FPDFAction_GetFilePath_Delegate>(nameof(FPDFAction_GetFilePath));
             FPDFAction_GetURIPathStatic = GetPDFiumFunction<FPDFAction_GetURIPath_Delegate>(nameof(FPDFAction_GetURIPath));
             FPDFDest_GetDestPageIndexStatic = GetPDFiumFunction<FPDFDest_GetDestPageIndex_Delegate>(nameof(FPDFDest_GetDestPageIndex));
-            //// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDFDest_GetView(FPDF_DEST dest, unsigned long* pNumParams, FS_FLOAT* pParams);
+            FPDFDest_GetViewStatic = GetPDFiumFunction<FPDFDest_GetView_Delegate>(nameof(FPDFDest_GetView));
             FPDFDest_GetLocationInPageStatic = GetPDFiumFunction<FPDFDest_GetLocationInPage_Delegate>(nameof(FPDFDest_GetLocationInPage));
             FPDFLink_GetLinkAtPointStatic = GetPDFiumFunction<FPDFLink_GetLinkAtPoint_Delegate>(nameof(FPDFLink_GetLinkAtPoint));
             FPDFLink_GetLinkZOrderAtPointStatic = GetPDFiumFunction<FPDFLink_GetLinkZOrderAtPoint_Delegate>(nameof(FPDFLink_GetLinkZOrderAtPoint));
@@ -618,8 +654,8 @@
             FPDFLink_GetAnnotRectStatic = GetPDFiumFunction<FPDFLink_GetAnnotRect_Delegate>(nameof(FPDFLink_GetAnnotRect));
             FPDFLink_CountQuadPointsStatic = GetPDFiumFunction<FPDFLink_CountQuadPoints_Delegate>(nameof(FPDFLink_CountQuadPoints));
             FPDFLink_GetQuadPointsStatic = GetPDFiumFunction<FPDFLink_GetQuadPoints_Delegate>(nameof(FPDFLink_GetQuadPoints));
-            //// FPDF_EXPORT FPDF_ACTION FPDF_CALLCONV FPDF_GetPageAAction(FPDF_PAGE page, int aa_type);
-            //// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDF_GetFileIdentifier(FPDF_DOCUMENT document, FPDF_FILEIDTYPE id_type, void* buffer, unsigned long buflen);
+            FPDF_GetPageAActionStatic = GetPDFiumFunction<FPDF_GetPageAAction_Delegate>(nameof(FPDF_GetPageAAction));
+            FPDF_GetFileIdentifierStatic = GetPDFiumFunction<FPDF_GetFileIdentifier_Delegate>(nameof(FPDF_GetFileIdentifier));
             FPDF_GetMetaTextStatic = GetPDFiumFunction<FPDF_GetMetaText_Delegate>(nameof(FPDF_GetMetaText));
             FPDF_GetPageLabelStatic = GetPDFiumFunction<FPDF_GetPageLabel_Delegate>(nameof(FPDF_GetPageLabel));
         }

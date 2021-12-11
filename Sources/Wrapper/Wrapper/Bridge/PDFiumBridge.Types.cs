@@ -731,6 +731,57 @@
         }
 
         /// <summary>
+        /// Print modes.
+        /// </summary>
+        internal enum FPDF_PRINTMODES
+        {
+            /// <summary>
+            /// Print mode.
+            /// </summary>
+            FPDF_PRINTMODE_EMF = 0,
+
+            /// <summary>
+            /// Print mode.
+            /// </summary>
+            FPDF_PRINTMODE_TEXTONLY = 1,
+
+            /// <summary>
+            /// Print mode.
+            /// </summary>
+            FPDF_PRINTMODE_POSTSCRIPT2 = 2,
+
+            /// <summary>
+            /// Print mode.
+            /// </summary>
+            FPDF_PRINTMODE_POSTSCRIPT3 = 3,
+
+            /// <summary>
+            /// Print mode.
+            /// </summary>
+            FPDF_PRINTMODE_POSTSCRIPT2_PASSTHROUGH = 4,
+
+            /// <summary>
+            /// Print mode.
+            /// </summary>
+            FPDF_PRINTMODE_POSTSCRIPT3_PASSTHROUGH = 5,
+
+            /// <summary>
+            /// Print mode.
+            /// </summary>
+            FPDF_PRINTMODE_EMF_IMAGE_MASKS = 6,
+
+            /// <summary>
+            /// Print mode.
+            /// </summary>
+            FPDF_PRINTMODE_POSTSCRIPT3_TYPE42 = 7,
+
+            /// <summary>
+            /// Print mode.
+            /// </summary>
+            FPDF_PRINTMODE_POSTSCRIPT3_TYPE42_PASSTHROUGH = 8,
+        }
+
+        /// <summary>
         /// Color struct represents a 32-bit value specifing the color, in 8888 ARGB format.
         /// </summary>
         [StructLayout(LayoutKind.Explicit)]

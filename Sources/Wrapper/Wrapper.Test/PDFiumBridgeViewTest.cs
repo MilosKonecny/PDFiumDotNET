@@ -57,8 +57,6 @@
         [TestMethod]
         public void FPDFVIEW_GetLastError_OpenPdf_Fail()
         {
-            // The test will be successful for (net48), but fails for (netcoreapp3.1).
-            // Here is such error described: https://bugs.chromium.org/p/pdfium/issues/detail?id=452
             var bridge = new PDFiumBridge();
             var document = bridge.FPDF_LoadDocument(@"FileDoesNotExist.pdf", null);
             Assert.IsFalse(document.IsValid);
