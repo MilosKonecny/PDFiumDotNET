@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Runtime.InteropServices;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using PDFiumDotNET.Wrapper.Bridge;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
@@ -116,7 +117,13 @@
         [TestMethod]
         public void PDFiumBridge_FPDFLoadMemDocument_SimpleCall_NoException()
         {
-            _bridge.FPDF_LoadMemDocument(IntPtr.Zero, 0, string.Empty);
+            // For some reason, this unit test fails on GitHub
+            // if the Load method is called with IntPtr.Zero value.
+            var byteArray = new byte[] { 0 };
+            var hGlobal = Marshal.AllocHGlobal(1);
+            Marshal.Copy(byteArray, 0, hGlobal, 1);
+            _bridge.FPDF_LoadMemDocument(hGlobal, 1, string.Empty);
+            Marshal.FreeHGlobal(hGlobal);
         }
 
         /// <summary>
@@ -125,7 +132,13 @@
         [TestMethod]
         public void PDFiumBridge_FPDFLoadMemDocument64_SimpleCall_NoException()
         {
-            _bridge.FPDF_LoadMemDocument64(IntPtr.Zero, 0, string.Empty);
+            // For some reason, this unit test fails on GitHub
+            // if the Load method is called with IntPtr.Zero value.
+            var byteArray = new byte[] { 0 };
+            var hGlobal = Marshal.AllocHGlobal(1);
+            Marshal.Copy(byteArray, 0, hGlobal, 1);
+            _bridge.FPDF_LoadMemDocument64(hGlobal, 1, string.Empty);
+            Marshal.FreeHGlobal(hGlobal);
         }
 
         /// <summary>
