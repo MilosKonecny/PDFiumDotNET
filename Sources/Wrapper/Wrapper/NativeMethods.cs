@@ -148,9 +148,15 @@
         /// <typeparam name="T">Type of structure.</typeparam>
         /// <param name="array">Array to convert.</param>
         /// <returns>Converted array.</returns>
+        /// <remarks>Don't forget to call <see cref="Marshal.FreeHGlobal"/>.</remarks>
         public static IntPtr StructureArrayToIntPtr<T>(T[] array)
             where T : struct
         {
+            if (array == null)
+            {
+                return IntPtr.Zero;
+            }
+
             int structSize = Marshal.SizeOf(typeof(T));
             int size = array.Length * structSize;
             IntPtr ptr = Marshal.AllocHGlobal(size);

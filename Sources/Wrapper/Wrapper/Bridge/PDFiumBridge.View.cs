@@ -84,41 +84,58 @@
         //////          None.
         ////FPDF_EXPORT void FPDF_CALLCONV FPDF_SetTypefaceAccessibleFunc(PDFiumEnsureTypefaceCharactersAccessible func);
 
-        ////// Experimental API.
-        ////// Function: FPDF_SetPrintTextWithGDI
-        //////          Set whether to use GDI to draw fonts when printing on Windows.
-        ////// Parameters:
-        //////          use_gdi -   Set to true to enable printing text with GDI.
-        ////// Return value:
-        //////          None.
-        ////FPDF_EXPORT void FPDF_CALLCONV FPDF_SetPrintTextWithGDI(FPDF_BOOL use_gdi);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate void FPDF_SetPrintTextWithGDI_Delegate(bool use_gdi);
 
-        ////// Experimental API.
-        ////// Function: FPDF_SetPrintMode
-        //////          Set printing mode when printing on Windows.
-        ////// Parameters:
-        //////          mode - FPDF_PRINTMODE_EMF to output EMF (default)
-        //////                 FPDF_PRINTMODE_TEXTONLY to output text only (for charstream
-        //////                 devices)
-        //////                 FPDF_PRINTMODE_POSTSCRIPT2 to output level 2 PostScript into
-        //////                 EMF as a series of GDI comments.
-        //////                 FPDF_PRINTMODE_POSTSCRIPT3 to output level 3 PostScript into
-        //////                 EMF as a series of GDI comments.
-        //////                 FPDF_PRINTMODE_POSTSCRIPT2_PASSTHROUGH to output level 2
-        //////                 PostScript via ExtEscape() in PASSTHROUGH mode.
-        //////                 FPDF_PRINTMODE_POSTSCRIPT3_PASSTHROUGH to output level 3
-        //////                 PostScript via ExtEscape() in PASSTHROUGH mode.
-        //////                 FPDF_PRINTMODE_EMF_IMAGE_MASKS to output EMF, with more
-        //////                 efficient processing of documents containing image masks.
-        //////                 FPDF_PRINTMODE_POSTSCRIPT3_TYPE42 to output level 3
-        //////                 PostScript with embedded Type 42 fonts, when applicable, into
-        //////                 EMF as a series of GDI comments.
-        //////                 FPDF_PRINTMODE_POSTSCRIPT3_TYPE42_PASSTHROUGH to output level
-        //////                 3 PostScript with embedded Type 42 fonts, when applicable,
-        //////                 via ExtEscape() in PASSTHROUGH mode.
-        ////// Return value:
-        //////          True if successful, false if unsuccessful (typically invalid input).
-        ////FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDF_SetPrintMode(int mode);
+        private static FPDF_SetPrintTextWithGDI_Delegate FPDF_SetPrintTextWithGDIStatic { get; set; }
+
+        /// <summary>
+        /// Experimental API.
+        /// Set whether to use GDI to draw fonts when printing on Windows.
+        /// </summary>
+        /// <param name="use_gdi">Set to true to enable printing text with GDI.</param>
+        /// <remarks>
+        /// FPDF_EXPORT void FPDF_CALLCONV FPDF_SetPrintTextWithGDI(FPDF_BOOL use_gdi);.
+        /// </remarks>
+        public void FPDF_SetPrintTextWithGDI(bool use_gdi)
+        {
+            lock (_syncObject)
+            {
+                FPDF_SetPrintTextWithGDIStatic(use_gdi);
+            }
+        }
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate bool FPDF_SetPrintMode_Delegate(FPDF_PRINTMODES mode);
+
+        private static FPDF_SetPrintMode_Delegate FPDF_SetPrintModeStatic { get; set; }
+
+        /// <summary>
+        /// Experimental API.
+        /// Set printing mode when printing on Windows.
+        /// </summary>
+        /// <param name="mode">
+        /// FPDF_PRINTMODE_EMF to output EMF (default)
+        /// FPDF_PRINTMODE_TEXTONLY to output text only (for charstream devices)
+        /// FPDF_PRINTMODE_POSTSCRIPT2 to output level 2 PostScript into EMF as a series of GDI comments.
+        /// FPDF_PRINTMODE_POSTSCRIPT3 to output level 3 PostScript into EMF as a series of GDI comments.
+        /// FPDF_PRINTMODE_POSTSCRIPT2_PASSTHROUGH to output level 2 PostScript via ExtEscape() in PASSTHROUGH mode.
+        /// FPDF_PRINTMODE_POSTSCRIPT3_PASSTHROUGH to output level 3 PostScript via ExtEscape() in PASSTHROUGH mode.
+        /// FPDF_PRINTMODE_EMF_IMAGE_MASKS to output EMF, with more efficient processing of documents containing image masks.
+        /// FPDF_PRINTMODE_POSTSCRIPT3_TYPE42 to output level 3 PostScript with embedded Type 42 fonts, when applicable, into EMF as a series of GDI comments.
+        /// FPDF_PRINTMODE_POSTSCRIPT3_TYPE42_PASSTHROUGH to output level 3 PostScript with embedded Type 42 fonts, when applicable, via ExtEscape() in PASSTHROUGH mode.
+        /// </param>
+        /// <returns>True if successful, false if unsuccessful (typically invalid input).</returns>
+        /// <remarks>
+        /// FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDF_SetPrintMode(int mode);.
+        /// </remarks>
+        public bool FPDF_SetPrintMode(FPDF_PRINTMODES mode)
+        {
+            lock (_syncObject)
+            {
+                return FPDF_SetPrintModeStatic(mode);
+            }
+        }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_DOCUMENT FPDF_LoadDocument_Delegate([MarshalAs(UnmanagedType.LPStr)] string file_path, [MarshalAs(UnmanagedType.LPStr)] string password);
@@ -146,52 +163,64 @@
             }
         }
 
-        ////// Function: FPDF_LoadMemDocument
-        //////          Open and load a PDF document from memory.
-        ////// Parameters:
-        //////          data_buf    -   Pointer to a buffer containing the PDF document.
-        //////          size        -   Number of bytes in the PDF document.
-        //////          password    -   A string used as the password for the PDF file.
-        //////                          If no password is needed, empty or NULL can be used.
-        ////// Return value:
-        //////          A handle to the loaded document, or NULL on failure.
-        ////// Comments:
-        //////          The memory buffer must remain valid when the document is open.
-        //////          The loaded document can be closed by FPDF_CloseDocument.
-        //////          If this function fails, you can use FPDF_GetLastError() to retrieve
-        //////          the reason why it failed.
-        //////
-        //////          See the comments for FPDF_LoadDocument() regarding the encoding for
-        //////          |password|.
-        ////// Notes:
-        //////          If PDFium is built with the XFA module, the application should call
-        //////          FPDF_LoadXFA() function after the PDF document loaded to support XFA
-        //////          fields defined in the fpdfformfill.h file.
-        ////FPDF_EXPORT FPDF_DOCUMENT FPDF_CALLCONV FPDF_LoadMemDocument(const void* data_buf, int size, FPDF_BYTESTRING password);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate FPDF_DOCUMENT FPDF_LoadMemDocument_Delegate(IntPtr data_buf, int size, [MarshalAs(UnmanagedType.LPStr)] string password);
 
-        ////// Experimental API.
-        ////// Function: FPDF_LoadMemDocument64
-        //////          Open and load a PDF document from memory.
-        ////// Parameters:
-        //////          data_buf    -   Pointer to a buffer containing the PDF document.
-        //////          size        -   Number of bytes in the PDF document.
-        //////          password    -   A string used as the password for the PDF file.
-        //////                          If no password is needed, empty or NULL can be used.
-        ////// Return value:
-        //////          A handle to the loaded document, or NULL on failure.
-        ////// Comments:
-        //////          The memory buffer must remain valid when the document is open.
-        //////          The loaded document can be closed by FPDF_CloseDocument.
-        //////          If this function fails, you can use FPDF_GetLastError() to retrieve
-        //////          the reason why it failed.
-        //////
-        //////          See the comments for FPDF_LoadDocument() regarding the encoding for
-        //////          |password|.
-        ////// Notes:
-        //////          If PDFium is built with the XFA module, the application should call
-        //////          FPDF_LoadXFA() function after the PDF document loaded to support XFA
-        //////          fields defined in the fpdfformfill.h file.
-        ////FPDF_EXPORT FPDF_DOCUMENT FPDF_CALLCONV FPDF_LoadMemDocument64(const void* data_buf, size_t size, FPDF_BYTESTRING password);
+        private static FPDF_LoadMemDocument_Delegate FPDF_LoadMemDocumentStatic { get; set; }
+
+        /// <summary>
+        /// Open and load a PDF document from memory.
+        /// </summary>
+        /// <param name="data_buf">Pointer to a buffer containing the PDF document.</param>
+        /// <param name="size">Number of bytes in the PDF document.</param>
+        /// <param name="password">A string used as the password for the PDF file. If no password is needed, empty or NULL can be used.</param>
+        /// <returns>A handle to the loaded document, or NULL on failure.</returns>
+        /// <remarks>
+        /// The memory buffer must remain valid when the document is open.
+        /// The loaded document can be closed by FPDF_CloseDocument.
+        /// If this function fails, you can use FPDF_GetLastError() to retrieve the reason why it failed.
+        /// See the comments for <see cref="FPDF_LoadDocument"/> regarding the encoding for |password|.
+        /// If PDFium is built with the XFA module, the application should call FPDF_LoadXFA() function
+        /// after the PDF document loaded to support XFA fields defined in the fpdfformfill.h file.
+        /// FPDF_EXPORT FPDF_DOCUMENT FPDF_CALLCONV FPDF_LoadMemDocument(const void* data_buf, int size, FPDF_BYTESTRING password);.
+        /// </remarks>
+        public FPDF_DOCUMENT FPDF_LoadMemDocument(IntPtr data_buf, int size, [MarshalAs(UnmanagedType.LPStr)] string password)
+        {
+            lock (_syncObject)
+            {
+                return FPDF_LoadMemDocumentStatic(data_buf, size, password);
+            }
+        }
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate FPDF_DOCUMENT FPDF_LoadMemDocument64_Delegate(IntPtr data_buf, int size, [MarshalAs(UnmanagedType.LPStr)] string password);
+
+        private static FPDF_LoadMemDocument64_Delegate FPDF_LoadMemDocument64Static { get; set; }
+
+        /// <summary>
+        /// Experimental API.
+        /// Open and load a PDF document from memory.
+        /// </summary>
+        /// <param name="data_buf">Pointer to a buffer containing the PDF document.</param>
+        /// <param name="size">Number of bytes in the PDF document.</param>
+        /// <param name="password">A string used as the password for the PDF file. If no password is needed, empty or NULL can be used.</param>
+        /// <returns>A handle to the loaded document, or NULL on failure.</returns>
+        /// <remarks>
+        /// The memory buffer must remain valid when the document is open.
+        /// The loaded document can be closed by FPDF_CloseDocument.
+        /// If this function fails, you can use FPDF_GetLastError() to retrieve the reason why it failed.
+        /// See the comments for FPDF_LoadDocument() regarding the encoding for |password|.
+        /// If PDFium is built with the XFA module, the application should call FPDF_LoadXFA() function
+        /// after the PDF document loaded to support XFA fields defined in the fpdfformfill.h file.
+        /// FPDF_EXPORT FPDF_DOCUMENT FPDF_CALLCONV FPDF_LoadMemDocument64(const void* data_buf, size_t size, FPDF_BYTESTRING password);.
+        /// </remarks>
+        public FPDF_DOCUMENT FPDF_LoadMemDocument64(IntPtr data_buf, int size, [MarshalAs(UnmanagedType.LPStr)] string password)
+        {
+            lock (_syncObject)
+            {
+                return FPDF_LoadMemDocument64Static(data_buf, size, password);
+            }
+        }
 
         ////// Function: FPDF_LoadCustomDocument
         //////          Load PDF document from a custom access descriptor.
@@ -283,21 +312,31 @@
             }
         }
 
-        ////// Experimental API.
-        ////// Function: FPDF_GetTrailerEnds
-        //////          Get the byte offsets of trailer ends.
-        ////// Parameters:
-        //////          document    -   Handle to document. Returned by FPDF_LoadDocument().
-        //////          buffer      -   The address of a buffer that receives the
-        //////                          byte offsets.
-        //////          length      -   The size, in ints, of |buffer|.
-        ////// Return value:
-        //////          Returns the number of ints in the buffer on success, 0 on error.
-        //////
-        ////// |buffer| is an array of integers that describes the exact byte offsets of the
-        ////// trailer ends in the document. If |length| is less than the returned length,
-        ////// or |document| or |buffer| is NULL, |buffer| will not be modified.
-        ////FPDF_EXPORT unsigned long FPDF_CALLCONV FPDF_GetTrailerEnds(FPDF_DOCUMENT document, unsigned int* buffer, unsigned long length);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate ulong FPDF_GetTrailerEnds_Delegate(FPDF_DOCUMENT document, IntPtr buffer, ulong length);
+
+        private static FPDF_GetTrailerEnds_Delegate FPDF_GetTrailerEndsStatic { get; set; }
+
+        /// <summary>
+        /// Experimental API.
+        /// Get the byte offsets of trailer ends.
+        /// </summary>
+        /// <param name="document">Handle to document. Returned by FPDF_LoadDocument().</param>
+        /// <param name="buffer">The address of a buffer that receives the byte offsets.</param>
+        /// <param name="length">The size, in ints, of |buffer|.</param>
+        /// <returns>Returns the number of ints in the buffer on success, 0 on error.</returns>
+        /// <remarks>
+        /// |buffer| is an array of integers that describes the exact byte offsets of the trailer ends in the document.
+        /// If |length| is less than the returned length, or |document| or |buffer| is NULL, |buffer| will not be modified.
+        /// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDF_GetTrailerEnds(FPDF_DOCUMENT document, unsigned int* buffer, unsigned long length);.
+        /// </remarks>
+        public ulong FPDF_GetTrailerEnds(FPDF_DOCUMENT document, IntPtr buffer, ulong length)
+        {
+            lock (_syncObject)
+            {
+                return FPDF_GetTrailerEndsStatic(document, buffer, length);
+            }
+        }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_PERMISSIONS FPDF_GetDocPermissions_Delegate(FPDF_DOCUMENT document);
@@ -321,15 +360,27 @@
             }
         }
 
-        ////// Function: FPDF_GetSecurityHandlerRevision
-        //////          Get the revision for the security handler.
-        ////// Parameters:
-        //////          document    -   Handle to a document. Returned by FPDF_LoadDocument.
-        ////// Return value:
-        //////          The security handler revision number. Please refer to the PDF
-        //////          Reference for a detailed description. If the document is not
-        //////          protected, -1 will be returned.
-        ////FPDF_EXPORT int FPDF_CALLCONV FPDF_GetSecurityHandlerRevision(FPDF_DOCUMENT document);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate int FPDF_GetSecurityHandlerRevision_Delegate(FPDF_DOCUMENT document);
+
+        private static FPDF_GetSecurityHandlerRevision_Delegate FPDF_GetSecurityHandlerRevisionStatic { get; set; }
+
+        /// <summary>
+        /// Get the revision for the security handler.
+        /// </summary>
+        /// <param name="document">Handle to a document. Returned by FPDF_LoadDocument.</param>
+        /// <returns>The security handler revision number. Please refer to the PDF Reference for a detailed description.
+        /// If the document is not protected, -1 will be returned.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT int FPDF_CALLCONV FPDF_GetSecurityHandlerRevision(FPDF_DOCUMENT document);.
+        /// </remarks>
+        public int FPDF_GetSecurityHandlerRevision(FPDF_DOCUMENT document)
+        {
+            lock (_syncObject)
+            {
+                return FPDF_GetSecurityHandlerRevisionStatic(document);
+            }
+        }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDF_GetPageCount_Delegate(FPDF_DOCUMENT document);
@@ -1194,12 +1245,22 @@
         private static void LoadDllViewPart1()
         {
             FPDF_InitLibraryStatic = GetPDFiumFunction<FPDF_InitLibrary_Delegate>(nameof(FPDF_InitLibrary));
+            ////FPDF_EXPORT void FPDF_CALLCONV FPDF_InitLibraryWithConfig(const FPDF_LIBRARY_CONFIG* config);
             FPDF_DestroyLibraryStatic = GetPDFiumFunction<FPDF_DestroyLibrary_Delegate>(nameof(FPDF_DestroyLibrary));
+            ////FPDF_EXPORT void FPDF_CALLCONV FPDF_SetSandBoxPolicy(FPDF_DWORD policy, FPDF_BOOL enable);
+            ////FPDF_EXPORT void FPDF_CALLCONV FPDF_SetTypefaceAccessibleFunc(PDFiumEnsureTypefaceCharactersAccessible func);
+            FPDF_SetPrintTextWithGDIStatic = GetPDFiumFunction<FPDF_SetPrintTextWithGDI_Delegate>(nameof(FPDF_SetPrintTextWithGDI));
+            FPDF_SetPrintModeStatic = GetPDFiumFunction<FPDF_SetPrintMode_Delegate>(nameof(FPDF_SetPrintMode));
             FPDF_LoadDocumentStatic = GetPDFiumFunction<FPDF_LoadDocument_Delegate>(nameof(FPDF_LoadDocument));
+            FPDF_LoadMemDocumentStatic = GetPDFiumFunction<FPDF_LoadMemDocument_Delegate>(nameof(FPDF_LoadMemDocument));
+            FPDF_LoadMemDocument64Static = GetPDFiumFunction<FPDF_LoadMemDocument64_Delegate>(nameof(FPDF_LoadMemDocument64));
+            ////FPDF_EXPORT FPDF_DOCUMENT FPDF_CALLCONV FPDF_LoadCustomDocument(FPDF_FILEACCESS* pFileAccess, FPDF_BYTESTRING password);
             FPDF_GetFileVersionStatic = GetPDFiumFunction<FPDF_GetFileVersion_Delegate>(nameof(FPDF_GetFileVersion));
             FPDF_GetLastErrorStatic = GetPDFiumFunction<FPDF_GetLastError_Delegate>(nameof(FPDF_GetLastError));
             FPDF_DocumentHasValidCrossReferenceTableStatic = GetPDFiumFunction<FPDF_DocumentHasValidCrossReferenceTable_Delegate>(nameof(FPDF_DocumentHasValidCrossReferenceTable));
+            FPDF_GetTrailerEndsStatic = GetPDFiumFunction<FPDF_GetTrailerEnds_Delegate>(nameof(FPDF_GetTrailerEnds));
             FPDF_GetDocPermissionsStatic = GetPDFiumFunction<FPDF_GetDocPermissions_Delegate>(nameof(FPDF_GetDocPermissions));
+            FPDF_GetSecurityHandlerRevisionStatic = GetPDFiumFunction<FPDF_GetSecurityHandlerRevision_Delegate>(nameof(FPDF_GetSecurityHandlerRevision));
             FPDF_GetPageCountStatic = GetPDFiumFunction<FPDF_GetPageCount_Delegate>(nameof(FPDF_GetPageCount));
             FPDF_LoadPageStatic = GetPDFiumFunction<FPDF_LoadPage_Delegate>(nameof(FPDF_LoadPage));
             FPDF_GetPageWidthFStatic = GetPDFiumFunction<FPDF_GetPageWidthF_Delegate>(nameof(FPDF_GetPageWidthF));
@@ -1209,8 +1270,10 @@
             FPDF_GetPageBoundingBoxStatic = GetPDFiumFunction<FPDF_GetPageBoundingBox_Delegate>(nameof(FPDF_GetPageBoundingBox));
             FPDF_GetPageSizeByIndexFStatic = GetPDFiumFunction<FPDF_GetPageSizeByIndexF_Delegate>(nameof(FPDF_GetPageSizeByIndexF));
             FPDF_GetPageSizeByIndexStatic = GetPDFiumFunction<FPDF_GetPageSizeByIndex_Delegate>(nameof(FPDF_GetPageSizeByIndex));
+            ////FPDF_EXPORT void FPDF_CALLCONV FPDF_RenderPage(HDC dc, FPDF_PAGE page, int start_x, int start_y, int size_x, int size_y, int rotate, int flags);
             FPDF_RenderPageBitmapStatic = GetPDFiumFunction<FPDF_RenderPageBitmap_Delegate>(nameof(FPDF_RenderPageBitmap));
             FPDF_RenderPageBitmapWithMatrixStatic = GetPDFiumFunction<FPDF_RenderPageBitmapWithMatrix_Delegate>(nameof(FPDF_RenderPageBitmapWithMatrix));
+            ////FPDF_EXPORT FPDF_RECORDER FPDF_CALLCONV FPDF_RenderPageSkp(FPDF_PAGE page, int size_x, int size_y);
             FPDF_ClosePageStatic = GetPDFiumFunction<FPDF_ClosePage_Delegate>(nameof(FPDF_ClosePage));
             FPDF_CloseDocumentStatic = GetPDFiumFunction<FPDF_CloseDocument_Delegate>(nameof(FPDF_CloseDocument));
         }

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Runtime.InteropServices;
     using System.Runtime.Serialization;
 
@@ -22,7 +23,7 @@
         /// Initializes a new instance of the <see cref="PDFiumLibraryNotLoadedException"/> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public PDFiumLibraryNotLoadedException(string message)
+        public PDFiumLibraryNotLoadedException([Localizable(false)] string message)
             : base(message)
         {
         }
@@ -32,7 +33,7 @@
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
         /// <param name="innerException">The exception that is the cause of the current exception, or a null reference if no inner exception is specified.</param>
-        public PDFiumLibraryNotLoadedException(string message, Exception innerException)
+        public PDFiumLibraryNotLoadedException([Localizable(false)] string message, Exception innerException)
             : base(message, innerException)
         {
         }
