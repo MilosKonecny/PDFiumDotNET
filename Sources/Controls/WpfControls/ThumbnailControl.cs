@@ -1,19 +1,11 @@
-﻿#if WpfControls
-namespace PDFiumDotNET.WpfControls
-#else
-namespace PDFiumDotNET.WpfCoreControls
-#endif
+﻿namespace PDFiumDotNET.WpfControls
 {
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using PDFiumDotNET.Components.Contracts.Page;
-#if WpfControls
     using PDFiumDotNET.WpfControls.Helper;
-#else
-    using PDFiumDotNET.WpfCoreControls.Helper;
-#endif
 
 
     /// <summary>

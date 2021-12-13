@@ -1,8 +1,4 @@
-﻿#if WpfControls
-namespace PDFiumDotNET.WpfControls
-#else
-namespace PDFiumDotNET.WpfCoreControls
-#endif
+﻿namespace PDFiumDotNET.WpfControls
 {
     using System;
     using System.Collections.Generic;
@@ -14,11 +10,7 @@ namespace PDFiumDotNET.WpfCoreControls
     using System.Windows.Media.Imaging;
     using PDFiumDotNET.Components.Contracts.Adapters;
     using PDFiumDotNET.Components.Contracts.Page;
-#if WpfControls
     using PDFiumDotNET.WpfControls.Helper;
-#else
-    using PDFiumDotNET.WpfCoreControls.Helper;
-#endif
 
     /// <summary>
     /// View class shows pages from opened PDF document.

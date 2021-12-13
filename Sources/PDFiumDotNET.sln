@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30225.117
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3F0204E0-2155-4433-8314-C8CB97341616}"
 	ProjectSection(SolutionItems) = preProject
@@ -33,9 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFiumDotNET.Samples.Simple
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controls", "Controls", "{E7CEDADC-4B97-4BA8-97EF-0F3306AE7057}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFiumDotNET.WpfControls", "Controls\WpfControls\PDFiumDotNET.WpfControls.csproj", "{0BCAC3A2-5ACB-4FCD-AD3A-2A1E226DC693}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.WpfCoreControls", "Controls\WpfCoreControls\PDFiumDotNET.WpfCoreControls.csproj", "{ADF2387D-A099-4A84-B64C-ADD6CE626D2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.WpfControls", "Controls\WpfControls\PDFiumDotNET.WpfControls.csproj", "{0BCAC3A2-5ACB-4FCD-AD3A-2A1E226DC693}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.Components.Factory", "Components\Components.Factory\PDFiumDotNET.Components.Factory.csproj", "{501C6E92-72DD-4944-8822-2483920E44B4}"
 EndProject
@@ -73,10 +71,6 @@ Global
 		{0BCAC3A2-5ACB-4FCD-AD3A-2A1E226DC693}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BCAC3A2-5ACB-4FCD-AD3A-2A1E226DC693}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BCAC3A2-5ACB-4FCD-AD3A-2A1E226DC693}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ADF2387D-A099-4A84-B64C-ADD6CE626D2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ADF2387D-A099-4A84-B64C-ADD6CE626D2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ADF2387D-A099-4A84-B64C-ADD6CE626D2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ADF2387D-A099-4A84-B64C-ADD6CE626D2D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{501C6E92-72DD-4944-8822-2483920E44B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{501C6E92-72DD-4944-8822-2483920E44B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{501C6E92-72DD-4944-8822-2483920E44B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -93,7 +87,6 @@ Global
 		{2E26ED44-85FE-401E-8954-C38103253F1B} = {F0F26C63-E33F-494D-B376-3DD9823FAF98}
 		{F2A1A9EC-C144-4F5C-9142-7E4C1E3BBAF2} = {1D8395C4-4774-488C-BAC4-B0F2ADD6E85B}
 		{0BCAC3A2-5ACB-4FCD-AD3A-2A1E226DC693} = {E7CEDADC-4B97-4BA8-97EF-0F3306AE7057}
-		{ADF2387D-A099-4A84-B64C-ADD6CE626D2D} = {E7CEDADC-4B97-4BA8-97EF-0F3306AE7057}
 		{501C6E92-72DD-4944-8822-2483920E44B4} = {F0F26C63-E33F-494D-B376-3DD9823FAF98}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
