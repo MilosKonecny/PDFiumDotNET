@@ -1,8 +1,4 @@
-﻿#if WpfControls
-namespace PDFiumDotNET.WpfControls
-#else
-namespace PDFiumDotNET.WpfCoreControls
-#endif
+﻿namespace PDFiumDotNET.WpfControls
 {
     using System.Collections.Generic;
     using System.Linq;

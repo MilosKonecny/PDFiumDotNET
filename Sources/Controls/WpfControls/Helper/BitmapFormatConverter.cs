@@ -1,8 +1,4 @@
-﻿#if WpfControls
-namespace PDFiumDotNET.WpfControls.Helper
-#else
-namespace PDFiumDotNET.WpfCoreControls.Helper
-#endif
+﻿namespace PDFiumDotNET.WpfControls.Helper
 {
     using System.Windows.Media;
     using PDFiumDotNET.Components.Contracts.Bitmap;
