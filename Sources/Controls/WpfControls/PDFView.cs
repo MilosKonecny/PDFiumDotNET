@@ -75,6 +75,21 @@
 
         private double _oldZoomFactor = -1d;
 
+        /// <summary>
+        /// Variable used to support scroll through mouse and stylus dragging.
+        /// </summary>
+        private Point _startDragPoint = new Point(-1, -1);
+
+        /// <summary>
+        /// Variable used to support scroll through mouse and stylus dragging.
+        /// </summary>
+        private double _startHorizontalOffset;
+
+        /// <summary>
+        /// Variable used to support scroll through mouse and stylus dragging.
+        /// </summary>
+        private double _startVerticalOffset;
+
         #endregion Private fields
 
         #region Constructors
@@ -268,12 +283,24 @@
 
             if (e != null)
             {
-                var point = e.GetPosition(this);
-                var link = GetLinkOnPosition(point);
-                if (link != null)
+                if (e.LeftButton == MouseButtonState.Pressed)
                 {
-                    Cursor = Cursors.Hand;
-                    return;
+                    if (_startDragPoint.X != -1 && _startDragPoint.Y != -1)
+                    {
+                        var newDragPoint = e.GetPosition(this);
+                        HorizontalOffset = _startHorizontalOffset + _startDragPoint.X - newDragPoint.X;
+                        VerticalOffset = _startVerticalOffset + _startDragPoint.Y - newDragPoint.Y;
+                    }
+                }
+                else
+                {
+                    var point = e.GetPosition(this);
+                    var link = GetLinkOnPosition(point);
+                    if (link != null)
+                    {
+                        Cursor = Cursors.Hand;
+                        return;
+                    }
                 }
             }
 
@@ -283,9 +310,23 @@
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+
+            _startHorizontalOffset = HorizontalOffset;
+            _startVerticalOffset = VerticalOffset;
+            _startDragPoint = e.GetPosition(this);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonUp(e);
+
+            _startDragPoint = new Point(-1, -1);
 
             if (e != null)
             {
