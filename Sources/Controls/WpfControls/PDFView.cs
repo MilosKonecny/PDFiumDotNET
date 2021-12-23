@@ -314,9 +314,12 @@
         {
             base.OnMouseLeftButtonDown(e);
 
-            _startHorizontalOffset = HorizontalOffset;
-            _startVerticalOffset = VerticalOffset;
-            _startDragPoint = e.GetPosition(this);
+            if (e != null)
+            {
+                _startHorizontalOffset = HorizontalOffset;
+                _startVerticalOffset = VerticalOffset;
+                _startDragPoint = e.GetPosition(this);
+            }
         }
 
         /// <summary>

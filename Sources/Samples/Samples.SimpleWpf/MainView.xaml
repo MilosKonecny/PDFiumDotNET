@@ -68,10 +68,45 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="5" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="5" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <!-- Menu -->
+        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="{Binding ElementName=MainViewName, Path=Background}">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open" Command="{Binding Path=OpenCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="Resources\Menu\BlueUI\icons8_pdf.ico" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Close" Command="{Binding Path=CloseCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="Resources\Menu\BlueUI\icons8_close.ico" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Properties" Command="{Binding Path=InformationCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="Resources\Menu\BlueUI\icons8_search_property.ico" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="_Exit" Command="{Binding Path=ExitCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="Resources\Menu\BlueUI\icons8_shutdown.ico" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About" Command="{Binding Path=AboutCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="Resources\Menu\BlueUI\icons8_about.ico" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
         <!-- Splitter -->
-        <GridSplitter x:Name="_splitter" Grid.Row="2" Grid.Column="1" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+        <GridSplitter x:Name="_splitter" Grid.Row="4" Grid.Column="1" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch">
             <GridSplitter.Background>
                 <SolidColorBrush x:Name="_splitterBackground" Color="White"/>
             </GridSplitter.Background>
@@ -93,7 +128,7 @@
             </GridSplitter.Triggers>
         </GridSplitter>
         <!-- Toolbar -->
-        <WrapPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+        <WrapPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
             <WrapPanel.Resources>
                 <Style TargetType="TextBlock">
                     <Setter Property="VerticalAlignment" Value="Center"/>
@@ -108,28 +143,30 @@
             </WrapPanel.Resources>
             <StackPanel Orientation="Horizontal" Margin="0,5,10,5">
                 <Button Command="{Binding Path=OpenCommand}" ToolTip="Open PDF document">
-                    <wpfControl:AutoDisabledImage Source="Resources\open_40px.png"/>
+                    <wpfControl:AutoDisabledImage Source="Resources\Toolbar\BlueUI\icons8_pdf_40px.png"/>
                 </Button>
                 <Button Command="{Binding Path=CloseCommand}" ToolTip="Close PDF document">
-                    <wpfControl:AutoDisabledImage Source="Resources\close_40px.png"/>
+                    <wpfControl:AutoDisabledImage Source="Resources\Toolbar\BlueUI\icons8_close_40px.png"/>
                 </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,10,5">
                 <Button Command="{Binding Path=InformationCommand}" ToolTip="Document information">
-                    <wpfControl:AutoDisabledImage Source="Resources\show_property_40px.png"/>
+                    <wpfControl:AutoDisabledImage Source="Resources\Toolbar\BlueUI\icons8_search_property_40px.png"/>
                 </Button>
                 <ToggleButton x:Name="_showAnnotationsToggleButton"
                               Command="{Binding Path=ShowAnnotationsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" ToolTip="Show document annotations">
-                    <wpfControl:AutoDisabledImage Source="Resources\note_40px.png"/>
+                    <wpfControl:AutoDisabledImage Source="Resources\Toolbar\BlueUI\icons8_note_40px.png"/>
                 </ToggleButton>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,10,5">
                 <Button Command="{Binding Path=ZoomWidthCommand}" ToolTip="Zoom to width of widest page">
-                    <wpfControl:AutoDisabledImage Source="Resources\width_40px.png"/>
+                    <wpfControl:AutoDisabledImage Source="Resources\Toolbar\BlueUI\icons8_width_40px.png"/>
                 </Button>
                 <Button Command="{Binding Path=ZoomHeightCommand}" ToolTip="Zoom to height of highest page">
-                    <wpfControl:AutoDisabledImage Source="Resources\height_40px.png"/>
+                    <wpfControl:AutoDisabledImage Source="Resources\Toolbar\BlueUI\icons8_height_40px.png"/>
                 </Button>
                 <Button Command="{Binding Path=ZoomOutCommand}" ToolTip="Zoom out">
-                    <wpfControl:AutoDisabledImage Source="Resources\zoom_out_40px.png"/>
+                    <wpfControl:AutoDisabledImage Source="Resources\Toolbar\BlueUI\icons8_zoom_out_40px.png"/>
                 </Button>
                 <StackPanel Orientation="Horizontal" Margin="10,0">
                     <TextBlock Text="Zoom:" />
@@ -148,15 +185,15 @@
                     <TextBlock Text="%" />
                 </StackPanel>
                 <Button Command="{Binding Path=ZoomInCommand}" ToolTip="Zoom in">
-                    <wpfControl:AutoDisabledImage Source="Resources\zoom_in_40px.png"/>
+                    <wpfControl:AutoDisabledImage Source="Resources\Toolbar\BlueUI\icons8_zoom_in_40px.png"/>
                 </Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,10,5">
                 <Button Command="{Binding Path=GoToFirstPageCommand}" ToolTip="Navigate to first page">
-                    <wpfControl:AutoDisabledImage Source="Resources\first_40px.png"/>
+                    <wpfControl:AutoDisabledImage Source="Resources\Toolbar\BlueUI\icons8_skip_to_start_40px.png"/>
                 </Button>
                 <Button Command="{Binding Path=GoToPreviousPageCommand}" ToolTip="Navigate to previous page">
-                    <wpfControl:AutoDisabledImage Source="Resources\previous_40px.png"/>
+                    <wpfControl:AutoDisabledImage Source="Resources\Toolbar\BlueUI\icons8_rewind_40px.png"/>
                 </Button>
                 <StackPanel Orientation="Horizontal" Margin="10,0">
                     <TextBlock Text="Page:" />
@@ -192,15 +229,15 @@
                     <TextBlock Text=")" />
                 </StackPanel>
                 <Button Command="{Binding Path=GoToNextPageCommand}" ToolTip="Navigate to next page">
-                    <wpfControl:AutoDisabledImage Source="Resources\next_40px.png"/>
+                    <wpfControl:AutoDisabledImage Source="Resources\Toolbar\BlueUI\icons8_fast_forward_40px.png"/>
                 </Button>
                 <Button Command="{Binding Path=GoToLastPageCommand}" ToolTip="Navigate to last page">
-                    <wpfControl:AutoDisabledImage Source="Resources\last_40px.png"/>
+                    <wpfControl:AutoDisabledImage Source="Resources\Toolbar\BlueUI\icons8_end_40px.png"/>
                 </Button>
             </StackPanel>
         </WrapPanel>
         <!-- Bookmarks & Thumbnails -->
-        <TabControl x:Name="_tabControl" Grid.Row="2" Grid.Column="0">
+        <TabControl x:Name="_tabControl" Grid.Row="4" Grid.Column="0">
             <TabItem Header="Bookmarks">
                 <Border Margin="3" BorderThickness="1" BorderBrush="{Binding ElementName=_tabControl, Path=BorderBrush}">
                     <TreeView BorderThickness="0"
@@ -293,7 +330,7 @@
             </TabItem>
         </TabControl>
         <!-- PDF -->
-        <ScrollViewer Grid.Row="2" Grid.Column="2" CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="4" Grid.Column="2" CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <wpfControl:PDFView x:Name="_pdfView"
                                 PDFPageComponent="{Binding Path=PageComponent}"
                                 PDFZoomComponent="{Binding Path=ZoomComponent}" />

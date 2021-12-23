@@ -37,7 +37,7 @@
     <DocumentationFile>bin\Release\PDFiumDotNET.Samples.SimpleWpf.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\app.ico</ApplicationIcon>
+    <ApplicationIcon>icons8_pdf.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -63,12 +63,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Base\BaseViewModel.cs" />
+    <Compile Include="Dialogs\AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\AboutViewModel.cs" />
     <Compile Include="Helper\ViewModelExtCommand.cs" />
     <Compile Include="Templates\FindTemplateSelector.cs" />
     <Compile Include="Windows\DocumentInformation.xaml.cs">
       <DependentUpon>DocumentInformation.xaml</DependentUpon>
     </Compile>
     <Page Include="CommonDialogs\TextInputView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\AboutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -124,6 +133,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Libs\PDFium\x64\LICENSE">
+      <Link>Resources\Licenses\PDFium\LICENSE</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\LICENSE">
+      <Link>Resources\Licenses\MyOwn\LICENSE</Link>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -152,32 +167,76 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\close_40px.png" />
-    <Resource Include="Resources\open_40px.png" />
+    <Resource Include="Resources\Toolbar\BlueUI\icons8_height_40px.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\first_40px.png" />
-    <Resource Include="Resources\height_40px.png" />
-    <Resource Include="Resources\last_40px.png" />
-    <Resource Include="Resources\next_40px.png" />
-    <Resource Include="Resources\previous_40px.png" />
-    <Resource Include="Resources\search_40px.png" />
-    <Resource Include="Resources\width_40px.png" />
-    <Resource Include="Resources\zoom_in_40px.png" />
-    <Resource Include="Resources\zoom_out_40px.png" />
+    <Resource Include="Resources\Toolbar\BlueUI\icons8_info_40px.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\app.ico" />
-    <Resource Include="Resources\app_40px.png" />
+    <Resource Include="Resources\Toolbar\BlueUI\icons8_last_40px.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\info_40px.png" />
+    <Resource Include="Resources\Toolbar\BlueUI\icons8_first_40px.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\show_property_40px.png" />
+    <Resource Include="Resources\Toolbar\BlueUI\icons8_next_40px.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\note_40px.png" />
+    <Resource Include="Resources\Toolbar\BlueUI\icons8_previous_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Toolbar\BlueUI\icons8_width_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Toolbar\BlueUI\icons8_zoom_out_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Toolbar\BlueUI\icons8_zoom_in_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Toolbar\BlueUI\icons8_search_property_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Toolbar\BlueUI\icons8_pdf_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Toolbar\BlueUI\icons8_note_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Toolbar\BlueUI\icons8_end_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Toolbar\BlueUI\icons8_skip_to_start_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Toolbar\BlueUI\icons8_rewind_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Toolbar\BlueUI\icons8_fast_forward_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Toolbar\BlueUI\icons8_close_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Menu\BlueUI\icons8_close.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Menu\BlueUI\icons8_pdf.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Menu\BlueUI\icons8_search_property.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Menu\BlueUI\icons8_shutdown.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Menu\BlueUI\icons8_about.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons8_pdf.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons8_pdf.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
