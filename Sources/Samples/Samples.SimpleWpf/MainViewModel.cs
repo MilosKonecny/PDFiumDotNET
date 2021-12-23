@@ -14,13 +14,14 @@
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Zoom;
     using PDFiumDotNET.Components.Factory;
+    using PDFiumDotNET.Samples.SimpleWpf.Base;
     using PDFiumDotNET.Samples.SimpleWpf.Contracts;
     using PDFiumDotNET.Samples.SimpleWpf.Helper;
 
     /// <summary>
     /// View model class for <see cref="MainView"/>.
     /// </summary>
-    public partial class MainViewModel : IViewModel, INotifyPropertyChanged
+    public partial class MainViewModel : BaseViewModel, IViewModel
     {
         #region Private fields
 
@@ -273,19 +274,6 @@
 
         #endregion Public methods
 
-        #region Private invoke event methods
-
-        /// <summary>
-        /// The method invokes the <see cref="PropertyChanged"/> event.
-        /// </summary>
-        /// <param name="propertyName">Parameter name used in <see cref="PropertyChangedEventArgs"/>.</param>
-        private void InvokePropertyChangedEvent([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName ?? string.Empty));
-        }
-
-        #endregion Private invoke event methods
-
         #region Implementation of IViewModel
 
         /// <summary>
@@ -300,6 +288,8 @@
             // Base commands
             OpenCommand = new ViewModelCommand(ExecuteOpenCommand, CanExecuteOpenCommand);
             CloseCommand = new ViewModelCommand(ExecuteCloseCommand, CanExecuteCloseCommand);
+            ExitCommand = new ViewModelCommand(ExecuteExitCommand, CanExecuteExitCommand);
+            AboutCommand = new ViewModelCommand(ExecuteAboutCommand, CanExecuteAboutCommand);
             InformationCommand = new ViewModelCommand(ExecuteInformationCommand, CanExecuteInformationCommand);
             ShowAnnotationsCommand = new ViewModelExtCommand<ToggleButton>(ExecuteShowAnnotationsCommand, CanExecuteShowAnnotationsCommand);
             // Zoom commands
@@ -407,14 +397,5 @@
         }
 
         #endregion Implementation of IViewModel
-
-        #region Implementation of INotifyPropertyChanged
-
-        /// <summary>
-        /// Occurs when a property value changes.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        #endregion Implementation of INotifyPropertyChanged
     }
 }

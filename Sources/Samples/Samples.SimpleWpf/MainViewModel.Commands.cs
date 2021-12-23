@@ -7,6 +7,7 @@
     using Microsoft.Win32;
     using PDFiumDotNET.Components.Contracts.Adapters;
     using PDFiumDotNET.Samples.SimpleWpf.CommonDialogs;
+    using PDFiumDotNET.Samples.SimpleWpf.Dialogs;
     using PDFiumDotNET.Samples.SimpleWpf.Helper;
     using PDFiumDotNET.Samples.SimpleWpf.Windows;
 
@@ -26,6 +27,16 @@
         /// Gets the close pdf command.
         /// </summary>
         public ViewModelCommand CloseCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the exit command.
+        /// </summary>
+        public ViewModelCommand ExitCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the about command.
+        /// </summary>
+        public ViewModelCommand AboutCommand { get; private set; }
 
         /// <summary>
         /// Gets the document information command.
@@ -148,6 +159,28 @@
         private bool CanExecuteCloseCommand()
         {
             return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+        }
+
+        private void ExecuteExitCommand()
+        {
+            App.Current.Shutdown();
+        }
+
+        private bool CanExecuteExitCommand()
+        {
+            return true;
+        }
+
+        private void ExecuteAboutCommand()
+        {
+            var view = new AboutView();
+            view.Owner = _view.Window;
+            view.ShowDialog();
+        }
+
+        private bool CanExecuteAboutCommand()
+        {
+            return true;
         }
 
         private void ExecuteInformationCommand()
