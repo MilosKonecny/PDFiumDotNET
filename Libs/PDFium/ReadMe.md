@@ -1,7 +1,7 @@
 ## Libs/PDFium folder
 
-I found and fixed an issue in PDFium and compiled it.
+PDFiumDotNET uses modified version of PDFium. The modification fixes error handling.
 
-Compilation is based on solution from [bblanchon/pdfium-binaries](https://github.com/bblanchon)
+Compilation of PDFium is based on the solution from [bblanchon/pdfium-binaries](https://github.com/bblanchon)
 
-Used PDFium version: [4748](https://pdfium.googlesource.com/pdfium/+/refs/heads/chromium/4748).
+Actually used PDFium version: [4787](https://pdfium.googlesource.com/pdfium/+/refs/heads/chromium/4787).

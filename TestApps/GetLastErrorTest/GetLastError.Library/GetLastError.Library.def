@@ -1,5 +1,0 @@
-LIBRARY
-
-EXPORTS
-	FPDF_LoadDocument
-	FPDF_GetLastError
