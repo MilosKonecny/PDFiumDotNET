@@ -28,12 +28,12 @@
 
         #endregion Constructors
 
-        #region Public properties
+        #region Public static properties
 
         /// <summary>
         /// Gets about text.
         /// </summary>
-        public string AboutText
+        public static string AboutText
         {
             get
             {
@@ -45,7 +45,7 @@
         /// <summary>
         /// Gets my own license text.
         /// </summary>
-        public string MyOwnLicense
+        public static string MyOwnLicense
         {
             get
             {
@@ -62,7 +62,7 @@
         /// <summary>
         /// Gets PDFium license text.
         /// </summary>
-        public string PDFiumLicense
+        public static string PDFiumLicense
         {
             get
             {
@@ -76,7 +76,7 @@
             }
         }
 
-        #endregion Public properties
+        #endregion Public static properties
 
         #region Private properties
 
@@ -92,7 +92,19 @@
 
         #region Private methods
 
-        private string ReadEmbededResource(string resourceName)
+        private static string CreateMessageFromException(Exception e)
+        {
+            var message = e.Message;
+            e = e.InnerException;
+            while (e != null)
+            {
+                message += Environment.NewLine;
+                message += e.Message;
+            }
+            return message;
+        }
+
+        private static string ReadEmbededResource(string resourceName)
         {
             try
             {
@@ -105,16 +117,29 @@
                     }
                 }
             }
-            catch (Exception ex)
+            catch (ArgumentNullException e1)
             {
-                var message = ex.Message;
-                ex = ex.InnerException;
-                while (ex != null)
-                {
-                    message += Environment.NewLine;
-                    message += ex.Message;
-                }
-                return message;
+                return CreateMessageFromException(e1);
+            }
+            catch (ArgumentException e2)
+            {
+                return CreateMessageFromException(e2);
+            }
+            catch (FileLoadException e3)
+            {
+                return CreateMessageFromException(e3);
+            }
+            catch (FileNotFoundException e4)
+            {
+                return CreateMessageFromException(e4);
+            }
+            catch (BadImageFormatException e5)
+            {
+                return CreateMessageFromException(e5);
+            }
+            catch (NotImplementedException e6)
+            {
+                return CreateMessageFromException(e6);
             }
         }
 

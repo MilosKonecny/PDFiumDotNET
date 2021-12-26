@@ -17,6 +17,9 @@
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+#if NET5_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows7.0")]
+#endif
         protected override void OnAttached()
         {
             AssociatedObject.PreviewKeyDown += HandleAssociatedObjectPreviewKeyDownEvent;
@@ -27,6 +30,9 @@
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+#if NET5_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows7.0")]
+#endif
         protected override void OnDetaching()
         {
             AssociatedObject.PreviewKeyDown -= HandleAssociatedObjectPreviewKeyDownEvent;
@@ -34,9 +40,9 @@
             base.OnDetaching();
         }
 
-        #endregion Protected override methods
+#endregion Protected override methods
 
-        #region Private event handler methods
+#region Private event handler methods
 
         private void HandleAssociatedObjectGotFocusEvent(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -53,6 +59,6 @@
             }
         }
 
-        #endregion Private event handler methods
+#endregion Private event handler methods
     }
 }

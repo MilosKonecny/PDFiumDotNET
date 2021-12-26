@@ -12,7 +12,7 @@
         mc:Ignorable="d" 
         d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type local:MainViewModel}}"
         d:DesignHeight="300" d:DesignWidth="500"
-        Title="PDFiumDotNET sample application">
+        Title="{Binding Path=UsedFramework, StringFormat=PDFiumDotNET sample application ({0})}">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

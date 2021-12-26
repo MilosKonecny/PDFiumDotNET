@@ -1,5 +1,6 @@
 ﻿namespace PDFiumDotNET.Samples.SimpleWpf.Windows
 {
+    using System;
     using System.Windows;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Information;
@@ -17,6 +18,11 @@
         /// <param name="pdfComponent">Related pdf component.</param>
         public DocumentInformation(IPDFComponent pdfComponent)
         {
+            if (pdfComponent == null)
+            {
+                throw new ArgumentNullException(nameof(pdfComponent));
+            }
+
             InitializeComponent();
 
             DataContext = this;
@@ -128,14 +134,13 @@
 
         #endregion Public properties
 
-        #region Private methods
+        #region Private static methods
 
-
-        private string Allowed(bool allowed)
+        private static string Allowed(bool allowed)
         {
             return allowed ? "Allowed" : "Not allowed";
         }
 
-        #endregion Private methods
+        #endregion Private static methods
     }
 }

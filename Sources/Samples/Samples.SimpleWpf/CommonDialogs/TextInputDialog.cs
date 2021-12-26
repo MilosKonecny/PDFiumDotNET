@@ -34,11 +34,13 @@ namespace PDFiumDotNET.Samples.SimpleWpf.CommonDialogs
         /// <returns><c>true</c> in case OK button was pressed. Otherwise <c>false</c>.</returns>
         public bool ShowDialog(Window owner)
         {
-            var view = new TextInputView(owner, this);
+            var view = new TextInputView(this);
+            view.Owner = owner;
             if (true == view.ShowDialog())
             {
                 return true;
             }
+
             return false;
         }
     }
