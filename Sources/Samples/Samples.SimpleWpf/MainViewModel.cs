@@ -6,6 +6,7 @@
     using System.Diagnostics;
     using System.Globalization;
     using System.Runtime.CompilerServices;
+    using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Controls.Primitives;
     using PDFiumDotNET.Components.Contracts;
@@ -252,6 +253,17 @@
         /// </summary>
         public ObservableCollection<IPDFFindPage> FindResult { get; private set; }
 
+        /// <summary>
+        /// Gets the name of used framework.
+        /// </summary>
+        public string UsedFramework
+        {
+            get
+            {
+                return RuntimeInformation.FrameworkDescription + " / " + RuntimeInformation.ProcessArchitecture;
+            }
+        }
+
         #endregion Public properties
 
         #region Public methods
@@ -262,6 +274,11 @@
         /// <param name="bookmark"></param>
         public void NavigateTo(IPDFBookmark bookmark)
         {
+            if (bookmark == null)
+            {
+                return;
+            }
+
             if (bookmark.Action != null)
             {
                 _pdfComponent.PageComponent.PerformAction(bookmark.Action);
@@ -273,6 +290,22 @@
         }
 
         #endregion Public methods
+
+        #region Private methods
+
+        private static string CreateMessageFromException(Exception e)
+        {
+            var message = e.Message;
+            e = e.InnerException;
+            while (e != null)
+            {
+                message += Environment.NewLine;
+                message += e.Message;
+            }
+            return message;
+        }
+
+        #endregion Private methods
 
         #region Implementation of IViewModel
 
@@ -312,7 +345,7 @@
 
             _pdfComponent.PropertyChanged += (s, e) =>
             {
-                if (string.Equals(nameof(IPDFComponent.IsDocumentOpened), e?.PropertyName))
+                if (string.Equals(nameof(IPDFComponent.IsDocumentOpened), e?.PropertyName, StringComparison.OrdinalIgnoreCase))
                 {
                     IsFindActive = false;
                     FindResult.Clear();
@@ -323,7 +356,7 @@
 
             _pdfComponent.ZoomComponent.PropertyChanged += (s, e) =>
             {
-                if (string.Equals(nameof(IPDFZoomComponent.CurrentZoomFactor), e.PropertyName)
+                if (string.Equals(nameof(IPDFZoomComponent.CurrentZoomFactor), e.PropertyName, StringComparison.OrdinalIgnoreCase)
                     || string.IsNullOrEmpty(e.PropertyName))
                 {
                     InvokePropertyChangedEvent(nameof(CurrentZoom));
@@ -332,12 +365,12 @@
 
             _pdfComponent.PageComponent.PropertyChanged += (s, e) =>
             {
-                if (string.Equals(nameof(IPDFPageComponent.CurrentPageIndex), e.PropertyName))
+                if (string.Equals(nameof(IPDFPageComponent.CurrentPageIndex), e.PropertyName, StringComparison.OrdinalIgnoreCase))
                 {
                     _currentPageIndex = _pdfComponent.PageComponent.CurrentPageIndex;
                     InvokePropertyChangedEvent(nameof(CurrentPageIndex));
                 }
-                else if (string.Equals(nameof(IPDFPageComponent.CurrentPageLabel), e.PropertyName))
+                else if (string.Equals(nameof(IPDFPageComponent.CurrentPageLabel), e.PropertyName, StringComparison.OrdinalIgnoreCase))
                 {
                     _currentPageLabel = _pdfComponent.PageComponent.CurrentPageLabel;
                     InvokePropertyChangedEvent(nameof(CurrentPageLabel));
@@ -359,11 +392,31 @@
                 {
                     try
                     {
-                        Process.Start(Uri.UnescapeDataString(e.Action.UriPath ?? string.Empty) ?? Uri.UnescapeDataString(e.Action.FilePath ?? string.Empty));
+                        var p = new Process()
+                        {
+                            StartInfo = new ProcessStartInfo()
+                            {
+                                FileName = Uri.UnescapeDataString(e.Action.UriPath ?? string.Empty) ?? Uri.UnescapeDataString(e.Action.FilePath ?? string.Empty),
+                                UseShellExecute = true
+                            },
+                        };
+                        p.Start();
                     }
-                    catch (Exception ex)
+                    catch (ObjectDisposedException e1)
                     {
-                        MessageBox.Show(ex.Message, ex.GetType().ToString());
+                        MessageBox.Show(CreateMessageFromException(e1), e1.GetType().ToString());
+                    }
+                    catch (InvalidOperationException e2)
+                    {
+                        MessageBox.Show(CreateMessageFromException(e2), e2.GetType().ToString());
+                    }
+                    catch (Win32Exception e3)
+                    {
+                        MessageBox.Show(CreateMessageFromException(e3), e3.GetType().ToString());
+                    }
+                    catch (PlatformNotSupportedException e4)
+                    {
+                        MessageBox.Show(CreateMessageFromException(e4), e4.GetType().ToString());
                     }
                 }
             };

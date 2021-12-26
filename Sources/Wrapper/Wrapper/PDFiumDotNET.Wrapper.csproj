@@ -10,7 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <AdditionalFiles Remove=".editorconfig" />
+      <AdditionalFiles Remove=".editorconfig" />
     </ItemGroup>
 
     <ItemGroup>

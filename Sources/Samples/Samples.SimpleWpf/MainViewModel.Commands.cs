@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Controls.Primitives;
     using Microsoft.Win32;
@@ -337,6 +338,10 @@
             ActiveFindPage = 1;
             FindResult.Clear();
             IsFindActive = true;
+
+            // Cancelation token not used.
+            // The cancelation is implemented by the IsFindActive property
+            var ct = new CancellationToken();
             await Task.Factory.StartNew(() =>
             {
                 _pdfComponent.FindComponent.FindText(
@@ -372,7 +377,7 @@
 
                         return IsFindActive;
                     });
-            });
+            }, ct, TaskCreationOptions.LongRunning, TaskScheduler.Default).ConfigureAwait(false);
 
             IsFindActive = false;
         }

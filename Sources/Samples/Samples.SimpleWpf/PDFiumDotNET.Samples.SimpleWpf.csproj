@@ -1,248 +1,93 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F2A1A9EC-C144-4F5C-9142-7E4C1E3BBAF2}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>PDFiumDotNET.Samples.SimpleWpf</RootNamespace>
-    <AssemblyName>PDFiumDotNET.Samples.SimpleWpf</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\PDFiumDotNET.Samples.SimpleWpf.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\PDFiumDotNET.Samples.SimpleWpf.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>icons8_pdf.ico</ApplicationIcon>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.39\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-  </ItemGroup>
-  <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="Base\BaseViewModel.cs" />
-    <Compile Include="Dialogs\AboutView.xaml.cs">
-      <DependentUpon>AboutView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\AboutViewModel.cs" />
-    <Compile Include="Helper\ViewModelExtCommand.cs" />
-    <Compile Include="Templates\FindTemplateSelector.cs" />
-    <Compile Include="Windows\DocumentInformation.xaml.cs">
-      <DependentUpon>DocumentInformation.xaml</DependentUpon>
-    </Compile>
-    <Page Include="CommonDialogs\TextInputView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\AboutView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MainView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Compile Include="..\..\Common\AssemblyGlobalInfo.cs">
-      <Link>Properties\AssemblyGlobalInfo.cs</Link>
-    </Compile>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Behaviors\TextBoxEnterBehavior.cs" />
-    <Compile Include="CommonDialogs\TextInputDialog.cs" />
-    <Compile Include="CommonDialogs\TextInputView.xaml.cs">
-      <DependentUpon>TextInputView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Contracts\IView.cs" />
-    <Compile Include="Contracts\IViewModel.cs" />
-    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Helper\ViewModelCommand.cs" />
-    <Compile Include="MainView.xaml.cs">
-      <DependentUpon>MainView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MainViewModel.cs" />
-    <Page Include="ResourceDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\DocumentInformation.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="MainViewModel.Commands.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Libs\PDFium\x64\LICENSE">
-      <Link>Resources\Licenses\PDFium\LICENSE</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\LICENSE">
-      <Link>Resources\Licenses\MyOwn\LICENSE</Link>
-    </EmbeddedResource>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Components\Components.Contracts\PDFiumDotNET.Components.Contracts.csproj">
-      <Project>{2e26ed44-85fe-401e-8954-c38103253f1b}</Project>
-      <Name>PDFiumDotNET.Components.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Components\Components.Factory\PDFiumDotNET.Components.Factory.csproj">
-      <Project>{501c6e92-72dd-4944-8822-2483920e44b4}</Project>
-      <Name>PDFiumDotNET.Components.Factory</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Controls\WpfControls\PDFiumDotNET.WpfControls.csproj">
-      <Project>{0bcac3a2-5acb-4fcd-ad3a-2a1e226dc693}</Project>
-      <Name>PDFiumDotNET.WpfControls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Wrapper\Wrapper\PDFiumDotNET.Wrapper.csproj">
-      <Project>{6c4fc621-a329-4859-a2dd-e2ed63bed903}</Project>
-      <Name>PDFiumDotNET.Wrapper</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Toolbar\BlueUI\icons8_height_40px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Toolbar\BlueUI\icons8_info_40px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Toolbar\BlueUI\icons8_last_40px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Toolbar\BlueUI\icons8_first_40px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Toolbar\BlueUI\icons8_next_40px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Toolbar\BlueUI\icons8_previous_40px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Toolbar\BlueUI\icons8_width_40px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Toolbar\BlueUI\icons8_zoom_out_40px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Toolbar\BlueUI\icons8_zoom_in_40px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Toolbar\BlueUI\icons8_search_property_40px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Toolbar\BlueUI\icons8_pdf_40px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Toolbar\BlueUI\icons8_note_40px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Toolbar\BlueUI\icons8_end_40px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Toolbar\BlueUI\icons8_skip_to_start_40px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Toolbar\BlueUI\icons8_rewind_40px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Toolbar\BlueUI\icons8_fast_forward_40px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Toolbar\BlueUI\icons8_close_40px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Menu\BlueUI\icons8_close.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Menu\BlueUI\icons8_pdf.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Menu\BlueUI\icons8_search_property.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Menu\BlueUI\icons8_shutdown.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Menu\BlueUI\icons8_about.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\icons8_pdf.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons8_pdf.ico" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>mkdir "$(TargetDir)PDFium\x86"
-mkdir "$(TargetDir)PDFium\x64"
-copy "$(ProjectDir)..\..\..\Libs\PDFium\x86\*.*" "$(TargetDir)PDFium\x86"
-copy "$(ProjectDir)..\..\..\Libs\PDFium\x64\*.*" "$(TargetDir)PDFium\x64"</PostBuildEvent>
-  </PropertyGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFrameworks>netcoreapp3.1;net48;net5.0-windows;net6.0-windows</TargetFrameworks>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <ApplicationIcon>Resources\icons8_pdf.ico</ApplicationIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\Menu\BlueUI\icons8_about.ico" />
+      <None Remove="Resources\Menu\BlueUI\icons8_close.ico" />
+      <None Remove="Resources\Menu\BlueUI\icons8_pdf.ico" />
+      <None Remove="Resources\Menu\BlueUI\icons8_search_property.ico" />
+      <None Remove="Resources\Menu\BlueUI\icons8_shutdown.ico" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_close_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_end_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_fast_forward_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_first_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_height_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_info_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_last_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_next_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_note_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_pdf_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_previous_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_rewind_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_search_property_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_skip_to_start_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_width_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_zoom_in_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_zoom_out_40px.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Include="..\..\Common\AssemblyGlobalInfo.cs" Link="AssemblyGlobalInfo.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="Resources\icons8_pdf.ico" />
+      <Resource Include="Resources\Menu\BlueUI\icons8_about.ico" />
+      <Resource Include="Resources\Menu\BlueUI\icons8_close.ico" />
+      <Resource Include="Resources\Menu\BlueUI\icons8_pdf.ico" />
+      <Resource Include="Resources\Menu\BlueUI\icons8_search_property.ico" />
+      <Resource Include="Resources\Menu\BlueUI\icons8_shutdown.ico" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_close_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_end_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_fast_forward_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_first_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_height_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_info_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_last_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_next_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_note_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_pdf_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_previous_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_rewind_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_search_property_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_skip_to_start_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_width_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_zoom_in_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_zoom_out_40px.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Components\Components.Factory\PDFiumDotNET.Components.Factory.csproj" />
+        <ProjectReference Include="..\..\Controls\WpfControls\PDFiumDotNET.WpfControls.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Resources\Licenses\MyOwn\" />
+      <Folder Include="Resources\Licenses\PDFium\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="..\..\..\Libs\PDFium\x64\LICENSE" Link="Resources\Licenses\PDFium\LICENSE" />
+      <EmbeddedResource Include="..\..\..\LICENSE" Link="Resources\Licenses\MyOwn\LICENSE" />
+    </ItemGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+      <Exec Command="mkdir &quot;$(TargetDir)PDFium\x86&quot;&#xD;&#xA;mkdir &quot;$(TargetDir)PDFium\x64&quot;&#xD;&#xA;copy &quot;$(ProjectDir)..\..\..\Libs\PDFium\x86\*.*&quot; &quot;$(TargetDir)PDFium\x86&quot;&#xD;&#xA;copy &quot;$(ProjectDir)..\..\..\Libs\PDFium\x64\*.*&quot; &quot;$(TargetDir)PDFium\x64&quot;" />
+    </Target>
+
 </Project>

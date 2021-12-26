@@ -1,5 +1,6 @@
 ﻿namespace PDFiumDotNET.Samples.SimpleWpf.CommonDialogs
 {
+    using System;
     using System.Windows;
 
     /// <summary>
@@ -12,13 +13,12 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="TextInputView"/> class.
         /// </summary>
-        /// <param name="owner">Ownder window to center text input view.</param>
         /// <param name="viewModel">View model to use.</param>
-        public TextInputView(Window owner, TextInputDialog viewModel)
+        public TextInputView(TextInputDialog viewModel)
         {
             InitializeComponent();
-            Owner = owner;
-            DataContext = viewModel;
+
+            DataContext = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
             if (viewModel.UsePasswordInput)
             {
                 _pwdBox.Focus();
