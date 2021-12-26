@@ -45,6 +45,7 @@
         /// <param name="bookmark">Handle to the current bookmark.</param>
         /// <returns>Returns a handle to the next sibling of |bookmark|, or NULL if this is the last bookmark at this level.</returns>
         /// <remarks>
+        /// Note that the caller is responsible for handling circular bookmark references, as may arise from malformed documents.
         /// FPDF_EXPORT FPDF_BOOKMARK FPDF_CALLCONV FPDFBookmark_GetNextSibling(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark);.
         /// </remarks>
         public FPDF_BOOKMARK FPDFBookmark_GetNextSibling(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark)
