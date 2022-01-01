@@ -111,20 +111,20 @@
         }
 
         /// <summary>
-        /// Gets the page count.
+        /// Gets the current zoom in percentage.
         /// </summary>
-        public double CurrentZoom
+        public int CurrentZoom
         {
             get
             {
-                return (_pdfComponent != null && _pdfComponent.ZoomComponent != null) ? _pdfComponent.ZoomComponent.CurrentZoomFactor * 100d : 100d;
+                return _pdfComponent != null && _pdfComponent.ZoomComponent != null ? _pdfComponent.ZoomComponent.CurrentZoomPercentage : 100;
             }
 
             set
             {
                 if (_pdfComponent != null && _pdfComponent.ZoomComponent != null)
                 {
-                    _pdfComponent.ZoomComponent.CurrentZoomFactor = value / 100d;
+                    _pdfComponent.ZoomComponent.CurrentZoomPercentage = value;
                 }
             }
         }

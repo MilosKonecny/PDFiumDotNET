@@ -14,10 +14,18 @@
         ZoomType CurrentZoomType { get; set; }
 
         /// <summary>
-        /// Gets or sets the current zoom factor. Factor 1.0 is 100%.
+        /// Gets or sets the current zoom factor. Value has two decimal places.
+        /// CurrentZoomFactor == CurrentZoomPercentage / 100.
         /// Value is returned regardless of <see cref="CurrentZoomType"/> property.
         /// </summary>
         double CurrentZoomFactor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the current zoom factor, in percentage.
+        /// CurrentZoomPercentage = CurrentZoomFactor * 100.
+        /// Value is returned regardless of <see cref="CurrentZoomType"/> property.
+        /// </summary>
+        int CurrentZoomPercentage { get; set; }
 
         /// <summary>
         /// Gets or sets predefined values in % used for particular zoom values. First and last value are used as min and max value.
