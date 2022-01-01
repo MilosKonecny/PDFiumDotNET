@@ -115,6 +115,22 @@
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        public int CurrentZoomPercentage
+        {
+            get
+            {
+                return (int)Math.Round(100d * CurrentZoomFactor, 0);
+            }
+
+            set
+            {
+                CurrentZoomFactor = value / 100d;
+            }
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public IEnumerable<double> ZoomValues
         {
             get
