@@ -18,7 +18,7 @@ jobs:
     name: "Build DEBUG"
     # 26.11.2021:
     # - windows-latest uses VS2019
-    # - windows-2022 uses VS20222
+    # - windows-2022 uses VS2022
     runs-on: windows-2022
     steps:
     - name: Parameters
@@ -43,15 +43,15 @@ jobs:
     - name: Restore dependencies specified in a .NET projects.
       run: dotnet restore ./Sources/PDFiumDotNET.sln
     - name: Build all .NET projects.
-      run: dotnet -c DEBUG build ./Sources/PDFiumDotNET.sln
+      run: dotnet build -c DEBUG ./Sources/PDFiumDotNET.sln
     - name: Run unit tests using the test runner specified in a .NET projects.
-      run: dotnet -c DEBUG test ./Sources/PDFiumDotNET.sln
+      run: dotnet test -c DEBUG ./Sources/PDFiumDotNET.sln
 
   build-release:
     name: "Build RELEASE"
     # 26.11.2021:
     # - windows-latest uses VS2019
-    # - windows-2022 uses VS20222
+    # - windows-2022 uses VS2022
     runs-on: windows-2022
     steps:
     - name: Parameters
@@ -76,6 +76,6 @@ jobs:
     - name: Restore dependencies specified in a .NET projects.
       run: dotnet restore ./Sources/PDFiumDotNET.sln
     - name: Build all .NET projects.
-      run: dotnet -c RELEASE build ./Sources/PDFiumDotNET.sln
+      run: dotnet build -c RELEASE ./Sources/PDFiumDotNET.sln
     - name: Run unit tests using the test runner specified in a .NET projects.
-      run: dotnet -c RELEASE test ./Sources/PDFiumDotNET.sln
+      run: dotnet test -c RELEASE ./Sources/PDFiumDotNET.sln
