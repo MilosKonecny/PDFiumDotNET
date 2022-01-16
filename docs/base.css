@@ -1,0 +1,57 @@
+.class-name {
+    font-family: 'Courier New';
+    color: dodgerblue;
+}
+
+body::after {
+    content: 'D r a f t';
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    color: #d0d0d0;
+    font-size: 100px;
+    font-weight: 900;
+    font-style: italic;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    opacity: 0.2;
+    letter-spacing: 10px;
+    transform: rotate(315deg);
+}
+
+
+.pt-6 {
+    padding-top: 3.5rem !important;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: black;
+}
+
+    .navbar-light .navbar-nav .nav-link.active {
+        font-weight: 700;
+        /*font-size: 18px;*/
+    }
+
+.navbar-fixed-left {
+    width: stretch;
+    position: fixed;
+    border-radius: 5px;
+    height: 100%;
+    background-color: white;
+}
+
+    .navbar-fixed-left li {
+        padding: 0px 15px 0px 15px;
+        text-align: left;
+    }
+
+    .navbar-fixed-left .li .dropdown-menu {
+        margin-top: -50px;
+        margin-left: 140px;
+        background-color: blue;
+    }

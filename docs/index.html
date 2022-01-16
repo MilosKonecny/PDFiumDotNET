@@ -3,10 +3,430 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
+    <meta name="author" content="Miloš Konečný">
     <title>PDFiumDotNET</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="base.css" rel="stylesheet">
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
 </head>
-<body>
-<h1>PDFiumDotNET library</h1>
-    Site under construction
+
+<body data-bs-spy="scroll" data-bs-target="sidebarMenu" data-bs-offset="100">
+
+    <header class="container navbar navbar-light sticky-top bg-white flex-md-nowrap p-0 shadow">
+        <div class="navbar-brand col-md-3 col-lg-2 me-0 px-3 text-black text-center w-100">
+            <h1>PDFiumDotNET library</h1>
+        </div>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </header>
+
+    <div class="container">
+        <div class="row">
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-white sidebar collapse">
+                <div class="navbar-light navbar-fixed-left">
+                    <ul class="navbar-nav" id="navbarid">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#overview">Overview</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#features">Features</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#modules">Modules</a>
+                        </li>
+                        <li class="nav-item">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a href="#modules-wrapper" class="nav-link">Wrapper</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#modules-components" class="nav-link">Components</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#modules-controls" class="nav-link">Controls</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#samples">Samples</a>
+                        </li>
+                        <li class="nav-item">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a href="#samples-simplewpf" class="nav-link">SimpleWpf</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#samples-simplewinforms" class="nav-link">SimpleWinForms</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#samples-memoryleaks" class="nav-link">MemoryLeaks</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </div>
+            </nav>
+
+            <main class="col-md-9 col-lg-10">
+
+                <!-- 1 -------------------------------------------------------------------------------- -->
+                <div id="overview" class="pt-6">
+                    <div>
+                        <h2>Overview</h2>
+                        <p>
+                            PDFiumDotNET is .NET library intended for displaying of PDF documents, or obtain some information from PDF documents.
+                            PDFiumDotNET uses Google's open source PDFium library.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 1 -------------------------------------------------------------------------------- -->
+                <div id="features" class="pt-6">
+                    <div>
+                        <h2>Features</h2>
+                        <p>
+                            Key features:
+                            <ul>
+                                <li>
+                                    many supported frameworks
+                                    <ul>
+                                        <li>.NET 6</li>
+                                        <li>.NET 5</li>
+                                        <li>.NET Core 3.1</li>
+                                        <li>.NET Framework 4.8</li>
+                                    </ul>
+                                </li>
+                                <li>support for Wpf applications (without air space problem)</li>
+                                <li>support for WinForms applications (currently not implemented)</li>
+                                <li>touch support</li>
+                                <li>modular structure</li>
+                                <li>written entirely in C#</li>
+                                <li>support for search in document</li>
+                                <li>show of document annotations</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 1 -------------------------------------------------------------------------------- -->
+                <div id="modules" class="pt-6">
+                    <div>
+                        <h2>Modules</h2>
+                        <p>
+                            The project consists of several modules as shown on the image.
+                        </p>
+                        <p>
+                            <img src="images/PDFiumDotNETProject-Modules.png" style="width:100%" />
+                        </p>
+                        <p>
+                            The module can be perceived as a single assembly or set of assemblies.
+                        </p>
+                        <p>
+                            All classes in PDFiumDotNET.Wrapper and PDFiumDotNET.Components are essentially private or internal.
+                            For the usage are exposed only interfaces defined in PDFiumDotNET.Components.Contracts.
+                            Primary instance creation is possible by using of PDFiumDotNET.Components.Factory.
+                        </p>
+                    </div>
+
+                    <!-- 2 -------------------------------------------------------------------------------- -->
+                    <div id="modules-wrapper" class="pt-4">
+                        <div>
+                                <h3>Wrapper</h3>
+                                <p>
+                                    Wrapper implements interoperability between unmanaged and managed code.
+                                </p>
+                                <p>
+                                    Wrapper module consists from only one assembly:
+                                    <ul>
+                                        <li>PDFiumDotNET.Wrapper</li>
+                                    </ul>
+                                </p>
+                                <p>
+                                    This assembly contains only one class <span class="class-name">PDFiumBridge</span> that encapsulates all supported functions from PDFium library.
+                                    Loads appropriate version of PDFium dll (x86 / x64) and loads all actually used functions.
+                                    The class is implemented as internal to avoid direct usage. The class is used exclusively from Components module.
+                                </p>
+                                <p style="font-size:small;color:gray">
+                                    Lorem ipsum dolor sit amet, ipsum lorem praesent sed ut, labore partiendo concludaturque mea no, per euripidis liberavisse an. Affert doctus cu qui, vel autem equidem ne. Movet noluisse interesset ne eam, eu vel accommodare consectetuer. Sit in ignota labitur democritum, suas imperdiet adolescens ut vim.
+                                    Eu solet recteque pri. Mea ne dolor consul, facilisis accusamus efficiantur an qui. Ut blandit pericula vel, esse mazim iudico sit at. Legere labitur ad vel, ne sea velit pertinacia, eu iusto fastidii usu. Ius saepe labores disputando ei, no vel quod oporteat, in etiam iusto labitur est.
+                                    Vis populo senserit at, ne nec clita graece nusquam. Euripidis interesset pri no, animal platonem pro an, vis an eius libris animal. In suas tation postea eum, decore petentium salutandi id duo. Has ea labore euripidis, iuvaret minimum et cum.
+                                    Amet elitr dolorum vix ut. Legimus interesset ne eos. Libris possim iisque cu mei, qui id iusto omnes debitis. Vix ei everti regione aliquam, modo partiendo duo te. Alienum sententiae vix et.
+                                    Stet invenire referrentur mei an, brute idque ea eum, hinc expetendis cu his. Et facilisis principes sed, hinc falli sententiae ex vix. Graece forensibus cu sed, an vero probatus vim. Id usu stet deterruisset.
+                                    Noster deterruisset mei ut. Pro eius repudiandae concludaturque ea. Ea stet insolens erroribus has. Vix at legere aeterno explicari. Dolorum dolorem persecuti no eos, sed porro sanctus qualisque ea.
+                                    Case inani recteque eos ne, usu quod iusto ad, at copiosae molestiae quo. Sea ad denique mandamus, probo aeterno atomorum in vix. Ea ignota molestiae referrentur quo. Qui ei maiorum torquatos adipiscing, ex wisi impetus epicurei eum, vitae appareat cu cum. Quem patrioque temporibus ea eum. Id per vocibus platonem efficiantur, iudico forensibus sed no, his utinam volutpat id.
+                                    Sanctus adipisci scribentur eum ne, veritus adversarium cum no, at utamur adipisci splendide sed. Ex saperet maiorum efficiantur nec, in verear albucius dissentias qui. Suas putant vim ad. Sea principes similique voluptaria eu, nam sapientem conceptam cotidieque at. Vel stet inimicus et, sale verterem inciderint ea eos, ex duo dicam insolens omittantur. Id eius consequat qui, ea accusam contentiones nec.
+                                    Has soleat dictas te, cum an congue facilisis omittantur, nam semper molestiae quaerendum eu. Vim id tale perpetua, vel ei modo integre. Pro te dissentiunt theophrastus, cu mel alii congue, sed ea utamur meliore facilis. Ad inermis probatus cum. Est nostrud appareat lobortis id. Qui atqui inani vivendo eu.
+                                    Nec adhuc doming et. Veniam animal vituperata te duo. Has ne timeam delicata. Mel tacimates adolescens an.
+                                </p>
+                            </div>
+                    </div>
+
+                    <!-- 2 -------------------------------------------------------------------------------- -->
+                    <div id="modules-components" class="pt-4">
+                        <div>
+                            <div>
+                                <h3>Components</h3>
+                                <p>
+                                    Components implements functionality which gets necessary data from PDF document
+                                    and provides these in particular form.
+                                </p>
+                                <p>
+                                    Components module consists from following assemblies:
+                                    <ul>
+                                        <li>PDFiumDotNET.Components</li>
+                                        <li>PDFiumDotNET.Components.Contracts</li>
+                                        <li>PDFiumDotNET.Components.Factory</li>
+                                    </ul>
+                                </p>
+                            </div>
+                            <!-- 3 -------------------------------------------------------------------------------- -->
+                            <div class="pt-2">
+                                <h4>PDFiumDotNET.Components</h4>
+                                <p>
+                                    This assembly contains entirely implementation of PDF document access functionality.
+                                    Functionality is split to many classes, that are not accessible directly by user of PDFiumDotNET library.
+                                </p>
+                                <p style="font-size:small;color:gray">
+                                    Lorem ipsum dolor sit amet, ipsum lorem praesent sed ut, labore partiendo concludaturque mea no, per euripidis liberavisse an. Affert doctus cu qui, vel autem equidem ne. Movet noluisse interesset ne eam, eu vel accommodare consectetuer. Sit in ignota labitur democritum, suas imperdiet adolescens ut vim.
+                                    Eu solet recteque pri. Mea ne dolor consul, facilisis accusamus efficiantur an qui. Ut blandit pericula vel, esse mazim iudico sit at. Legere labitur ad vel, ne sea velit pertinacia, eu iusto fastidii usu. Ius saepe labores disputando ei, no vel quod oporteat, in etiam iusto labitur est.
+                                    Vis populo senserit at, ne nec clita graece nusquam. Euripidis interesset pri no, animal platonem pro an, vis an eius libris animal. In suas tation postea eum, decore petentium salutandi id duo. Has ea labore euripidis, iuvaret minimum et cum.
+                                    Amet elitr dolorum vix ut. Legimus interesset ne eos. Libris possim iisque cu mei, qui id iusto omnes debitis. Vix ei everti regione aliquam, modo partiendo duo te. Alienum sententiae vix et.
+                                    Stet invenire referrentur mei an, brute idque ea eum, hinc expetendis cu his. Et facilisis principes sed, hinc falli sententiae ex vix. Graece forensibus cu sed, an vero probatus vim. Id usu stet deterruisset.
+                                    Noster deterruisset mei ut. Pro eius repudiandae concludaturque ea. Ea stet insolens erroribus has. Vix at legere aeterno explicari. Dolorum dolorem persecuti no eos, sed porro sanctus qualisque ea.
+                                    Case inani recteque eos ne, usu quod iusto ad, at copiosae molestiae quo. Sea ad denique mandamus, probo aeterno atomorum in vix. Ea ignota molestiae referrentur quo. Qui ei maiorum torquatos adipiscing, ex wisi impetus epicurei eum, vitae appareat cu cum. Quem patrioque temporibus ea eum. Id per vocibus platonem efficiantur, iudico forensibus sed no, his utinam volutpat id.
+                                    Sanctus adipisci scribentur eum ne, veritus adversarium cum no, at utamur adipisci splendide sed. Ex saperet maiorum efficiantur nec, in verear albucius dissentias qui. Suas putant vim ad. Sea principes similique voluptaria eu, nam sapientem conceptam cotidieque at. Vel stet inimicus et, sale verterem inciderint ea eos, ex duo dicam insolens omittantur. Id eius consequat qui, ea accusam contentiones nec.
+                                    Has soleat dictas te, cum an congue facilisis omittantur, nam semper molestiae quaerendum eu. Vim id tale perpetua, vel ei modo integre. Pro te dissentiunt theophrastus, cu mel alii congue, sed ea utamur meliore facilis. Ad inermis probatus cum. Est nostrud appareat lobortis id. Qui atqui inani vivendo eu.
+                                    Nec adhuc doming et. Veniam animal vituperata te duo. Has ne timeam delicata. Mel tacimates adolescens an.
+                                </p>
+                            </div>
+                            <!-- 3 -------------------------------------------------------------------------------- -->
+                            <div class="pt-2">
+                                <h4>PDFiumDotNET.Components.Contracts</h4>
+                                <p>
+                                    This assembly contains over 15 interfaces.
+                                    User of PDFiumDotNET library is able to use only these interfaces.
+                                </p>
+                                <p style="font-size:small;color:gray">
+                                    Lorem ipsum dolor sit amet, ipsum lorem praesent sed ut, labore partiendo concludaturque mea no, per euripidis liberavisse an. Affert doctus cu qui, vel autem equidem ne. Movet noluisse interesset ne eam, eu vel accommodare consectetuer. Sit in ignota labitur democritum, suas imperdiet adolescens ut vim.
+                                    Eu solet recteque pri. Mea ne dolor consul, facilisis accusamus efficiantur an qui. Ut blandit pericula vel, esse mazim iudico sit at. Legere labitur ad vel, ne sea velit pertinacia, eu iusto fastidii usu. Ius saepe labores disputando ei, no vel quod oporteat, in etiam iusto labitur est.
+                                    Vis populo senserit at, ne nec clita graece nusquam. Euripidis interesset pri no, animal platonem pro an, vis an eius libris animal. In suas tation postea eum, decore petentium salutandi id duo. Has ea labore euripidis, iuvaret minimum et cum.
+                                    Amet elitr dolorum vix ut. Legimus interesset ne eos. Libris possim iisque cu mei, qui id iusto omnes debitis. Vix ei everti regione aliquam, modo partiendo duo te. Alienum sententiae vix et.
+                                    Stet invenire referrentur mei an, brute idque ea eum, hinc expetendis cu his. Et facilisis principes sed, hinc falli sententiae ex vix. Graece forensibus cu sed, an vero probatus vim. Id usu stet deterruisset.
+                                    Noster deterruisset mei ut. Pro eius repudiandae concludaturque ea. Ea stet insolens erroribus has. Vix at legere aeterno explicari. Dolorum dolorem persecuti no eos, sed porro sanctus qualisque ea.
+                                    Case inani recteque eos ne, usu quod iusto ad, at copiosae molestiae quo. Sea ad denique mandamus, probo aeterno atomorum in vix. Ea ignota molestiae referrentur quo. Qui ei maiorum torquatos adipiscing, ex wisi impetus epicurei eum, vitae appareat cu cum. Quem patrioque temporibus ea eum. Id per vocibus platonem efficiantur, iudico forensibus sed no, his utinam volutpat id.
+                                    Sanctus adipisci scribentur eum ne, veritus adversarium cum no, at utamur adipisci splendide sed. Ex saperet maiorum efficiantur nec, in verear albucius dissentias qui. Suas putant vim ad. Sea principes similique voluptaria eu, nam sapientem conceptam cotidieque at. Vel stet inimicus et, sale verterem inciderint ea eos, ex duo dicam insolens omittantur. Id eius consequat qui, ea accusam contentiones nec.
+                                    Has soleat dictas te, cum an congue facilisis omittantur, nam semper molestiae quaerendum eu. Vim id tale perpetua, vel ei modo integre. Pro te dissentiunt theophrastus, cu mel alii congue, sed ea utamur meliore facilis. Ad inermis probatus cum. Est nostrud appareat lobortis id. Qui atqui inani vivendo eu.
+                                    Nec adhuc doming et. Veniam animal vituperata te duo. Has ne timeam delicata. Mel tacimates adolescens an.
+                                </p>
+                            </div>
+                            <!-- 3 -------------------------------------------------------------------------------- -->
+                            <div class="pt-2">
+                                <h4>PDFiumDotNET.Components.Factory</h4>
+                                <p>
+                                    This assembly contains only one class - <span class="class-name">PDFFactory</span>
+                                    and this class implements only one property that returns instance of class implementing <span class="class-name">IPDFComponent</span>.
+                                    It is at this moment only one possiblity to get component from PDFiumDotNET.Components.
+                                </p>
+                                <p>
+                                    There is another possibility:
+                                    <div class="mx-5">
+                                        <samp>
+                                            // Other possibility to get the instance from already loaded assembly.<br />
+                                            // The condition 'already loaded' should be fullfilled by another part of application.<br />
+                                            // For example MEF.<br />
+                                            var specificType = AppDomain.CurrentDomain.GetAssemblies()<br />
+                                            &nbsp;&nbsp;&nbsp;&nbsp;.SelectMany(x => x.GetTypes())<br />
+                                            &nbsp;&nbsp;&nbsp;&nbsp;.Where(x => typeof(IPDFComponent).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)<br />
+                                            &nbsp;&nbsp;&nbsp;&nbsp;.FirstOrDefault();<br />
+                                            if (specificType != null)<br />
+                                            {<br />
+                                            &nbsp;&nbsp;&nbsp;&nbsp;return Activator.CreateInstance(specificType) as IPDFComponent;<br />
+                                            }<br />
+                                            // PDFiumDotNET.Components not loaded?<br />
+                                            return null;
+                                        </samp>
+                                    </div>
+                                </p>
+                                <p>
+                                    Further possibilities like MEF export, will be implemented on request.
+                                </p>
+                                <p style="font-size:small;color:gray">
+                                    Lorem ipsum dolor sit amet, ipsum lorem praesent sed ut, labore partiendo concludaturque mea no, per euripidis liberavisse an. Affert doctus cu qui, vel autem equidem ne. Movet noluisse interesset ne eam, eu vel accommodare consectetuer. Sit in ignota labitur democritum, suas imperdiet adolescens ut vim.
+                                    Eu solet recteque pri. Mea ne dolor consul, facilisis accusamus efficiantur an qui. Ut blandit pericula vel, esse mazim iudico sit at. Legere labitur ad vel, ne sea velit pertinacia, eu iusto fastidii usu. Ius saepe labores disputando ei, no vel quod oporteat, in etiam iusto labitur est.
+                                    Vis populo senserit at, ne nec clita graece nusquam. Euripidis interesset pri no, animal platonem pro an, vis an eius libris animal. In suas tation postea eum, decore petentium salutandi id duo. Has ea labore euripidis, iuvaret minimum et cum.
+                                    Amet elitr dolorum vix ut. Legimus interesset ne eos. Libris possim iisque cu mei, qui id iusto omnes debitis. Vix ei everti regione aliquam, modo partiendo duo te. Alienum sententiae vix et.
+                                    Stet invenire referrentur mei an, brute idque ea eum, hinc expetendis cu his. Et facilisis principes sed, hinc falli sententiae ex vix. Graece forensibus cu sed, an vero probatus vim. Id usu stet deterruisset.
+                                    Noster deterruisset mei ut. Pro eius repudiandae concludaturque ea. Ea stet insolens erroribus has. Vix at legere aeterno explicari. Dolorum dolorem persecuti no eos, sed porro sanctus qualisque ea.
+                                    Case inani recteque eos ne, usu quod iusto ad, at copiosae molestiae quo. Sea ad denique mandamus, probo aeterno atomorum in vix. Ea ignota molestiae referrentur quo. Qui ei maiorum torquatos adipiscing, ex wisi impetus epicurei eum, vitae appareat cu cum. Quem patrioque temporibus ea eum. Id per vocibus platonem efficiantur, iudico forensibus sed no, his utinam volutpat id.
+                                    Sanctus adipisci scribentur eum ne, veritus adversarium cum no, at utamur adipisci splendide sed. Ex saperet maiorum efficiantur nec, in verear albucius dissentias qui. Suas putant vim ad. Sea principes similique voluptaria eu, nam sapientem conceptam cotidieque at. Vel stet inimicus et, sale verterem inciderint ea eos, ex duo dicam insolens omittantur. Id eius consequat qui, ea accusam contentiones nec.
+                                    Has soleat dictas te, cum an congue facilisis omittantur, nam semper molestiae quaerendum eu. Vim id tale perpetua, vel ei modo integre. Pro te dissentiunt theophrastus, cu mel alii congue, sed ea utamur meliore facilis. Ad inermis probatus cum. Est nostrud appareat lobortis id. Qui atqui inani vivendo eu.
+                                    Nec adhuc doming et. Veniam animal vituperata te duo. Has ne timeam delicata. Mel tacimates adolescens an.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 2 -------------------------------------------------------------------------------- -->
+                        <div id="modules-controls" class="pt-4">
+                            <div>
+                                <h3>Controls</h3>
+                                <p>
+                                    Controls module consists from following assemblies:
+                                    <ul>
+                                        <li>PDFiumDotNET.WpfControls</li>
+                                        <li>PDFiumDotNET.WinForms</li>
+                                    </ul>
+                                </p>
+                            </div>
+                            <!-- 3 -------------------------------------------------------------------------------- -->
+                            <div class="pt-2">
+                                <h4>PDFiumDotNET.WpfControls</h4>
+                                <p>
+                                    Contains two controls:
+                                    <ul>
+                                        <li><span class="class-name">PDFView</span> shows PDF document</li>
+                                        <li><span class="class-name">PDFThumbnailView</span> shows thumbnail preview</li>
+                                    </ul>
+                                    These controls become the components by dependency properties <span class="class-name">PDFPageComponent</span>.
+                                </p>
+                                <p style="font-size:small;color:gray">
+                                    Lorem ipsum dolor sit amet, ipsum lorem praesent sed ut, labore partiendo concludaturque mea no, per euripidis liberavisse an. Affert doctus cu qui, vel autem equidem ne. Movet noluisse interesset ne eam, eu vel accommodare consectetuer. Sit in ignota labitur democritum, suas imperdiet adolescens ut vim.
+                                    Eu solet recteque pri. Mea ne dolor consul, facilisis accusamus efficiantur an qui. Ut blandit pericula vel, esse mazim iudico sit at. Legere labitur ad vel, ne sea velit pertinacia, eu iusto fastidii usu. Ius saepe labores disputando ei, no vel quod oporteat, in etiam iusto labitur est.
+                                    Vis populo senserit at, ne nec clita graece nusquam. Euripidis interesset pri no, animal platonem pro an, vis an eius libris animal. In suas tation postea eum, decore petentium salutandi id duo. Has ea labore euripidis, iuvaret minimum et cum.
+                                    Amet elitr dolorum vix ut. Legimus interesset ne eos. Libris possim iisque cu mei, qui id iusto omnes debitis. Vix ei everti regione aliquam, modo partiendo duo te. Alienum sententiae vix et.
+                                    Stet invenire referrentur mei an, brute idque ea eum, hinc expetendis cu his. Et facilisis principes sed, hinc falli sententiae ex vix. Graece forensibus cu sed, an vero probatus vim. Id usu stet deterruisset.
+                                    Noster deterruisset mei ut. Pro eius repudiandae concludaturque ea. Ea stet insolens erroribus has. Vix at legere aeterno explicari. Dolorum dolorem persecuti no eos, sed porro sanctus qualisque ea.
+                                    Case inani recteque eos ne, usu quod iusto ad, at copiosae molestiae quo. Sea ad denique mandamus, probo aeterno atomorum in vix. Ea ignota molestiae referrentur quo. Qui ei maiorum torquatos adipiscing, ex wisi impetus epicurei eum, vitae appareat cu cum. Quem patrioque temporibus ea eum. Id per vocibus platonem efficiantur, iudico forensibus sed no, his utinam volutpat id.
+                                    Sanctus adipisci scribentur eum ne, veritus adversarium cum no, at utamur adipisci splendide sed. Ex saperet maiorum efficiantur nec, in verear albucius dissentias qui. Suas putant vim ad. Sea principes similique voluptaria eu, nam sapientem conceptam cotidieque at. Vel stet inimicus et, sale verterem inciderint ea eos, ex duo dicam insolens omittantur. Id eius consequat qui, ea accusam contentiones nec.
+                                    Has soleat dictas te, cum an congue facilisis omittantur, nam semper molestiae quaerendum eu. Vim id tale perpetua, vel ei modo integre. Pro te dissentiunt theophrastus, cu mel alii congue, sed ea utamur meliore facilis. Ad inermis probatus cum. Est nostrud appareat lobortis id. Qui atqui inani vivendo eu.
+                                    Nec adhuc doming et. Veniam animal vituperata te duo. Has ne timeam delicata. Mel tacimates adolescens an.
+                                </p>
+                            </div>
+                            <!-- 3 -------------------------------------------------------------------------------- -->
+                            <div class="pt-2">
+                                <h4>PDFiumDotNET.WinFormsControls</h4>
+                                <p>
+                                    Not implemented yet.
+                                </p>
+                                <p style="font-size:small;color:gray">
+                                    Lorem ipsum dolor sit amet, ipsum lorem praesent sed ut, labore partiendo concludaturque mea no, per euripidis liberavisse an. Affert doctus cu qui, vel autem equidem ne. Movet noluisse interesset ne eam, eu vel accommodare consectetuer. Sit in ignota labitur democritum, suas imperdiet adolescens ut vim.
+                                    Eu solet recteque pri. Mea ne dolor consul, facilisis accusamus efficiantur an qui. Ut blandit pericula vel, esse mazim iudico sit at. Legere labitur ad vel, ne sea velit pertinacia, eu iusto fastidii usu. Ius saepe labores disputando ei, no vel quod oporteat, in etiam iusto labitur est.
+                                    Vis populo senserit at, ne nec clita graece nusquam. Euripidis interesset pri no, animal platonem pro an, vis an eius libris animal. In suas tation postea eum, decore petentium salutandi id duo. Has ea labore euripidis, iuvaret minimum et cum.
+                                    Amet elitr dolorum vix ut. Legimus interesset ne eos. Libris possim iisque cu mei, qui id iusto omnes debitis. Vix ei everti regione aliquam, modo partiendo duo te. Alienum sententiae vix et.
+                                    Stet invenire referrentur mei an, brute idque ea eum, hinc expetendis cu his. Et facilisis principes sed, hinc falli sententiae ex vix. Graece forensibus cu sed, an vero probatus vim. Id usu stet deterruisset.
+                                    Noster deterruisset mei ut. Pro eius repudiandae concludaturque ea. Ea stet insolens erroribus has. Vix at legere aeterno explicari. Dolorum dolorem persecuti no eos, sed porro sanctus qualisque ea.
+                                    Case inani recteque eos ne, usu quod iusto ad, at copiosae molestiae quo. Sea ad denique mandamus, probo aeterno atomorum in vix. Ea ignota molestiae referrentur quo. Qui ei maiorum torquatos adipiscing, ex wisi impetus epicurei eum, vitae appareat cu cum. Quem patrioque temporibus ea eum. Id per vocibus platonem efficiantur, iudico forensibus sed no, his utinam volutpat id.
+                                    Sanctus adipisci scribentur eum ne, veritus adversarium cum no, at utamur adipisci splendide sed. Ex saperet maiorum efficiantur nec, in verear albucius dissentias qui. Suas putant vim ad. Sea principes similique voluptaria eu, nam sapientem conceptam cotidieque at. Vel stet inimicus et, sale verterem inciderint ea eos, ex duo dicam insolens omittantur. Id eius consequat qui, ea accusam contentiones nec.
+                                    Has soleat dictas te, cum an congue facilisis omittantur, nam semper molestiae quaerendum eu. Vim id tale perpetua, vel ei modo integre. Pro te dissentiunt theophrastus, cu mel alii congue, sed ea utamur meliore facilis. Ad inermis probatus cum. Est nostrud appareat lobortis id. Qui atqui inani vivendo eu.
+                                    Nec adhuc doming et. Veniam animal vituperata te duo. Has ne timeam delicata. Mel tacimates adolescens an.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1 -------------------------------------------------------------------------------- -->
+                <div id="samples" class="pt-6">
+                    <div>
+                        <h2>Sample applications</h2>
+                    </div>
+                    <!-- 2 -------------------------------------------------------------------------------- -->
+                    <div id="samples-simplewpf" class="pt-4">
+                        <h3>SimpleWpf</h3>
+                        <p>This application demonstrates simple Wpf application using PDFiumDotNET library.</p>
+                        <p class="mt-5">
+                            PDF document bookmarks.
+                        </p>
+                        <p>
+                            <img src="images/SimpleWpf-01.jpg" style="width:100%" />
+                        </p>
+                        <p class="mt-5">
+                            Thumbnails of PDF document.
+                        </p>
+                        <p>
+                            <img src="images/SimpleWpf-02.jpg" style="width:100%" />
+                        </p>
+                        <p class="mt-5">
+                            Search for word 'derivation'.
+                        </p>
+                        <p>
+                            <img src="images/SimpleWpf-03.jpg" style="width:100%" />
+                        </p>
+                        <p class="mt-5">
+                            PDF document information.
+                        </p>
+                        <p>
+                            <img src="images/SimpleWpf-04.jpg" style="width: 49.5%" />
+                            <img src="images/SimpleWpf-05.jpg" style="width: 49.5%" />
+                        </p>
+                        <p class="mt-5">
+                            PDF document annotations on/off.
+                        </p>
+                        <p>
+                            <img src="images/SimpleWpf-06.jpg" style="width:49.5%" />
+                            <img src="images/SimpleWpf-07.jpg" style="width:49.5%" />
+                        </p>
+                    </div>
+                    <!-- 2 -------------------------------------------------------------------------------- -->
+                    <div id="samples-simplewinforms" class="pt-4">
+                        <h3>SimpleWinForms</h3>
+                        <p>
+                            Not implemented yet.
+                        </p>
+                        <p style="font-size:small;color:gray">
+                            Lorem ipsum dolor sit amet, ipsum lorem praesent sed ut, labore partiendo concludaturque mea no, per euripidis liberavisse an. Affert doctus cu qui, vel autem equidem ne. Movet noluisse interesset ne eam, eu vel accommodare consectetuer. Sit in ignota labitur democritum, suas imperdiet adolescens ut vim.
+                            Eu solet recteque pri. Mea ne dolor consul, facilisis accusamus efficiantur an qui. Ut blandit pericula vel, esse mazim iudico sit at. Legere labitur ad vel, ne sea velit pertinacia, eu iusto fastidii usu. Ius saepe labores disputando ei, no vel quod oporteat, in etiam iusto labitur est.
+                            Vis populo senserit at, ne nec clita graece nusquam. Euripidis interesset pri no, animal platonem pro an, vis an eius libris animal. In suas tation postea eum, decore petentium salutandi id duo. Has ea labore euripidis, iuvaret minimum et cum.
+                            Amet elitr dolorum vix ut. Legimus interesset ne eos. Libris possim iisque cu mei, qui id iusto omnes debitis. Vix ei everti regione aliquam, modo partiendo duo te. Alienum sententiae vix et.
+                            Stet invenire referrentur mei an, brute idque ea eum, hinc expetendis cu his. Et facilisis principes sed, hinc falli sententiae ex vix. Graece forensibus cu sed, an vero probatus vim. Id usu stet deterruisset.
+                            Noster deterruisset mei ut. Pro eius repudiandae concludaturque ea. Ea stet insolens erroribus has. Vix at legere aeterno explicari. Dolorum dolorem persecuti no eos, sed porro sanctus qualisque ea.
+                            Case inani recteque eos ne, usu quod iusto ad, at copiosae molestiae quo. Sea ad denique mandamus, probo aeterno atomorum in vix. Ea ignota molestiae referrentur quo. Qui ei maiorum torquatos adipiscing, ex wisi impetus epicurei eum, vitae appareat cu cum. Quem patrioque temporibus ea eum. Id per vocibus platonem efficiantur, iudico forensibus sed no, his utinam volutpat id.
+                            Sanctus adipisci scribentur eum ne, veritus adversarium cum no, at utamur adipisci splendide sed. Ex saperet maiorum efficiantur nec, in verear albucius dissentias qui. Suas putant vim ad. Sea principes similique voluptaria eu, nam sapientem conceptam cotidieque at. Vel stet inimicus et, sale verterem inciderint ea eos, ex duo dicam insolens omittantur. Id eius consequat qui, ea accusam contentiones nec.
+                            Has soleat dictas te, cum an congue facilisis omittantur, nam semper molestiae quaerendum eu. Vim id tale perpetua, vel ei modo integre. Pro te dissentiunt theophrastus, cu mel alii congue, sed ea utamur meliore facilis. Ad inermis probatus cum. Est nostrud appareat lobortis id. Qui atqui inani vivendo eu.
+                            Nec adhuc doming et. Veniam animal vituperata te duo. Has ne timeam delicata. Mel tacimates adolescens an.
+                        </p>
+                    </div>
+                    <!-- 2 -------------------------------------------------------------------------------- -->
+                    <div id="samples-memoryleaks" class="pt-4">
+                        <h3 id="samples-memoryleaks">TestMemoryLeaks</h3>
+                        <p>
+                            Not implemented yet.
+                        </p>
+                        <p>
+                            This test application should:
+                            <ul>
+                                <li>use components module</li>
+                                <li>periodically open and close PDF documents</li>
+                                <li>perform some action in opened PDF document</li>
+                                <li>check consumed memory and show these information</li>
+                            </ul>
+                        </p>
+                        <p style="font-size:small;color:gray">
+                            Lorem ipsum dolor sit amet, ipsum lorem praesent sed ut, labore partiendo concludaturque mea no, per euripidis liberavisse an. Affert doctus cu qui, vel autem equidem ne. Movet noluisse interesset ne eam, eu vel accommodare consectetuer. Sit in ignota labitur democritum, suas imperdiet adolescens ut vim.
+                            Eu solet recteque pri. Mea ne dolor consul, facilisis accusamus efficiantur an qui. Ut blandit pericula vel, esse mazim iudico sit at. Legere labitur ad vel, ne sea velit pertinacia, eu iusto fastidii usu. Ius saepe labores disputando ei, no vel quod oporteat, in etiam iusto labitur est.
+                            Vis populo senserit at, ne nec clita graece nusquam. Euripidis interesset pri no, animal platonem pro an, vis an eius libris animal. In suas tation postea eum, decore petentium salutandi id duo. Has ea labore euripidis, iuvaret minimum et cum.
+                            Amet elitr dolorum vix ut. Legimus interesset ne eos. Libris possim iisque cu mei, qui id iusto omnes debitis. Vix ei everti regione aliquam, modo partiendo duo te. Alienum sententiae vix et.
+                            Stet invenire referrentur mei an, brute idque ea eum, hinc expetendis cu his. Et facilisis principes sed, hinc falli sententiae ex vix. Graece forensibus cu sed, an vero probatus vim. Id usu stet deterruisset.
+                            Noster deterruisset mei ut. Pro eius repudiandae concludaturque ea. Ea stet insolens erroribus has. Vix at legere aeterno explicari. Dolorum dolorem persecuti no eos, sed porro sanctus qualisque ea.
+                            Case inani recteque eos ne, usu quod iusto ad, at copiosae molestiae quo. Sea ad denique mandamus, probo aeterno atomorum in vix. Ea ignota molestiae referrentur quo. Qui ei maiorum torquatos adipiscing, ex wisi impetus epicurei eum, vitae appareat cu cum. Quem patrioque temporibus ea eum. Id per vocibus platonem efficiantur, iudico forensibus sed no, his utinam volutpat id.
+                            Sanctus adipisci scribentur eum ne, veritus adversarium cum no, at utamur adipisci splendide sed. Ex saperet maiorum efficiantur nec, in verear albucius dissentias qui. Suas putant vim ad. Sea principes similique voluptaria eu, nam sapientem conceptam cotidieque at. Vel stet inimicus et, sale verterem inciderint ea eos, ex duo dicam insolens omittantur. Id eius consequat qui, ea accusam contentiones nec.
+                            Has soleat dictas te, cum an congue facilisis omittantur, nam semper molestiae quaerendum eu. Vim id tale perpetua, vel ei modo integre. Pro te dissentiunt theophrastus, cu mel alii congue, sed ea utamur meliore facilis. Ad inermis probatus cum. Est nostrud appareat lobortis id. Qui atqui inani vivendo eu.
+                            Nec adhuc doming et. Veniam animal vituperata te duo. Has ne timeam delicata. Mel tacimates adolescens an.
+                        </p>
+                    </div>
+                </div>
+
+                <div style="height:50px"></div>
+            </main>
+        </div>
+        <footer class="container bg-white fixed-bottom d-flex flex-wrap justify-content-between align-items-center border-top py-2 small">
+            <a class="text-black text-nowrap" href="https://github.com/MilosKonecny" target="_blank">Miloš Konečný on GitHub</a>
+            <a class="text-black text-nowrap" href="https://github.com/MilosKonecny/PDFiumDotNET/blob/main/LICENSE" target="_blank">License</a>
+            <a class="text-black text-nowrap" href="https://github.com/MilosKonecny/PDFiumDotNET" target="_blank">PDFiumDotNET on GitHub</a>
+        </footer>
+    </div>
+
 </body>
 </html>
