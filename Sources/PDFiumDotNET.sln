@@ -29,17 +29,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.Components.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.Components.Contracts", "Components\Components.Contracts\PDFiumDotNET.Components.Contracts.csproj", "{2E26ED44-85FE-401E-8954-C38103253F1B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{1D8395C4-4774-488C-BAC4-B0F2ADD6E85B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.Samples.SimpleWpf", "Samples\Samples.SimpleWpf\PDFiumDotNET.Samples.SimpleWpf.csproj", "{F2A1A9EC-C144-4F5C-9142-7E4C1E3BBAF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.Components.Factory", "Components\Components.Factory\PDFiumDotNET.Components.Factory.csproj", "{501C6E92-72DD-4944-8822-2483920E44B4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controls", "Controls", "{E7CEDADC-4B97-4BA8-97EF-0F3306AE7057}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.WpfControls", "Controls\WpfControls\PDFiumDotNET.WpfControls.csproj", "{0BCAC3A2-5ACB-4FCD-AD3A-2A1E226DC693}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.Components.Factory", "Components\Components.Factory\PDFiumDotNET.Components.Factory.csproj", "{501C6E92-72DD-4944-8822-2483920E44B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.WinFormsControls", "Controls\WinFormsControls\PDFiumDotNET.WinFormsControls.csproj", "{A963D334-F2FF-4AF8-B775-626714EC42C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFiumDotNET.WinFormsControls", "Controls\WinFormsControls\PDFiumDotNET.WinFormsControls.csproj", "{A963D334-F2FF-4AF8-B775-626714EC42C3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{1D8395C4-4774-488C-BAC4-B0F2ADD6E85B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.Samples.SimpleWpf", "Samples\Samples.SimpleWpf\PDFiumDotNET.Samples.SimpleWpf.csproj", "{F2A1A9EC-C144-4F5C-9142-7E4C1E3BBAF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFiumDotNET.Samples.SimpleWinForms", "Samples\SimpleWinForms\PDFiumDotNET.Samples.SimpleWinForms.csproj", "{0A56C8AB-57D3-4E92-AF3E-0B87CCBADEBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,10 @@ Global
 		{A963D334-F2FF-4AF8-B775-626714EC42C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A963D334-F2FF-4AF8-B775-626714EC42C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A963D334-F2FF-4AF8-B775-626714EC42C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A56C8AB-57D3-4E92-AF3E-0B87CCBADEBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A56C8AB-57D3-4E92-AF3E-0B87CCBADEBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A56C8AB-57D3-4E92-AF3E-0B87CCBADEBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A56C8AB-57D3-4E92-AF3E-0B87CCBADEBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,6 +103,7 @@ Global
 		{0BCAC3A2-5ACB-4FCD-AD3A-2A1E226DC693} = {E7CEDADC-4B97-4BA8-97EF-0F3306AE7057}
 		{501C6E92-72DD-4944-8822-2483920E44B4} = {F0F26C63-E33F-494D-B376-3DD9823FAF98}
 		{A963D334-F2FF-4AF8-B775-626714EC42C3} = {E7CEDADC-4B97-4BA8-97EF-0F3306AE7057}
+		{0A56C8AB-57D3-4E92-AF3E-0B87CCBADEBA} = {1D8395C4-4774-488C-BAC4-B0F2ADD6E85B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EFF36FBA-336D-484C-B9B5-0F16E75DB07B}
