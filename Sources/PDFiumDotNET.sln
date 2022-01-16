@@ -39,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.WpfControls", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.Components.Factory", "Components\Components.Factory\PDFiumDotNET.Components.Factory.csproj", "{501C6E92-72DD-4944-8822-2483920E44B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFiumDotNET.WinFormsControls", "Controls\WinFormsControls\PDFiumDotNET.WinFormsControls.csproj", "{A963D334-F2FF-4AF8-B775-626714EC42C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{501C6E92-72DD-4944-8822-2483920E44B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{501C6E92-72DD-4944-8822-2483920E44B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{501C6E92-72DD-4944-8822-2483920E44B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A963D334-F2FF-4AF8-B775-626714EC42C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A963D334-F2FF-4AF8-B775-626714EC42C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A963D334-F2FF-4AF8-B775-626714EC42C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A963D334-F2FF-4AF8-B775-626714EC42C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +96,7 @@ Global
 		{F2A1A9EC-C144-4F5C-9142-7E4C1E3BBAF2} = {1D8395C4-4774-488C-BAC4-B0F2ADD6E85B}
 		{0BCAC3A2-5ACB-4FCD-AD3A-2A1E226DC693} = {E7CEDADC-4B97-4BA8-97EF-0F3306AE7057}
 		{501C6E92-72DD-4944-8822-2483920E44B4} = {F0F26C63-E33F-494D-B376-3DD9823FAF98}
+		{A963D334-F2FF-4AF8-B775-626714EC42C3} = {E7CEDADC-4B97-4BA8-97EF-0F3306AE7057}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EFF36FBA-336D-484C-B9B5-0F16E75DB07B}
