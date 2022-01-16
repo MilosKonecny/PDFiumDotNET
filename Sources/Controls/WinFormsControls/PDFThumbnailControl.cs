@@ -1,17 +1,15 @@
 ﻿namespace PDFiumDotNET.WinFormsControls
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Data;
-    using System.Drawing;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using System.Windows.Forms;
 
+    /// <summary>
+    /// Class implements control to view thumbnails of PDF document.
+    /// </summary>
     public partial class PDFThumbnailControl : UserControl
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PDFThumbnailControl"/> class.
+        /// </summary>
         public PDFThumbnailControl()
         {
             InitializeComponent();
