@@ -6,7 +6,7 @@
     /// <summary>
     /// Implementation of <see cref="ICommand"/> usable in MVVM.
     /// </summary>
-    /// <typeparam name="T">Type of command parameter</typeparam>
+    /// <typeparam name="T">Type of command parameter.</typeparam>
     /// <seealso cref="ICommand" />
     public class ViewModelExtCommand<T> : ICommand
     {
@@ -96,6 +96,7 @@
             {
                 return true;
             }
+
             return CanExecuteCommand(commandValue);
         }
 
@@ -119,6 +120,7 @@
                 CommandManager.RequerySuggested += value;
                 CanExecuteChangedPrivate += value;
             }
+
             remove
             {
                 CanExecuteChangedPrivate -= value;

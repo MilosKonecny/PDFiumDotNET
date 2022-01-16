@@ -122,7 +122,7 @@
         }
 
         /// <summary>
-        /// Gets permission - print document high quality
+        /// Gets permission - print document high quality.
         /// </summary>
         public string PermissionPrintDocumentHighQuality
         {

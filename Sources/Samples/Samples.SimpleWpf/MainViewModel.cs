@@ -51,6 +51,17 @@
         #region Public properties
 
         /// <summary>
+        /// Gets the name of used framework.
+        /// </summary>
+        public static string UsedFramework
+        {
+            get
+            {
+                return RuntimeInformation.FrameworkDescription + " / " + RuntimeInformation.ProcessArchitecture;
+            }
+        }
+
+        /// <summary>
         /// Gets the main PDF component.
         /// </summary>
         public IPDFComponent PDFComponent
@@ -253,25 +264,14 @@
         /// </summary>
         public ObservableCollection<IPDFFindPage> FindResult { get; private set; }
 
-        /// <summary>
-        /// Gets the name of used framework.
-        /// </summary>
-        public string UsedFramework
-        {
-            get
-            {
-                return RuntimeInformation.FrameworkDescription + " / " + RuntimeInformation.ProcessArchitecture;
-            }
-        }
-
         #endregion Public properties
 
         #region Public methods
 
         /// <summary>
-        /// 
+        /// Navigates to the defined position by <paramref name="bookmark"/>.
         /// </summary>
-        /// <param name="bookmark"></param>
+        /// <param name="bookmark">Parameter defines the position in document where should be navigated to.</param>
         public void NavigateTo(IPDFBookmark bookmark)
         {
             if (bookmark == null)
@@ -302,6 +302,7 @@
                 message += Environment.NewLine;
                 message += e.Message;
             }
+
             return message;
         }
 
@@ -325,16 +326,19 @@
             AboutCommand = new ViewModelCommand(ExecuteAboutCommand, CanExecuteAboutCommand);
             InformationCommand = new ViewModelCommand(ExecuteInformationCommand, CanExecuteInformationCommand);
             ShowAnnotationsCommand = new ViewModelExtCommand<ToggleButton>(ExecuteShowAnnotationsCommand, CanExecuteShowAnnotationsCommand);
+
             // Zoom commands
             ZoomWidthCommand = new ViewModelCommand(ExecuteZoomWidthCommand, CanExecuteZoomWidthCommand);
             ZoomHeightCommand = new ViewModelCommand(ExecuteZoomHeightCommand, CanExecuteZoomHeightCommand);
             ZoomOutCommand = new ViewModelCommand(ExecuteZoomOutCommand, CanExecuteZoomOutCommand);
             ZoomInCommand = new ViewModelCommand(ExecuteZoomInCommand, CanExecuteZoomInCommand);
+
             // Go to commands
             GoToFirstPageCommand = new ViewModelCommand(ExecuteGoToFirstPageCommand, CanExecuteGoToFirstPageCommand);
             GoToPreviousPageCommand = new ViewModelCommand(ExecuteGoToPreviousPageCommand, CanExecuteGoToPreviousPageCommand);
             GoToNextPageCommand = new ViewModelCommand(ExecuteGoToNextPageCommand, CanExecuteGoToNextPageCommand);
             GoToLastPageCommand = new ViewModelCommand(ExecuteGoToLastPageCommand, CanExecuteGoToLastPageCommand);
+
             // Find commands
             FindCommand = new ViewModelCommand(ExecuteFindCommand, CanExecuteFindCommand);
             FindClearResultCommand = new ViewModelCommand(ExecuteFindClearResultCommand, CanExecuteFindClearResultCommand);
@@ -386,8 +390,12 @@
 
                 // Simple example solution.
                 var caption = "Perform action?";
-                var text = string.Format(CultureInfo.InvariantCulture, "Action type: {0}\nUri path: {1}\nFile path: {2}",
-                    e.Action.ActionType, Uri.UnescapeDataString(e.Action.UriPath ?? string.Empty), Uri.UnescapeDataString(e.Action.FilePath ?? string.Empty));
+                var text = string.Format(
+                    CultureInfo.InvariantCulture,
+                    "Action type: {0}\nUri path: {1}\nFile path: {2}",
+                    e.Action.ActionType,
+                    Uri.UnescapeDataString(e.Action.UriPath ?? string.Empty),
+                    Uri.UnescapeDataString(e.Action.FilePath ?? string.Empty));
                 if (MessageBox.Show(text, caption, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     try
@@ -397,7 +405,7 @@
                             StartInfo = new ProcessStartInfo()
                             {
                                 FileName = Uri.UnescapeDataString(e.Action.UriPath ?? string.Empty) ?? Uri.UnescapeDataString(e.Action.FilePath ?? string.Empty),
-                                UseShellExecute = true
+                                UseShellExecute = true,
                             },
                         };
                         p.Start();
@@ -431,6 +439,7 @@
             {
                 return null;
             }
+
             set
             {
                 if (value == null)

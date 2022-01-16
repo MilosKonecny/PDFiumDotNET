@@ -117,7 +117,7 @@
 
             var dialog = new OpenFileDialog
             {
-                Filter = "PDF Files|*.pdf|All files|*.*"
+                Filter = "PDF Files|*.pdf|All files|*.*",
             };
             if (dialog.ShowDialog() == false)
             {
@@ -131,12 +131,13 @@
                 {
                     UsePasswordInput = true,
                     InputDialogTitle = "PDF document is password protected",
-                    InputTextHint = "Please enter a password:"
+                    InputTextHint = "Please enter a password:",
                 };
                 if (inputDialog.ShowDialog(_view.Window))
                 {
                     return inputDialog.InputText;
                 }
+
                 return null;
             });
             InvokePropertyChangedEvent();
@@ -188,7 +189,7 @@
         {
             var di = new DocumentInformation(_pdfComponent)
             {
-                Owner = _view.Window
+                Owner = _view.Window,
             };
             di.ShowDialog();
         }
@@ -228,7 +229,7 @@
                 return;
             }
 
-            zoomComponent.CurrentZoomFactor = _view.PDFActualWidth / (pageComponent[PageLayoutType.Standard].WidestGridCellWidth + 2 * _view.PDFPageMargin);
+            zoomComponent.CurrentZoomFactor = _view.PDFActualWidth / (pageComponent[PageLayoutType.Standard].WidestGridCellWidth + (2 * _view.PDFPageMargin));
         }
 
         private bool CanExecuteZoomWidthCommand()
@@ -245,7 +246,7 @@
                 return;
             }
 
-            zoomComponent.CurrentZoomFactor = _view.PDFActualHeight / (pageComponent[PageLayoutType.Standard].HighestGridCellHeight + 2 * _view.PDFPageMargin);
+            zoomComponent.CurrentZoomFactor = _view.PDFActualHeight / (pageComponent[PageLayoutType.Standard].HighestGridCellHeight + (2 * _view.PDFPageMargin));
         }
 
         private bool CanExecuteZoomHeightCommand()
@@ -264,6 +265,7 @@
             {
                 return false;
             }
+
             var values = _pdfComponent.ZoomComponent.ZoomValues.ToList();
             if (values.Count == 0)
             {
@@ -284,6 +286,7 @@
             {
                 return false;
             }
+
             var values = _pdfComponent.ZoomComponent.ZoomValues.ToList();
             if (values.Count == 0)
             {
@@ -342,42 +345,46 @@
             // Cancelation token not used.
             // The cancelation is implemented by the IsFindActive property
             var ct = new CancellationToken();
-            await Task.Factory.StartNew(() =>
-            {
-                _pdfComponent.FindComponent.FindText(
-                    FindText,
-                    IsFindCaseSensitive,
-                    IsFindWholeWords,
-                    (pageIndex) =>
-                    {
-                        ActiveFindPage = pageIndex + 1;
-                        return IsFindActive;
-                    },
-                    (page) =>
-                    {
-                        if (page != null)
+            await Task.Factory.StartNew(
+                () =>
+                {
+                    _pdfComponent.FindComponent.FindText(
+                        FindText,
+                        IsFindCaseSensitive,
+                        IsFindWholeWords,
+                        (pageIndex) =>
                         {
-                            App.Current.Dispatcher.Invoke(() =>
-                            {
-                                FindResult.Add(page);
-                            });
-                        }
-
-                        return IsFindActive;
-                    },
-                    (page, position) =>
-                    {
-                        if (page != null && position != null)
+                            ActiveFindPage = pageIndex + 1;
+                            return IsFindActive;
+                        },
+                        (page) =>
                         {
-                            App.Current.Dispatcher.Invoke(() =>
+                            if (page != null)
                             {
-                                page.Positions.Add(position);
-                            });
-                        }
+                                App.Current.Dispatcher.Invoke(() =>
+                                {
+                                    FindResult.Add(page);
+                                });
+                            }
 
-                        return IsFindActive;
-                    });
-            }, ct, TaskCreationOptions.LongRunning, TaskScheduler.Default).ConfigureAwait(false);
+                            return IsFindActive;
+                        },
+                        (page, position) =>
+                        {
+                            if (page != null && position != null)
+                            {
+                                App.Current.Dispatcher.Invoke(() =>
+                                {
+                                    page.Positions.Add(position);
+                                });
+                            }
+
+                            return IsFindActive;
+                        });
+                },
+                ct,
+                TaskCreationOptions.LongRunning,
+                TaskScheduler.Default).ConfigureAwait(false);
 
             IsFindActive = false;
         }
@@ -386,7 +393,6 @@
         {
             return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
         }
-
 
         private void ExecuteFindClearResultCommand()
         {

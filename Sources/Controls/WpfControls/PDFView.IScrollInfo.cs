@@ -1,10 +1,10 @@
 ﻿namespace PDFiumDotNET.WpfControls
 {
-    using System.Windows;
-    using System.Windows.Media;
-    using System.Windows.Controls;
     using System;
+    using System.Windows;
+    using System.Windows.Controls;
     using System.Windows.Input;
+    using System.Windows.Media;
 
     /// <summary>
     /// View class shows pages from opened PDF document.

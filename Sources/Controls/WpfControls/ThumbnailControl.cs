@@ -7,7 +7,6 @@
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.WpfControls.Helper;
 
-
     /// <summary>
     /// Thumbnail control used to show small image of page.
     /// </summary>
@@ -47,12 +46,16 @@
 
             // background
             drawingContext.DrawRectangle(Background, null, new Rect(0, 0, Width, Height));
+
             // left
             drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Left), new Point(0, 0), new Point(0, Height));
+
             // top
             drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Top), new Point(0, 0), new Point(Width, 0));
+
             // right
             drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Right), new Point(Width, 0), new Point(Width, Height));
+
             // bottom
             drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Bottom), new Point(0, Height), new Point(Width, Height));
 
@@ -74,7 +77,9 @@
                 drawingContext.DrawImage(bitmap, new Rect(0, 0, Width, Height));
             }
 #pragma warning disable CA1031 // Do not catch general exception types
-            catch { }
+            catch
+            {
+            }
 #pragma warning restore CA1031 // Do not catch general exception types
         }
     }

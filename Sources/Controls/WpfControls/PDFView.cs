@@ -95,7 +95,7 @@
         #region Constructors
 
         /// <summary>
-        /// Static constructor to define metadata for the control (and link it to the style in Generic.xaml).
+        /// Initializes static members of the <see cref="PDFView"/> class.
         /// </summary>
         static PDFView()
         {
@@ -390,15 +390,19 @@
                     // Transform the point to the page.
                     point.X -= pageInfo.Left;
                     point.Y -= pageInfo.Top;
+
                     // Eliminate zoom factor
                     point.X /= PDFZoomComponent.CurrentZoomFactor;
                     point.Y /= PDFZoomComponent.CurrentZoomFactor;
+
                     // Transform y axis from top-left position to the bottom-left.
                     point.Y = pageInfo.Page.Height - point.Y;
+
                     // Get the link on this position.
                     return pageInfo.Page.GetLinkFromPoint(point.X, point.Y);
                 }
             }
+
             return null;
         }
 
@@ -436,7 +440,7 @@
         /// Datermines area where fit all pages of opened document.
         /// </summary>
         /// <param name="availableSize">Available size based on current layout of application.</param>
-        /// <returns>Required size to show all pages of opened</returns>
+        /// <returns>Required size to show all pages of opened document.</returns>
         private Size DeterminePageArea(Size availableSize)
         {
             if (PDFPageComponent == null

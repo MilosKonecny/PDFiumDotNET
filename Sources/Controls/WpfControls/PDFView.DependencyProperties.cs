@@ -21,43 +21,37 @@
         /// Dependency property for 'PDFFindSelectionBorder' - source of information to draw find selection border.
         /// </summary>
         public static readonly DependencyProperty PDFFindSelectionBorderProperty
-            = DependencyProperty.Register("PDFFindSelectionBorder", typeof(Color), typeof(PDFView),
-                new PropertyMetadata(new Color() { R = 0x00, G = 0x00, B = 0xFF, A = 0xFF }));
+            = DependencyProperty.Register("PDFFindSelectionBorder", typeof(Color), typeof(PDFView), new PropertyMetadata(new Color() { R = 0x00, G = 0x00, B = 0xFF, A = 0xFF }));
 
         /// <summary>
         /// Dependency property for 'PDFFindSelectionBackground' - source of information to draw find selection background.
         /// </summary>
         public static readonly DependencyProperty PDFFindSelectionBackgroundProperty
-            = DependencyProperty.Register("PDFFindSelectionBackground", typeof(Color), typeof(PDFView),
-                new PropertyMetadata(new Color() { R = 0xFF, G = 0xFF, B = 0xA0, A = 0x3F }));
+            = DependencyProperty.Register("PDFFindSelectionBackground", typeof(Color), typeof(PDFView), new PropertyMetadata(new Color() { R = 0xFF, G = 0xFF, B = 0xA0, A = 0x3F }));
 
         /// <summary>
         /// Dependency property for 'PDFPageMargin' - source of information to draw content.
         /// </summary>
         public static readonly DependencyProperty PDFPageMarginProperty
-            = DependencyProperty.Register("PDFPageMargin", typeof(double), typeof(PDFView),
-                new FrameworkPropertyMetadata(5d, HandlePDFPageMarginPropertyChanged));
+            = DependencyProperty.Register("PDFPageMargin", typeof(double), typeof(PDFView), new FrameworkPropertyMetadata(5d, HandlePDFPageMarginPropertyChanged));
 
         /// <summary>
         /// Dependency property for 'PDFPageBackground' - source of information to draw content.
         /// </summary>
         public static readonly DependencyProperty PDFPageBackgroundProperty
-            = DependencyProperty.Register("PDFPageBackground", typeof(Brush), typeof(PDFView),
-                new FrameworkPropertyMetadata(Brushes.White, HandlePDFPageBackgroundPropertyChanged));
+            = DependencyProperty.Register("PDFPageBackground", typeof(Brush), typeof(PDFView), new FrameworkPropertyMetadata(Brushes.White, HandlePDFPageBackgroundPropertyChanged));
 
         /// <summary>
         /// Dependency property for 'PDFPageComponent' - source of information to draw content.
         /// </summary>
         public static readonly DependencyProperty PDFPageComponentProperty
-            = DependencyProperty.Register("PDFPageComponent", typeof(IPDFPageComponent), typeof(PDFView),
-                new FrameworkPropertyMetadata(null, HandlePDFPageComponentPropertyChanged));
+            = DependencyProperty.Register("PDFPageComponent", typeof(IPDFPageComponent), typeof(PDFView), new FrameworkPropertyMetadata(null, HandlePDFPageComponentPropertyChanged));
 
         /// <summary>
         /// Dependency property for 'PDFZoomComponent' - source of information to draw content.
         /// </summary>
         public static readonly DependencyProperty PDFZoomComponentProperty
-            = DependencyProperty.Register("PDFZoomComponent", typeof(IPDFZoomComponent), typeof(PDFView),
-                new FrameworkPropertyMetadata(null, HandlePDFZoomComponentPropertyChanged));
+            = DependencyProperty.Register("PDFZoomComponent", typeof(IPDFZoomComponent), typeof(PDFView), new FrameworkPropertyMetadata(null, HandlePDFZoomComponentPropertyChanged));
 
         #endregion Dependency properties - register
 
@@ -288,13 +282,13 @@
 
                 // Center vertically
                 var pageHeight = page.Height * PDFZoomComponent.CurrentZoomFactor;
-                var detailedPositionYFromTop = pageHeight - e.DetailedPositionY * PDFZoomComponent.CurrentZoomFactor;
-                verticalOffset += detailedPositionYFromTop - ActualHeight / 2;
+                var detailedPositionYFromTop = pageHeight - (e.DetailedPositionY * PDFZoomComponent.CurrentZoomFactor);
+                verticalOffset += detailedPositionYFromTop - (ActualHeight / 2);
 
                 // Center horizontally
                 var pageWidth = page.Width * PDFZoomComponent.CurrentZoomFactor;
                 var detailedPositionXFromLeft = e.DetailedPositionX * PDFZoomComponent.CurrentZoomFactor;
-                horizontalOffset = (_workArea.Width - pageWidth) / 2 + detailedPositionXFromLeft - ActualWidth / 2;
+                horizontalOffset = ((_workArea.Width - pageWidth) / 2) + detailedPositionXFromLeft - (ActualWidth / 2);
             }
 
             VerticalOffset = verticalOffset;
@@ -302,7 +296,6 @@
             {
                 HorizontalOffset = horizontalOffset;
             }
-
         }
 
         private void HandlePDFPageComponentTextSelectionsRemovedEvent(object sender, EventArgs e)

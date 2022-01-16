@@ -18,29 +18,25 @@
         /// Dependency property for 'PDFPageBackground' - source of information to draw content.
         /// </summary>
         public static readonly DependencyProperty PDFPageBackgroundProperty
-            = DependencyProperty.Register("PDFPageBackground", typeof(Brush), typeof(PDFThumbnailView),
-                new FrameworkPropertyMetadata(Brushes.White, HandlePDFPageBackgroundPropertyChanged));
+            = DependencyProperty.Register("PDFPageBackground", typeof(Brush), typeof(PDFThumbnailView), new FrameworkPropertyMetadata(Brushes.White, HandlePDFPageBackgroundPropertyChanged));
 
         /// <summary>
         /// Dependency property for 'PDFPageBorderBrush' - source of information to draw content.
         /// </summary>
         public static readonly DependencyProperty PDFPageBorderBrushProperty
-            = DependencyProperty.Register("PDFPageBorderBrush", typeof(Brush), typeof(PDFThumbnailView),
-                new FrameworkPropertyMetadata(Brushes.Black, HandlePDFPageBorderBrushPropertyChanged));
+            = DependencyProperty.Register("PDFPageBorderBrush", typeof(Brush), typeof(PDFThumbnailView), new FrameworkPropertyMetadata(Brushes.Black, HandlePDFPageBorderBrushPropertyChanged));
 
         /// <summary>
         /// Dependency property for 'PDFPageBorderThickness' - source of information to draw content.
         /// </summary>
         public static readonly DependencyProperty PDFPageBorderThicknessProperty
-            = DependencyProperty.Register("PDFPageBorderThickness", typeof(Thickness), typeof(PDFThumbnailView),
-                new FrameworkPropertyMetadata(new Thickness(0.5), HandlePDFPageBorderThicknessPropertyChanged));
+            = DependencyProperty.Register("PDFPageBorderThickness", typeof(Thickness), typeof(PDFThumbnailView), new FrameworkPropertyMetadata(new Thickness(0.5), HandlePDFPageBorderThicknessPropertyChanged));
 
         /// <summary>
         /// Dependency property for 'PDFPageComponent' - source of information to draw content.
         /// </summary>
         public static readonly DependencyProperty PDFPageComponentProperty
-            = DependencyProperty.Register("PDFPageComponent", typeof(IPDFPageComponent), typeof(PDFThumbnailView),
-                new FrameworkPropertyMetadata(null, HandlePDFPageComponentPropertyChanged));
+            = DependencyProperty.Register("PDFPageComponent", typeof(IPDFPageComponent), typeof(PDFThumbnailView), new FrameworkPropertyMetadata(null, HandlePDFPageComponentPropertyChanged));
 
         #endregion Dependency properties - register
 

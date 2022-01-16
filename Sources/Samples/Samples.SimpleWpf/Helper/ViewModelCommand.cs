@@ -1,8 +1,8 @@
-﻿using System;
-using System.Windows.Input;
-
-namespace PDFiumDotNET.Samples.SimpleWpf.Helper
+﻿namespace PDFiumDotNET.Samples.SimpleWpf.Helper
 {
+    using System;
+    using System.Windows.Input;
+
     /// <summary>
     /// Implementation of <see cref="ICommand"/> usable in MVVM.
     /// </summary>
@@ -94,6 +94,7 @@ namespace PDFiumDotNET.Samples.SimpleWpf.Helper
             {
                 return CanExecuteCommand();
             }
+
             return true;
         }
 
@@ -116,6 +117,7 @@ namespace PDFiumDotNET.Samples.SimpleWpf.Helper
                 CommandManager.RequerySuggested += value;
                 CanExecuteChangedPrivate += value;
             }
+
             remove
             {
                 CanExecuteChangedPrivate -= value;

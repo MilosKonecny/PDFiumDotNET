@@ -1,7 +1,7 @@
-﻿using System.Windows;
-
-namespace PDFiumDotNET.Samples.SimpleWpf.CommonDialogs
+﻿namespace PDFiumDotNET.Samples.SimpleWpf.CommonDialogs
 {
+    using System.Windows;
+
     /// <summary>
     /// Class implements text input dialog.
     /// </summary>
@@ -36,7 +36,7 @@ namespace PDFiumDotNET.Samples.SimpleWpf.CommonDialogs
         {
             var view = new TextInputView(this);
             view.Owner = owner;
-            if (true == view.ShowDialog())
+            if (view.ShowDialog() == true)
             {
                 return true;
             }
