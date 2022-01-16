@@ -14,7 +14,7 @@ on:
 
 jobs:
 
-  build:
+  build-debug:
     name: "Build DEBUG"
     # 26.11.2021:
     # - windows-latest uses VS2019
@@ -47,7 +47,7 @@ jobs:
     - name: Run unit tests using the test runner specified in a .NET projects.
       run: dotnet -c DEBUG test ./Sources/PDFiumDotNET.sln
 
-  build:
+  build-release:
     name: "Build RELEASE"
     # 26.11.2021:
     # - windows-latest uses VS2019
