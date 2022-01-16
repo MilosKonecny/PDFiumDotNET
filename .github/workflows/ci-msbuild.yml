@@ -15,7 +15,7 @@ on:
 jobs:
 
   build:
-    name: "Continuous integration - ms build"
+    name: "Build"
     # 26.11.2021:
     # - windows-latest uses VS2019
     # - windows-2022 uses VS20222

@@ -15,7 +15,7 @@ on:
 jobs:
 
   build:
-    name: "Continuous integration - dotnet"
+    name: "Build"
     # 26.11.2021:
     # - windows-latest uses VS2019
     # - windows-2022 uses VS20222
@@ -41,8 +41,8 @@ jobs:
       with:
         dotnet-version: '6.0.x'
     - name: Restore dependencies specified in a .NET projects.
-      run: dotnet restore
+      run: dotnet restore ./**/*.sln
     - name: Build all .NET projects.
-      run: dotnet build
+      run: dotnet build ./**/*.sln
     - name: Run unit tests using the test runner specified in a .NET projects.
-      run: dotnet test
+      run: dotnet test ./**/*.sln
