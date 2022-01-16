@@ -10,4 +10,10 @@
       <Compile Include="..\..\Common\AssemblyGlobalInfo.cs" Link="AssemblyGlobalInfo.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Components\Components.Contracts\PDFiumDotNET.Components.Contracts.csproj" />
+      <ProjectReference Include="..\..\Components\Components.Factory\PDFiumDotNET.Components.Factory.csproj" />
+      <ProjectReference Include="..\..\Controls\WinFormsControls\PDFiumDotNET.WinFormsControls.csproj" />
+    </ItemGroup>
+
 </Project>
