@@ -1,4 +1,4 @@
-name: Continuous integration - dotnet
+name: Continuous integration (dotnet)
 
 on:
   push:
@@ -15,7 +15,7 @@ on:
 jobs:
 
   build:
-    name: "Build"
+    name: "Build DEBUG"
     # 26.11.2021:
     # - windows-latest uses VS2019
     # - windows-2022 uses VS20222
@@ -43,6 +43,39 @@ jobs:
     - name: Restore dependencies specified in a .NET projects.
       run: dotnet restore ./Sources/PDFiumDotNET.sln
     - name: Build all .NET projects.
-      run: dotnet build ./Sources/PDFiumDotNET.sln
+      run: dotnet -c DEBUG build ./Sources/PDFiumDotNET.sln
     - name: Run unit tests using the test runner specified in a .NET projects.
-      run: dotnet test ./Sources/PDFiumDotNET.sln
+      run: dotnet -c DEBUG test ./Sources/PDFiumDotNET.sln
+
+  build:
+    name: "Build RELEASE"
+    # 26.11.2021:
+    # - windows-latest uses VS2019
+    # - windows-2022 uses VS20222
+    runs-on: windows-2022
+    steps:
+    - name: Parameters
+      run: |
+        echo "Log level: ${{ github.event.inputs.logLevel }}"
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Install framework 3.1
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x'
+    - name: Install framework 5.0
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.x'
+    - name: Install framework 6.0
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.x'
+    - name: Restore dependencies specified in a .NET projects.
+      run: dotnet restore ./Sources/PDFiumDotNET.sln
+    - name: Build all .NET projects.
+      run: dotnet -c RELEASE build ./Sources/PDFiumDotNET.sln
+    - name: Run unit tests using the test runner specified in a .NET projects.
+      run: dotnet -c RELEASE test ./Sources/PDFiumDotNET.sln
