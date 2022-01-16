@@ -7,8 +7,6 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <GenerateDocumentationFile>True</GenerateDocumentationFile>
         <ApplicationIcon>Resources\icons8_pdf.ico</ApplicationIcon>
     </PropertyGroup>
 

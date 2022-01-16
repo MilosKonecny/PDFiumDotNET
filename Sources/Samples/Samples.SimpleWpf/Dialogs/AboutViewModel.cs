@@ -41,7 +41,6 @@
             }
         }
 
-
         /// <summary>
         /// Gets my own license text.
         /// </summary>
@@ -101,6 +100,7 @@
                 message += Environment.NewLine;
                 message += e.Message;
             }
+
             return message;
         }
 

@@ -22,6 +22,7 @@
             drawingContext.DrawRectangle(Background, null, new Rect(0, 0, ViewportWidth, ViewportHeight));
 
             var pageOnCenter = _renderedPages.FirstOrDefault(page => page.IsOnCenter);
+
             // Determine pages to draw.
             _renderedPages.Clear();
             _renderedPages.AddRange(PDFPageComponent[PageLayoutType.Thumbnail].DeterminePagesToRender(
@@ -40,8 +41,8 @@
                 var currentPageWidth = pageInfo.Page.ThumbnailWidth * _thumbnailZoomFactor;
 
                 // Center the page horizontally
-                pageInfo.Left = ViewportWidth / 2d - currentPageWidth / 2d;
-                pageInfo.Right = ViewportWidth / 2d + currentPageWidth / 2d;
+                pageInfo.Left = (ViewportWidth / 2d) - (currentPageWidth / 2d);
+                pageInfo.Right = (ViewportWidth / 2d) + (currentPageWidth / 2d);
 
                 // Take offsets into account
                 pageInfo.Left -= HorizontalOffset;
@@ -84,7 +85,9 @@
                     drawingContext.DrawImage(bitmap, new Rect(pageRect.TopLeft, pageRect.BottomRight));
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
-                catch { }
+                catch
+                {
+                }
 #pragma warning restore CA1031 // Do not catch general exception types
 
                 // Draw page label
@@ -96,25 +99,31 @@
                     FontSize,
                     Foreground,
                     VisualTreeHelper.GetDpi(this).PixelsPerDip);
-                var textLocation = new Point(pageInfo.Left + (pageInfo.Right - pageInfo.Left) / 2d - ft.WidthIncludingTrailingWhitespace / 2, pageInfo.Bottom);
+                var textLocation = new Point(pageInfo.Left + ((pageInfo.Right - pageInfo.Left) / 2d) - (ft.WidthIncludingTrailingWhitespace / 2), pageInfo.Bottom);
                 drawingContext.DrawText(ft, textLocation);
 
                 // Draw page border - left
                 drawingContext.DrawLine(new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Left), new Point(pageInfo.Left, pageInfo.Top), new Point(pageInfo.Left, pageInfo.Bottom));
+
                 // Draw page border - top
                 drawingContext.DrawLine(new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Top), new Point(pageInfo.Left, pageInfo.Top), new Point(pageInfo.Right, pageInfo.Top));
+
                 // Draw page border - right
                 drawingContext.DrawLine(new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Right), new Point(pageInfo.Right, pageInfo.Top), new Point(pageInfo.Right, pageInfo.Bottom));
+
                 // Draw page border - bottom
                 drawingContext.DrawLine(new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Bottom), new Point(pageInfo.Left, pageInfo.Bottom), new Point(pageInfo.Right, pageInfo.Bottom));
             }
 
             // Draw background border - left
             drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Left), new Point(0, 0), new Point(0, ViewportHeight));
+
             // Draw background border - top
             drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Top), new Point(0, 0), new Point(ViewportWidth, 0));
+
             // Draw background border - right
             drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Right), new Point(ViewportWidth, 0), new Point(ViewportWidth, ViewportHeight));
+
             // Draw background border - bottom
             drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Bottom), new Point(0, ViewportHeight), new Point(ViewportWidth, ViewportHeight));
         }
@@ -123,12 +132,16 @@
         {
             // Draw background
             drawingContext.DrawRectangle(Background, null, new Rect(0, 0, ViewportWidth, ViewportHeight));
+
             // Draw page border - left
             drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Left), new Point(0, 0), new Point(0, ViewportHeight));
+
             // Draw page border - top
             drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Top), new Point(0, 0), new Point(ViewportWidth, 0));
+
             // Draw page border - right
             drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Right), new Point(ViewportWidth, 0), new Point(ViewportWidth, ViewportHeight));
+
             // Draw page border - bottom
             drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Bottom), new Point(0, ViewportHeight), new Point(ViewportWidth, ViewportHeight));
         }

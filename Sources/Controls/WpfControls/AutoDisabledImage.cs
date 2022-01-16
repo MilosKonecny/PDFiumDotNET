@@ -13,7 +13,7 @@
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AutoDisabledImage"/> class.
+        /// Initializes static members of the <see cref="AutoDisabledImage"/> class.
         /// </summary>
         static AutoDisabledImage()
         {
@@ -69,6 +69,7 @@
                 {
                     // restore the original image
                     Source = ((FormatConvertedBitmap)Source).Source;
+
                     // reset the Opcity Mask
                     OpacityMask = null;
                 }
@@ -78,10 +79,11 @@
                 // image is disabled (i.e. grayscale the original image)
                 if (!IsGrayedOut)
                 {
-                    // Get the source bitmap                        
+                    // Get the source bitmap
                     if (Source is BitmapSource bitmapImage)
                     {
                         Source = new FormatConvertedBitmap(bitmapImage, PixelFormats.Gray8, null, 0);
+
                         // reuse the opacity mask from the original image as FormatConvertedBitmap does not keep transparency info
                         OpacityMask = new ImageBrush(bitmapImage);
                     }

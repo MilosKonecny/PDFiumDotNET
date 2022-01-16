@@ -4,7 +4,7 @@
     using System.Windows;
 
     /// <summary>
-    /// Interaction logic for TextInputView.xaml
+    /// Interaction logic for TextInputView.xaml.
     /// </summary>
     public partial class TextInputView : Window
     {
@@ -34,7 +34,7 @@
         #region Public properties
 
         /// <summary>
-        /// Gets view model;
+        /// Gets view model.
         /// </summary>
         public TextInputDialog ViewModel => DataContext as TextInputDialog;
 

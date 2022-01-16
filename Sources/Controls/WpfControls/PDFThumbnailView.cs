@@ -91,7 +91,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PDFView"/> class.
+        /// Initializes a new instance of the <see cref="PDFThumbnailView"/> class.
         /// </summary>
         public PDFThumbnailView()
         {
@@ -374,7 +374,7 @@
         /// Datermines area where fit all pages of opened document.
         /// </summary>
         /// <param name="availableSize">Available size based on current layout of application.</param>
-        /// <returns>Required size to show all pages of opened</returns>
+        /// <returns>Required size to show all pages of opened document.</returns>
         private Size DeterminePageArea(Size availableSize)
         {
             if (PDFPageComponent == null
