@@ -88,15 +88,6 @@
         /// Test for <see cref="PDFiumBridge"/> method.
         /// </summary>
         [TestMethod]
-        public void PDFiumBridge_FPDFSetPrintTextWithGDI_SimpleCall_NoException()
-        {
-            _bridge.FPDF_SetPrintTextWithGDI(false);
-        }
-
-        /// <summary>
-        /// Test for <see cref="PDFiumBridge"/> method.
-        /// </summary>
-        [TestMethod]
         public void PDFiumBridge_FPDFSetPrintMode_SimpleCall_NoException()
         {
             _bridge.FPDF_SetPrintMode(FPDF_PRINTMODES.FPDF_PRINTMODE_EMF);

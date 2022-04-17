@@ -74,37 +74,6 @@
         //////          None.
         ////FPDF_EXPORT void FPDF_CALLCONV FPDF_SetSandBoxPolicy(FPDF_DWORD policy, FPDF_BOOL enable);
 
-        ////// Experimental API.
-        ////// Function: FPDF_SetTypefaceAccessibleFunc
-        //////          Set the function pointer that makes GDI fonts available in sandboxed
-        //////          environments.
-        ////// Parameters:
-        //////          func -   A function pointer. See description above.
-        ////// Return value:
-        //////          None.
-        ////FPDF_EXPORT void FPDF_CALLCONV FPDF_SetTypefaceAccessibleFunc(PDFiumEnsureTypefaceCharactersAccessible func);
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate void FPDF_SetPrintTextWithGDI_Delegate(bool use_gdi);
-
-        private static FPDF_SetPrintTextWithGDI_Delegate FPDF_SetPrintTextWithGDIStatic { get; set; }
-
-        /// <summary>
-        /// Experimental API.
-        /// Set whether to use GDI to draw fonts when printing on Windows.
-        /// </summary>
-        /// <param name="use_gdi">Set to true to enable printing text with GDI.</param>
-        /// <remarks>
-        /// FPDF_EXPORT void FPDF_CALLCONV FPDF_SetPrintTextWithGDI(FPDF_BOOL use_gdi);.
-        /// </remarks>
-        public void FPDF_SetPrintTextWithGDI(bool use_gdi)
-        {
-            lock (_syncObject)
-            {
-                FPDF_SetPrintTextWithGDIStatic(use_gdi);
-            }
-        }
-
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDF_SetPrintMode_Delegate(FPDF_PRINTMODES mode);
 
@@ -151,6 +120,7 @@
         /// <returns>A handle to the loaded document, or NULL on failure.</returns>
         /// <remarks>
         /// Loaded document can be closed by FPDF_CloseDocument(). If this function fails, you can use FPDF_GetLastError() to retrieve the reason why it failed.
+        /// The encoding for |file_path| is UTF-8.
         /// The encoding for |password| can be either UTF-8 or Latin-1. PDFs, depending on the security handler revision, will only accept one or the other encoding.
         /// If |password|'s encoding and the PDF's expected encoding do not match, FPDF_LoadDocument() will automatically convert |password| to the other encoding.
         /// FPDF_EXPORT FPDF_DOCUMENT FPDF_CALLCONV FPDF_LoadDocument(FPDF_STRING file_path, FPDF_BYTESTRING password);.
@@ -1248,8 +1218,6 @@
             ////FPDF_EXPORT void FPDF_CALLCONV FPDF_InitLibraryWithConfig(const FPDF_LIBRARY_CONFIG* config);
             FPDF_DestroyLibraryStatic = GetPDFiumFunction<FPDF_DestroyLibrary_Delegate>(nameof(FPDF_DestroyLibrary));
             ////FPDF_EXPORT void FPDF_CALLCONV FPDF_SetSandBoxPolicy(FPDF_DWORD policy, FPDF_BOOL enable);
-            ////FPDF_EXPORT void FPDF_CALLCONV FPDF_SetTypefaceAccessibleFunc(PDFiumEnsureTypefaceCharactersAccessible func);
-            FPDF_SetPrintTextWithGDIStatic = GetPDFiumFunction<FPDF_SetPrintTextWithGDI_Delegate>(nameof(FPDF_SetPrintTextWithGDI));
             FPDF_SetPrintModeStatic = GetPDFiumFunction<FPDF_SetPrintMode_Delegate>(nameof(FPDF_SetPrintMode));
             FPDF_LoadDocumentStatic = GetPDFiumFunction<FPDF_LoadDocument_Delegate>(nameof(FPDF_LoadDocument));
             FPDF_LoadMemDocumentStatic = GetPDFiumFunction<FPDF_LoadMemDocument_Delegate>(nameof(FPDF_LoadMemDocument));
