@@ -96,6 +96,15 @@
         /// Test for <see cref="PDFiumBridge"/> method.
         /// </summary>
         [TestMethod]
+        public void PDFiumBridge_FPDFBookmarkGetCount_SimpleCall_NoException()
+        {
+            _bridge.FPDFBookmark_GetCount(FPDF_BOOKMARK.InvalidHandle);
+        }
+
+        /// <summary>
+        /// Test for <see cref="PDFiumBridge"/> method.
+        /// </summary>
+        [TestMethod]
         public void PDFiumBridge_FPDFBookmarkFind_SimpleCall_NoException()
         {
             _bridge.FPDFBookmark_Find(FPDF_DOCUMENT.InvalidHandle, IntPtr.Zero);

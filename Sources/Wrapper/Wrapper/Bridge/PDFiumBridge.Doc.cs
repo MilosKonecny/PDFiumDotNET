@@ -83,6 +83,30 @@
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate int FPDFBookmark_GetCount_Delegate(FPDF_BOOKMARK bookmark);
+
+        private static FPDFBookmark_GetCount_Delegate FPDFBookmark_GetCountStatic { get; set; }
+
+        /// <summary>
+        /// Experimental API.
+        /// Get the number of chlidren of |bookmark|.
+        /// </summary>
+        /// <param name="bookmark">Handle to the bookmark.</param>
+        /// <returns>
+        /// Returns a signed integer that represents the number of sub-items the given bookmark has.
+        /// If the value is positive, child items shall be shown by default (open state).
+        /// If the value is negative, child items shall be hidden by default (closed state).
+        /// Please refer to PDF 32000-1:2008, Table 153.
+        /// Returns 0 if the bookmark has no children or is invalid.</returns>
+        public int FPDFBookmark_GetCount(FPDF_BOOKMARK bookmark)
+        {
+            lock (_syncObject)
+            {
+                return FPDFBookmark_GetCountStatic(bookmark);
+            }
+        }
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_BOOKMARK FPDFBookmark_Find_Delegate(FPDF_DOCUMENT document, IntPtr title);
 
         private static FPDFBookmark_Find_Delegate FPDFBookmark_FindStatic { get; set; }
@@ -636,6 +660,7 @@
             FPDFBookmark_GetFirstChildStatic = GetPDFiumFunction<FPDFBookmark_GetFirstChild_Delegate>(nameof(FPDFBookmark_GetFirstChild));
             FPDFBookmark_GetNextSiblingStatic = GetPDFiumFunction<FPDFBookmark_GetNextSibling_Delegate>(nameof(FPDFBookmark_GetNextSibling));
             FPDFBookmark_GetTitleStatic = GetPDFiumFunction<FPDFBookmark_GetTitle_Delegate>(nameof(FPDFBookmark_GetTitle));
+            FPDFBookmark_GetCountStatic = GetPDFiumFunction<FPDFBookmark_GetCount_Delegate>(nameof(FPDFBookmark_GetCount));
             FPDFBookmark_FindStatic = GetPDFiumFunction<FPDFBookmark_Find_Delegate>(nameof(FPDFBookmark_Find));
             FPDFBookmark_GetDestStatic = GetPDFiumFunction<FPDFBookmark_GetDest_Delegate>(nameof(FPDFBookmark_GetDest));
             FPDFBookmark_GetActionStatic = GetPDFiumFunction<FPDFBookmark_GetAction_Delegate>(nameof(FPDFBookmark_GetAction));

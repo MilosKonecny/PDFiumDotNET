@@ -248,6 +248,7 @@
         /// <returns>A 32-bit integer indicating error code as defined above.</returns>
         /// <remarks>
         /// If the previous SDK call succeeded, the return value of this function is not defined.
+        /// This function only works in conjunction with APIs that mention FPDF_GetLastError() in their documentation.
         /// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDF_GetLastError();.
         /// </remarks>
         public FPDF_ERROR FPDF_GetLastError()
