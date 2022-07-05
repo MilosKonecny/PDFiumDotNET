@@ -108,5 +108,49 @@
             component.CloseDocument();
             component.Dispose();
         }
+
+        /// <summary>
+        /// Test for correct count of bookmaks.
+        /// </summary>
+        [TestMethod]
+        public void PDFBookmarkComponent_Bookmarks_CheckState_Success()
+        {
+            var pdfFile = Path.Combine(_pdfFilesFolder, "DiversePages.pdf");
+
+            var component = new PDFComponent();
+            var bookmarkComponent = component.BookmarkComponent;
+
+            component.OpenDocument(pdfFile, string.Empty);
+            Assert.IsTrue(component.IsDocumentOpened);
+
+            var checkCount = 0;
+            foreach (var bookmark in bookmarkComponent.Bookmarks)
+            {
+#if NET48
+                if (bookmark.Text.Contains("opened"))
+#else
+                if (bookmark.Text.Contains("opened", StringComparison.InvariantCultureIgnoreCase))
+#endif
+                {
+                    Assert.IsTrue(bookmark.IsOpened);
+                    checkCount++;
+                }
+
+#if NET48
+                if (bookmark.Text.Contains("closed"))
+#else
+                if (bookmark.Text.Contains("closed", StringComparison.InvariantCultureIgnoreCase))
+#endif
+                {
+                    Assert.IsFalse(bookmark.IsOpened);
+                    checkCount++;
+                }
+            }
+
+            Assert.AreEqual(3, checkCount);
+
+            component.CloseDocument();
+            component.Dispose();
+        }
     }
 }
