@@ -260,6 +260,11 @@
                             </TextBlock>
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
+                        <TreeView.ItemContainerStyle>
+                            <Style TargetType="{x:Type TreeViewItem}">
+                                <Setter Property="IsExpanded" Value="{Binding Path=IsOpened}"/>
+                            </Style>
+                        </TreeView.ItemContainerStyle>
                     </TreeView>
                 </Border>
             </TabItem>

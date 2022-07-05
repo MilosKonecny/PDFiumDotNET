@@ -20,6 +20,11 @@
         ObservableCollection<IPDFBookmark> Bookmarks { get; }
 
         /// <summary>
+        /// Gets the flag whether the bookmark is in opened state - child bookmarks are visible.
+        /// </summary>
+        bool IsOpened { get; }
+
+        /// <summary>
         /// Gets associated destionation of bookmark.
         /// </summary>
         IPDFDestination Destination { get; }

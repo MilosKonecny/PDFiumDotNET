@@ -59,6 +59,8 @@
                 Bookmarks.Add(newBookmark);
                 childBookmarkHandle = _mainComponent.PDFiumBridge.FPDFBookmark_GetNextSibling(_mainComponent.PDFiumDocument, childBookmarkHandle);
             }
+
+            IsOpened = _mainComponent.PDFiumBridge.FPDFBookmark_GetCount(_bookmarkHandle) > 0;
         }
 
         #endregion Public methods
@@ -91,6 +93,11 @@
         /// <inheritdoc/>
         /// </summary>
         public ObservableCollection<IPDFBookmark> Bookmarks { get; private set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public bool IsOpened { get; private set; }
 
         /// <summary>
         /// <inheritdoc/>
