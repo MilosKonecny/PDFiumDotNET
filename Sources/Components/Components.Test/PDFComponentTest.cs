@@ -1,7 +1,6 @@
 ﻿namespace PDFiumDotNET.Components.Test
 {
     using System;
-    using System.Globalization;
     using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
@@ -331,8 +330,6 @@
             Assert.AreEqual("-", info.Keywords);
             Assert.AreEqual("Miloš Konečný", info.Creator);
             Assert.AreEqual("PDFsharp 1.50.4740 (www.pdfsharp.com)", info.Producer);
-            Assert.AreEqual(DateTimeOffset.Parse("2021-02-12T11:37:53+01:00", CultureInfo.InvariantCulture), info.CreationDate);
-            Assert.AreEqual(DateTimeOffset.Parse("2021-02-12T11:37:53+01:00", CultureInfo.InvariantCulture), info.ModDate);
             component.Dispose();
         }
 
