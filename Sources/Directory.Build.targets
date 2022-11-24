@@ -1,6 +1,13 @@
 <!-- Directory.Build.targets -->
 <Project>
 
+    <PropertyGroup>
+        <!-- Don't show 'The target framework is out of support' -->
+        <CheckEolTargetFramework>false</CheckEolTargetFramework>
+        <!-- Don't show 'The .NET SDK has newer analyzers with version '7.0.0' than what version '6.0.0' of 'Microsoft.CodeAnalysis.NetAnalyzers' package provides. Update or remove this package reference.' -->
+        <_SkipUpgradeNetAnalyzersNuGetWarning>true</_SkipUpgradeNetAnalyzersNuGetWarning>
+    </PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0" PrivateAssets="all" />
         <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3">
