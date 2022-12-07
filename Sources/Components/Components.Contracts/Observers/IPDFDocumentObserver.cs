@@ -10,7 +10,7 @@
         /// <summary>
         /// Called whenever PDF document will be opened.
         /// </summary>
-        /// <param name="file">Opened PDF file.</param>
+        /// <param name="file">Opening PDF file.</param>
         void DocumentOpening(string file);
 
         /// <summary>
@@ -22,7 +22,7 @@
         /// <summary>
         /// Called whenever PDF document open has failed.
         /// </summary>
-        /// <param name="file">Opened PDF file.</param>
+        /// <param name="file">PDF file attempted to open.</param>
         void DocumentOpenFailed(string file);
 
         /// <summary>

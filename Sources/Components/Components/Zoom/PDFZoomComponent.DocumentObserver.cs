@@ -2,56 +2,46 @@
 {
     using PDFiumDotNET.Components.Contracts.Zoom;
 
-    /// <summary>
     /// <inheritdoc cref="IPDFZoomComponent"/>
-    /// </summary>
     internal sealed partial class PDFZoomComponent
     {
-        #region Implementation of IDocumentObserver
+        #region Protected methods - overrides
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        public void DocumentOpening(string file)
+        protected override void ProcessDocumentOpening(string file)
         {
             SetDefaultValues();
+
+            base.ProcessDocumentOpening(file);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        public void DocumentOpened(string file)
+        protected override void ProcessDocumentOpened(string file)
         {
-            if (_mainComponent.PDFiumBridge == null || !_mainComponent.PDFiumDocument.IsValid)
+            if (PDFComponent.PDFiumBridge != null && PDFComponent.PDFiumDocument.IsValid)
             {
-                return;
+                SetDefaultValues();
             }
 
-            SetDefaultValues();
+            base.ProcessDocumentOpened(file);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        public void DocumentOpenFailed(string file)
-        {
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public void DocumentClosing()
+        protected override void ProcessDocumentOpenFailed(string file)
         {
             SetDefaultValues();
+
+            base.ProcessDocumentOpenFailed(file);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        public void DocumentClosed()
+        protected override void ProcessDocumentClosing()
         {
+            SetDefaultValues();
+
+            base.ProcessDocumentClosing();
         }
 
-        #endregion Implementation of IDocumentObserver
+        #endregion Protected methods - overrides
     }
 }

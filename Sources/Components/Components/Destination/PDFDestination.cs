@@ -4,9 +4,7 @@
     using PDFiumDotNET.Components.Contracts.Destination;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
-    /// <summary>
     /// <inheritdoc cref="IPDFDestination"/>
-    /// </summary>
     internal class PDFDestination : IPDFDestination
     {
         #region Private fields
@@ -33,9 +31,7 @@
 
         #region Public override methods
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public override string ToString()
         {
             return $"Page='{PageIndex}' / X='{X}' / Y='{Y}' / Zoom='{Zoom}'";
@@ -45,9 +41,7 @@
 
         #region Implementation of IDestination
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public int PageIndex
         {
             get
@@ -61,9 +55,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public float? X
         {
             get
@@ -84,9 +76,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public float? Y
         {
             get
@@ -107,9 +97,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public float? Zoom
         {
             get
@@ -130,9 +118,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public string Info => ToString();
 
         #endregion Implementation of IDestination

@@ -2,18 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Globalization;
     using System.Linq;
-    using System.Runtime.CompilerServices;
-    using PDFiumDotNET.Components.Contracts;
-    using PDFiumDotNET.Components.Contracts.Observers;
     using PDFiumDotNET.Components.Contracts.Zoom;
 
-    /// <summary>
     /// <inheritdoc cref="IPDFZoomComponent"/>
-    /// </summary>
-    internal sealed partial class PDFZoomComponent : IPDFZoomComponent, IPDFDocumentObserver
+    internal sealed partial class PDFZoomComponent : PDFChildComponent, IPDFZoomComponent
     {
         #region Private consts
 
@@ -23,7 +16,6 @@
 
         #region Private fields
 
-        private PDFComponent _mainComponent;
         private ZoomType _currentZoomType;
         private double _currentZoomFactor;
         private List<double> _zoomList;
@@ -59,20 +51,9 @@
 
         #endregion Private methods
 
-        #region Private methods - invoke event
-
-        private void InvokePropertyChangedEvent([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName ?? string.Empty));
-        }
-
-        #endregion Private methods - invoke event
-
         #region Implementation of IPDFZoomComponent
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public ZoomType CurrentZoomType
         {
             get => _currentZoomType;
@@ -86,9 +67,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public double CurrentZoomFactor
         {
             get => _currentZoomFactor;
@@ -112,9 +91,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public int CurrentZoomPercentage
         {
             get
@@ -128,9 +105,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public IEnumerable<double> ZoomValues
         {
             get
@@ -157,9 +132,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public void IncreaseZoom()
         {
             // Find the nearest bigger value.
@@ -170,9 +143,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public void DecreaseZoom()
         {
             // Find the nearest lower value.
@@ -184,51 +155,5 @@
         }
 
         #endregion Implementation of IPDFZoomComponent
-
-        #region Implementation of IPDFChildComponent
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public IPDFComponent MainComponent => _mainComponent;
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public bool IsDisposed { get; private set; }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public void AttachedTo(IPDFComponent mainComponent)
-        {
-            var mc = mainComponent as PDFComponent;
-
-            _mainComponent = mc ?? throw new ArgumentException(
-                string.Format(CultureInfo.InvariantCulture, "The parameter {0} is not of expected type.", nameof(mainComponent)));
-        }
-
-        #endregion Implementation of IPDFChildComponent
-
-        #region Implementation of INotifyPropertyChanged
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        #endregion Implementation of INotifyPropertyChanged
-
-        #region Implementation of IDisposable
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public void Dispose()
-        {
-            IsDisposed = true;
-        }
-
-        #endregion Implementation of IDisposable
     }
 }

@@ -10,9 +10,7 @@
     using PDFiumDotNET.Components.Link;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
-    /// <summary>
     /// <inheritdoc cref="IPDFPage"/>
-    /// </summary>
     internal class PDFPage : IPDFPage
     {
         #region Private fields
@@ -87,19 +85,13 @@
 
         #region Implementation of IPDFPage
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public double Height { get; private set; }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public double Width { get; private set; }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public double ThumbnailHeight
         {
             get
@@ -108,9 +100,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public double ThumbnailWidth
         {
             get
@@ -119,19 +109,13 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public string PageLabel { get; private set; }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public int PageIndex { get; private set; }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public void RenderPageBitmap(double zoomFactor, int startX, int startY, int sizeX, int sizeY, int width, int height, BitmapFormat format, IntPtr buffer, int stride)
         {
             var bmp = new PDFBitmap(_mainComponent);
@@ -161,9 +145,7 @@
             bmp.Destroy();
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public void RenderThumbnailBitmap(BitmapFormat format, IntPtr buffer, int stride)
         {
             var bmp = new PDFBitmap(_mainComponent);
@@ -182,9 +164,7 @@
             bmp.Destroy();
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public IPDFLink GetLinkFromPoint(double x, double y)
         {
             var pageHandle = _mainComponent.PDFiumBridge.FPDF_LoadPage(_mainComponent.PDFiumDocument, PageIndex);
@@ -199,9 +179,7 @@
             return null;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public void NavigteTo()
         {
             _mainComponent.PageComponent.NavigateToPage(PageIndex + 1);

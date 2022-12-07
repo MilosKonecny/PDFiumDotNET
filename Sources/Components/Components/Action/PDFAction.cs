@@ -8,9 +8,7 @@
     using PDFiumDotNET.Components.Destination;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
-    /// <summary>
     /// <inheritdoc cref="IPDFAction"/>
-    /// </summary>
     internal class PDFAction : IPDFAction
     {
         #region Private fields
@@ -37,9 +35,7 @@
 
         #region Public override methods
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public override string ToString()
         {
             return $"Type='{ActionType}' / Destination=({Destination}) / File='{FilePath}' / Uri='{UriPath}'";
@@ -67,9 +63,7 @@
 
         #region Implementation of IAction
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public PDFActionType ActionType
         {
             get
@@ -83,9 +77,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public IPDFDestination Destination
         {
             get
@@ -105,9 +97,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public string FilePath
         {
             get
@@ -132,9 +122,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public string UriPath
         {
             get
@@ -159,9 +147,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public string Info => ToString();
 
         #endregion Implementation of IAction

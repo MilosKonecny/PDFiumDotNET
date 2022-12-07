@@ -8,9 +8,7 @@
     using PDFiumDotNET.Components.Destination;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
-    /// <summary>
     /// <inheritdoc cref="IPDFLink"/>
-    /// </summary>
     internal class PDFLink : IPDFLink
     {
         #region Private fields
@@ -37,9 +35,7 @@
 
         #region Implementation of IPDFLink
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public IPDFAction Action
         {
             get
@@ -59,9 +55,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public IPDFDestination Destination
         {
             get

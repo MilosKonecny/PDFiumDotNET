@@ -56,7 +56,8 @@
         public void PDFZoomComponent_Component_CheckType_Success()
         {
             var component = new PDFComponent();
-            var zoomComponent = component.ZoomComponent;
+            var pageComponent = component.PageComponent;
+            var zoomComponent = pageComponent.ZoomComponent;
 
             Assert.IsNotNull(zoomComponent as PDFZoomComponent);
 
@@ -72,7 +73,8 @@
             var pdfFile = Path.Combine(_pdfFilesFolder, "Precalculus.pdf");
 
             var component = new PDFComponent();
-            var zoomComponent = component.ZoomComponent;
+            var pageComponent = component.PageComponent;
+            var zoomComponent = pageComponent.ZoomComponent;
             Assert.AreEqual(1d, zoomComponent.CurrentZoomFactor);
 
             component.OpenDocument(pdfFile, string.Empty);

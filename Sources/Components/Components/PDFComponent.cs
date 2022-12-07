@@ -1,25 +1,14 @@
 ﻿namespace PDFiumDotNET.Components
 {
     using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Wrapper.Bridge;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
-    /// <summary>
     /// <inheritdoc cref="IPDFComponent"/>
-    /// </summary>
-    internal sealed partial class PDFComponent : IPDFComponent, IDisposable
+    internal sealed partial class PDFComponent : PDFBaseComponent, IPDFComponent
     {
-        #region Private fields
-
-        private readonly List<IPDFChildComponent> _childComponents = new List<IPDFChildComponent>();
-
-        #endregion Private fields
-
         #region Constructors
 
         /// <summary>
@@ -32,7 +21,7 @@
 
         #endregion Constructors
 
-        #region Internal methods
+        #region Internal properties
 
         /// <summary>
         /// Gets active bridge.
@@ -44,7 +33,7 @@
         /// </summary>
         internal FPDF_DOCUMENT PDFiumDocument { get; private set; }
 
-        #endregion Internal methods
+        #endregion Internal properties
 
         #region Private methods - helper
 
@@ -65,41 +54,16 @@
 
         #endregion Private methods - helper
 
-        #region Private methods - invoke event
+        #region Protected override methods
 
-        private void InvokePropertyChangedEvent([CallerMemberName]string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName ?? string.Empty));
-        }
-
-        #endregion Private methods - invoke event
-
-        #region Implementation of INotifyPropertyChanged
-
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        #endregion Implementation of INotifyPropertyChanged
-
-        #region Implementation of IDisposable
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            foreach (var component in _childComponents)
-            {
-                component.Dispose();
-            }
-
-            _childComponents.Clear();
-            IsDisposed = true;
+            base.Dispose(disposing);
             PDFiumBridge?.Dispose();
+            PDFiumBridge = null;
         }
 
-        #endregion Implementation of IDisposable
+        #endregion Protected override methods
     }
 }

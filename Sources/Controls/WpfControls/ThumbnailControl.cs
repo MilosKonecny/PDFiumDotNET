@@ -32,9 +32,7 @@
         public static readonly DependencyProperty PageProperty =
             DependencyProperty.Register("Page", typeof(IPDFPage), typeof(ThumbnailControl), new PropertyMetadata(null));
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         protected override void OnRender(DrawingContext drawingContext)
         {
             if (drawingContext == null)

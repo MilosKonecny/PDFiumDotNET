@@ -7,6 +7,7 @@
     using PDFiumDotNET.Components.Contracts.Destination;
     using PDFiumDotNET.Components.Contracts.EventArguments;
     using PDFiumDotNET.Components.Contracts.Find;
+    using PDFiumDotNET.Components.Contracts.Zoom;
 
     /// <summary>
     /// Interface defines functionality of page component.
@@ -14,6 +15,11 @@
     /// </summary>
     public interface IPDFPageComponent : IPDFChildComponent
     {
+        /// <summary>
+        /// Gets the zoom component.
+        /// </summary>
+        IPDFZoomComponent ZoomComponent { get; }
+
         /// <summary>
         /// Gets index of current page of opened document. First page has index 1.
         /// </summary>

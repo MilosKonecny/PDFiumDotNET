@@ -1,7 +1,6 @@
 ﻿namespace PDFiumDotNET.Components
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using PDFiumDotNET.Components.Bookmark;
@@ -11,24 +10,18 @@
     using PDFiumDotNET.Components.Contracts.Information;
     using PDFiumDotNET.Components.Contracts.Observers;
     using PDFiumDotNET.Components.Contracts.Page;
-    using PDFiumDotNET.Components.Contracts.Zoom;
     using PDFiumDotNET.Components.Find;
     using PDFiumDotNET.Components.Helper;
     using PDFiumDotNET.Components.Information;
     using PDFiumDotNET.Components.Page;
-    using PDFiumDotNET.Components.Zoom;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
-    /// <summary>
     /// <inheritdoc cref="IPDFComponent"/>
-    /// </summary>
     internal sealed partial class PDFComponent
     {
         #region Implementation of IPDFComponent
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public IPDFPageComponent PageComponent
         {
             get
@@ -38,7 +31,7 @@
                     return null;
                 }
 
-                var component = _childComponents.OfType<IPDFPageComponent>().FirstOrDefault();
+                var component = ChildComponents.OfType<IPDFPageComponent>().FirstOrDefault();
                 if (component == null)
                 {
                     component = new PDFPageComponent();
@@ -49,9 +42,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public IPDFBookmarkComponent BookmarkComponent
         {
             get
@@ -61,33 +52,10 @@
                     return null;
                 }
 
-                var component = _childComponents.OfType<IPDFBookmarkComponent>().FirstOrDefault();
+                var component = ChildComponents.OfType<IPDFBookmarkComponent>().FirstOrDefault();
                 if (component == null)
                 {
                     component = new PDFBookmarkComponent();
-                    Attach(component);
-                }
-
-                return component;
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public IPDFZoomComponent ZoomComponent
-        {
-            get
-            {
-                if (IsDisposed)
-                {
-                    return null;
-                }
-
-                var component = _childComponents.OfType<IPDFZoomComponent>().FirstOrDefault();
-                if (component == null)
-                {
-                    component = new PDFZoomComponent();
                     Attach(component);
                 }
 
@@ -107,7 +75,7 @@
                     return null;
                 }
 
-                var component = _childComponents.OfType<IPDFFindComponent>().FirstOrDefault();
+                var component = ChildComponents.OfType<IPDFFindComponent>().FirstOrDefault();
                 if (component == null)
                 {
                     component = new PDFFindComponent();
@@ -118,66 +86,26 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        public IEnumerable<IPDFChildComponent> ChildComponents
-        {
-            get
-            {
-                return _childComponents.OfType<IPDFChildComponent>();
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         public bool IsDocumentOpened
         {
             get;
             private set;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        public bool IsDisposed
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public void Attach(IPDFChildComponent childComponent)
-        {
-            if (childComponent == null)
-            {
-                throw new ArgumentNullException(nameof(childComponent));
-            }
-
-            _childComponents.Add(childComponent);
-            childComponent.AttachedTo(this);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         public void OpenDocument(string file, string password)
         {
             OpenDocument(file, () => password);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public void OpenDocument(string file, Func<string> getPassword = null)
         {
             FileName = Path.GetFileName(file);
             FileWithPath = file;
 
-            _childComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentOpening(file));
+            ChildComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentOpening(file));
             PDFiumDocument = PDFiumBridge.FPDF_LoadDocument(file, null);
             if (!PDFiumDocument.IsValid)
             {
@@ -192,17 +120,15 @@
             InvokePropertyChangedEvent(nameof(IsDocumentOpened));
             if (IsDocumentOpened)
             {
-                _childComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentOpened(file));
+                ChildComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentOpened(file));
             }
             else
             {
-                _childComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentOpenFailed(file));
+                ChildComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentOpenFailed(file));
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public void CloseDocument()
         {
             FileName = null;
@@ -214,12 +140,12 @@
                 return;
             }
 
-            _childComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentClosing());
+            ChildComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentClosing());
             PDFiumBridge.FPDF_CloseDocument(PDFiumDocument);
             PDFiumDocument = FPDF_DOCUMENT.InvalidHandle;
             IsDocumentOpened = false;
             InvokePropertyChangedEvent(nameof(IsDocumentOpened));
-            _childComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentClosed());
+            ChildComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentClosed());
         }
 
         /// <summary>

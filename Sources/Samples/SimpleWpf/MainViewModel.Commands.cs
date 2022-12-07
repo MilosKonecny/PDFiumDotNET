@@ -223,7 +223,7 @@
         private void ExecuteZoomWidthCommand()
         {
             var pageComponent = _pdfComponent?.PageComponent;
-            var zoomComponent = _pdfComponent?.ZoomComponent;
+            var zoomComponent = pageComponent?.ZoomComponent;
             if (pageComponent == null || zoomComponent == null)
             {
                 return;
@@ -240,7 +240,7 @@
         private void ExecuteZoomHeightCommand()
         {
             var pageComponent = _pdfComponent?.PageComponent;
-            var zoomComponent = _pdfComponent?.ZoomComponent;
+            var zoomComponent = pageComponent?.ZoomComponent;
             if (pageComponent == null || zoomComponent == null)
             {
                 return;
@@ -256,44 +256,44 @@
 
         private void ExecuteZoomInCommand()
         {
-            _pdfComponent?.ZoomComponent?.IncreaseZoom();
+            _pdfComponent?.PageComponent?.ZoomComponent?.IncreaseZoom();
         }
 
         private bool CanExecuteZoomInCommand()
         {
-            if (_pdfComponent == null || !_pdfComponent.IsDocumentOpened)
+            if (_pdfComponent == null || !_pdfComponent.IsDocumentOpened || _pdfComponent.PageComponent == null)
             {
                 return false;
             }
 
-            var values = _pdfComponent.ZoomComponent.ZoomValues.ToList();
+            var values = _pdfComponent.PageComponent.ZoomComponent.ZoomValues.ToList();
             if (values.Count == 0)
             {
                 return false;
             }
 
-            return Math.Abs(values[values.Count - 1] - _pdfComponent.ZoomComponent.CurrentZoomFactor) > 0.01;
+            return Math.Abs(values[values.Count - 1] - _pdfComponent.PageComponent.ZoomComponent.CurrentZoomFactor) > 0.01;
         }
 
         private void ExecuteZoomOutCommand()
         {
-            _pdfComponent?.ZoomComponent?.DecreaseZoom();
+            _pdfComponent?.PageComponent?.ZoomComponent?.DecreaseZoom();
         }
 
         private bool CanExecuteZoomOutCommand()
         {
-            if (_pdfComponent == null || !_pdfComponent.IsDocumentOpened)
+            if (_pdfComponent == null || !_pdfComponent.IsDocumentOpened || _pdfComponent.PageComponent == null)
             {
                 return false;
             }
 
-            var values = _pdfComponent.ZoomComponent.ZoomValues.ToList();
+            var values = _pdfComponent.PageComponent.ZoomComponent.ZoomValues.ToList();
             if (values.Count == 0)
             {
                 return false;
             }
 
-            return Math.Abs(values[0] - _pdfComponent.ZoomComponent.CurrentZoomFactor) > 0.01;
+            return Math.Abs(values[0] - _pdfComponent.PageComponent.ZoomComponent.CurrentZoomFactor) > 0.01;
         }
 
         private void ExecuteGoToFirstPageCommand()

@@ -10,9 +10,7 @@
     using PDFiumDotNET.Components.Destination;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
-    /// <summary>
     /// <inheritdoc cref="IPDFBookmark"/>
-    /// </summary>
     internal class PDFBookmark : IPDFBookmark
     {
         #region Private fields
@@ -67,9 +65,7 @@
 
         #region Implementation of IPDFBookmark
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public IPDFAction Action
         {
             get
@@ -89,19 +85,13 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public ObservableCollection<IPDFBookmark> Bookmarks { get; private set; }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public bool IsOpened { get; private set; }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public IPDFDestination Destination
         {
             get
@@ -121,9 +111,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public string Text
         {
             get

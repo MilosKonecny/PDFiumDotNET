@@ -3,67 +3,51 @@
     using PDFiumDotNET.Components.Contracts.Bookmark;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
-    /// <summary>
     /// <inheritdoc cref="IPDFBookmarkComponent"/>
-    /// </summary>
     internal sealed partial class PDFBookmarkComponent
     {
-        #region Implementation of IDocumentObserver
+        #region Protected methods - overrides
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        public void DocumentOpening(string file)
+        protected override void ProcessDocumentOpening(string file)
         {
             Bookmarks.Clear();
             InvokePropertyChangedEvent(nameof(Bookmarks));
+
+            base.ProcessDocumentOpening(file);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        public void DocumentOpened(string file)
+        protected override void ProcessDocumentOpened(string file)
         {
-            if (_mainComponent.PDFiumBridge == null || !_mainComponent.PDFiumDocument.IsValid)
+            if (PDFComponent.PDFiumBridge == null || !PDFComponent.PDFiumDocument.IsValid)
             {
                 return;
             }
 
-            var bookmarkHandle = _mainComponent.PDFiumBridge.FPDFBookmark_GetFirstChild(_mainComponent.PDFiumDocument, FPDF_BOOKMARK.InvalidHandle);
+            var bookmarkHandle = PDFComponent.PDFiumBridge.FPDFBookmark_GetFirstChild(PDFComponent.PDFiumDocument, FPDF_BOOKMARK.InvalidHandle);
             while (bookmarkHandle.IsValid)
             {
-                var newBookmark = new PDFBookmark(_mainComponent, bookmarkHandle);
+                var newBookmark = new PDFBookmark(PDFComponent, bookmarkHandle);
                 newBookmark.Build();
                 Bookmarks.Add(newBookmark);
-                bookmarkHandle = _mainComponent.PDFiumBridge.FPDFBookmark_GetNextSibling(_mainComponent.PDFiumDocument, bookmarkHandle);
+                bookmarkHandle = PDFComponent.PDFiumBridge.FPDFBookmark_GetNextSibling(PDFComponent.PDFiumDocument, bookmarkHandle);
             }
 
             InvokePropertyChangedEvent(nameof(Bookmarks));
+
+            base.ProcessDocumentOpened(file);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        public void DocumentOpenFailed(string file)
-        {
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public void DocumentClosing()
+        protected override void ProcessDocumentClosing()
         {
             Bookmarks.Clear();
             InvokePropertyChangedEvent(nameof(Bookmarks));
+
+            base.ProcessDocumentClosing();
         }
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public void DocumentClosed()
-        {
-        }
-
-        #endregion Implementation of IDocumentObserver
+        #endregion Protected methods - overrides
     }
 }

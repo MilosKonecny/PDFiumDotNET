@@ -39,9 +39,7 @@
 
         #region Implementation of IValueConverter
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is bool boolValue)
@@ -59,9 +57,7 @@
             return DependencyProperty.UnsetValue;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();

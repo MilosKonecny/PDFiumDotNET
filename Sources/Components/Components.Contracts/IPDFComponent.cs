@@ -7,13 +7,12 @@
     using PDFiumDotNET.Components.Contracts.Find;
     using PDFiumDotNET.Components.Contracts.Information;
     using PDFiumDotNET.Components.Contracts.Page;
-    using PDFiumDotNET.Components.Contracts.Zoom;
 
     /// <summary>
     /// Defines functionality of main component used in namespace <see cref="PDFiumDotNET.Components"/>.
     /// This component is parent component for every <see cref="IPDFChildComponent"/>.
     /// </summary>
-    public interface IPDFComponent : INotifyPropertyChanged, IDisposable
+    public interface IPDFComponent : IPDFBaseComponent
     {
         /// <summary>
         /// Gets the page component.
@@ -26,35 +25,14 @@
         IPDFBookmarkComponent BookmarkComponent { get; }
 
         /// <summary>
-        /// Gets the zoom component.
-        /// </summary>
-        IPDFZoomComponent ZoomComponent { get; }
-
-        /// <summary>
         /// Gets the find component.
         /// </summary>
         IPDFFindComponent FindComponent { get; }
 
         /// <summary>
-        /// Gets all child components attached to this main component.
-        /// </summary>
-        IEnumerable<IPDFChildComponent> ChildComponents { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether the instance is disposed or not.
-        /// </summary>
-        bool IsDisposed { get; }
-
-        /// <summary>
         /// Gets a value indicating whether pdf document is opened or not.
         /// </summary>
         bool IsDocumentOpened { get; }
-
-        /// <summary>
-        /// Attaches new child component. This method calls <see cref="IPDFChildComponent.AttachedTo(IPDFComponent)"/> of child component.
-        /// </summary>
-        /// <param name="childComponent">Component to attach.</param>
-        void Attach(IPDFChildComponent childComponent);
 
         /// <summary>
         /// Closes pdf document.
