@@ -102,9 +102,7 @@
 
         #region Protected override methods
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         protected override Size MeasureOverride(Size constraint)
         {
             var newSize = new Size(
@@ -116,9 +114,7 @@
             return newSize;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         protected override Size ArrangeOverride(Size arrangeBounds)
         {
             Size size = base.ArrangeOverride(DesiredSize);
@@ -130,9 +126,7 @@
             return size;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         protected override void OnRender(DrawingContext drawingContext)
         {
             if (drawingContext == null)
@@ -150,9 +144,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -179,9 +171,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         protected override void OnManipulationStarted(ManipulationStartedEventArgs e)
         {
             _startManipulationVerticalOffset = VerticalOffset;
@@ -189,9 +179,7 @@
             base.OnManipulationStarted(e);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         protected override void OnManipulationDelta(ManipulationDeltaEventArgs e)
         {
             if (e != null && e.CumulativeManipulation != null)
@@ -202,9 +190,7 @@
             base.OnManipulationDelta(e);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingEventArgs e)
         {
             if (e != null)
@@ -237,17 +223,13 @@
             base.OnManipulationInertiaStarting(e);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         protected override void OnManipulationCompleted(ManipulationCompletedEventArgs e)
         {
             base.OnManipulationCompleted(e);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
@@ -265,9 +247,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
@@ -280,9 +260,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonUp(e);
@@ -300,9 +278,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         protected override void OnTouchDown(TouchEventArgs e)
         {
             base.OnTouchDown(e);
@@ -314,9 +290,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         protected override void OnTouchUp(TouchEventArgs e)
         {
             base.OnTouchUp(e);

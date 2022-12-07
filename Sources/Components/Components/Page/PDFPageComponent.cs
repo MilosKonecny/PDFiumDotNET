@@ -3,33 +3,27 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.Globalization;
     using System.Linq;
-    using System.Runtime.CompilerServices;
     using PDFiumDotNET.Components.Adapters;
-    using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Action;
     using PDFiumDotNET.Components.Contracts.Adapters;
     using PDFiumDotNET.Components.Contracts.Destination;
     using PDFiumDotNET.Components.Contracts.EventArguments;
     using PDFiumDotNET.Components.Contracts.Find;
-    using PDFiumDotNET.Components.Contracts.Observers;
     using PDFiumDotNET.Components.Contracts.Page;
+    using PDFiumDotNET.Components.Contracts.Zoom;
     using PDFiumDotNET.Components.Find;
     using PDFiumDotNET.Components.Helper;
+    using PDFiumDotNET.Components.Zoom;
 
-    /// <summary>
     /// <inheritdoc cref="IPDFPageComponent"/>
-    /// </summary>
-    internal sealed partial class PDFPageComponent : IPDFPageComponent, IPDFDocumentObserver
+    internal sealed partial class PDFPageComponent : PDFChildComponent, IPDFPageComponent
     {
         #region Private fields
 
         private readonly List<IPageLayoutAdapter> _pageLayoutAdapters = new List<IPageLayoutAdapter>();
         private readonly List<PDFRectangle> _selectionRectangles = new List<PDFRectangle>();
         private int _pageIndexWithSelections;
-        private PDFComponent _mainComponent;
         private StandardPageLayout _standardPageLayout;
         private ThumbnailPageLayout _thumbnailPageLayout;
         private Func<int> _findSelectionBackgroundFunc;
@@ -169,43 +163,47 @@
 
         #endregion Private methods
 
-        #region Private methods - invoke event
-
-        private void InvokePropertyChangedEvent([CallerMemberName]string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName ?? string.Empty));
-        }
-
-        #endregion Private methods - invoke event
-
         #region Implementation of IPageComponent
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
+        public IPDFZoomComponent ZoomComponent
+        {
+            get
+            {
+                if (IsDisposed)
+                {
+                    return null;
+                }
+
+                var component = ChildComponents.OfType<IPDFZoomComponent>().FirstOrDefault();
+                if (component == null)
+                {
+                    component = new PDFZoomComponent();
+                    Attach(component);
+                }
+
+                return component;
+            }
+        }
+
+        /// <inheritdoc/>
         public int CurrentPageIndex
         {
             get;
             private set;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public string CurrentPageLabel
         {
             get;
             private set;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public int PageCount { get; private set; }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public IPageLayoutAdapter this[PageLayoutType type]
         {
             get
@@ -214,9 +212,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public ObservableCollection<IPDFPage> Pages { get; private set; }
 
         /// <summary>
@@ -264,9 +260,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public void PerformAction(IPDFAction action)
         {
             if (action == null)
@@ -290,9 +284,7 @@
             NavigatedToPage?.Invoke(this, new NavigatedToPageEventArgs(previousCurrentPageIndex, CurrentPageIndex));
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public void NavigateToDestination(IPDFDestination destination)
         {
             if (destination == null)
@@ -310,9 +302,7 @@
             NavigatedToPage?.Invoke(this, new NavigatedToPageEventArgs(previousCurrentPageIndex, CurrentPageIndex));
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public void NavigateToPage(int pageIndex)
         {
             if (pageIndex < 1 || pageIndex > PageCount)
@@ -325,9 +315,7 @@
             NavigatedToPage?.Invoke(this, new NavigatedToPageEventArgs(previousCurrentPageIndex, CurrentPageIndex));
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public void NavigateToFindPlace(IPDFFindPage page)
         {
             if (page == null)
@@ -339,9 +327,7 @@
             NavigateToPage(page.RelatedPage.PageIndex + 1);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public void NavigateToFindPlace(IPDFFindPosition position)
         {
             if (position == null)
@@ -356,15 +342,15 @@
                 PageIndexWithSelections = ourPage.PageIndex;
                 var positionX = -1;
                 var positionY = -1;
-                var pageHandle = _mainComponent.PDFiumBridge.FPDF_LoadPage(_mainComponent.PDFiumDocument, ourPosition.Page.RelatedPage.PageIndex);
-                var textPageHandle = _mainComponent.PDFiumBridge.FPDFText_LoadPage(pageHandle);
+                var pageHandle = PDFComponent.PDFiumBridge.FPDF_LoadPage(PDFComponent.PDFiumDocument, ourPosition.Page.RelatedPage.PageIndex);
+                var textPageHandle = PDFComponent.PDFiumBridge.FPDFText_LoadPage(pageHandle);
 
-                var rectCount = _mainComponent.PDFiumBridge.FPDFText_CountRects(textPageHandle, ourPosition.Position, ourPosition.Length);
+                var rectCount = PDFComponent.PDFiumBridge.FPDFText_CountRects(textPageHandle, ourPosition.Position, ourPosition.Length);
                 for (int i = 0; i < rectCount; i++)
                 {
                     double left, top, right, bottom;
                     left = top = right = bottom = 0;
-                    if (_mainComponent.PDFiumBridge.FPDFText_GetRect(textPageHandle, i, ref left, ref top, ref right, ref bottom))
+                    if (PDFComponent.PDFiumBridge.FPDFText_GetRect(textPageHandle, i, ref left, ref top, ref right, ref bottom))
                     {
                         AddSelectionRectangle(left, top, right, bottom);
                         if (positionX == -1)
@@ -375,8 +361,8 @@
                     }
                 }
 
-                _mainComponent.PDFiumBridge.FPDFText_ClosePage(textPageHandle);
-                _mainComponent.PDFiumBridge.FPDF_ClosePage(pageHandle);
+                PDFComponent.PDFiumBridge.FPDFText_ClosePage(textPageHandle);
+                PDFComponent.PDFiumBridge.FPDF_ClosePage(pageHandle);
 
                 var previousCurrentPageIndex = CurrentPageIndex;
                 var currentPageIndex = position.Page.RelatedPage.PageIndex + 1;
@@ -389,9 +375,7 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public void NavigateToPage(string pageLabel)
         {
             var page = Pages.FirstOrDefault(p => string.Equals(p.PageLabel, pageLabel, StringComparison.OrdinalIgnoreCase));
@@ -403,14 +387,10 @@
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public event EventHandler<NavigatedToPageEventArgs> NavigatedToPage;
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public event EventHandler<PerformActionEventArgs> PerformOutsideAction;
 
         /// <summary>
@@ -421,51 +401,5 @@
         public event EventHandler<EventArgs> TextSelectionsRemoved;
 
         #endregion Implementation of IPageComponent
-
-        #region Implementation of IPDFChildComponent
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public IPDFComponent MainComponent => _mainComponent;
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public bool IsDisposed { get; private set; }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public void AttachedTo(IPDFComponent mainComponent)
-        {
-            var mc = mainComponent as PDFComponent;
-
-            _mainComponent = mc ?? throw new ArgumentException(
-                string.Format(CultureInfo.InvariantCulture, "The parameter {0} is not of expected type.", nameof(mainComponent)));
-        }
-
-        #endregion Implementation of IPDFChildComponent
-
-        #region Implementation of INotifyPropertyChanged
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        #endregion Implementation of INotifyPropertyChanged
-
-        #region Implementation of IDisposable
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public void Dispose()
-        {
-            IsDisposed = true;
-        }
-
-        #endregion Implementation of IDisposable
     }
 }

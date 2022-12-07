@@ -357,29 +357,19 @@
 
         #region Implementation of IPageLayoutAdapter
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public PageLayoutType LayoutType { get; protected set; }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public double WidestGridCellWidth { get; protected set; }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public double HighestGridCellHeight { get; protected set; }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public double CumulativeHeight { get; protected set; }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public double GetPageTopLine(int pageIndex, double pageMargin, double zoomFactor)
         {
             var currentPosition = pageMargin;
@@ -397,25 +387,19 @@
             return currentPosition;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public void DetermineArea(ref double width, ref double height, double pageMargin, double zoomFactor)
         {
             DetermineAreaVirtual(ref width, ref height, pageMargin, zoomFactor);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public IList<IPDFPageRenderInfo> DeterminePagesToRender(double topLine, double bottomLine, double pageMargin, double zoomFactor, bool setCurrentPageIndex = false)
         {
             return DeterminePagesToRenderVirtual(topLine, bottomLine, pageMargin, zoomFactor, setCurrentPageIndex);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public IList<IPDFPageRenderInfo> DeterminePagesToRender(IPDFPageRenderInfo pageOnCenter, ref double topLine, ref double bottomLine, double pageMargin, double zoomFactor)
         {
             return DeterminePagesToRenderVirtual(pageOnCenter, ref topLine, ref bottomLine, pageMargin, zoomFactor);

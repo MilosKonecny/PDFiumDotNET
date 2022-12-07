@@ -14,9 +14,7 @@
     {
         #region Protected override methods
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
 #if NET5_0_OR_GREATER
         [System.Runtime.Versioning.SupportedOSPlatform("windows7.0")]
 #endif
@@ -27,9 +25,7 @@
             base.OnAttached();
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
 #if NET5_0_OR_GREATER
         [System.Runtime.Versioning.SupportedOSPlatform("windows7.0")]
 #endif

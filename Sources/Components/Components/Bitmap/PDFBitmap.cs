@@ -5,9 +5,7 @@
     using PDFiumDotNET.Components.Contracts.Page;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
-    /// <summary>
     /// <inheritdoc cref="IPDFBitmap"/>
-    /// </summary>
     internal class PDFBitmap : IPDFBitmap
     {
         #region Private fields
@@ -153,19 +151,13 @@
 
         #region Implementation of IBitmap
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public int Width { get; private set; }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public int Height { get; private set; }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public void Destroy()
         {
             _mainComponent.PDFiumBridge.FPDFBitmap_Destroy(_bitmapHandle);

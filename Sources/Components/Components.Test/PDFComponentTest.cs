@@ -130,8 +130,8 @@
 
             var pageComponent = component.PageComponent;
             Assert.IsNotNull(pageComponent);
-            var zoomComponent = component.ZoomComponent;
-            Assert.IsNotNull(zoomComponent);
+            var findComponent = component.FindComponent;
+            Assert.IsNotNull(findComponent);
             var bookmarkComponent = component.BookmarkComponent;
             Assert.IsNotNull(bookmarkComponent);
 
@@ -140,8 +140,8 @@
 
             pageComponent = component.PageComponent;
             Assert.IsNotNull(pageComponent);
-            zoomComponent = component.ZoomComponent;
-            Assert.IsNotNull(zoomComponent);
+            findComponent = component.FindComponent;
+            Assert.IsNotNull(findComponent);
             bookmarkComponent = component.BookmarkComponent;
             Assert.IsNotNull(bookmarkComponent);
 
@@ -149,21 +149,21 @@
 
             pageComponent = component.PageComponent;
             Assert.IsNotNull(pageComponent);
-            zoomComponent = component.ZoomComponent;
-            Assert.IsNotNull(zoomComponent);
+            findComponent = component.FindComponent;
+            Assert.IsNotNull(findComponent);
             bookmarkComponent = component.BookmarkComponent;
             Assert.IsNotNull(bookmarkComponent);
 
             component.Dispose();
 
             Assert.IsTrue(pageComponent.IsDisposed);
-            Assert.IsTrue(zoomComponent.IsDisposed);
+            Assert.IsTrue(findComponent.IsDisposed);
             Assert.IsTrue(bookmarkComponent.IsDisposed);
 
             pageComponent = component.PageComponent;
             Assert.IsNull(pageComponent);
-            zoomComponent = component.ZoomComponent;
-            Assert.IsNull(zoomComponent);
+            findComponent = component.FindComponent;
+            Assert.IsNull(findComponent);
             bookmarkComponent = component.BookmarkComponent;
             Assert.IsNull(bookmarkComponent);
         }

@@ -2,74 +2,63 @@
 {
     using PDFiumDotNET.Components.Contracts.Page;
 
-    /// <summary>
     /// <inheritdoc cref="IPDFPageComponent"/>
-    /// </summary>
     internal sealed partial class PDFPageComponent
     {
-        #region Implementation of IDocumentObserver
+        #region Protected methods - overrides
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        public void DocumentOpening(string file)
+        protected override void ProcessDocumentOpening(string file)
         {
             SetDefaultValues();
+
+            base.ProcessDocumentOpening(file);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        public void DocumentOpened(string file)
+        protected override void ProcessDocumentOpened(string file)
         {
-            if (_mainComponent.PDFiumBridge == null || !_mainComponent.PDFiumDocument.IsValid)
+            if (PDFComponent.PDFiumBridge != null && PDFComponent.PDFiumDocument.IsValid)
             {
-                return;
-            }
-
-            PageCount = _mainComponent.PDFiumBridge.FPDF_GetPageCount(_mainComponent.PDFiumDocument);
-            _standardPageLayout.SetDefaultValues();
-            _thumbnailPageLayout.SetDefaultValues();
-            if (PageCount > 0)
-            {
-                for (var index = 0; index < PageCount; index++)
+                PageCount = PDFComponent.PDFiumBridge.FPDF_GetPageCount(PDFComponent.PDFiumDocument);
+                _standardPageLayout.SetDefaultValues();
+                _thumbnailPageLayout.SetDefaultValues();
+                if (PageCount > 0)
                 {
-                    var newPage = new PDFPage(_mainComponent, index);
-                    newPage.Build();
-                    Pages.Add(newPage);
+                    for (var index = 0; index < PageCount; index++)
+                    {
+                        var newPage = new PDFPage(PDFComponent, index);
+                        newPage.Build();
+                        Pages.Add(newPage);
+                    }
+
+                    _standardPageLayout.InitializeLayout();
+                    _thumbnailPageLayout.InitializeLayout();
+                    SetCurrentInformation(Pages[0]);
                 }
 
-                _standardPageLayout.InitializeLayout();
-                _thumbnailPageLayout.InitializeLayout();
-                SetCurrentInformation(Pages[0]);
+                InvokePropertyChangedEvent(null);
             }
 
-            InvokePropertyChangedEvent(null);
+            base.ProcessDocumentOpened(file);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        public void DocumentOpenFailed(string file)
+        protected override void ProcessDocumentOpenFailed(string file)
         {
             SetDefaultValues();
+
+            base.ProcessDocumentOpenFailed(file);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        public void DocumentClosing()
+        protected override void ProcessDocumentClosing()
         {
             SetDefaultValues();
+
+            base.ProcessDocumentClosing();
         }
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public void DocumentClosed()
-        {
-        }
-
-        #endregion Implementation of IDocumentObserver
+        #endregion Protected methods - overrides
     }
 }

@@ -101,7 +101,7 @@
         {
             get
             {
-                return _pdfComponent?.ZoomComponent;
+                return _pdfComponent?.PageComponent?.ZoomComponent;
             }
         }
 
@@ -128,14 +128,17 @@
         {
             get
             {
-                return _pdfComponent != null && _pdfComponent.ZoomComponent != null ? _pdfComponent.ZoomComponent.CurrentZoomPercentage : 100;
+                return _pdfComponent != null
+                    && _pdfComponent.PageComponent != null
+                    && _pdfComponent.PageComponent.ZoomComponent != null
+                    ? _pdfComponent.PageComponent.ZoomComponent.CurrentZoomPercentage : 100;
             }
 
             set
             {
-                if (_pdfComponent != null && _pdfComponent.ZoomComponent != null)
+                if (_pdfComponent != null && _pdfComponent.PageComponent != null && _pdfComponent.PageComponent.ZoomComponent != null)
                 {
-                    _pdfComponent.ZoomComponent.CurrentZoomPercentage = value;
+                    _pdfComponent.PageComponent.ZoomComponent.CurrentZoomPercentage = value;
                 }
             }
         }
@@ -358,7 +361,7 @@
                 }
             };
 
-            _pdfComponent.ZoomComponent.PropertyChanged += (s, e) =>
+            _pdfComponent.PageComponent.ZoomComponent.PropertyChanged += (s, e) =>
             {
                 if (string.Equals(nameof(IPDFZoomComponent.CurrentZoomFactor), e.PropertyName, StringComparison.OrdinalIgnoreCase)
                     || string.IsNullOrEmpty(e.PropertyName))
