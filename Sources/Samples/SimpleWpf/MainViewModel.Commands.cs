@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
     using System.Windows.Controls.Primitives;
     using Microsoft.Win32;
-    using PDFiumDotNET.Components.Contracts.Adapters;
+    using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Samples.SimpleWpf.CommonDialogs;
     using PDFiumDotNET.Samples.SimpleWpf.Dialogs;
     using PDFiumDotNET.Samples.SimpleWpf.Helper;

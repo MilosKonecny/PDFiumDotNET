@@ -5,8 +5,8 @@
     using System.Windows;
     using System.Windows.Media;
     using PDFiumDotNET.Components.Contracts;
-    using PDFiumDotNET.Components.Contracts.Adapters;
     using PDFiumDotNET.Components.Contracts.EventArguments;
+    using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Zoom;
 

@@ -4,16 +4,16 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
-    using PDFiumDotNET.Components.Adapters;
     using PDFiumDotNET.Components.Contracts.Action;
-    using PDFiumDotNET.Components.Contracts.Adapters;
     using PDFiumDotNET.Components.Contracts.Destination;
     using PDFiumDotNET.Components.Contracts.EventArguments;
     using PDFiumDotNET.Components.Contracts.Find;
+    using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Zoom;
     using PDFiumDotNET.Components.Find;
     using PDFiumDotNET.Components.Helper;
+    using PDFiumDotNET.Components.Layout;
     using PDFiumDotNET.Components.Zoom;
 
     /// <inheritdoc cref="IPDFPageComponent"/>

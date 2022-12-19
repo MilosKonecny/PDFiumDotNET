@@ -3,7 +3,7 @@
     using System;
     using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using PDFiumDotNET.Components.Contracts.Adapters;
+    using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Page;
 
     // Disable "Remove the underscores from member name"

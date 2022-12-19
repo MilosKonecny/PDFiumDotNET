@@ -1,7 +1,7 @@
-﻿namespace PDFiumDotNET.Components.Adapters
+﻿namespace PDFiumDotNET.Components.Layout
 {
     using System;
-    using PDFiumDotNET.Components.Contracts.Adapters;
+    using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Page;
 

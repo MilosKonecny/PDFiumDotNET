@@ -13,4 +13,8 @@
         <ProjectReference Include="..\Components.Contracts\PDFiumDotNET.Components.Contracts.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Adapters\" />
+    </ItemGroup>
+
 </Project>
