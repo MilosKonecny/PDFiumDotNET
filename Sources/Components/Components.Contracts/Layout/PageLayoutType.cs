@@ -1,4 +1,4 @@
-﻿namespace PDFiumDotNET.Components.Contracts.Adapters
+﻿namespace PDFiumDotNET.Components.Contracts.Layout
 {
     /// <summary>
     /// Enumeration defines all available page layouts.

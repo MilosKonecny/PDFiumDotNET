@@ -1,4 +1,4 @@
-﻿namespace PDFiumDotNET.Components.Contracts.Adapters
+﻿namespace PDFiumDotNET.Components.Contracts.Layout
 {
     using System.Collections.Generic;
     using PDFiumDotNET.Components.Contracts.Page;

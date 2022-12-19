@@ -8,7 +8,7 @@
     using System.Windows;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
-    using PDFiumDotNET.Components.Contracts.Adapters;
+    using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.WpfControls.Helper;
 
