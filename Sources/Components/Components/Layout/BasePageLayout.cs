@@ -126,11 +126,11 @@
             foreach (var page in PageComponent.Pages)
             {
                 // Filter out all pages above top line.
-                if (currentPositionOnY + PageHeight(page) * zoomFactor < topLine)
+                if (currentPositionOnY + (PageHeight(page) * zoomFactor) < topLine)
                 {
                     // Page is above top line.
                     // Adjust the current position on y and continue.
-                    currentPositionOnY += pageMargin + PageHeight(page) * zoomFactor;
+                    currentPositionOnY += pageMargin + (PageHeight(page) * zoomFactor);
                     continue;
                 }
 
@@ -149,7 +149,7 @@
                     Left = 0,
                     Right = PageWidth(page) * zoomFactor,
                     Top = currentPositionOnY,
-                    Bottom = currentPositionOnY + PageHeight(page) * zoomFactor,
+                    Bottom = currentPositionOnY + (PageHeight(page) * zoomFactor),
                 };
 
                 // Check if the middle point of height of viewport is over this page.
@@ -183,7 +183,7 @@
                 list.Add(pageToAdd);
 
                 // Adjust current position on y.
-                currentPositionOnY += pageMargin + PageHeight(page) * zoomFactor;
+                currentPositionOnY += pageMargin + (PageHeight(page) * zoomFactor);
             }
 
             return list;
@@ -253,7 +253,7 @@
                     {
                         Left = 0,
                         Right = PageWidth(page) * zoomFactor,
-                        Top = currentPositionOnY - PageHeight(page) * zoomFactor,
+                        Top = currentPositionOnY - (PageHeight(page) * zoomFactor),
                         Bottom = currentPositionOnY,
                     };
 
@@ -267,7 +267,7 @@
             }
 
             // Set new top and bottom line returned back.
-            topLine = -1d * currentPositionOnY - height / 2d;
+            topLine = (-1d * currentPositionOnY) - (height / 2d);
             bottomLine = topLine + height;
 
             // A negative top line means that the first page is displayed and not positioned at the top.
@@ -282,10 +282,10 @@
                 foreach (var pageRenderInfo in list)
                 {
                     pageRenderInfo.Top = currentPositionOnY;
-                    pageRenderInfo.Bottom = currentPositionOnY + PageHeight(pageRenderInfo.Page) * zoomFactor;
+                    pageRenderInfo.Bottom = currentPositionOnY + (PageHeight(pageRenderInfo.Page) * zoomFactor);
 
                     // Adjust current position on y axis.
-                    currentPositionOnY += pageMargin + PageHeight(pageRenderInfo.Page) * zoomFactor;
+                    currentPositionOnY += pageMargin + (PageHeight(pageRenderInfo.Page) * zoomFactor);
                 }
             }
             else
@@ -293,8 +293,8 @@
                 // Adjust top and bottom line of all already added pages to render.
                 foreach (var pageRenderInfo in list)
                 {
-                    pageRenderInfo.Top += topLine + height / 2d;
-                    pageRenderInfo.Bottom += topLine + height / 2d;
+                    pageRenderInfo.Top += topLine + (height / 2d);
+                    pageRenderInfo.Bottom += topLine + (height / 2d);
                     currentPositionOnY = pageRenderInfo.Bottom;
                 }
 
@@ -320,14 +320,14 @@
                     Left = 0,
                     Right = PageWidth(PageComponent.Pages[index]) * zoomFactor,
                     Top = currentPositionOnY,
-                    Bottom = currentPositionOnY + PageHeight(PageComponent.Pages[index]) * zoomFactor,
+                    Bottom = currentPositionOnY + (PageHeight(PageComponent.Pages[index]) * zoomFactor),
                 };
 
                 // Add the page to the list.
                 list.Add(nextPageToAdd);
 
                 // Adjust current position on y axis.
-                currentPositionOnY += pageMargin + PageHeight(PageComponent.Pages[index]) * zoomFactor;
+                currentPositionOnY += pageMargin + (PageHeight(PageComponent.Pages[index]) * zoomFactor);
             }
 
             return list;
