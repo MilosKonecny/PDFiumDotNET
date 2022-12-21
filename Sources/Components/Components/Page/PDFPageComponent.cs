@@ -36,8 +36,12 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="PDFPageComponent"/> class.
         /// </summary>
-        public PDFPageComponent()
+        /// <param name="pageComponentName">Name of component. The name should be unique in <see cref="PDFComponent"/> context.</param>
+        public PDFPageComponent(string pageComponentName = null)
         {
+            // ToDo: Remove default value for pageComponentName parameter.
+            Name = pageComponentName;
+
             Pages = new ObservableCollection<IPDFPage>();
 
             _standardPageLayout = new StandardPageLayout(this);
@@ -49,6 +53,11 @@
         #endregion Constructors
 
         #region Internal properties
+
+        /// <summary>
+        /// Gets the name of page component.
+        /// </summary>
+        internal string Name { get; private set; }
 
         /// <summary>
         /// Gets the page index where are the selection rectangles defined.

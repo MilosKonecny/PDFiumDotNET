@@ -6,6 +6,7 @@
     using PDFiumDotNET.Components.Contracts.Bookmark;
     using PDFiumDotNET.Components.Contracts.Find;
     using PDFiumDotNET.Components.Contracts.Information;
+    using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Page;
 
     /// <summary>
@@ -14,6 +15,11 @@
     /// </summary>
     public interface IPDFComponent : IPDFBaseComponent
     {
+        /// <summary>
+        /// Gets the layout component that provides multiple page components (<see cref="IPDFPageComponent"/>).
+        /// </summary>
+        IPDFLayoutComponent LayoutComponent { get; }
+
         /// <summary>
         /// Gets the page component.
         /// </summary>

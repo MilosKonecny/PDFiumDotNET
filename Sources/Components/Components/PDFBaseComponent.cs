@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Linq;
     using System.Runtime.CompilerServices;
     using PDFiumDotNET.Components.Contracts;
 
@@ -54,6 +55,22 @@
         #endregion Protected properties
 
         #region Protected methods
+
+        /// <summary>
+        /// The method disposes child component and removes it from <see cref="ListOfChildComponents"/>.
+        /// </summary>
+        /// <param name="childComponent">Child component to dispose and remove.</param>
+        protected void DisposeChildComponent(IPDFChildComponent childComponent)
+        {
+            var component = ListOfChildComponents.FirstOrDefault(component => component == childComponent);
+            if (component == null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            ListOfChildComponents.Remove(component);
+            component.Dispose();
+        }
 
         /// <summary>
         /// Method invokes <see cref="PropertyChanged"/> event.

@@ -8,11 +8,13 @@
     using PDFiumDotNET.Components.Contracts.Bookmark;
     using PDFiumDotNET.Components.Contracts.Find;
     using PDFiumDotNET.Components.Contracts.Information;
+    using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Observers;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Find;
     using PDFiumDotNET.Components.Helper;
     using PDFiumDotNET.Components.Information;
+    using PDFiumDotNET.Components.Layout;
     using PDFiumDotNET.Components.Page;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
@@ -20,6 +22,27 @@
     internal sealed partial class PDFComponent
     {
         #region Implementation of IPDFComponent
+
+        /// <inheritdoc/>
+        public IPDFLayoutComponent LayoutComponent
+        {
+            get
+            {
+                if (IsDisposed)
+                {
+                    return null;
+                }
+
+                var component = ChildComponents.OfType<IPDFLayoutComponent>().FirstOrDefault();
+                if (component == null)
+                {
+                    component = new PDFLayoutComponent();
+                    Attach(component);
+                }
+
+                return component;
+            }
+        }
 
         /// <inheritdoc/>
         public IPDFPageComponent PageComponent
