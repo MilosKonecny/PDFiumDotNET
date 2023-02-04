@@ -27,7 +27,7 @@
                 {
                     for (var index = 0; index < PageCount; index++)
                     {
-                        var newPage = new PDFPage(PDFComponent, index);
+                        var newPage = new PDFPage(this, index);
                         newPage.Build();
                         Pages.Add(newPage);
                     }

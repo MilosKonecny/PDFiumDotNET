@@ -3,6 +3,7 @@
     using System;
     using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Zoom;
 
     // Disable "Remove the underscores from member name"
@@ -56,10 +57,17 @@
         public void PDFZoomComponent_Component_CheckType_Success()
         {
             var component = new PDFComponent();
-            var pageComponent = component.PageComponent;
-            var zoomComponent = pageComponent.ZoomComponent;
+            var layoutComponent = component.LayoutComponent;
+            Assert.IsNotNull(layoutComponent);
 
-            Assert.IsNotNull(zoomComponent as PDFZoomComponent);
+            var pageComponentStandard = layoutComponent.CreatePageComponent("standard", PageLayoutType.Standard);
+            var pageComponentThumbnail = layoutComponent.CreatePageComponent("thumbnail", PageLayoutType.Thumbnail);
+
+            var zoomComponentStandard = pageComponentStandard.ZoomComponent;
+            var zoomComponentThumbnail = pageComponentThumbnail.ZoomComponent;
+
+            Assert.IsNotNull(zoomComponentStandard as PDFZoomComponent);
+            Assert.IsNotNull(zoomComponentThumbnail as PDFZoomComponent);
 
             component.Dispose();
         }
@@ -73,19 +81,33 @@
             var pdfFile = Path.Combine(_pdfFilesFolder, "Precalculus.pdf");
 
             var component = new PDFComponent();
-            var pageComponent = component.PageComponent;
-            var zoomComponent = pageComponent.ZoomComponent;
-            Assert.AreEqual(1d, zoomComponent.CurrentZoomFactor);
+            var layoutComponent = component.LayoutComponent;
+            Assert.IsNotNull(layoutComponent);
+
+            var pageComponentStandard = layoutComponent.CreatePageComponent("standard", PageLayoutType.Standard);
+            var pageComponentThumbnail = layoutComponent.CreatePageComponent("thumbnail", PageLayoutType.Thumbnail);
+
+            var zoomComponentStandard = pageComponentStandard.ZoomComponent;
+            var zoomComponentThumbnail = pageComponentThumbnail.ZoomComponent;
+
+            Assert.AreEqual(1d, zoomComponentStandard.CurrentZoomFactor);
+            Assert.AreEqual(1d, zoomComponentThumbnail.CurrentZoomFactor);
 
             component.OpenDocument(pdfFile, string.Empty);
             Assert.IsTrue(component.IsDocumentOpened);
-            Assert.AreEqual(1d, zoomComponent.CurrentZoomFactor);
 
-            zoomComponent.CurrentZoomFactor = 2.1d;
-            Assert.AreEqual(2.1d, zoomComponent.CurrentZoomFactor);
+            Assert.AreEqual(1d, zoomComponentStandard.CurrentZoomFactor);
+            zoomComponentStandard.CurrentZoomFactor = 2.1d;
+            Assert.AreEqual(2.1d, zoomComponentStandard.CurrentZoomFactor);
+
+            Assert.AreEqual(1d, zoomComponentThumbnail.CurrentZoomFactor);
+            zoomComponentThumbnail.CurrentZoomFactor = 2.1d;
+            Assert.AreEqual(2.1d, zoomComponentThumbnail.CurrentZoomFactor);
 
             component.CloseDocument();
-            Assert.AreEqual(1d, zoomComponent.CurrentZoomFactor);
+
+            Assert.AreEqual(1d, zoomComponentStandard.CurrentZoomFactor);
+            Assert.AreEqual(1d, zoomComponentThumbnail.CurrentZoomFactor);
 
             component.CloseDocument();
             component.Dispose();

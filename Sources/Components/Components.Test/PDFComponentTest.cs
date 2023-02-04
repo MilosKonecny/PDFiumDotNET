@@ -128,42 +128,33 @@
 
             var component = new PDFComponent();
 
-            var pageComponent = component.PageComponent;
-            Assert.IsNotNull(pageComponent);
-            var findComponent = component.FindComponent;
-            Assert.IsNotNull(findComponent);
+            var layoutComponent = component.LayoutComponent;
+            Assert.IsNotNull(layoutComponent);
             var bookmarkComponent = component.BookmarkComponent;
             Assert.IsNotNull(bookmarkComponent);
 
             component.OpenDocument(pdfFile);
             Assert.IsTrue(component.IsDocumentOpened);
 
-            pageComponent = component.PageComponent;
-            Assert.IsNotNull(pageComponent);
-            findComponent = component.FindComponent;
-            Assert.IsNotNull(findComponent);
+            layoutComponent = component.LayoutComponent;
+            Assert.IsNotNull(layoutComponent);
             bookmarkComponent = component.BookmarkComponent;
             Assert.IsNotNull(bookmarkComponent);
 
             component.CloseDocument();
 
-            pageComponent = component.PageComponent;
-            Assert.IsNotNull(pageComponent);
-            findComponent = component.FindComponent;
-            Assert.IsNotNull(findComponent);
+            layoutComponent = component.LayoutComponent;
+            Assert.IsNotNull(layoutComponent);
             bookmarkComponent = component.BookmarkComponent;
             Assert.IsNotNull(bookmarkComponent);
 
             component.Dispose();
 
-            Assert.IsTrue(pageComponent.IsDisposed);
-            Assert.IsTrue(findComponent.IsDisposed);
+            Assert.IsTrue(layoutComponent.IsDisposed);
             Assert.IsTrue(bookmarkComponent.IsDisposed);
 
-            pageComponent = component.PageComponent;
-            Assert.IsNull(pageComponent);
-            findComponent = component.FindComponent;
-            Assert.IsNull(findComponent);
+            layoutComponent = component.LayoutComponent;
+            Assert.IsNull(layoutComponent);
             bookmarkComponent = component.BookmarkComponent;
             Assert.IsNull(bookmarkComponent);
         }

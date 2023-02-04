@@ -57,9 +57,14 @@
         public void PDFPageComponent_Component_CheckType_Success()
         {
             var component = new PDFComponent();
-            var pageComponent = component.PageComponent;
+            var layoutComponent = component.LayoutComponent;
+            Assert.IsNotNull(layoutComponent);
 
-            Assert.IsNotNull(pageComponent as PDFPageComponent);
+            var pageComponentStandard = layoutComponent.CreatePageComponent("standard", PageLayoutType.Standard);
+            var pageComponentThumbnail = layoutComponent.CreatePageComponent("thumbnail", PageLayoutType.Thumbnail);
+
+            Assert.IsNotNull(pageComponentStandard as PDFPageComponent);
+            Assert.IsNotNull(pageComponentThumbnail as PDFPageComponent);
 
             component.CloseDocument();
             component.Dispose();
@@ -74,31 +79,39 @@
             var pdfFile = Path.Combine(_pdfFilesFolder, "Precalculus.pdf");
 
             var component = new PDFComponent();
-            var pageComponent = component.PageComponent;
-            Assert.IsNotNull(pageComponent);
-            Assert.IsNotNull(pageComponent[PageLayoutType.Standard]);
+            var layoutComponent = component.LayoutComponent;
+            Assert.IsNotNull(layoutComponent);
+
+            var pageComponentStandard = layoutComponent.CreatePageComponent("standard", PageLayoutType.Standard);
+            var pageComponentThumbnail = layoutComponent.CreatePageComponent("thumbnail", PageLayoutType.Thumbnail);
+
+            Assert.IsNotNull(pageComponentStandard[PageLayoutType.Standard]);
+            Assert.IsNotNull(pageComponentThumbnail[PageLayoutType.Thumbnail]);
 
             component.OpenDocument(pdfFile, string.Empty);
             Assert.IsTrue(component.IsDocumentOpened);
 
-            Assert.AreEqual(1, pageComponent.CurrentPageIndex);
-            Assert.AreEqual(1094, pageComponent.PageCount);
+            Assert.AreEqual(1, pageComponentStandard.CurrentPageIndex);
+            Assert.AreEqual(1094, pageComponentStandard.PageCount);
+            Assert.AreEqual(1, pageComponentThumbnail.CurrentPageIndex);
+            Assert.AreEqual(1094, pageComponentThumbnail.PageCount);
 
             // Test all layout adapters
             foreach (PageLayoutType type in Enum.GetValues(typeof(PageLayoutType)))
             {
-                Assert.IsNotNull(pageComponent[type]);
+                Assert.IsNotNull(pageComponentStandard[type]);
+                Assert.IsNotNull(pageComponentThumbnail[type]);
             }
 
             // Standard
-            Assert.IsTrue(866448 - pageComponent[PageLayoutType.Standard].CumulativeHeight <= 1, "Value: " + pageComponent[PageLayoutType.Standard].CumulativeHeight);
-            Assert.IsTrue(792 - pageComponent[PageLayoutType.Standard].HighestGridCellHeight <= 1, "Value: " + pageComponent[PageLayoutType.Standard].HighestGridCellHeight);
-            Assert.IsTrue(612 - pageComponent[PageLayoutType.Standard].WidestGridCellWidth <= 1, "Value: " + pageComponent[PageLayoutType.Standard].WidestGridCellWidth);
+            Assert.IsTrue(866448 - pageComponentStandard[PageLayoutType.Standard].CumulativeHeight <= 1, "Value: " + pageComponentStandard[PageLayoutType.Standard].CumulativeHeight);
+            Assert.IsTrue(792 - pageComponentStandard[PageLayoutType.Standard].HighestGridCellHeight <= 1, "Value: " + pageComponentStandard[PageLayoutType.Standard].HighestGridCellHeight);
+            Assert.IsTrue(612 - pageComponentStandard[PageLayoutType.Standard].WidestGridCellWidth <= 1, "Value: " + pageComponentStandard[PageLayoutType.Standard].WidestGridCellWidth);
 
             // Thumbnail
-            Assert.IsTrue(218800 - (int)pageComponent[PageLayoutType.Thumbnail].CumulativeHeight <= 1, "Value: " + (int)pageComponent[PageLayoutType.Thumbnail].CumulativeHeight);
-            Assert.IsTrue(100 - (int)pageComponent[PageLayoutType.Thumbnail].HighestGridCellHeight <= 1, "Value: " + (int)pageComponent[PageLayoutType.Thumbnail].HighestGridCellHeight);
-            Assert.IsTrue(77 - (int)pageComponent[PageLayoutType.Thumbnail].WidestGridCellWidth <= 1, "Value: " + (int)pageComponent[PageLayoutType.Thumbnail].WidestGridCellWidth);
+            Assert.IsTrue(218800 - (int)pageComponentThumbnail[PageLayoutType.Thumbnail].CumulativeHeight <= 1, "Value: " + (int)pageComponentThumbnail[PageLayoutType.Thumbnail].CumulativeHeight);
+            Assert.IsTrue(100 - (int)pageComponentThumbnail[PageLayoutType.Thumbnail].HighestGridCellHeight <= 1, "Value: " + (int)pageComponentThumbnail[PageLayoutType.Thumbnail].HighestGridCellHeight);
+            Assert.IsTrue(77 - (int)pageComponentThumbnail[PageLayoutType.Thumbnail].WidestGridCellWidth <= 1, "Value: " + (int)pageComponentThumbnail[PageLayoutType.Thumbnail].WidestGridCellWidth);
 
             component.CloseDocument();
             component.Dispose();
@@ -113,15 +126,20 @@
             var pdfFile = Path.Combine(_pdfFilesFolder, "Precalculus.pdf");
 
             var component = new PDFComponent();
-            var pageComponent = component.PageComponent;
+            var layoutComponent = component.LayoutComponent;
+            Assert.IsNotNull(layoutComponent);
+
+            var pageComponentStandard = layoutComponent.CreatePageComponent("standard", PageLayoutType.Standard);
+            var pageComponentThumbnail = layoutComponent.CreatePageComponent("thumbnail", PageLayoutType.Thumbnail);
 
             component.OpenDocument(pdfFile, string.Empty);
             Assert.IsTrue(component.IsDocumentOpened);
 
-            Assert.IsNotNull(pageComponent.Pages);
+            Assert.IsNotNull(pageComponentStandard.Pages);
+            Assert.IsNotNull(pageComponentThumbnail.Pages);
 
             var pageIndex = 0;
-            foreach (var page in pageComponent.Pages)
+            foreach (var page in pageComponentStandard.Pages)
             {
                 Assert.IsNotNull(page);
                 Assert.AreEqual(pageIndex++, page.PageIndex);

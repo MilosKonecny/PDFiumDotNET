@@ -16,6 +16,11 @@
     public interface IPDFPageComponent : IPDFChildComponent
     {
         /// <summary>
+        /// Gets the find component.
+        /// </summary>
+        IPDFFindComponent FindComponent { get; }
+
+        /// <summary>
         /// Gets the zoom component.
         /// </summary>
         IPDFZoomComponent ZoomComponent { get; }

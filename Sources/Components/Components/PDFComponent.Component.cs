@@ -45,27 +45,6 @@
         }
 
         /// <inheritdoc/>
-        public IPDFPageComponent PageComponent
-        {
-            get
-            {
-                if (IsDisposed)
-                {
-                    return null;
-                }
-
-                var component = ChildComponents.OfType<IPDFPageComponent>().FirstOrDefault();
-                if (component == null)
-                {
-                    component = new PDFPageComponent();
-                    Attach(component);
-                }
-
-                return component;
-            }
-        }
-
-        /// <inheritdoc/>
         public IPDFBookmarkComponent BookmarkComponent
         {
             get
@@ -79,29 +58,6 @@
                 if (component == null)
                 {
                     component = new PDFBookmarkComponent();
-                    Attach(component);
-                }
-
-                return component;
-            }
-        }
-
-        /// <summary>
-        /// Gets the find component.
-        /// </summary>
-        public IPDFFindComponent FindComponent
-        {
-            get
-            {
-                if (IsDisposed)
-                {
-                    return null;
-                }
-
-                var component = ChildComponents.OfType<IPDFFindComponent>().FirstOrDefault();
-                if (component == null)
-                {
-                    component = new PDFFindComponent();
                     Attach(component);
                 }
 

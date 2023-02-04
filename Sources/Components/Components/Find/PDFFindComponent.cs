@@ -13,13 +13,21 @@
     /// </summary>
     internal sealed partial class PDFFindComponent : PDFChildComponent, IPDFFindComponent
     {
+        #region Private fields
+
+        private readonly PDFPageComponent _pageComponent;
+
+        #endregion Private fields
+
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PDFFindComponent"/> class.
         /// </summary>
-        public PDFFindComponent()
+        /// <param name="pageComponent">Page component where the find will be performed.</param>
+        public PDFFindComponent(PDFPageComponent pageComponent)
         {
+            _pageComponent = pageComponent ?? throw new ArgumentNullException(nameof(pageComponent));
         }
 
         #endregion Constructors
@@ -45,10 +53,7 @@
                 return false;
             }
 
-            if (PDFComponent.PageComponent is PDFPageComponent pageComponent)
-            {
-                pageComponent.ClearSelectionRectangles();
-            }
+            _pageComponent.ClearSelectionRectangles();
 
             FPDF_FIND_FLAGS flags = FPDF_FIND_FLAGS.FPDF_NONE;
             if (caseSensitive)
@@ -64,7 +69,7 @@
             var somethingFound = false;
             var cancelFind = false;
 
-            foreach (var page in PDFComponent.PageComponent.Pages)
+            foreach (var page in _pageComponent.Pages)
             {
                 if (cancelFind || (progress != null && !progress(page.PageIndex)))
                 {
@@ -137,10 +142,7 @@
         /// </summary>
         public void ClearFindSelections()
         {
-            if (PDFComponent.PageComponent is PDFPageComponent pageComponent)
-            {
-                pageComponent.ClearSelectionRectangles();
-            }
+            _pageComponent.ClearSelectionRectangles();
         }
 
         #endregion Implementation of IPDFFindComponent
