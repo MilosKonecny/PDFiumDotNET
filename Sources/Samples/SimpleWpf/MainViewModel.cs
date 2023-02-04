@@ -5,13 +5,13 @@
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Globalization;
-    using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Controls.Primitives;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Bookmark;
     using PDFiumDotNET.Components.Contracts.Find;
+    using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Zoom;
     using PDFiumDotNET.Components.Factory;
@@ -24,11 +24,19 @@
     /// </summary>
     public partial class MainViewModel : BaseViewModel, IViewModel
     {
+        #region Private consts
+
+        private const string _standardPageComponentName = "StandardPageComponent";
+        private const string _thumbnailPageComponentName = "ThumbnailPageComponent";
+
+        #endregion Private consts
+
         #region Private fields
 
         private IView _view;
         private IPDFComponent _pdfComponent;
-        private IPDFPage _selectedThumbnail;
+        private IPDFPageComponent _standardPageComponent;
+        private IPDFPageComponent _thumbnailPageComponent;
         private string _currentPageLabel;
         private int _currentPageIndex;
         private bool _isFindActive;
@@ -79,7 +87,7 @@
         {
             get
             {
-                return _pdfComponent?.PageComponent;
+                return _standardPageComponent;
             }
         }
 
@@ -101,23 +109,7 @@
         {
             get
             {
-                return _pdfComponent?.PageComponent?.ZoomComponent;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets selected thumbnail.
-        /// </summary>
-        public IPDFPage SelectedThumbnail
-        {
-            get => _selectedThumbnail;
-            set
-            {
-                if (_selectedThumbnail != value)
-                {
-                    _selectedThumbnail = value;
-                    _selectedThumbnail?.NavigteTo();
-                }
+                return _standardPageComponent?.ZoomComponent;
             }
         }
 
@@ -129,16 +121,16 @@
             get
             {
                 return _pdfComponent != null
-                    && _pdfComponent.PageComponent != null
-                    && _pdfComponent.PageComponent.ZoomComponent != null
-                    ? _pdfComponent.PageComponent.ZoomComponent.CurrentZoomPercentage : 100;
+                    && _standardPageComponent != null
+                    && _standardPageComponent.ZoomComponent != null
+                    ? _standardPageComponent.ZoomComponent.CurrentZoomPercentage : 100;
             }
 
             set
             {
-                if (_pdfComponent != null && _pdfComponent.PageComponent != null && _pdfComponent.PageComponent.ZoomComponent != null)
+                if (_pdfComponent != null && _standardPageComponent != null && _standardPageComponent.ZoomComponent != null)
                 {
-                    _pdfComponent.PageComponent.ZoomComponent.CurrentZoomPercentage = value;
+                    _standardPageComponent.ZoomComponent.CurrentZoomPercentage = value;
                 }
             }
         }
@@ -158,7 +150,7 @@
                 if (!string.Equals(_currentPageLabel, value, StringComparison.OrdinalIgnoreCase)
                     && _pdfComponent != null)
                 {
-                    _pdfComponent.PageComponent.NavigateToPage(value);
+                    _standardPageComponent.NavigateToPage(value);
                 }
             }
         }
@@ -178,7 +170,7 @@
                 if (_currentPageIndex != value
                     && _pdfComponent != null)
                 {
-                    _pdfComponent.PageComponent.NavigateToPage(value);
+                    _standardPageComponent.NavigateToPage(value);
                 }
             }
         }
@@ -284,11 +276,11 @@
 
             if (bookmark.Action != null)
             {
-                _pdfComponent.PageComponent.PerformAction(bookmark.Action);
+                _standardPageComponent.PerformAction(bookmark.Action);
             }
             else if (bookmark.Destination != null)
             {
-                _pdfComponent.PageComponent.NavigateToDestination(bookmark.Destination);
+                _standardPageComponent.NavigateToDestination(bookmark.Destination);
             }
         }
 
@@ -361,7 +353,11 @@
                 }
             };
 
-            _pdfComponent.PageComponent.ZoomComponent.PropertyChanged += (s, e) =>
+            // We will use only two page components. One for thumbnails and one for standard view.
+            _standardPageComponent = _pdfComponent.LayoutComponent.CreatePageComponent(_standardPageComponentName, PageLayoutType.Standard);
+            _thumbnailPageComponent = _pdfComponent.LayoutComponent.CreatePageComponent(_thumbnailPageComponentName, PageLayoutType.Thumbnail);
+
+            _standardPageComponent.ZoomComponent.PropertyChanged += (s, e) =>
             {
                 if (string.Equals(nameof(IPDFZoomComponent.CurrentZoomFactor), e.PropertyName, StringComparison.OrdinalIgnoreCase)
                     || string.IsNullOrEmpty(e.PropertyName))
@@ -370,21 +366,21 @@
                 }
             };
 
-            _pdfComponent.PageComponent.PropertyChanged += (s, e) =>
+            _standardPageComponent.PropertyChanged += (s, e) =>
             {
                 if (string.Equals(nameof(IPDFPageComponent.CurrentPageIndex), e.PropertyName, StringComparison.OrdinalIgnoreCase))
                 {
-                    _currentPageIndex = _pdfComponent.PageComponent.CurrentPageIndex;
+                    _currentPageIndex = _standardPageComponent.CurrentPageIndex;
                     InvokePropertyChangedEvent(nameof(CurrentPageIndex));
                 }
                 else if (string.Equals(nameof(IPDFPageComponent.CurrentPageLabel), e.PropertyName, StringComparison.OrdinalIgnoreCase))
                 {
-                    _currentPageLabel = _pdfComponent.PageComponent.CurrentPageLabel;
+                    _currentPageLabel = _standardPageComponent.CurrentPageLabel;
                     InvokePropertyChangedEvent(nameof(CurrentPageLabel));
                 }
             };
 
-            _pdfComponent.PageComponent.PerformOutsideAction += (s, e) =>
+            _standardPageComponent.PerformOutsideAction += (s, e) =>
             {
                 if (e == null || e.Action == null)
                 {
@@ -452,11 +448,11 @@
 
                 if (value is IPDFFindPage page)
                 {
-                    _pdfComponent.PageComponent.NavigateToFindPlace(page);
+                    _standardPageComponent.NavigateToFindPlace(page);
                 }
                 else if (value is IPDFFindPosition position)
                 {
-                    _pdfComponent.PageComponent.NavigateToFindPlace(position);
+                    _standardPageComponent.NavigateToFindPlace(position);
                 }
             }
         }

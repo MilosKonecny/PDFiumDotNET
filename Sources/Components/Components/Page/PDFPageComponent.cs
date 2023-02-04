@@ -37,7 +37,7 @@
         /// Initializes a new instance of the <see cref="PDFPageComponent"/> class.
         /// </summary>
         /// <param name="pageComponentName">Name of component. The name should be unique in <see cref="PDFComponent"/> context.</param>
-        public PDFPageComponent(string pageComponentName = null)
+        public PDFPageComponent(string pageComponentName)
         {
             // ToDo: Remove default value for pageComponentName parameter.
             Name = pageComponentName;
@@ -173,6 +173,27 @@
         #endregion Private methods
 
         #region Implementation of IPageComponent
+
+        /// <inheritdoc/>
+        public IPDFFindComponent FindComponent
+        {
+            get
+            {
+                if (IsDisposed)
+                {
+                    return null;
+                }
+
+                var component = ChildComponents.OfType<IPDFFindComponent>().FirstOrDefault();
+                if (component == null)
+                {
+                    component = new PDFFindComponent(this);
+                    Attach(component);
+                }
+
+                return component;
+            }
+        }
 
         /// <inheritdoc/>
         public IPDFZoomComponent ZoomComponent

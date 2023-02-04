@@ -15,6 +15,7 @@
     {
         #region Private fields
 
+        private readonly PDFPageComponent _pageComponent;
         private readonly PDFComponent _mainComponent;
 
         #endregion Private fields
@@ -24,11 +25,12 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="PDFPage"/> class.
         /// </summary>
-        /// <param name="mainComponent">Main component where this page belongs.</param>
+        /// <param name="pageComponent">Page component where this page belongs.</param>
         /// <param name="pageIndex">Index of associated page.</param>
-        public PDFPage(PDFComponent mainComponent, int pageIndex)
+        public PDFPage(PDFPageComponent pageComponent, int pageIndex)
         {
-            _mainComponent = mainComponent ?? throw new ArgumentNullException(nameof(mainComponent));
+            _pageComponent = pageComponent ?? throw new ArgumentNullException(nameof(pageComponent));
+            _mainComponent = _pageComponent.MainComponent as PDFComponent;
             PageIndex = pageIndex;
         }
 
@@ -118,7 +120,7 @@
         /// <inheritdoc/>
         public void RenderPageBitmap(double zoomFactor, int startX, int startY, int sizeX, int sizeY, int width, int height, BitmapFormat format, IntPtr buffer, int stride)
         {
-            var bmp = new PDFBitmap(_mainComponent);
+            var bmp = new PDFBitmap(_pageComponent);
             bmp.Create(width, height, format, buffer, stride);
 
             var pageHandle = _mainComponent.PDFiumBridge.FPDF_LoadPage(_mainComponent.PDFiumDocument, PageIndex);
@@ -129,10 +131,10 @@
                 startY,
                 sizeX,
                 sizeY,
-                _mainComponent.PageComponent.IsAnnotationToRender ? FPDF_RENDERING_FLAGS.FPDF_ANNOT : FPDF_RENDERING_FLAGS.FPDF_NONE);
+                _pageComponent.IsAnnotationToRender ? FPDF_RENDERING_FLAGS.FPDF_ANNOT : FPDF_RENDERING_FLAGS.FPDF_NONE);
             _mainComponent.PDFiumBridge.FPDF_ClosePage(pageHandle);
 
-            if (_mainComponent.PageComponent is PDFPageComponent pageComponent
+            if (_pageComponent is PDFPageComponent pageComponent
                 && pageComponent.PageIndexWithSelections == PageIndex
                 && pageComponent.SelectionRectangles.Count != 0)
             {
@@ -148,7 +150,7 @@
         /// <inheritdoc/>
         public void RenderThumbnailBitmap(BitmapFormat format, IntPtr buffer, int stride)
         {
-            var bmp = new PDFBitmap(_mainComponent);
+            var bmp = new PDFBitmap(_pageComponent);
             bmp.Create((int)ThumbnailWidth, (int)ThumbnailHeight, format, buffer, stride);
 
             var pageHandle = _mainComponent.PDFiumBridge.FPDF_LoadPage(_mainComponent.PDFiumDocument, PageIndex);
@@ -182,7 +184,7 @@
         /// <inheritdoc/>
         public void NavigteTo()
         {
-            _mainComponent.PageComponent.NavigateToPage(PageIndex + 1);
+            _pageComponent.NavigateToPage(PageIndex + 1);
         }
 
         #endregion Implementation of IPDFPage

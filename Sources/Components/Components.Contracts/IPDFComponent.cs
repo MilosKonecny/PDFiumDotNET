@@ -21,19 +21,9 @@
         IPDFLayoutComponent LayoutComponent { get; }
 
         /// <summary>
-        /// Gets the page component.
-        /// </summary>
-        IPDFPageComponent PageComponent { get; }
-
-        /// <summary>
         /// Gets the bookmark component.
         /// </summary>
         IPDFBookmarkComponent BookmarkComponent { get; }
-
-        /// <summary>
-        /// Gets the find component.
-        /// </summary>
-        IPDFFindComponent FindComponent { get; }
 
         /// <summary>
         /// Gets a value indicating whether pdf document is opened or not.

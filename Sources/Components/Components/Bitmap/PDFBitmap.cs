@@ -2,7 +2,7 @@
 {
     using System;
     using PDFiumDotNET.Components.Contracts.Bitmap;
-    using PDFiumDotNET.Components.Contracts.Page;
+    using PDFiumDotNET.Components.Page;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
     /// <inheritdoc cref="IPDFBitmap"/>
@@ -10,6 +10,7 @@
     {
         #region Private fields
 
+        private readonly PDFPageComponent _pageComponent;
         private readonly PDFComponent _mainComponent;
         private FPDF_BITMAP _bitmapHandle;
 
@@ -20,10 +21,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="PDFBitmap"/> class.
         /// </summary>
-        /// <param name="mainComponent">Main component where this bookmark belongs.</param>
-        public PDFBitmap(PDFComponent mainComponent)
+        /// <param name="pageComponent">Page component where this bitmap belongs.</param>
+        public PDFBitmap(PDFPageComponent pageComponent)
         {
-            _mainComponent = mainComponent ?? throw new ArgumentNullException(nameof(mainComponent));
+            _pageComponent = pageComponent ?? throw new ArgumentNullException(nameof(pageComponent));
+            _mainComponent = _pageComponent.MainComponent as PDFComponent;
         }
 
         #endregion Constructors
@@ -59,17 +61,14 @@
             // Colors
             var colorBackground = new FPDF_COLOR(0xFF, 0xFF, 0xA0, 0x3F);
             var colorBorder = new FPDF_COLOR(0x00, 0x00, 0xFF, 0xFF);
-            if (_mainComponent.PageComponent is IPDFPageComponent pageComponent)
+            if (_pageComponent.FindSelectionBackgroundFunc != null)
             {
-                if (_mainComponent.PageComponent.FindSelectionBackgroundFunc != null)
-                {
-                    colorBackground = new FPDF_COLOR(_mainComponent.PageComponent.FindSelectionBackgroundFunc());
-                }
+                colorBackground = new FPDF_COLOR(_pageComponent.FindSelectionBackgroundFunc());
+            }
 
-                if (_mainComponent.PageComponent.FindSelectionBorderFunc != null)
-                {
-                    colorBorder = new FPDF_COLOR(_mainComponent.PageComponent.FindSelectionBorderFunc());
-                }
+            if (_pageComponent.FindSelectionBorderFunc != null)
+            {
+                colorBorder = new FPDF_COLOR(_pageComponent.FindSelectionBorderFunc());
             }
 
             // Background
