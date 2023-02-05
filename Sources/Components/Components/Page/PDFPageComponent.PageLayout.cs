@@ -1,83 +1,35 @@
-﻿namespace PDFiumDotNET.Components.Layout
+﻿namespace PDFiumDotNET.Components.Page
 {
     using System;
     using System.Collections.Generic;
-    using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Page;
-    using PDFiumDotNET.Components.Page;
 
-    /// <summary>
-    /// Base class for all page layout adapters.
-    /// </summary>
-    internal abstract class BasePageLayout : IPageLayoutAdapter
+    /// <inheritdoc cref="IPDFPageComponent"/>
+    internal sealed partial class PDFPageComponent
     {
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BasePageLayout"/> class.
-        /// </summary>
-        /// <param name="pageComponent"><see cref="PDFPageComponent"/> used to obtain information.</param>
-        /// <param name="layoutType">Type of supported layout.</param>
-        internal BasePageLayout(PDFPageComponent pageComponent, PageLayoutType layoutType)
-        {
-            PageComponent = pageComponent ?? throw new ArgumentNullException(nameof(pageComponent));
-            LayoutType = layoutType;
-        }
-
-        #endregion Constructors
-
-        #region Protected properties
-
-        /// <summary>
-        /// Gets associated <see cref="PDFPageComponent"/>.
-        /// </summary>
-        protected PDFPageComponent PageComponent
-        {
-            get;
-            private set;
-        }
-
-        #endregion Protected properties
-
-        #region Internal virtual methods
-
-        /// <summary>
-        /// Sets default values in fields and properties.
-        /// </summary>
-        internal virtual void SetDefaultValues()
-        {
-            WidestGridCellWidth = 0;
-            HighestGridCellHeight = 0;
-            CumulativeHeight = 0;
-        }
+        #region Private methods
 
         /// <summary>
         /// Initializes layout.
         /// </summary>
-        internal virtual void InitializeLayout()
+        private void InitializeLayout()
         {
-            SetDefaultValues();
-
-            for (var index = 0; index < PageComponent.PageCount; index++)
+            for (var index = 0; index < PageCount; index++)
             {
-                var page = PageComponent.Pages[index];
+                var page = Pages[index];
 
-                CumulativeHeight += PageHeight(page);
-                if (PageWidth(page) > WidestGridCellWidth)
+                CumulativeHeight += page.Height;
+                if (page.Width > WidestGridCellWidth)
                 {
-                    WidestGridCellWidth = PageWidth(page);
+                    WidestGridCellWidth = page.Width;
                 }
 
-                if (PageHeight(page) > HighestGridCellHeight)
+                if (page.Height > HighestGridCellHeight)
                 {
-                    HighestGridCellHeight = PageHeight(page);
+                    HighestGridCellHeight = page.Height;
                 }
             }
         }
-
-        #endregion Internal virtual methods
-
-        #region Protected virtual methods
 
         /// <summary>
         /// Determine required size of area where fit all pages.
@@ -86,9 +38,9 @@
         /// <param name="height">In: available height. Out: required height.</param>
         /// <param name="pageMargin">Margin around the page.</param>
         /// <param name="zoomFactor">Zoom factor to use for the computing of required area.</param>
-        protected virtual void DetermineAreaVirtual(ref double width, ref double height, double pageMargin, double zoomFactor)
+        private void DetermineAreaVirtual(ref double width, ref double height, double pageMargin, double zoomFactor)
         {
-            if (PageComponent.PageCount == 0)
+            if (PageCount == 0)
             {
                 return;
             }
@@ -96,7 +48,7 @@
             var newWidth = WidestGridCellWidth * zoomFactor;
             var newHeight = CumulativeHeight * zoomFactor;
             var marginWidth = 2d * pageMargin;
-            var marginHeight = (PageComponent.PageCount + 1) * pageMargin;
+            var marginHeight = (PageCount + 1) * pageMargin;
             width = Math.Round(newWidth + marginWidth, 2);
             height = Math.Round(newHeight + marginHeight, 2);
         }
@@ -110,7 +62,7 @@
         /// <param name="zoomFactor">Zoom factor to use for pages. Not for page margin.</param>
         /// <param name="setCurrentPageIndex">If <c>true</c>, page on middle of height will be set as current page.</param>
         /// <returns>Pages to draw in required region.</returns>
-        protected virtual IList<IPDFPageRenderInfo> DeterminePagesToRenderVirtual(double topLine, double bottomLine, double pageMargin, double zoomFactor, bool setCurrentPageIndex = false)
+        private IList<IPDFPageRenderInfo> DeterminePagesToRenderVirtual(double topLine, double bottomLine, double pageMargin, double zoomFactor, bool setCurrentPageIndex = false)
         {
             // List of all pages to render.
             var list = new List<IPDFPageRenderInfo>();
@@ -123,14 +75,14 @@
             var isCenterSet = false;
 
             // Iterate through all pages.
-            foreach (var page in PageComponent.Pages)
+            foreach (var page in Pages)
             {
                 // Filter out all pages above top line.
-                if (currentPositionOnY + (PageHeight(page) * zoomFactor) < topLine)
+                if (currentPositionOnY + (page.Height * zoomFactor) < topLine)
                 {
                     // Page is above top line.
                     // Adjust the current position on y and continue.
-                    currentPositionOnY += pageMargin + (PageHeight(page) * zoomFactor);
+                    currentPositionOnY += pageMargin + (page.Height * zoomFactor);
                     continue;
                 }
 
@@ -147,9 +99,9 @@
                 var pageToAdd = new PDFPageRenderInfo(page)
                 {
                     Left = 0,
-                    Right = PageWidth(page) * zoomFactor,
+                    Right = page.Width * zoomFactor,
                     Top = currentPositionOnY,
-                    Bottom = currentPositionOnY + (PageHeight(page) * zoomFactor),
+                    Bottom = currentPositionOnY + (page.Height * zoomFactor),
                 };
 
                 // Check if the middle point of height of viewport is over this page.
@@ -162,7 +114,7 @@
                     isCenterSet = true;
                     if (setCurrentPageIndex)
                     {
-                        PageComponent.SetCurrentInformation(pageToAdd.Page);
+                        SetCurrentInformation(pageToAdd.Page);
                     }
                 }
 
@@ -175,7 +127,7 @@
                     isCenterSet = true;
                     if (setCurrentPageIndex)
                     {
-                        PageComponent.SetCurrentInformation(pageToAdd.Page);
+                        SetCurrentInformation(pageToAdd.Page);
                     }
                 }
 
@@ -183,7 +135,7 @@
                 list.Add(pageToAdd);
 
                 // Adjust current position on y.
-                currentPositionOnY += pageMargin + (PageHeight(page) * zoomFactor);
+                currentPositionOnY += pageMargin + (page.Height * zoomFactor);
             }
 
             return list;
@@ -198,13 +150,13 @@
         /// <param name="pageMargin">Margin around the page.</param>
         /// <param name="zoomFactor">Zoom factor to use for pages. Not for page margin.</param>
         /// <returns>Pages to draw in required region.</returns>
-        protected virtual IList<IPDFPageRenderInfo> DeterminePagesToRenderVirtual(IPDFPageRenderInfo pageOnCenter, ref double topLine, ref double bottomLine, double pageMargin, double zoomFactor)
+        private IList<IPDFPageRenderInfo> DeterminePagesToRenderVirtual(IPDFPageRenderInfo pageOnCenter, ref double topLine, ref double bottomLine, double pageMargin, double zoomFactor)
         {
             // Base check.
             if (pageOnCenter == null
                 || !pageOnCenter.IsOnCenter
                 || pageOnCenter.Page == null
-                || pageOnCenter.Page.PageIndex >= PageComponent.PageCount)
+                || pageOnCenter.Page.PageIndex >= PageCount)
             {
                 // We don't have required information.
                 return DeterminePagesToRenderVirtual(topLine, bottomLine, pageMargin, zoomFactor);
@@ -224,9 +176,9 @@
             var pageOnMiddle = new PDFPageRenderInfo(pageOnCenter.Page)
             {
                 Left = 0,
-                Right = PageWidth(pageOnCenter.Page) * zoomFactor,
-                Top = -1d * pageOnCenter.PagePositionOnCenter * PageHeight(pageOnCenter.Page) * zoomFactor,
-                Bottom = (1d - pageOnCenter.PagePositionOnCenter) * PageHeight(pageOnCenter.Page) * zoomFactor,
+                Right = pageOnCenter.Page.Width * zoomFactor,
+                Top = -1d * pageOnCenter.PagePositionOnCenter * pageOnCenter.Page.Height * zoomFactor,
+                Bottom = (1d - pageOnCenter.PagePositionOnCenter) * pageOnCenter.Page.Height * zoomFactor,
                 IsOnCenter = pageOnCenter.IsOnCenter,
                 PagePositionOnCenter = pageOnCenter.PagePositionOnCenter,
             };
@@ -243,7 +195,7 @@
             for (var index = pageOnCenter.Page.PageIndex - 1; index >= 0; index--)
             {
                 // Get page to check.
-                var page = PageComponent.Pages[index];
+                var page = Pages[index];
 
                 // Check the curreint position on y relative to the virtual top line.
                 if (currentPositionOnY > virtualTopLine)
@@ -252,8 +204,8 @@
                     var nextPageToAdd = new PDFPageRenderInfo(page)
                     {
                         Left = 0,
-                        Right = PageWidth(page) * zoomFactor,
-                        Top = currentPositionOnY - (PageHeight(page) * zoomFactor),
+                        Right = page.Width * zoomFactor,
+                        Top = currentPositionOnY - (page.Height * zoomFactor),
                         Bottom = currentPositionOnY,
                     };
 
@@ -262,7 +214,7 @@
                 }
 
                 // Adjust current position on y.
-                currentPositionOnY -= PageHeight(page) * zoomFactor;
+                currentPositionOnY -= page.Height * zoomFactor;
                 currentPositionOnY -= pageMargin;
             }
 
@@ -282,10 +234,10 @@
                 foreach (var pageRenderInfo in list)
                 {
                     pageRenderInfo.Top = currentPositionOnY;
-                    pageRenderInfo.Bottom = currentPositionOnY + (PageHeight(pageRenderInfo.Page) * zoomFactor);
+                    pageRenderInfo.Bottom = currentPositionOnY + (pageRenderInfo.Page.Height * zoomFactor);
 
                     // Adjust current position on y axis.
-                    currentPositionOnY += pageMargin + (PageHeight(pageRenderInfo.Page) * zoomFactor);
+                    currentPositionOnY += pageMargin + (pageRenderInfo.Page.Height * zoomFactor);
                 }
             }
             else
@@ -303,7 +255,7 @@
             }
 
             // Iterate through pages from 'page on middle' to the last page.
-            for (var index = pageOnCenter.Page.PageIndex + 1; index < PageComponent.Pages.Count; index++)
+            for (var index = pageOnCenter.Page.PageIndex + 1; index < Pages.Count; index++)
             {
                 // Filter out all pages below bottom line.
                 if (currentPositionOnY > bottomLine)
@@ -315,72 +267,49 @@
 
                 // Part of this page is between top and bottom line.
                 // Add this page to the list.
-                var nextPageToAdd = new PDFPageRenderInfo(PageComponent.Pages[index])
+                var nextPageToAdd = new PDFPageRenderInfo(Pages[index])
                 {
                     Left = 0,
-                    Right = PageWidth(PageComponent.Pages[index]) * zoomFactor,
+                    Right = Pages[index].Width * zoomFactor,
                     Top = currentPositionOnY,
-                    Bottom = currentPositionOnY + (PageHeight(PageComponent.Pages[index]) * zoomFactor),
+                    Bottom = currentPositionOnY + (Pages[index].Height * zoomFactor),
                 };
 
                 // Add the page to the list.
                 list.Add(nextPageToAdd);
 
                 // Adjust current position on y axis.
-                currentPositionOnY += pageMargin + (PageHeight(PageComponent.Pages[index]) * zoomFactor);
+                currentPositionOnY += pageMargin + (Pages[index].Height * zoomFactor);
             }
 
             return list;
         }
 
-        #endregion Protected virtual methods
-
-        #region Protected abstract methods
-
-        /// <summary>
-        /// Returns the width of given page.
-        /// </summary>
-        /// <param name="page">Page to examine.</param>
-        /// <returns>Width of given page.</returns>
-        /// <remarks>Used to determine which width should be used - width or thumbnail width.</remarks>
-        protected abstract double PageWidth(IPDFPage page);
-
-        /// <summary>
-        /// Returns the height of given page.
-        /// </summary>
-        /// <param name="page">Page to examine.</param>
-        /// <returns>Height of given page.</returns>
-        /// <remarks>Used to determine which height should be used - height or thumbnail height.</remarks>
-        protected abstract double PageHeight(IPDFPage page);
-
-        #endregion Protected abstract methods
+        #endregion Private methods
 
         #region Implementation of IPageLayoutAdapter
 
         /// <inheritdoc/>
-        public PageLayoutType LayoutType { get; protected set; }
+        public double WidestGridCellWidth { get; private set; }
 
         /// <inheritdoc/>
-        public double WidestGridCellWidth { get; protected set; }
+        public double HighestGridCellHeight { get; private set; }
 
         /// <inheritdoc/>
-        public double HighestGridCellHeight { get; protected set; }
-
-        /// <inheritdoc/>
-        public double CumulativeHeight { get; protected set; }
+        public double CumulativeHeight { get; private set; }
 
         /// <inheritdoc/>
         public double GetPageTopLine(int pageIndex, double pageMargin, double zoomFactor)
         {
             var currentPosition = pageMargin;
-            for (var index = 0; index < PageComponent.Pages.Count; index++)
+            for (var index = 0; index < Pages.Count; index++)
             {
                 if (index == pageIndex)
                 {
                     break;
                 }
 
-                currentPosition += PageHeight(PageComponent.Pages[index]) * zoomFactor;
+                currentPosition += Pages[index].Height * zoomFactor;
                 currentPosition += pageMargin;
             }
 

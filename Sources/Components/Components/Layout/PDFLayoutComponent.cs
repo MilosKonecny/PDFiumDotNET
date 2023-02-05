@@ -5,6 +5,7 @@
     using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Page;
+    using PDFiumDotNET.Components.Transformation;
 
     /// <summary>
     /// Implementation class of <see cref="IPDFLayoutComponent"/>.
@@ -79,7 +80,7 @@
             var component = this[name];
             if (component == null)
             {
-                component = new PDFPageComponent(name);
+                component = new PDFPageComponent(name, pageLayout == PageLayoutType.Thumbnail ? new PageSizeThumbnailTransformation() : null);
                 Attach(component);
             }
 

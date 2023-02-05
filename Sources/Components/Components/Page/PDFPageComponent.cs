@@ -13,19 +13,16 @@
     using PDFiumDotNET.Components.Contracts.Zoom;
     using PDFiumDotNET.Components.Find;
     using PDFiumDotNET.Components.Helper;
-    using PDFiumDotNET.Components.Layout;
+    using PDFiumDotNET.Components.Transformation;
     using PDFiumDotNET.Components.Zoom;
 
     /// <inheritdoc cref="IPDFPageComponent"/>
-    internal sealed partial class PDFPageComponent : PDFChildComponent, IPDFPageComponent
+    internal sealed partial class PDFPageComponent : PDFChildComponent, IPDFPageComponent, IPageLayoutAdapter
     {
         #region Private fields
 
-        private readonly List<IPageLayoutAdapter> _pageLayoutAdapters = new List<IPageLayoutAdapter>();
         private readonly List<PDFRectangle> _selectionRectangles = new List<PDFRectangle>();
         private int _pageIndexWithSelections;
-        private StandardPageLayout _standardPageLayout;
-        private ThumbnailPageLayout _thumbnailPageLayout;
         private Func<int> _findSelectionBackgroundFunc;
         private Func<int> _findSelectionBorderFunc;
 
@@ -37,17 +34,15 @@
         /// Initializes a new instance of the <see cref="PDFPageComponent"/> class.
         /// </summary>
         /// <param name="pageComponentName">Name of component. The name should be unique in <see cref="PDFComponent"/> context.</param>
-        public PDFPageComponent(string pageComponentName)
+        /// <param name="pageSizeTransformation">Instance of class for page size transformation.</param>
+        public PDFPageComponent(string pageComponentName, IPageSizeTransformation pageSizeTransformation)
         {
-            // ToDo: Remove default value for pageComponentName parameter.
             Name = pageComponentName;
+            PageSizeTransformation = pageSizeTransformation;
 
             Pages = new ObservableCollection<IPDFPage>();
 
-            _standardPageLayout = new StandardPageLayout(this);
-            _pageLayoutAdapters.Add(_standardPageLayout);
-            _thumbnailPageLayout = new ThumbnailPageLayout(this);
-            _pageLayoutAdapters.Add(_thumbnailPageLayout);
+            PageSizeTransformation = pageSizeTransformation;
         }
 
         #endregion Constructors
@@ -85,6 +80,11 @@
                 return _selectionRectangles;
             }
         }
+
+        /// <summary>
+        /// Gets the instance of class for page size transformation. Return value can be <c>null</c>.
+        /// </summary>
+        internal IPageSizeTransformation PageSizeTransformation { get; private set; }
 
         #endregion Internal properties
 
@@ -137,9 +137,11 @@
             PageCount = 0;
             Pages.Clear();
             SetCurrentInformation(null);
-            _standardPageLayout.SetDefaultValues();
-            _thumbnailPageLayout.SetDefaultValues();
             InvokePropertyChangedEvent(null);
+
+            WidestGridCellWidth = 0;
+            HighestGridCellHeight = 0;
+            CumulativeHeight = 0;
         }
 
         /// <summary>
@@ -232,15 +234,6 @@
 
         /// <inheritdoc/>
         public int PageCount { get; private set; }
-
-        /// <inheritdoc/>
-        public IPageLayoutAdapter this[PageLayoutType type]
-        {
-            get
-            {
-                return _pageLayoutAdapters.FirstOrDefault(adapter => adapter.LayoutType == type);
-            }
-        }
 
         /// <inheritdoc/>
         public ObservableCollection<IPDFPage> Pages { get; private set; }

@@ -223,7 +223,7 @@
                         </b:Interaction.Behaviors>
                     </TextBox>
                     <TextBlock Text="/" />
-                    <TextBox Text="{Binding Path=PageComponent.PageCount, Mode=OneWay}"
+                    <TextBox Text="{Binding Path=StandardPageComponent.PageCount, Mode=OneWay}"
                              ToolTip="Not editable"
                              IsReadOnly="True" SelectionBrush="Transparent" />
                     <TextBlock Text=")" />
@@ -274,7 +274,7 @@
                               CanContentScroll="True" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
                         <wpfControl:PDFThumbnailView x:Name="_pdfThumbnailView"
                                                  BorderThickness="0"
-                                                 PDFPageComponent="{Binding Path=PageComponent}"/>
+                                                 PDFPageComponent="{Binding Path=ThumbnailPageComponent}"/>
                     </ScrollViewer>
                 </Border>
             </TabItem>
@@ -337,7 +337,7 @@
         <!-- PDF -->
         <ScrollViewer Grid.Row="4" Grid.Column="2" CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <wpfControl:PDFView x:Name="_pdfView"
-                                PDFPageComponent="{Binding Path=PageComponent}"
+                                PDFPageComponent="{Binding Path=StandardPageComponent}"
                                 PDFZoomComponent="{Binding Path=ZoomComponent}" />
         </ScrollViewer>
         <!-- Find active -->

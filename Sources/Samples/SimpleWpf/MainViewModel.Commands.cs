@@ -203,7 +203,7 @@
         {
             if (_pdfComponent != null && _pdfComponent.IsDocumentOpened && relatedButton != null)
             {
-                _standardPageComponent.IsAnnotationToRender = !_standardPageComponent.IsAnnotationToRender;
+                _standardPageComponentNew.IsAnnotationToRender = !_standardPageComponentNew.IsAnnotationToRender;
                 InvokePropertyChangedEvent();
                 _view.InvalidatePDFControl();
             }
@@ -216,20 +216,20 @@
                 return false;
             }
 
-            relatedButton.IsChecked = _standardPageComponent.IsAnnotationToRender;
+            relatedButton.IsChecked = _standardPageComponentNew.IsAnnotationToRender;
             return true;
         }
 
         private void ExecuteZoomWidthCommand()
         {
-            var pageComponent = _standardPageComponent;
+            var pageComponent = _standardPageComponentNew;
             var zoomComponent = pageComponent?.ZoomComponent;
             if (pageComponent == null || zoomComponent == null)
             {
                 return;
             }
 
-            zoomComponent.CurrentZoomFactor = _view.PDFActualWidth / (pageComponent[PageLayoutType.Standard].WidestGridCellWidth + (2 * _view.PDFPageMargin));
+            zoomComponent.CurrentZoomFactor = _view.PDFActualWidth / (pageComponent.WidestGridCellWidth + (2 * _view.PDFPageMargin));
         }
 
         private bool CanExecuteZoomWidthCommand()
@@ -239,14 +239,14 @@
 
         private void ExecuteZoomHeightCommand()
         {
-            var pageComponent = _standardPageComponent;
+            var pageComponent = _standardPageComponentNew;
             var zoomComponent = pageComponent?.ZoomComponent;
             if (pageComponent == null || zoomComponent == null)
             {
                 return;
             }
 
-            zoomComponent.CurrentZoomFactor = _view.PDFActualHeight / (pageComponent[PageLayoutType.Standard].HighestGridCellHeight + (2 * _view.PDFPageMargin));
+            zoomComponent.CurrentZoomFactor = _view.PDFActualHeight / (pageComponent.HighestGridCellHeight + (2 * _view.PDFPageMargin));
         }
 
         private bool CanExecuteZoomHeightCommand()
@@ -256,49 +256,49 @@
 
         private void ExecuteZoomInCommand()
         {
-            _standardPageComponent?.ZoomComponent?.IncreaseZoom();
+            _standardPageComponentNew?.ZoomComponent?.IncreaseZoom();
         }
 
         private bool CanExecuteZoomInCommand()
         {
-            if (_pdfComponent == null || !_pdfComponent.IsDocumentOpened || _standardPageComponent == null)
+            if (_pdfComponent == null || !_pdfComponent.IsDocumentOpened || _standardPageComponentNew == null)
             {
                 return false;
             }
 
-            var values = _standardPageComponent.ZoomComponent.ZoomValues.ToList();
+            var values = _standardPageComponentNew.ZoomComponent.ZoomValues.ToList();
             if (values.Count == 0)
             {
                 return false;
             }
 
-            return Math.Abs(values[values.Count - 1] - _standardPageComponent.ZoomComponent.CurrentZoomFactor) > 0.01;
+            return Math.Abs(values[values.Count - 1] - _standardPageComponentNew.ZoomComponent.CurrentZoomFactor) > 0.01;
         }
 
         private void ExecuteZoomOutCommand()
         {
-            _standardPageComponent?.ZoomComponent?.DecreaseZoom();
+            _standardPageComponentNew?.ZoomComponent?.DecreaseZoom();
         }
 
         private bool CanExecuteZoomOutCommand()
         {
-            if (_pdfComponent == null || !_pdfComponent.IsDocumentOpened || _standardPageComponent == null)
+            if (_pdfComponent == null || !_pdfComponent.IsDocumentOpened || _standardPageComponentNew == null)
             {
                 return false;
             }
 
-            var values = _standardPageComponent.ZoomComponent.ZoomValues.ToList();
+            var values = _standardPageComponentNew.ZoomComponent.ZoomValues.ToList();
             if (values.Count == 0)
             {
                 return false;
             }
 
-            return Math.Abs(values[0] - _standardPageComponent.ZoomComponent.CurrentZoomFactor) > 0.01;
+            return Math.Abs(values[0] - _standardPageComponentNew.ZoomComponent.CurrentZoomFactor) > 0.01;
         }
 
         private void ExecuteGoToFirstPageCommand()
         {
-            _standardPageComponent.NavigateToPage(1);
+            _standardPageComponentNew.NavigateToPage(1);
         }
 
         private bool CanExecuteGoToFirstPageCommand()
@@ -308,7 +308,7 @@
 
         private void ExecuteGoToPreviousPageCommand()
         {
-            _standardPageComponent.NavigateToPage(_standardPageComponent.CurrentPageIndex - 1);
+            _standardPageComponentNew.NavigateToPage(_standardPageComponentNew.CurrentPageIndex - 1);
         }
 
         private bool CanExecuteGoToPreviousPageCommand()
@@ -318,7 +318,7 @@
 
         private void ExecuteGoToNextPageCommand()
         {
-            _standardPageComponent.NavigateToPage(_standardPageComponent.CurrentPageIndex + 1);
+            _standardPageComponentNew.NavigateToPage(_standardPageComponentNew.CurrentPageIndex + 1);
         }
 
         private bool CanExecuteGoToNextPageCommand()
@@ -328,7 +328,7 @@
 
         private void ExecuteGoToLastPageCommand()
         {
-            _standardPageComponent.NavigateToPage(_standardPageComponent.PageCount);
+            _standardPageComponentNew.NavigateToPage(_standardPageComponentNew.PageCount);
         }
 
         private bool CanExecuteGoToLastPageCommand()
@@ -348,7 +348,7 @@
             await Task.Factory.StartNew(
                 () =>
                 {
-                    _standardPageComponent.FindComponent.FindText(
+                    _standardPageComponentNew.FindComponent.FindText(
                         FindText,
                         IsFindCaseSensitive,
                         IsFindWholeWords,
@@ -399,7 +399,7 @@
             FindResult.Clear();
             if (_pdfComponent != null && _pdfComponent.IsDocumentOpened)
             {
-                _standardPageComponent.FindComponent.ClearFindSelections();
+                _standardPageComponentNew.FindComponent.ClearFindSelections();
             }
         }
 

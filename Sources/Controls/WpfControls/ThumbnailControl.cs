@@ -68,7 +68,7 @@
                 var format = BitmapFormatConverter.GetFormat(bitmap.Format);
 
                 bitmap.Lock();
-                Page.RenderThumbnailBitmap(format, bitmap.BackBuffer, bitmap.BackBufferStride);
+                Page.RenderWholePageBitmap(format, bitmap.BackBuffer, bitmap.BackBufferStride);
                 bitmap.AddDirtyRect(new Int32Rect(0, 0, (int)Width, (int)Height));
                 bitmap.Unlock();
 

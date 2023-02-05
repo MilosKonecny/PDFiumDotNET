@@ -7,7 +7,6 @@
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
     using System.Windows.Media;
-    using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Page;
 
     /// <summary>
@@ -359,7 +358,7 @@
 
             var width = availableSize.Width;
             var height = availableSize.Height;
-            PDFPageComponent[PageLayoutType.Thumbnail].DetermineArea(ref width, ref height, 2d * FontSize, _thumbnailZoomFactor);
+            PDFPageComponent.DetermineArea(ref width, ref height, 2d * FontSize, _thumbnailZoomFactor);
             return new Size(width, height);
         }
 

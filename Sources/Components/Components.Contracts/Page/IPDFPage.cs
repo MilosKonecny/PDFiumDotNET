@@ -10,24 +10,18 @@
     public interface IPDFPage
     {
         /// <summary>
-        /// Gets page height defined in PDF document.
+        /// Gets page width. Original value is defined in PDF document,
+        /// but this value may be transformed. For example for thumbnail.
         /// </summary>
-        double Height { get; }
-
-        /// <summary>
-        /// Gets page width defined in PDF document.
-        /// </summary>
+        /// <remarks>Check the Adobe Acrobat Reader and transformation of thumbnails.</remarks>
         double Width { get; }
 
         /// <summary>
-        /// Gets predefined thumbnail height.
+        /// Gets page height. Original value is defined in PDF document,
+        /// but this value may be transformed. For example for thumbnail.
         /// </summary>
-        double ThumbnailHeight { get; }
-
-        /// <summary>
-        /// Gets predefined thumbnail width.
-        /// </summary>
-        double ThumbnailWidth { get; }
+        /// <remarks>Check the Adobe Acrobat Reader and transformation of thumbnails.</remarks>
+        double Height { get; }
 
         /// <summary>
         /// Gets page label defined in PDF document.
@@ -55,12 +49,12 @@
         void RenderPageBitmap(double zoomFactor, int startX, int startY, int sizeX, int sizeY, int width, int height, BitmapFormat format, IntPtr buffer, int stride);
 
         /// <summary>
-        /// Creates thumbnail bitmap of page.
+        /// Creates bitmap of whole page.
         /// </summary>
         /// <param name="format">Pixel format for created bitmap.</param>
         /// <param name="buffer">Buffer for created bitmap.</param>
         /// <param name="stride">Stride of created buffer.</param>
-        void RenderThumbnailBitmap(BitmapFormat format, IntPtr buffer, int stride);
+        void RenderWholePageBitmap(BitmapFormat format, IntPtr buffer, int stride);
 
         /// <summary>
         /// Gets the link on specified position.
