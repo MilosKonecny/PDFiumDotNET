@@ -13,7 +13,7 @@
     /// Interface defines functionality of page component.
     /// Component provides all information related to pages of opened PDF document.
     /// </summary>
-    public interface IPDFPageComponent : IPDFChildComponent
+    public interface IPDFPageComponent : IPDFChildComponent, IPageLayoutAdapter
     {
         /// <summary>
         /// Gets the find component.
@@ -39,16 +39,6 @@
         /// Gets the page count of opened document.
         /// </summary>
         int PageCount { get; }
-
-        /// <summary>
-        /// Gets the one of available layout adapters.
-        /// </summary>
-        /// <param name="type">Type of layout adapter to get.</param>
-        /// <returns>Required adapter. Returned value is never <c>null</c>.</returns>
-        IPageLayoutAdapter this[PageLayoutType type]
-        {
-            get;
-        }
 
         /// <summary>
         /// Gets the pages of opened document.

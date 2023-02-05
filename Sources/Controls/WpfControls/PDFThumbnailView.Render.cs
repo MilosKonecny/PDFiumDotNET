@@ -6,7 +6,6 @@
     using System.Windows;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
-    using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.WpfControls.Helper;
 
     /// <summary>
@@ -25,7 +24,7 @@
 
             // Determine pages to draw.
             _renderedPages.Clear();
-            _renderedPages.AddRange(PDFPageComponent[PageLayoutType.Thumbnail].DeterminePagesToRender(
+            _renderedPages.AddRange(PDFPageComponent.DeterminePagesToRender(
                 VerticalOffset,
                 VerticalOffset + ViewportHeight,
                 2d * FontSize,
@@ -38,7 +37,7 @@
             foreach (var pageInfo in _renderedPages)
             {
                 // Current page width
-                var currentPageWidth = pageInfo.Page.ThumbnailWidth * _thumbnailZoomFactor;
+                var currentPageWidth = pageInfo.Page.Width * _thumbnailZoomFactor;
 
                 // Center the page horizontally
                 pageInfo.Left = (ViewportWidth / 2d) - (currentPageWidth / 2d);
@@ -73,11 +72,11 @@
 
                 try
                 {
-                    var bitmap = new WriteableBitmap((int)pageInfo.Page.ThumbnailWidth, (int)pageInfo.Page.ThumbnailHeight, 96, 96, PixelFormats.Bgra32, null);
+                    var bitmap = new WriteableBitmap((int)pageInfo.Page.Width, (int)pageInfo.Page.Height, 96, 96, PixelFormats.Bgra32, null);
                     var format = BitmapFormatConverter.GetFormat(bitmap.Format);
 
                     bitmap.Lock();
-                    pageInfo.Page.RenderThumbnailBitmap(format, bitmap.BackBuffer, bitmap.BackBufferStride);
+                    pageInfo.Page.RenderWholePageBitmap(format, bitmap.BackBuffer, bitmap.BackBufferStride);
                     bitmap.AddDirtyRect(new Int32Rect(0, 0, (int)pageRect.Width, (int)pageRect.Height));
                     bitmap.Unlock();
 

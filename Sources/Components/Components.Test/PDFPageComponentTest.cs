@@ -85,9 +85,6 @@
             var pageComponentStandard = layoutComponent.CreatePageComponent("standard", PageLayoutType.Standard);
             var pageComponentThumbnail = layoutComponent.CreatePageComponent("thumbnail", PageLayoutType.Thumbnail);
 
-            Assert.IsNotNull(pageComponentStandard[PageLayoutType.Standard]);
-            Assert.IsNotNull(pageComponentThumbnail[PageLayoutType.Thumbnail]);
-
             component.OpenDocument(pdfFile, string.Empty);
             Assert.IsTrue(component.IsDocumentOpened);
 
@@ -96,22 +93,15 @@
             Assert.AreEqual(1, pageComponentThumbnail.CurrentPageIndex);
             Assert.AreEqual(1094, pageComponentThumbnail.PageCount);
 
-            // Test all layout adapters
-            foreach (PageLayoutType type in Enum.GetValues(typeof(PageLayoutType)))
-            {
-                Assert.IsNotNull(pageComponentStandard[type]);
-                Assert.IsNotNull(pageComponentThumbnail[type]);
-            }
-
             // Standard
-            Assert.IsTrue(866448 - pageComponentStandard[PageLayoutType.Standard].CumulativeHeight <= 1, "Value: " + pageComponentStandard[PageLayoutType.Standard].CumulativeHeight);
-            Assert.IsTrue(792 - pageComponentStandard[PageLayoutType.Standard].HighestGridCellHeight <= 1, "Value: " + pageComponentStandard[PageLayoutType.Standard].HighestGridCellHeight);
-            Assert.IsTrue(612 - pageComponentStandard[PageLayoutType.Standard].WidestGridCellWidth <= 1, "Value: " + pageComponentStandard[PageLayoutType.Standard].WidestGridCellWidth);
+            Assert.IsTrue(866448 - pageComponentStandard.CumulativeHeight <= 1, "Value: " + pageComponentStandard.CumulativeHeight);
+            Assert.IsTrue(792 - pageComponentStandard.HighestGridCellHeight <= 1, "Value: " + pageComponentStandard.HighestGridCellHeight);
+            Assert.IsTrue(612 - pageComponentStandard.WidestGridCellWidth <= 1, "Value: " + pageComponentStandard.WidestGridCellWidth);
 
             // Thumbnail
-            Assert.IsTrue(218800 - (int)pageComponentThumbnail[PageLayoutType.Thumbnail].CumulativeHeight <= 1, "Value: " + (int)pageComponentThumbnail[PageLayoutType.Thumbnail].CumulativeHeight);
-            Assert.IsTrue(100 - (int)pageComponentThumbnail[PageLayoutType.Thumbnail].HighestGridCellHeight <= 1, "Value: " + (int)pageComponentThumbnail[PageLayoutType.Thumbnail].HighestGridCellHeight);
-            Assert.IsTrue(77 - (int)pageComponentThumbnail[PageLayoutType.Thumbnail].WidestGridCellWidth <= 1, "Value: " + (int)pageComponentThumbnail[PageLayoutType.Thumbnail].WidestGridCellWidth);
+            Assert.IsTrue(218800 - (int)pageComponentThumbnail.CumulativeHeight <= 1, "Value: " + (int)pageComponentThumbnail.CumulativeHeight);
+            Assert.IsTrue(100 - (int)pageComponentThumbnail.HighestGridCellHeight <= 1, "Value: " + (int)pageComponentThumbnail.HighestGridCellHeight);
+            Assert.IsTrue(77 - (int)pageComponentThumbnail.WidestGridCellWidth <= 1, "Value: " + (int)pageComponentThumbnail.WidestGridCellWidth);
 
             component.CloseDocument();
             component.Dispose();

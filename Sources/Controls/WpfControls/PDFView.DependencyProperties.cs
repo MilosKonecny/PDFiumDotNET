@@ -273,7 +273,7 @@
         private void HandlePDFPageComponentNavigatedToPageEvent(object sender, NavigatedToPageEventArgs e)
         {
             // Current page is changed. Scroll to this page.
-            var verticalOffset = PDFPageComponent[PageLayoutType.Standard].GetPageTopLine(e.CurrentPageIndex - 1, PDFPageMargin, PDFZoomComponent.CurrentZoomFactor);
+            var verticalOffset = PDFPageComponent.GetPageTopLine(e.CurrentPageIndex - 1, PDFPageMargin, PDFZoomComponent.CurrentZoomFactor);
             var horizontalOffset = double.NaN;
             if (e.IsDetailedNavigation)
             {

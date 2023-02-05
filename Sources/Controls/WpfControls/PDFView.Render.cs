@@ -79,7 +79,7 @@
                 // Zoom factor was not changed or not preserved
                 // Determine pages to draw.
                 _renderedPages.Clear();
-                _renderedPages.AddRange(PDFPageComponent[PageLayoutType.Standard].DeterminePagesToRender(
+                _renderedPages.AddRange(PDFPageComponent.DeterminePagesToRender(
                     VerticalOffset,
                     VerticalOffset + ViewportHeight,
                     PDFPageMargin,
@@ -96,7 +96,7 @@
 
                 // Determine pages to draw.
                 _renderedPages.Clear();
-                _renderedPages.AddRange(PDFPageComponent[PageLayoutType.Standard].DeterminePagesToRender(
+                _renderedPages.AddRange(PDFPageComponent.DeterminePagesToRender(
                     pageOnCenter,
                     ref topLine,
                     ref bottomLine,

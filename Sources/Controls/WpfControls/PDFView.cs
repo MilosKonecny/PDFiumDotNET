@@ -7,7 +7,6 @@
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
     using System.Windows.Media;
-    using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Link;
     using PDFiumDotNET.Components.Contracts.Page;
 
@@ -428,7 +427,7 @@
 
             var width = availableSize.Width;
             var height = availableSize.Height;
-            PDFPageComponent[PageLayoutType.Standard].DetermineArea(ref width, ref height, PDFPageMargin, PDFZoomComponent.CurrentZoomFactor);
+            PDFPageComponent.DetermineArea(ref width, ref height, PDFPageMargin, PDFZoomComponent.CurrentZoomFactor);
             return new Size(width, height);
         }
 

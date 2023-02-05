@@ -36,17 +36,19 @@
 
         #endregion Constructors
 
-        #region Private properties
+        #region Public properties
 
-        private double ThumbnailFactor
-        {
-            get
-            {
-                return (Width > Height ? Width : Height) / 200d;
-            }
-        }
+        /// <summary>
+        /// Gets the original height - height obtained from pdf document.
+        /// </summary>
+        public double OriginalHeight { get; private set; }
 
-        #endregion Private properties
+        /// <summary>
+        /// Gets the original width - width obtained from pdf document.
+        /// </summary>
+        public double OriginalWidth { get; private set; }
+
+        #endregion Public properties
 
         #region Public methods
 
@@ -60,12 +62,12 @@
                 return;
             }
 
-            Width = 0;
-            Height = 0;
+            OriginalWidth = 0;
+            OriginalHeight = 0;
             if (_mainComponent.PDFiumBridge.FPDF_GetPageSizeByIndexF(_mainComponent.PDFiumDocument, PageIndex, out FS_SIZEF size))
             {
-                Width = size.Width;
-                Height = size.Height;
+                OriginalWidth = size.Width;
+                OriginalHeight = size.Height;
             }
 
             PageLabel = null;
@@ -88,26 +90,20 @@
         #region Implementation of IPDFPage
 
         /// <inheritdoc/>
-        public double Height { get; private set; }
-
-        /// <inheritdoc/>
-        public double Width { get; private set; }
-
-        /// <inheritdoc/>
-        public double ThumbnailHeight
+        public double Width
         {
             get
             {
-                return Height / ThumbnailFactor;
+                return _pageComponent.PageSizeTransformation == null ? OriginalWidth : _pageComponent.PageSizeTransformation.Width(this);
             }
         }
 
         /// <inheritdoc/>
-        public double ThumbnailWidth
+        public double Height
         {
             get
             {
-                return Width / ThumbnailFactor;
+                return _pageComponent.PageSizeTransformation == null ? OriginalHeight : _pageComponent.PageSizeTransformation.Height(this);
             }
         }
 
@@ -148,18 +144,18 @@
         }
 
         /// <inheritdoc/>
-        public void RenderThumbnailBitmap(BitmapFormat format, IntPtr buffer, int stride)
+        public void RenderWholePageBitmap(BitmapFormat format, IntPtr buffer, int stride)
         {
             var bmp = new PDFBitmap(_pageComponent);
-            bmp.Create((int)ThumbnailWidth, (int)ThumbnailHeight, format, buffer, stride);
+            bmp.Create((int)Width, (int)Height, format, buffer, stride);
 
             var pageHandle = _mainComponent.PDFiumBridge.FPDF_LoadPage(_mainComponent.PDFiumDocument, PageIndex);
             bmp.RenderWithoutTransformation(
                 pageHandle,
                 0,
                 0,
-                (int)ThumbnailWidth,
-                (int)ThumbnailHeight,
+                (int)Width,
+                (int)Height,
                 FPDF_RENDERING_FLAGS.FPDF_NONE);
             _mainComponent.PDFiumBridge.FPDF_ClosePage(pageHandle);
 

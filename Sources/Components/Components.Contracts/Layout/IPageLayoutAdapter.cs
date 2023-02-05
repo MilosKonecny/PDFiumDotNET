@@ -12,11 +12,6 @@
     public interface IPageLayoutAdapter
     {
         /// <summary>
-        /// Gets the type of page layout adapter.
-        /// </summary>
-        PageLayoutType LayoutType { get; }
-
-        /// <summary>
         /// Gets the width of widest grid cell.
         /// </summary>
         double WidestGridCellWidth { get; }

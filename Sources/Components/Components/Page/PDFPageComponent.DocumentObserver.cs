@@ -21,8 +21,6 @@
             if (PDFComponent.PDFiumBridge != null && PDFComponent.PDFiumDocument.IsValid)
             {
                 PageCount = PDFComponent.PDFiumBridge.FPDF_GetPageCount(PDFComponent.PDFiumDocument);
-                _standardPageLayout.SetDefaultValues();
-                _thumbnailPageLayout.SetDefaultValues();
                 if (PageCount > 0)
                 {
                     for (var index = 0; index < PageCount; index++)
@@ -32,10 +30,10 @@
                         Pages.Add(newPage);
                     }
 
-                    _standardPageLayout.InitializeLayout();
-                    _thumbnailPageLayout.InitializeLayout();
                     SetCurrentInformation(Pages[0]);
                 }
+
+                InitializeLayout();
 
                 InvokePropertyChangedEvent(null);
             }
