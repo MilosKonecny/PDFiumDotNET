@@ -1,7 +1,6 @@
 ﻿namespace PDFiumDotNET.Components.Contracts.Basic
 {
     using System;
-    using System.Drawing;
 
     /// <summary>
     /// Structure contains information about a point.
@@ -135,6 +134,7 @@
         ////{
         ////    get
         ////    {
+        ////        // This solution is for .NET 5 and higher
         ////        dynamic value1 = X;
         ////        dynamic value2 = Width;
         ////        return value1 + value2;
@@ -161,6 +161,7 @@
         ////{
         ////    get
         ////    {
+        ////        // This solution is for .NET 5 and higher
         ////        dynamic value1 = Y;
         ////        dynamic value2 = Height;
         ////        return value1 + value2;
