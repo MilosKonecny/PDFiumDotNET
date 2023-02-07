@@ -1,6 +1,5 @@
 ﻿namespace PDFiumDotNET.Components.Test.Basic
 {
-    using System.Drawing;
     using FluentAssertions;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using PDFiumDotNET.Components.Contracts.Basic;
@@ -70,14 +69,14 @@
 
         /// <summary>
         /// Test <see cref="PDFRectangle{T}"/> constructor.
-        /// Use constructor <see cref="PDFRectangle{T}.PDFRectangle()"/> and check values in rectangle.
+        /// Use constructor <see cref="PDFRectangle{T}.PDFRectangle()"/> and check default values in rectangle.
         /// </summary>
         [TestMethod]
         public void PDFRectangle_Constructor1_Instantiation_IsEmpty()
         {
             var tested = new PDFRectangle<double>();
 
-            tested.IsEmpty.Should().Be(true);
+            tested.IsEmpty.Should().BeTrue();
             tested.X.Should().Be(default);
             tested.Y.Should().Be(default);
             tested.Width.Should().Be(default);
@@ -132,6 +131,86 @@
             var tested = new PDFRectangle<double>(rectangle);
 
             tested.Should().BeEquivalentTo(rectangle);
+        }
+
+        /// <summary>
+        /// Test <see cref="PDFRectangle{T}.Equals(PDFRectangle{T})"/>.
+        /// Create two instances with identical values and use <see cref="PDFRectangle{T}.Equals(PDFRectangle{T})"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFRectangle_IEquatableEquals_UseEquals_AreEqual()
+        {
+            var rectangle1 = new PDFRectangle<double>(2, 5, 32, 85);
+            var rectangle2 = new PDFRectangle<double>(2, 5, 32, 85);
+
+            rectangle1.Equals(rectangle2).Should().BeTrue();
+            rectangle2.Equals(rectangle1).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Test <see cref="PDFRectangle{T}.Equals(PDFRectangle{T})"/>.
+        /// Create two instances with identical values and use <see cref="PDFRectangle{T}.Equals(PDFRectangle{T})"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFRectangle_IEquatableEquals_UseEquals_AreNotEqual()
+        {
+            var rectangle1 = new PDFRectangle<double>(2, 5, 32, 85);
+            var rectangle2 = new PDFRectangle<double>(2.1, 5.1, 32.1, 85.1);
+
+            rectangle1.Equals(rectangle2).Should().BeFalse();
+            rectangle2.Equals(rectangle1).Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Test <see cref="PDFRectangle{T}.Equals(object)"/>.
+        /// Create two instances with identical values and use <see cref="PDFRectangle{T}.Equals(object)"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFRectangle_Equals_UseEquals_AreEqual()
+        {
+            var rectangle1 = new PDFRectangle<double>(2, 5, 32, 85);
+            var rectangle2 = new PDFRectangle<double>(2, 5, 32, 85);
+
+            rectangle1.Equals((object)rectangle2).Should().BeTrue();
+            rectangle2.Equals((object)rectangle1).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Test <see cref="PDFRectangle{T}.Equals(object)"/>.
+        /// Create two instances with identical values and use <see cref="PDFRectangle{T}.Equals(object)"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFRectangle_Equals_UseEquals_AreNotEqual()
+        {
+            var rectangle1 = new PDFRectangle<double>(2, 5, 32, 85);
+            var rectangle2 = new PDFRectangle<double>(2.1, 5.1, 32.1, 85.1);
+
+            rectangle1.Equals((object)rectangle2).Should().BeFalse();
+            rectangle2.Equals((object)rectangle1).Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Test operator '==' of <see cref="PDFRectangle{T}"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFRectangle_EqualityOperator_CheckEquality_AreEqual()
+        {
+            var rectangle1 = new PDFRectangle<double>(3, 6, 33, 86);
+            var rectangle2 = new PDFRectangle<double>(3, 6, 33, 86);
+
+            (rectangle1 == rectangle2).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Test operator '!=' of <see cref="PDFRectangle{T}"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFRectangle_IneEqualityOperator_CheckInequality_AreNotEqual()
+        {
+            var rectangle1 = new PDFRectangle<double>(3, 6, 33, 86);
+            var rectangle2 = new PDFRectangle<double>(4, 7, 34, 87);
+
+            (rectangle1 != rectangle2).Should().BeTrue();
         }
     }
 }

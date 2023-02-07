@@ -69,14 +69,14 @@
 
         /// <summary>
         /// Test <see cref="PDFPoint{T}"/> constructor.
-        /// Use constructor <see cref="PDFPoint{T}.PDFPoint()"/> and check values in point.
+        /// Use constructor <see cref="PDFPoint{T}.PDFPoint()"/> and check default values in point.
         /// </summary>
         [TestMethod]
         public void PDFPoint_Constructor1_Instantiation_IsEmpty()
         {
             var tested = new PDFPoint<double>();
 
-            tested.IsEmpty.Should().Be(true);
+            tested.IsEmpty.Should().BeTrue();
             tested.X.Should().Be(default);
             tested.Y.Should().Be(default);
         }
@@ -110,6 +110,86 @@
             var tested = new PDFPoint<double>(point);
 
             tested.Should().BeEquivalentTo(point);
+        }
+
+        /// <summary>
+        /// Test <see cref="PDFPoint{T}.Equals(PDFPoint{T})"/>.
+        /// Create two instances with identical values and use <see cref="PDFPoint{T}.Equals(PDFPoint{T})"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFPoint_IEquatableEquals_UseEquals_AreEqual()
+        {
+            var point1 = new PDFPoint<double>(2, 5);
+            var point2 = new PDFPoint<double>(2, 5);
+
+            point1.Equals(point2).Should().BeTrue();
+            point2.Equals(point1).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Test <see cref="PDFPoint{T}.Equals(PDFPoint{T})"/>.
+        /// Create two instances with identical values and use <see cref="PDFPoint{T}.Equals(PDFPoint{T})"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFPoint_IEquatableEquals_UseEquals_AreNotEqual()
+        {
+            var point1 = new PDFPoint<double>(2, 5);
+            var point2 = new PDFPoint<double>(2.1, 5.1);
+
+            point1.Equals(point2).Should().BeFalse();
+            point2.Equals(point1).Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Test <see cref="PDFPoint{T}.Equals(object)"/>.
+        /// Create two instances with identical values and use <see cref="PDFPoint{T}.Equals(object)"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFPoint_Equals_UseEquals_AreEqual()
+        {
+            var point1 = new PDFPoint<double>(2, 5);
+            var point2 = new PDFPoint<double>(2, 5);
+
+            point1.Equals((object)point2).Should().BeTrue();
+            point2.Equals((object)point1).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Test <see cref="PDFPoint{T}.Equals(object)"/>.
+        /// Create two instances with identical values and use <see cref="PDFPoint{T}.Equals(object)"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFPoint_Equals_UseEquals_AreNotEqual()
+        {
+            var point1 = new PDFPoint<double>(2, 5);
+            var point2 = new PDFPoint<double>(2.1, 5.1);
+
+            point1.Equals((object)point2).Should().BeFalse();
+            point2.Equals((object)point1).Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Test operator '==' of <see cref="PDFPoint{T}"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFPoint_EqualityOperator_CheckEquality_AreEqual()
+        {
+            var point1 = new PDFPoint<double>(3, 6);
+            var point2 = new PDFPoint<double>(3, 6);
+
+            (point1 == point2).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Test operator '!=' of <see cref="PDFPoint{T}"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFPoint_IneEqualityOperator_CheckInequality_AreNotEqual()
+        {
+            var point1 = new PDFPoint<double>(3, 6);
+            var point2 = new PDFPoint<double>(4, 7);
+
+            (point1 != point2).Should().BeTrue();
         }
     }
 }

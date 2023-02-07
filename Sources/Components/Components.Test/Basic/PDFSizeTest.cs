@@ -69,14 +69,14 @@
 
         /// <summary>
         /// Test <see cref="PDFSize{T}"/> constructor.
-        /// Use constructor <see cref="PDFSize{T}.PDFSize()"/> and check values in point.
+        /// Use constructor <see cref="PDFSize{T}.PDFSize()"/> and check default values in size.
         /// </summary>
         [TestMethod]
         public void PDFSize_Constructor1_Instantiation_IsEmpty()
         {
             var tested = new PDFSize<double>();
 
-            tested.IsEmpty.Should().Be(true);
+            tested.IsEmpty.Should().BeTrue();
             tested.Width.Should().Be(default);
             tested.Height.Should().Be(default);
         }
@@ -110,6 +110,86 @@
             var tested = new PDFSize<double>(size);
 
             tested.Should().BeEquivalentTo(size);
+        }
+
+        /// <summary>
+        /// Test <see cref="PDFSize{T}.Equals(PDFSize{T})"/>.
+        /// Create two instances with identical values and use <see cref="PDFSize{T}.Equals(PDFSize{T})"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFSize_IEquatableEquals_UseEquals_AreEqual()
+        {
+            var size1 = new PDFSize<double>(2, 5);
+            var size2 = new PDFSize<double>(2, 5);
+
+            size1.Equals(size2).Should().BeTrue();
+            size2.Equals(size1).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Test <see cref="PDFSize{T}.Equals(PDFSize{T})"/>.
+        /// Create two instances with identical values and use <see cref="PDFSize{T}.Equals(PDFSize{T})"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFSize_IEquatableEquals_UseEquals_AreNotEqual()
+        {
+            var size1 = new PDFSize<double>(2, 5);
+            var size2 = new PDFSize<double>(2.1, 5.1);
+
+            size1.Equals(size2).Should().BeFalse();
+            size2.Equals(size1).Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Test <see cref="PDFSize{T}.Equals(object)"/>.
+        /// Create two instances with identical values and use <see cref="PDFSize{T}.Equals(object)"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFSize_Equals_UseEquals_AreEqual()
+        {
+            var size1 = new PDFSize<double>(2, 5);
+            var size2 = new PDFSize<double>(2, 5);
+
+            size1.Equals((object)size2).Should().BeTrue();
+            size2.Equals((object)size1).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Test <see cref="PDFSize{T}.Equals(object)"/>.
+        /// Create two instances with identical values and use <see cref="PDFSize{T}.Equals(object)"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFSize_Equals_UseEquals_AreNotEqual()
+        {
+            var size1 = new PDFSize<double>(2, 5);
+            var size2 = new PDFSize<double>(2.1, 5.1);
+
+            size1.Equals((object)size2).Should().BeFalse();
+            size2.Equals((object)size1).Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Test operator '==' of <see cref="PDFSize{T}"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFSize_EqualityOperator_CheckEquality_AreEqual()
+        {
+            var size1 = new PDFSize<double>(3, 6);
+            var size2 = new PDFSize<double>(3, 6);
+
+            (size1 == size2).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Test operator '!=' of <see cref="PDFSize{T}"/>.
+        /// </summary>
+        [TestMethod]
+        public void PDFSize_IneEqualityOperator_CheckInequality_AreNotEqual()
+        {
+            var size1 = new PDFSize<double>(3, 6);
+            var size2 = new PDFSize<double>(4, 7);
+
+            (size1 != size2).Should().BeTrue();
         }
     }
 }
