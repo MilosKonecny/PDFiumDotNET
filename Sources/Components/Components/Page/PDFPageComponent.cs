@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using System.Linq;
     using PDFiumDotNET.Components.Contracts.Action;
+    using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Destination;
     using PDFiumDotNET.Components.Contracts.EventArguments;
     using PDFiumDotNET.Components.Contracts.Find;
@@ -22,7 +23,7 @@
     {
         #region Private fields
 
-        private readonly List<PDFRectangle> _selectionRectangles = new List<PDFRectangle>();
+        private readonly List<PDFRectangle<double>> _selectionRectangles = new ();
         private readonly PDFRenderManager _renderManager;
         private int _pageIndexWithSelections;
         private Func<int> _findSelectionBackgroundFunc;
@@ -77,7 +78,7 @@
         /// <summary>
         /// Gets the list of selection rectangles to render on the page defined by <see cref="PageIndexWithSelections"/>.
         /// </summary>
-        internal List<PDFRectangle> SelectionRectangles
+        internal List<PDFRectangle<double>> SelectionRectangles
         {
             get
             {
@@ -127,7 +128,7 @@
         internal void ClearSelectionRectangles()
         {
             _pageIndexWithSelections = -1;
-            _selectionRectangles?.Clear();
+            _selectionRectangles.Clear();
             TextSelectionsRemoved?.Invoke(this, EventArgs.Empty);
         }
 
@@ -170,7 +171,7 @@
         /// <param name="bottom">Bottom position of rectangle.</param>
         private void AddSelectionRectangle(double left, double top, double right, double bottom)
         {
-            _selectionRectangles.Add(new PDFRectangle(left, top, right, bottom));
+            _selectionRectangles.Add(new PDFRectangle<double>(left, top, right - left, bottom - top));
         }
 
         #endregion Private methods
