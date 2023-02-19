@@ -33,7 +33,7 @@
                     SetCurrentInformation(Pages[0]);
                 }
 
-                InitializeLayout();
+                _renderManager.CalculateDocumentArea();
 
                 InvokePropertyChangedEvent(null);
             }

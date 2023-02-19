@@ -4,11 +4,10 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
-    using System.Linq;
     using System.Windows;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
-    using PDFiumDotNET.Components.Contracts.Layout;
+    using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.WpfControls.Helper;
 
@@ -22,35 +21,26 @@
         [Conditional("DEBUG")]
         private void RenderDebugInfo(DrawingContext drawingContext, IList<IPDFPageRenderInfo> pages = null)
         {
-            var text = $"Area: {_workArea.Width} / {_workArea.Height}{Environment.NewLine}Viewport: {_viewport.Width} / {_viewport.Height}{Environment.NewLine}Offset: {HorizontalOffset} / {VerticalOffset}";
+            var documentRectangle = new PDFRectangle<double>(0, 0, _documentArea.Width, _documentArea.Height);
+            var viewportRectangle = new PDFRectangle<double>(HorizontalOffset, VerticalOffset, _viewportArea.Width, _viewportArea.Height);
+
+            var text = $"Document area: {documentRectangle}{Environment.NewLine}";
+            text += $"Viewport area: {viewportRectangle}{Environment.NewLine}";
             if (pages != null)
             {
-                var viewportRectangle = new Rect(0, 0, _viewport.Width, _viewport.Height);
-                text += Environment.NewLine + "Pages to draw:";
+                text += $"Pages to draw:{Environment.NewLine}";
                 foreach (var pageInfo in pages)
                 {
-                    text += Environment.NewLine + $"{pageInfo.Page.PageIndex}: width={pageInfo.Page.Width} height={pageInfo.Page.Height}";
-
-                    var pageRect = new Rect(pageInfo.Left, pageInfo.Top, Math.Max(1d, pageInfo.Right - pageInfo.Left), Math.Max(0d, pageInfo.Bottom - pageInfo.Top));
-                    var pageOnViewport = pageRect;
-                    pageOnViewport.Intersect(viewportRectangle);
-                    if (pageOnViewport.IsEmpty)
-                    {
-                        continue;
-                    }
-
-                    pageOnViewport.Width = Math.Max(1d, pageOnViewport.Width);
-                    pageOnViewport.Height = Math.Max(1d, pageOnViewport.Height);
-
-                    var pageRectForPDFium = pageRect;
-                    pageRectForPDFium.Y = pageRect.Y > 0d ? 0d : pageRect.Y;
-                    pageRectForPDFium.X = pageRect.X > 0d ? 0d : pageRect.X;
-                    pageRectForPDFium.Width = Math.Max(1d, pageRectForPDFium.Width);
-                    pageRectForPDFium.Height = Math.Max(1d, pageRectForPDFium.Height);
-
-                    text += Environment.NewLine + $"    Page rect / x:{Math.Round(pageRect.X, 2)} width:{Math.Round(pageRect.Width, 2)} / y:{Math.Round(pageRect.Y, 2)} height:{Math.Round(pageRect.Height, 2)}";
-                    text += Environment.NewLine + $"    Page on viewort / x:{Math.Round(pageOnViewport.X, 2)} width:{Math.Round(pageOnViewport.Width, 2)} / y:{Math.Round(pageOnViewport.Y, 2)} height:{Math.Round(pageOnViewport.Height, 2)}";
-                    text += Environment.NewLine + $"    Page for PDFium / x:{Math.Round(pageRectForPDFium.X, 2)} width:{Math.Round(pageRectForPDFium.Width, 2)} / y:{Math.Round(pageRectForPDFium.Y, 2)} height:{Math.Round(pageRectForPDFium.Height, 2)}";
+                    text += $"{pageInfo.Page.PageIndex}: {pageInfo.Page.Width} x {pageInfo.Page.Height} (zoomed to {pageInfo.RelativePositionInViewportArea.Width} x {pageInfo.RelativePositionInViewportArea.Height})";
+                    text += Environment.NewLine;
+                    text += $"        Position in document - {pageInfo.PositionInDocumentArea}";
+                    text += Environment.NewLine;
+                    text += $"        Position in viewport - {pageInfo.RelativePositionInViewportArea}";
+                    text += Environment.NewLine;
+                    text += $"        Visible part - {pageInfo.VisiblePart}";
+                    text += Environment.NewLine;
+                    text += $"        Draw position - {pageInfo.VisiblePartInViewportArea}";
+                    text += Environment.NewLine;
                 }
             }
 
@@ -60,7 +50,7 @@
                 FlowDirection.LeftToRight,
                 new Typeface(FontFamily, FontStyle, FontWeight, FontStretch),
                 FontSize,
-                Brushes.Red,
+                Brushes.Blue,
                 VisualTreeHelper.GetDpi(this).PixelsPerDip);
             drawingContext.DrawText(ft, new Point(5, 5));
         }
@@ -70,116 +60,34 @@
             // Draw background
             drawingContext.DrawRectangle(Background, null, new Rect(0, 0, ViewportWidth, ViewportHeight));
 
-            var newZoomFactor = PDFZoomComponent.CurrentZoomFactor;
-            var pageOnCenter = _renderedPages.FirstOrDefault(page => page.IsOnCenter);
-            if (pageOnCenter == null
-                || _oldZoomFactor < 0d
-                || Math.Abs(_oldZoomFactor - newZoomFactor) < double.Epsilon)
-            {
-                // Zoom factor was not changed or not preserved
-                // Determine pages to draw.
-                _renderedPages.Clear();
-                _renderedPages.AddRange(PDFPageComponent.DeterminePagesToRender(
-                    VerticalOffset,
-                    VerticalOffset + ViewportHeight,
-                    PDFPageMargin,
-                    PDFZoomComponent.CurrentZoomFactor,
-                    true));
-            }
-            else
-            {
-                // Zoom factor was changed.
-                // Set 'predefined' top and bottom line.
-                // These lines will be probably changed in 'DeterminePagesToRender'
-                var topLine = VerticalOffset;
-                var bottomLine = topLine + ViewportHeight;
-
-                // Determine pages to draw.
-                _renderedPages.Clear();
-                _renderedPages.AddRange(PDFPageComponent.DeterminePagesToRender(
-                    pageOnCenter,
-                    ref topLine,
-                    ref bottomLine,
-                    PDFPageMargin,
-                    PDFZoomComponent.CurrentZoomFactor));
-
-                _verticalOffset = topLine;
-                if (newZoomFactor < _oldZoomFactor)
-                {
-                    HorizontalOffset = _horizontalOffset;
-                }
-            }
-
-            // Determine viewport rectangle
-            var viewportRectangle = new Rect(0, 0, _viewport.Width, _viewport.Height);
-
             // Iterate the pages, adjust some values, and draw them.
             foreach (var pageInfo in _renderedPages)
             {
-                // Current page width
-                var currentPageWidth = pageInfo.Page.Width * PDFZoomComponent.CurrentZoomFactor;
-
-                // Center the page horizontally
-                if (ViewportWidth > _workArea.Width)
-                {
-                    pageInfo.Left = (ViewportWidth / 2d) - (currentPageWidth / 2d);
-                    pageInfo.Right = (ViewportWidth / 2d) + (currentPageWidth / 2d);
-                }
-                else
-                {
-                    pageInfo.Left = (_workArea.Width / 2d) - (currentPageWidth / 2d);
-                    pageInfo.Right = (_workArea.Width / 2d) + (currentPageWidth / 2d);
-                }
-
-                // Take offsets into account
-                pageInfo.Left -= HorizontalOffset;
-                pageInfo.Right -= HorizontalOffset;
-                pageInfo.Top -= VerticalOffset;
-                pageInfo.Bottom -= VerticalOffset;
-
-                var pageRect = new Rect(pageInfo.Left, pageInfo.Top, Math.Max(1d, pageInfo.Right - pageInfo.Left), Math.Max(0d, pageInfo.Bottom - pageInfo.Top));
-
-                var pageOnViewport = pageRect;
-                pageOnViewport.Intersect(viewportRectangle);
-                if (pageOnViewport.IsEmpty)
-                {
-                    continue;
-                }
-
-                pageOnViewport.Width = Math.Max(1d, pageOnViewport.Width);
-                pageOnViewport.Height = Math.Max(1d, pageOnViewport.Height);
-
-                var pageRectForPDFium = pageRect;
-                pageRectForPDFium.Y = pageRect.Y > 0d ? 0d : pageRect.Y;
-                pageRectForPDFium.X = pageRect.X > 0d ? 0d : pageRect.X;
-                pageRectForPDFium.Width = Math.Max(1d, pageRectForPDFium.Width);
-                pageRectForPDFium.Height = Math.Max(1d, pageRectForPDFium.Height);
-
                 // Draw page background
-                drawingContext.DrawRectangle(PDFPageBackground, null, new Rect(pageRect.TopLeft, pageRect.BottomRight));
+                drawingContext.DrawRectangle(PDFPageBackground, null, new Rect(pageInfo.RelativePositionInViewportArea.X, pageInfo.RelativePositionInViewportArea.Y, pageInfo.RelativePositionInViewportArea.Width, pageInfo.RelativePositionInViewportArea.Height));
 
                 try
                 {
-                    var bitmap = new WriteableBitmap((int)pageOnViewport.Width, (int)pageOnViewport.Height, 96, 96, PixelFormats.Bgra32, null);
+                    var bitmap = new WriteableBitmap((int)pageInfo.VisiblePart.Width, (int)pageInfo.VisiblePart.Height, 96, 96, PixelFormats.Bgra32, null);
                     var format = BitmapFormatConverter.GetFormat(bitmap.Format);
 
                     bitmap.Lock();
                     pageInfo.Page.RenderPageBitmap(
                         PDFZoomComponent.CurrentZoomFactor,
-                        (int)pageRectForPDFium.X,
-                        (int)pageRectForPDFium.Y,
-                        (int)pageRectForPDFium.Width,
-                        (int)pageRectForPDFium.Height,
-                        (int)pageOnViewport.Width,
-                        (int)pageOnViewport.Height,
+                        (int)pageInfo.VisiblePart.Left,
+                        (int)pageInfo.VisiblePart.Top,
+                        (int)pageInfo.VisiblePart.Right,
+                        (int)pageInfo.VisiblePart.Bottom,
+                        (int)pageInfo.VisiblePart.Width,
+                        (int)pageInfo.VisiblePart.Height,
                         format,
                         bitmap.BackBuffer,
                         bitmap.BackBufferStride);
-                    bitmap.AddDirtyRect(new Int32Rect(0, 0, (int)pageOnViewport.Width, (int)pageOnViewport.Height));
+                    bitmap.AddDirtyRect(new Int32Rect(0, 0, (int)pageInfo.VisiblePart.Width, (int)pageInfo.VisiblePart.Height));
                     bitmap.Unlock();
 
                     // Draw page content.
-                    drawingContext.DrawImage(bitmap, new Rect(pageOnViewport.TopLeft, pageOnViewport.BottomRight));
+                    drawingContext.DrawImage(bitmap, new Rect(pageInfo.VisiblePartInViewportArea.X, pageInfo.VisiblePartInViewportArea.Y, pageInfo.VisiblePartInViewportArea.Width, pageInfo.VisiblePartInViewportArea.Height));
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
                 catch
@@ -201,8 +109,6 @@
             drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Bottom), new Point(0, ViewportHeight), new Point(ViewportWidth, ViewportHeight));
 
             RenderDebugInfo(drawingContext, _renderedPages);
-
-            _oldZoomFactor = PDFZoomComponent.CurrentZoomFactor;
         }
 
         private void RenderEmptyArea(DrawingContext drawingContext)

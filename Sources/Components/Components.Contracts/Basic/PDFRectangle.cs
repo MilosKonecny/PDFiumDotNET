@@ -1,6 +1,8 @@
 ﻿namespace PDFiumDotNET.Components.Contracts.Basic
 {
     using System;
+    using System.Drawing;
+    using System.Globalization;
 
     /// <summary>
     /// Structure contains information about a point.
@@ -16,6 +18,8 @@
         /// </summary>
         public PDFRectangle()
         {
+            X = default;
+            Y = default;
             Width = default;
             Height = default;
         }
@@ -125,21 +129,38 @@
             }
         }
 
-        /////// <summary>
-        ///////  Gets the x-coordinate that is the sum of the <see cref="PDFRectangle{T}.X"/>
-        ///////  and <see cref="PDFRectangle{T}.Width"/> property values
-        ///////  of this <see cref="PDFRectangle{T}"/> structure.
-        /////// </summary>
-        ////public T Right
-        ////{
-        ////    get
-        ////    {
-        ////        // This solution is for .NET 5 and higher
-        ////        dynamic value1 = X;
-        ////        dynamic value2 = Width;
-        ////        return value1 + value2;
-        ////    }
-        ////}
+        /// <summary>
+        ///  Gets the x-coordinate that is the sum of the <see cref="PDFRectangle{T}.X"/>
+        ///  and <see cref="PDFRectangle{T}.Width"/> property values
+        ///  of this <see cref="PDFRectangle{T}"/> structure.
+        /// </summary>
+        public T Right
+        {
+            get
+            {
+#if NET5_0_OR_GREATER
+                // This solution is for .NET 5 and higher
+                return (dynamic)X + (dynamic)Width;
+#else
+                if (typeof(T) == typeof(double))
+                {
+                    return (T)(object)((double)(object)X + (double)(object)Width);
+                }
+                else if (typeof(T) == typeof(float))
+                {
+                    return (T)(object)((float)(object)X + (float)(object)Width);
+                }
+                else if (typeof(T) == typeof(int))
+                {
+                    return (T)(object)((int)(object)X + (int)(object)Width);
+                }
+                else
+                {
+                    throw new InvalidOperationException($"Not implemented for type {typeof(T)}!");
+                }
+#endif
+            }
+        }
 
         /// <summary>
         /// Gets the y-coordinate of the top edge of this <see cref="PDFRectangle{T}"/> structure.
@@ -152,25 +173,196 @@
             }
         }
 
-        /////// <summary>
-        /////// Gets the y-coordinate that is the sum of the <see cref="PDFRectangle{T}.Y"/>
-        /////// and <see cref="PDFRectangle{T}.Height"/> property values
-        /////// of this <see cref="PDFRectangle{T}"/> structure.
-        /////// </summary>
-        ////public T Bottom
-        ////{
-        ////    get
-        ////    {
-        ////        // This solution is for .NET 5 and higher
-        ////        dynamic value1 = Y;
-        ////        dynamic value2 = Height;
-        ////        return value1 + value2;
-        ////    }
-        ////}
+        /// <summary>
+        /// Gets the y-coordinate that is the sum of the <see cref="PDFRectangle{T}.Y"/>
+        /// and <see cref="PDFRectangle{T}.Height"/> property values
+        /// of this <see cref="PDFRectangle{T}"/> structure.
+        /// </summary>
+        public T Bottom
+        {
+            get
+            {
+#if NET5_0_OR_GREATER
+                // This solution is for .NET 5 and higher
+                return (dynamic)Y + (dynamic)Height;
+#else
+                if (typeof(T) == typeof(double))
+                {
+                    return (T)(object)((double)(object)Y + (double)(object)Height);
+                }
+                else if (typeof(T) == typeof(float))
+                {
+                    return (T)(object)((float)(object)Y + (float)(object)Height);
+                }
+                else if (typeof(T) == typeof(int))
+                {
+                    return (T)(object)((int)(object)Y + (int)(object)Height);
+                }
+                else
+                {
+                    throw new InvalidOperationException($"Not implemented for type {typeof(T)}!");
+                }
+#endif
+            }
+        }
 
         #endregion Public properties
 
+        #region Public methods
+
+        /// <summary>
+        /// Gets the string containing information about rectangle values.
+        /// </summary>
+        /// <returns>String containing rectangle values.</returns>
+        /// <exception cref="InvalidOperationException">Thrown for unsuported type. Implement this type.</exception>
+        public string Info()
+        {
+            string x1, y1, x2, y2, w, h;
+            if (typeof(T) == typeof(double))
+            {
+                x1 = $"{Math.Round((double)(object)Left, 2)}";
+                y1 = $"{Math.Round((double)(object)Top, 2)}";
+                x2 = $"{Math.Round((double)(object)Right, 2)}";
+                y2 = $"{Math.Round((double)(object)Bottom, 2)}";
+                w = $"{Math.Round((double)(object)Width, 2)}";
+                h = $"{Math.Round((double)(object)Height, 2)}";
+            }
+            else if (typeof(T) == typeof(float))
+            {
+                x1 = $"{Math.Round((float)(object)Left, 2)}";
+                y1 = $"{Math.Round((float)(object)Top, 2)}";
+                x2 = $"{Math.Round((float)(object)Right, 2)}";
+                y2 = $"{Math.Round((float)(object)Bottom, 2)}";
+                w = $"{Math.Round((float)(object)Width, 2)}";
+                h = $"{Math.Round((float)(object)Height, 2)}";
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                x1 = $"{Left}";
+                y1 = $"{Top}";
+                x2 = $"{Right}";
+                y2 = $"{Bottom}";
+                w = $"{Width}";
+                h = $"{Height}";
+            }
+            else
+            {
+                throw new InvalidOperationException($"Not implemented for type {typeof(T)}!");
+            }
+
+            return string.Format(
+                CultureInfo.InvariantCulture,
+                $"x: ({x1} - {x2}; w: {w})  y: ({y1} - {y2}; h: {h})");
+        }
+
+        /// <summary>
+        /// Determines if this rectangle intersects with another rectangle.
+        /// </summary>
+        /// <param name="rect">Rectangle to check the intersection with.</param>
+        /// <returns><c>true</c> if there is any intersection, otherwise <c>false</c>.</returns>
+        public bool IntersectsWith(Rectangle rect)
+        {
+#if NET5_0_OR_GREATER
+            return ((dynamic)rect.X < (dynamic)Right) && ((dynamic)X < (dynamic)rect.Right) &&
+                ((dynamic)rect.Y < (dynamic)Bottom) && ((dynamic)Y < (dynamic)rect.Bottom);
+#else
+            if (typeof(T) == typeof(double))
+            {
+                return ((double)(object)rect.X < (double)(object)Right) && ((double)(object)X < (double)(object)rect.Right) &&
+                    ((double)(object)rect.Y < (double)(object)Bottom) && ((double)(object)Y < (double)(object)rect.Bottom);
+            }
+            else if (typeof(T) == typeof(float))
+            {
+                return ((float)(object)rect.X < (float)(object)Right) && ((float)(object)X < (float)(object)rect.Right) &&
+                    ((float)(object)rect.Y < (float)(object)Bottom) && ((float)(object)Y < (float)(object)rect.Bottom);
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                return ((int)(object)rect.X < (int)(object)Right) && ((int)(object)X < (int)(object)rect.Right) &&
+                    ((int)(object)rect.Y < (int)(object)Bottom) && ((int)(object)Y < (int)(object)rect.Bottom);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Not implemented for type {typeof(T)}!");
+            }
+#endif
+        }
+
+        /// <summary>
+        /// Creates a rectangle that represents the intersection between this and other rectangle.
+        /// If there is no intersection, an empty rectangle is returned.
+        /// </summary>
+        /// <param name="other">Another rectangle to create intersections with.</param>
+        public PDFRectangle<T> Intersect(PDFRectangle<T> other)
+        {
+#if NET5_0_OR_GREATER
+            dynamic x1 = Math.Max((dynamic)this.X, (dynamic)other.X);
+            dynamic x2 = Math.Min((dynamic)this.Right, (dynamic)other.Right);
+            dynamic y1 = Math.Max((dynamic)this.Y, (dynamic)other.Y);
+            dynamic y2 = Math.Min((dynamic)this.Bottom, (dynamic)other.Bottom);
+
+            if (x2 >= x1 && y2 >= y1)
+            {
+                return new PDFRectangle<T>(x1, y1, x2 - x1, y2 - y1);
+            }
+#else
+            if (typeof(T) == typeof(double))
+            {
+                double x1 = Math.Max((double)(object)this.X, (double)(object)other.X);
+                double x2 = Math.Min((double)(object)this.Right, (double)(object)other.Right);
+                double y1 = Math.Max((double)(object)this.Y, (double)(object)other.Y);
+                double y2 = Math.Min((double)(object)this.Bottom, (double)(object)other.Bottom);
+
+                if (x2 >= x1 && y2 >= y1)
+                {
+                    return new PDFRectangle<T>((T)(object)x1, (T)(object)y1, (T)(object)(x2 - x1), (T)(object)(y2 - y1));
+                }
+            }
+            else if (typeof(T) == typeof(float))
+            {
+                float x1 = Math.Max((float)(object)this.X, (float)(object)other.X);
+                float x2 = Math.Min((float)(object)this.Right, (float)(object)other.Right);
+                float y1 = Math.Max((float)(object)this.Y, (float)(object)other.Y);
+                float y2 = Math.Min((float)(object)this.Bottom, (float)(object)other.Bottom);
+
+                if (x2 >= x1 && y2 >= y1)
+                {
+                    return new PDFRectangle<T>((T)(object)x1, (T)(object)y1, (T)(object)(x2 - x1), (T)(object)(y2 - y1));
+                }
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                int x1 = Math.Max((int)(object)this.X, (int)(object)other.X);
+                int x2 = Math.Min((int)(object)this.Right, (int)(object)other.Right);
+                int y1 = Math.Max((int)(object)this.Y, (int)(object)other.Y);
+                int y2 = Math.Min((int)(object)this.Bottom, (int)(object)other.Bottom);
+
+                if (x2 >= x1 && y2 >= y1)
+                {
+                    return new PDFRectangle<T>((T)(object)x1, (T)(object)y1, (T)(object)(x2 - x1), (T)(object)(y2 - y1));
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException($"Not implemented for type {typeof(T)}!");
+            }
+#endif
+
+            return new PDFRectangle<T>();
+        }
+
+        #endregion Public methods
+
         #region Public override methods
+
+        /// <summary>
+        /// Returns the values of rectangle.
+        /// </summary>
+        /// <returns>Rectangle values.</returns>
+        public override string ToString()
+        {
+            return Info();
+        }
 
         /// <summary>
         /// Indicates whether this instance and a specified object are equal.

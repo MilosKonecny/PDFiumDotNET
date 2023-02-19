@@ -130,13 +130,11 @@
                 _pageComponent.IsAnnotationToRender ? FPDF_RENDERING_FLAGS.FPDF_ANNOT : FPDF_RENDERING_FLAGS.FPDF_NONE);
             _mainComponent.PDFiumBridge.FPDF_ClosePage(pageHandle);
 
-            if (_pageComponent is PDFPageComponent pageComponent
-                && pageComponent.PageIndexWithSelections == PageIndex
-                && pageComponent.SelectionRectangles.Count != 0)
+            if (_pageComponent.PageIndexWithSelections == PageIndex && _pageComponent.SelectionRectangles.Count != 0)
             {
-                foreach (var rect in pageComponent.SelectionRectangles)
+                foreach (var rect in _pageComponent.SelectionRectangles)
                 {
-                    bmp.RenderSelectionRectangle(zoomFactor, startX, startY, sizeY, rect.Left, rect.Top, rect.Width, rect.Height);
+                    bmp.RenderSelectionRectangle(zoomFactor, startX, startY, (int)(Height * zoomFactor), rect.Left, rect.Top, rect.Width, rect.Height);
                 }
             }
 

@@ -6,15 +6,20 @@
     using PDFiumDotNET.Components.Contracts.Destination;
     using PDFiumDotNET.Components.Contracts.EventArguments;
     using PDFiumDotNET.Components.Contracts.Find;
-    using PDFiumDotNET.Components.Contracts.Layout;
+    using PDFiumDotNET.Components.Contracts.Render;
     using PDFiumDotNET.Components.Contracts.Zoom;
 
     /// <summary>
     /// Interface defines functionality of page component.
     /// Component provides all information related to pages of opened PDF document.
     /// </summary>
-    public interface IPDFPageComponent : IPDFChildComponent, IPageLayoutAdapter
+    public interface IPDFPageComponent : IPDFChildComponent
     {
+        /// <summary>
+        /// Gets the render manager helping to render PDF document.
+        /// </summary>
+        IPDFRenderManager RenderManager { get; }
+
         /// <summary>
         /// Gets the find component.
         /// </summary>
@@ -34,6 +39,11 @@
         /// Gets label of current page of opened document.
         /// </summary>
         string CurrentPageLabel { get; }
+
+        /// <summary>
+        /// Gets the current page of opened document.
+        /// </summary>
+        IPDFPage CurrentPage { get; }
 
         /// <summary>
         /// Gets the page count of opened document.
@@ -75,6 +85,13 @@
         /// The position on the page is ignored even if it is defined.
         /// Zoom factor as well.</remarks>
         void NavigateToDestination(IPDFDestination destination);
+
+        /// <summary>
+        /// Sets the specified page as current page.
+        /// </summary>
+        /// <param name="pageIndex">Index of page to set as current page. Index is 1 based.</param>
+        /// <remarks>This method is as the same as <see cref="NavigateToPage(int)"/> / <see cref="NavigateToPage(string)"/>, but event <see cref="NavigatedToPage"/> is not triggered.</remarks>
+        void SetCurrentPage(int pageIndex);
 
         /// <summary>
         /// Navigates to the specified page based on its index.

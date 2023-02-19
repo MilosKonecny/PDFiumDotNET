@@ -4,7 +4,9 @@
     using System.Linq;
     using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Page;
+    using PDFiumDotNET.Components.Contracts.Render;
     using PDFiumDotNET.Components.Page;
+    using PDFiumDotNET.Components.Render;
     using PDFiumDotNET.Components.Transformation;
 
     /// <summary>
@@ -80,7 +82,10 @@
             var component = this[name];
             if (component == null)
             {
-                component = new PDFPageComponent(name, pageLayout == PageLayoutType.Thumbnail ? new PageSizeThumbnailTransformation() : null);
+                // We are using page transformation only for thumbnail layout.
+                var transformation = pageLayout == PageLayoutType.Thumbnail ? new PageSizeThumbnailTransformation() : null;
+                PDFRenderManager renderManager = pageLayout == PageLayoutType.Thumbnail ? new PDFRenderManagerThumbnail() : new PDFRenderManagerStandard();
+                component = new PDFPageComponent(name, renderManager, transformation);
                 Attach(component);
             }
 
