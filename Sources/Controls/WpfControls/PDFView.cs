@@ -1,5 +1,6 @@
 ﻿namespace PDFiumDotNET.WpfControls
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Windows;
@@ -7,6 +8,7 @@
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
     using System.Windows.Media;
+    using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Link;
     using PDFiumDotNET.Components.Contracts.Page;
 
@@ -20,7 +22,7 @@
         /// <summary>
         /// List of rendered pages. Used to examine click, touch, ...
         /// </summary>
-        private List<IPDFPageRenderInfo> _renderedPages = new List<IPDFPageRenderInfo>();
+        private List<IPDFPageRenderInfo> _renderedPages = new ();
 
         /// <summary>
         /// Permission for horizontal scroll.
@@ -45,12 +47,12 @@
         /// <summary>
         /// The area where all pages will fit.
         /// </summary>
-        private Size _workArea = new Size(0, 0);
+        private Size _documentArea = new Size(0, 0);
 
         /// <summary>
         /// The area visible to user.
         /// </summary>
-        private Size _viewport = new Size(0, 0);
+        private Size _viewportArea = new Size(0, 0);
 
         /// <summary>
         /// Zoom at manipulation start.
@@ -71,8 +73,6 @@
         /// <c>true</c> if touch manipulation for zoom is active.
         /// </summary>
         private bool _zoomManipulationActive = false;
-
-        private double _oldZoomFactor = -1d;
 
         /// <summary>
         /// Variable used to support scroll through mouse and stylus dragging.
@@ -123,7 +123,7 @@
                 double.IsInfinity(constraint.Width) ? 0d : constraint.Width,
                 double.IsInfinity(constraint.Height) ? 0d : constraint.Height);
 
-            UpdateViewportSize(newSize);
+            UpdateViewportAreaSize(newSize);
 
             return newSize;
         }
@@ -133,9 +133,9 @@
         {
             Size size = base.ArrangeOverride(DesiredSize);
 
-            UpdateWorkAreaSize(DeterminePageArea(arrangeBounds));
+            UpdateDocumentAreaSize(DetermineDocumentAreaSize(arrangeBounds));
 
-            UpdateViewportSize(arrangeBounds);
+            UpdateViewportAreaSize(arrangeBounds);
 
             return size;
         }
@@ -148,9 +148,26 @@
                 return;
             }
 
-            if (PDFPageComponent != null && PDFPageComponent.PageCount != 0)
+            if (PDFPageComponent != null)
+            {
+                // Check the position of viewport area in document area.
+                HorizontalOffset = Math.Min(HorizontalOffset, _documentArea.Width - _viewportArea.Width);
+                VerticalOffset = Math.Min(VerticalOffset, _documentArea.Height - _viewportArea.Height);
+
+                // Determine pages to draw.
+                var viewportInDocument = new PDFRectangle<double>(HorizontalOffset, VerticalOffset, ViewportWidth, ViewportHeight);
+                _renderedPages.Clear();
+                _renderedPages.AddRange(PDFPageComponent.RenderManager.PagesToRender(viewportInDocument));
+            }
+
+            if (_renderedPages.Count > 0)
             {
                 RenderPages(drawingContext);
+                var pageInfo = _renderedPages.FirstOrDefault(pageInfo => pageInfo.IsNearestToCenter);
+                if (pageInfo != null)
+                {
+                    PDFPageComponent.SetCurrentPage(pageInfo.Page.PageIndex + 1);
+                }
             }
             else
             {
@@ -358,13 +375,13 @@
             // ToDo: Optimize this place. Don't iterate throught all pages in some cases.
             foreach (var pageInfo in _renderedPages)
             {
-                if (point.X > pageInfo.Left && point.X < pageInfo.Right
-                    && point.Y > pageInfo.Top && point.Y < pageInfo.Bottom)
+                if (point.X > pageInfo.RelativePositionInViewportArea.Left && point.X < pageInfo.RelativePositionInViewportArea.Right
+                    && point.Y > pageInfo.RelativePositionInViewportArea.Top && point.Y < pageInfo.RelativePositionInViewportArea.Bottom)
                 {
                     // Mouse is over this page
                     // Transform the point to the page.
-                    point.X -= pageInfo.Left;
-                    point.Y -= pageInfo.Top;
+                    point.X -= pageInfo.RelativePositionInViewportArea.Left;
+                    point.Y -= pageInfo.RelativePositionInViewportArea.Top;
 
                     // Eliminate zoom factor
                     point.X /= PDFZoomComponent.CurrentZoomFactor;
@@ -385,14 +402,14 @@
         /// Update the viewport size.
         /// </summary>
         /// <param name="newSize">New size to use for viewport.</param>
-        private void UpdateViewportSize(Size newSize)
+        private void UpdateViewportAreaSize(Size newSize)
         {
-            if (_viewport == newSize)
+            if (_viewportArea == newSize)
             {
                 return;
             }
 
-            _viewport = newSize;
+            _viewportArea = newSize;
             ScrollOwner?.InvalidateScrollInfo();
         }
 
@@ -400,14 +417,14 @@
         /// Update the viewport size.
         /// </summary>
         /// <param name="newSize">New size to use for viewport.</param>
-        private void UpdateWorkAreaSize(Size newSize)
+        private void UpdateDocumentAreaSize(Size newSize)
         {
-            if (_workArea == newSize)
+            if (_documentArea == newSize)
             {
                 return;
             }
 
-            _workArea = newSize;
+            _documentArea = newSize;
             ScrollOwner?.InvalidateScrollInfo();
         }
 
@@ -416,19 +433,14 @@
         /// </summary>
         /// <param name="availableSize">Available size based on current layout of application.</param>
         /// <returns>Required size to show all pages of opened document.</returns>
-        private Size DeterminePageArea(Size availableSize)
+        private Size DetermineDocumentAreaSize(Size availableSize)
         {
-            if (PDFPageComponent == null
-                || PDFZoomComponent == null
-                || PDFPageComponent.PageCount == 0)
+            if (PDFPageComponent == null)
             {
                 return availableSize;
             }
 
-            var width = availableSize.Width;
-            var height = availableSize.Height;
-            PDFPageComponent.DetermineArea(ref width, ref height, PDFPageMargin, PDFZoomComponent.CurrentZoomFactor);
-            return new Size(width, height);
+            return new Size(PDFPageComponent.RenderManager.DocumentArea.Width, PDFPageComponent.RenderManager.DocumentArea.Height);
         }
 
         /// <summary>
@@ -438,8 +450,7 @@
         {
             _horizontalOffset = 0d;
             _verticalOffset = 0d;
-            _oldZoomFactor = 1d;
-            _workArea = new Size(0, 0);
+            _documentArea = new Size(0, 0);
             _renderedPages.Clear();
         }
 

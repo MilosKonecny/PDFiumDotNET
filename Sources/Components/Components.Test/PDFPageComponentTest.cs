@@ -93,16 +93,6 @@
             Assert.AreEqual(1, pageComponentThumbnail.CurrentPageIndex);
             Assert.AreEqual(1094, pageComponentThumbnail.PageCount);
 
-            // Standard
-            Assert.IsTrue(866448 - pageComponentStandard.CumulativeHeight <= 1, "Value: " + pageComponentStandard.CumulativeHeight);
-            Assert.IsTrue(792 - pageComponentStandard.HighestGridCellHeight <= 1, "Value: " + pageComponentStandard.HighestGridCellHeight);
-            Assert.IsTrue(612 - pageComponentStandard.WidestGridCellWidth <= 1, "Value: " + pageComponentStandard.WidestGridCellWidth);
-
-            // Thumbnail
-            Assert.IsTrue(218800 - (int)pageComponentThumbnail.CumulativeHeight <= 1, "Value: " + (int)pageComponentThumbnail.CumulativeHeight);
-            Assert.IsTrue(100 - (int)pageComponentThumbnail.HighestGridCellHeight <= 1, "Value: " + (int)pageComponentThumbnail.HighestGridCellHeight);
-            Assert.IsTrue(77 - (int)pageComponentThumbnail.WidestGridCellWidth <= 1, "Value: " + (int)pageComponentThumbnail.WidestGridCellWidth);
-
             component.CloseDocument();
             component.Dispose();
         }

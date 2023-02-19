@@ -5,8 +5,8 @@
     using System.Windows;
     using System.Windows.Media;
     using PDFiumDotNET.Components.Contracts;
+    using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.EventArguments;
-    using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Zoom;
 
@@ -33,7 +33,7 @@
         /// Dependency property for 'PDFPageMargin' - source of information to draw content.
         /// </summary>
         public static readonly DependencyProperty PDFPageMarginProperty
-            = DependencyProperty.Register("PDFPageMargin", typeof(double), typeof(PDFView), new FrameworkPropertyMetadata(5d, HandlePDFPageMarginPropertyChanged));
+            = DependencyProperty.Register("PDFPageMargin", typeof(Size), typeof(PDFView), new FrameworkPropertyMetadata(new Size(5, 5), HandlePDFPageMarginPropertyChanged));
 
         /// <summary>
         /// Dependency property for 'PDFPageBackground' - source of information to draw content.
@@ -78,9 +78,9 @@
         /// <summary>
         /// Gets or sets the value of dependency property.
         /// </summary>
-        public double PDFPageMargin
+        public Size PDFPageMargin
         {
-            get => (double)GetValue(PDFPageMarginProperty);
+            get => (Size)GetValue(PDFPageMarginProperty);
             set => SetValue(PDFPageMarginProperty, value);
         }
 
@@ -128,6 +128,7 @@
                 return;
             }
 
+            view.PDFPageComponent.RenderManager.Margin = new PDFSize<double>(view.PDFPageMargin.Width, view.PDFPageMargin.Height);
             view.InvalidateVisual();
         }
 
@@ -213,6 +214,9 @@
             component.MainComponent.PropertyChanged += HandlePDFComponentPropertyChangedEvent;
             component.NavigatedToPage += HandlePDFPageComponentNavigatedToPageEvent;
             component.TextSelectionsRemoved += HandlePDFPageComponentTextSelectionsRemovedEvent;
+
+            component.RenderManager.Margin = new PDFSize<double>(PDFPageMargin.Width, PDFPageMargin.Height);
+
             ScrollOwner?.InvalidateScrollInfo();
         }
 
@@ -273,7 +277,7 @@
         private void HandlePDFPageComponentNavigatedToPageEvent(object sender, NavigatedToPageEventArgs e)
         {
             // Current page is changed. Scroll to this page.
-            var verticalOffset = PDFPageComponent.GetPageTopLine(e.CurrentPageIndex - 1, PDFPageMargin, PDFZoomComponent.CurrentZoomFactor);
+            var verticalOffset = PDFPageComponent.RenderManager.PagePosition(e.CurrentPageIndex - 1).Y;
             var horizontalOffset = double.NaN;
             if (e.IsDetailedNavigation)
             {
@@ -288,7 +292,7 @@
                 // Center horizontally
                 var pageWidth = page.Width * PDFZoomComponent.CurrentZoomFactor;
                 var detailedPositionXFromLeft = e.DetailedPositionX * PDFZoomComponent.CurrentZoomFactor;
-                horizontalOffset = ((_workArea.Width - pageWidth) / 2) + detailedPositionXFromLeft - (ActualWidth / 2);
+                horizontalOffset = ((_documentArea.Width - pageWidth) / 2) + detailedPositionXFromLeft - (ActualWidth / 2);
             }
 
             VerticalOffset = verticalOffset;

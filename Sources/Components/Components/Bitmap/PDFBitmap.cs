@@ -36,9 +36,9 @@
         /// Render the rectangle to the bitmap.
         /// </summary>
         /// <param name="zoomFactor">Zoom factor to use for transformation.</param>
-        /// <param name="startX">Left pixel position of the page area to render.</param>
-        /// <param name="startY">Top pixel position of the page area to render.</param>
-        /// <param name="sizeY">Height of the page area to render.</param>
+        /// <param name="startX">Left pixel position of the page area to render. The value corresponds to the current zoom.</param>
+        /// <param name="startY">Top pixel position of the page area to render. The value corresponds to the current zoom.</param>
+        /// <param name="pageSizeY">Height of the whole page area. The value corresponds to the current zoom.</param>
         /// <param name="rectStartX">Left pixel position of the rectangle to render.</param>
         /// <param name="rectStartY">Top pixel position of the rectangle to render.</param>
         /// <param name="rectSizeX">Width of the rectangle to render.</param>
@@ -47,14 +47,14 @@
             double zoomFactor,
             int startX,
             int startY,
-            int sizeY,
+            int pageSizeY,
             double rectStartX,
             double rectStartY,
             double rectSizeX,
             double rectSizeY)
         {
-            int left = (int)Math.Round(rectStartX * zoomFactor, 0) + startX - 2;
-            int top = sizeY - (int)Math.Round(rectStartY * zoomFactor, 0) + startY - 2;
+            int left = (int)Math.Round(rectStartX * zoomFactor, 0) - startX - 2;
+            int top = pageSizeY - (int)Math.Round(rectStartY * zoomFactor, 0) - startY - 2;
             int width = (int)Math.Round(rectSizeX * zoomFactor, 0) + 4;
             int height = -(int)Math.Round(rectSizeY * zoomFactor, 0) + 4;
 
@@ -115,8 +115,22 @@
         {
             // Translation is performed with [1 0 0 1 tx ty].
             // Scaling is performed with [sx 0 0 sy 0 0].
-            FS_MATRIX matrix = new FS_MATRIX { A = (float)zoomFactor, B = 0, C = 0, D = (float)zoomFactor, E = startX > 0f ? 0f : startX, F = startY > 0f ? 0f : startY };
-            FS_RECTF rect = new FS_RECTF { Left = startX, Right = startX + sizeX, Top = startY, Bottom = startY + sizeY };
+            FS_MATRIX matrix = new ()
+            {
+                A = (float)zoomFactor,
+                B = 0,
+                C = 0,
+                D = (float)zoomFactor,
+                E = -startX,
+                F = -startY,
+            };
+            FS_RECTF rect = new ()
+            {
+                Left = 0,
+                Right = sizeX,
+                Top = 0,
+                Bottom = sizeY,
+            };
             _mainComponent.PDFiumBridge.FPDF_RenderPageBitmapWithMatrix(_bitmapHandle, page, ref matrix, ref rect, flags);
         }
 

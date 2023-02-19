@@ -66,28 +66,28 @@
         /// </summary>
         /// <value>A <see cref="double"/> that represents, in device independent pixels, the vertical size of the viewport for this content.
         /// This property has no default value.</value>
-        public double ViewportHeight => _viewport.Height;
+        public double ViewportHeight => _viewportArea.Height;
 
         /// <summary>
         /// Gets the horizontal size of the viewport for this content.
         /// </summary>
         /// <value>A <see cref="double"/> that represents, in device independent pixels, the horizontal size of the viewport for this content.
         /// This property has no default value.</value>
-        public double ViewportWidth => _viewport.Width;
+        public double ViewportWidth => _viewportArea.Width;
 
         /// <summary>
         /// Gets the vertical size of the extent.
         /// </summary>
         /// <value>A <see cref="double"/> that represents, in device independent pixels, the vertical size of the extent.
         /// This property has no default value.</value>
-        public double ExtentHeight => _workArea.Height;
+        public double ExtentHeight => _documentArea.Height;
 
         /// <summary>
         /// Gets the horizontal size of the extent.
         /// </summary>
         /// <value>A <see cref="double"/> that represents, in device independent pixels, the horizontal size of the extent.
         /// This property has no default value.</value>
-        public double ExtentWidth => _workArea.Width;
+        public double ExtentWidth => _documentArea.Width;
 
         /// <summary>
         /// Gets or sets a value that indicates whether scrolling on the horizontal axis is possible.

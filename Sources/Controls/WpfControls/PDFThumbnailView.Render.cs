@@ -6,6 +6,7 @@
     using System.Windows;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
+    using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.WpfControls.Helper;
 
     /// <summary>
@@ -20,55 +21,11 @@
             // Draw background
             drawingContext.DrawRectangle(Background, null, new Rect(0, 0, ViewportWidth, ViewportHeight));
 
-            var pageOnCenter = _renderedPages.FirstOrDefault(page => page.IsOnCenter);
-
-            // Determine pages to draw.
-            _renderedPages.Clear();
-            _renderedPages.AddRange(PDFPageComponent.DeterminePagesToRender(
-                VerticalOffset,
-                VerticalOffset + ViewportHeight,
-                2d * FontSize,
-                _thumbnailZoomFactor));
-
-            // Determine viewport rectangle
-            var viewportRectangle = new Rect(0, 0, _viewport.Width, _viewport.Height);
-
             // Iterate the pages, adjust some values, and draw them.
             foreach (var pageInfo in _renderedPages)
             {
-                // Current page width
-                var currentPageWidth = pageInfo.Page.Width * _thumbnailZoomFactor;
-
-                // Center the page horizontally
-                pageInfo.Left = (ViewportWidth / 2d) - (currentPageWidth / 2d);
-                pageInfo.Right = (ViewportWidth / 2d) + (currentPageWidth / 2d);
-
-                // Take offsets into account
-                pageInfo.Left -= HorizontalOffset;
-                pageInfo.Right -= HorizontalOffset;
-                pageInfo.Top -= VerticalOffset;
-                pageInfo.Bottom -= VerticalOffset;
-
-                var pageRect = new Rect(pageInfo.Left, pageInfo.Top, Math.Max(1d, pageInfo.Right - pageInfo.Left), Math.Max(0d, pageInfo.Bottom - pageInfo.Top));
-
-                ////////var pageOnViewport = pageRect;
-                ////////pageOnViewport.Intersect(viewportRectangle);
-                ////////if (pageOnViewport.IsEmpty)
-                ////////{
-                ////////    continue;
-                ////////}
-
-                ////////pageOnViewport.Width = Math.Max(1d, pageOnViewport.Width);
-                ////////pageOnViewport.Height = Math.Max(1d, pageOnViewport.Height);
-
-                var pageRectForPDFium = pageRect;
-                pageRectForPDFium.Y = pageRect.Y > 0d ? 0d : pageRect.Y;
-                pageRectForPDFium.X = pageRect.X > 0d ? 0d : pageRect.X;
-                pageRectForPDFium.Width = Math.Max(1d, pageRectForPDFium.Width);
-                pageRectForPDFium.Height = Math.Max(1d, pageRectForPDFium.Height);
-
                 // Draw page background
-                drawingContext.DrawRectangle(PDFPageBackground, null, new Rect(pageRect.TopLeft, pageRect.BottomRight));
+                drawingContext.DrawRectangle(PDFPageBackground, null, new Rect(pageInfo.RelativePositionInViewportArea.X, pageInfo.RelativePositionInViewportArea.Y, pageInfo.RelativePositionInViewportArea.Width, pageInfo.RelativePositionInViewportArea.Height));
 
                 try
                 {
@@ -77,11 +34,11 @@
 
                     bitmap.Lock();
                     pageInfo.Page.RenderWholePageBitmap(format, bitmap.BackBuffer, bitmap.BackBufferStride);
-                    bitmap.AddDirtyRect(new Int32Rect(0, 0, (int)pageRect.Width, (int)pageRect.Height));
+                    bitmap.AddDirtyRect(new Int32Rect(0, 0, (int)pageInfo.Page.Width, (int)pageInfo.Page.Height));
                     bitmap.Unlock();
 
                     // Draw page content.
-                    drawingContext.DrawImage(bitmap, new Rect(pageRect.TopLeft, pageRect.BottomRight));
+                    drawingContext.DrawImage(bitmap, new Rect(pageInfo.RelativePositionInViewportArea.X, pageInfo.RelativePositionInViewportArea.Y, pageInfo.RelativePositionInViewportArea.Width, pageInfo.RelativePositionInViewportArea.Height));
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
                 catch
@@ -98,20 +55,20 @@
                     FontSize,
                     Foreground,
                     VisualTreeHelper.GetDpi(this).PixelsPerDip);
-                var textLocation = new Point(pageInfo.Left + ((pageInfo.Right - pageInfo.Left) / 2d) - (ft.WidthIncludingTrailingWhitespace / 2), pageInfo.Bottom);
+                var textLocation = new Point(pageInfo.RelativePositionInViewportArea.Left + ((pageInfo.RelativePositionInViewportArea.Right - pageInfo.RelativePositionInViewportArea.Left) / 2d) - (ft.WidthIncludingTrailingWhitespace / 2), pageInfo.RelativePositionInViewportArea.Bottom);
                 drawingContext.DrawText(ft, textLocation);
 
                 // Draw page border - left
-                drawingContext.DrawLine(new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Left), new Point(pageInfo.Left, pageInfo.Top), new Point(pageInfo.Left, pageInfo.Bottom));
+                drawingContext.DrawLine(new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Left), new Point(pageInfo.RelativePositionInViewportArea.Left, pageInfo.RelativePositionInViewportArea.Top), new Point(pageInfo.RelativePositionInViewportArea.Left, pageInfo.RelativePositionInViewportArea.Bottom));
 
                 // Draw page border - top
-                drawingContext.DrawLine(new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Top), new Point(pageInfo.Left, pageInfo.Top), new Point(pageInfo.Right, pageInfo.Top));
+                drawingContext.DrawLine(new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Top), new Point(pageInfo.RelativePositionInViewportArea.Left, pageInfo.RelativePositionInViewportArea.Top), new Point(pageInfo.RelativePositionInViewportArea.Right, pageInfo.RelativePositionInViewportArea.Top));
 
                 // Draw page border - right
-                drawingContext.DrawLine(new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Right), new Point(pageInfo.Right, pageInfo.Top), new Point(pageInfo.Right, pageInfo.Bottom));
+                drawingContext.DrawLine(new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Right), new Point(pageInfo.RelativePositionInViewportArea.Right, pageInfo.RelativePositionInViewportArea.Top), new Point(pageInfo.RelativePositionInViewportArea.Right, pageInfo.RelativePositionInViewportArea.Bottom));
 
                 // Draw page border - bottom
-                drawingContext.DrawLine(new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Bottom), new Point(pageInfo.Left, pageInfo.Bottom), new Point(pageInfo.Right, pageInfo.Bottom));
+                drawingContext.DrawLine(new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Bottom), new Point(pageInfo.RelativePositionInViewportArea.Left, pageInfo.RelativePositionInViewportArea.Bottom), new Point(pageInfo.RelativePositionInViewportArea.Right, pageInfo.RelativePositionInViewportArea.Bottom));
             }
 
             // Draw background border - left

@@ -8,20 +8,22 @@
     using PDFiumDotNET.Components.Contracts.Destination;
     using PDFiumDotNET.Components.Contracts.EventArguments;
     using PDFiumDotNET.Components.Contracts.Find;
-    using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Page;
+    using PDFiumDotNET.Components.Contracts.Render;
     using PDFiumDotNET.Components.Contracts.Zoom;
     using PDFiumDotNET.Components.Find;
     using PDFiumDotNET.Components.Helper;
+    using PDFiumDotNET.Components.Render;
     using PDFiumDotNET.Components.Transformation;
     using PDFiumDotNET.Components.Zoom;
 
     /// <inheritdoc cref="IPDFPageComponent"/>
-    internal sealed partial class PDFPageComponent : PDFChildComponent, IPDFPageComponent, IPageLayoutAdapter
+    internal sealed partial class PDFPageComponent : PDFChildComponent, IPDFPageComponent
     {
         #region Private fields
 
         private readonly List<PDFRectangle> _selectionRectangles = new List<PDFRectangle>();
+        private readonly PDFRenderManager _renderManager;
         private int _pageIndexWithSelections;
         private Func<int> _findSelectionBackgroundFunc;
         private Func<int> _findSelectionBorderFunc;
@@ -34,15 +36,17 @@
         /// Initializes a new instance of the <see cref="PDFPageComponent"/> class.
         /// </summary>
         /// <param name="pageComponentName">Name of component. The name should be unique in <see cref="PDFComponent"/> context.</param>
+        /// <param name="renderManager">The render manager determines which side is to be drawn where.</param>
         /// <param name="pageSizeTransformation">Instance of class for page size transformation.</param>
-        public PDFPageComponent(string pageComponentName, IPageSizeTransformation pageSizeTransformation)
+        public PDFPageComponent(string pageComponentName, PDFRenderManager renderManager, IPageSizeTransformation pageSizeTransformation)
         {
             Name = pageComponentName;
+            _renderManager = renderManager ?? throw new ArgumentNullException(nameof(renderManager));
             PageSizeTransformation = pageSizeTransformation;
+
+            _renderManager.AttachPageComponent(this);
 
             Pages = new ObservableCollection<IPDFPage>();
-
-            PageSizeTransformation = pageSizeTransformation;
         }
 
         #endregion Constructors
@@ -136,12 +140,9 @@
             ClearSelectionRectangles();
             PageCount = 0;
             Pages.Clear();
+            _renderManager.CalculateDocumentArea();
             SetCurrentInformation(null);
             InvokePropertyChangedEvent(null);
-
-            WidestGridCellWidth = 0;
-            HighestGridCellHeight = 0;
-            CumulativeHeight = 0;
         }
 
         /// <summary>
@@ -174,7 +175,10 @@
 
         #endregion Private methods
 
-        #region Implementation of IPageComponent
+        #region Implementation of IPDFPageComponent
+
+        /// <inheritdoc/>
+        public IPDFRenderManager RenderManager => _renderManager;
 
         /// <inheritdoc/>
         public IPDFFindComponent FindComponent
@@ -230,6 +234,20 @@
         {
             get;
             private set;
+        }
+
+        /// <inheritdoc/>
+        public IPDFPage CurrentPage
+        {
+            get
+            {
+                if (CurrentPageIndex < 1 || CurrentPageIndex > PageCount)
+                {
+                    return null;
+                }
+
+                return Pages[CurrentPageIndex - 1];
+            }
         }
 
         /// <inheritdoc/>
@@ -323,6 +341,17 @@
             var previousCurrentPageIndex = CurrentPageIndex;
             SetCurrentInformation(GetPage(destination.PageIndex));
             NavigatedToPage?.Invoke(this, new NavigatedToPageEventArgs(previousCurrentPageIndex, CurrentPageIndex));
+        }
+
+        /// <inheritdoc/>
+        public void SetCurrentPage(int pageIndex)
+        {
+            if (pageIndex < 1 || pageIndex > PageCount)
+            {
+                return;
+            }
+
+            this.SetCurrentInformation(GetPage(pageIndex - 1));
         }
 
         /// <inheritdoc/>
@@ -423,6 +452,6 @@
         /// When the new find is started, this event is called.</remarks>
         public event EventHandler<EventArgs> TextSelectionsRemoved;
 
-        #endregion Implementation of IPageComponent
+        #endregion Implementation of IPDFPageComponent
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace PDFiumDotNET.Components.Page
 {
+    using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Page;
 
     /// <inheritdoc cref="IPDFPageRenderInfo"/>
@@ -24,22 +25,19 @@
         public IPDFPage Page { get; private set; }
 
         /// <inheritdoc/>
-        public double Left { get; set; }
+        public PDFRectangle<double> PositionInDocumentArea { get; internal set; }
 
         /// <inheritdoc/>
-        public double Right { get; set; }
+        public PDFRectangle<double> RelativePositionInViewportArea { get; internal set; }
 
         /// <inheritdoc/>
-        public double Top { get; set; }
+        public PDFRectangle<double> VisiblePart { get; internal set; }
 
         /// <inheritdoc/>
-        public double Bottom { get; set; }
+        public PDFRectangle<double> VisiblePartInViewportArea { get; internal set; }
 
         /// <inheritdoc/>
-        public bool IsOnCenter { get; set; }
-
-        /// <inheritdoc/>
-        public double PagePositionOnCenter { get; set; }
+        public bool IsNearestToCenter { get; set; }
 
         #endregion Implementation of IPDFPageRenderInfo
     }

@@ -1,5 +1,7 @@
 ﻿namespace PDFiumDotNET.Components.Contracts.Page
 {
+    using PDFiumDotNET.Components.Contracts.Basic;
+
     /// <summary>
     /// Interface defines information about page to render.
     /// </summary>
@@ -11,34 +13,29 @@
         IPDFPage Page { get; }
 
         /// <summary>
-        /// Gets or sets the left line of page.
+        /// Gets or sets the position of page in document area.
         /// </summary>
-        double Left { get; set; }
+        PDFRectangle<double> PositionInDocumentArea { get; }
 
         /// <summary>
-        /// Gets or sets the right line of page.
+        /// Gets or sets the position of page in viewport area.
+        /// Rectangle values are relative to the left-top point of viewport area.
         /// </summary>
-        double Right { get; set; }
+        PDFRectangle<double> RelativePositionInViewportArea { get; }
 
         /// <summary>
-        /// Gets or sets the top line of page.
+        /// Gets the visible part of page in viewport area.
         /// </summary>
-        double Top { get; set; }
+        PDFRectangle<double> VisiblePart { get; }
 
         /// <summary>
-        /// Gets or sets the bottom line of page.
+        /// Gets the position of visible part of page in viewport area.
         /// </summary>
-        double Bottom { get; set; }
+        PDFRectangle<double> VisiblePartInViewportArea { get; }
 
         /// <summary>
-        /// Gets or sets the value indicating that this page is in the center of vertical direction of viewport.
+        /// Gets or sets the value indicating that this side is closest to the center of the viewport.
         /// </summary>
-        bool IsOnCenter { get; set; }
-
-        /// <summary>
-        /// Gets or sets the position of center of vertical direction of viewport on this page.
-        /// Valid only if <see cref="IsOnCenter"/> is <c>true</c>.
-        /// </summary>
-        double PagePositionOnCenter { get; set; }
+        bool IsNearestToCenter { get; }
     }
 }

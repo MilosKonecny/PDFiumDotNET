@@ -1,6 +1,7 @@
 ﻿namespace PDFiumDotNET.Samples.SimpleWpf
 {
     using System.Windows;
+    using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Bookmark;
     using PDFiumDotNET.Samples.SimpleWpf.Contracts;
 
@@ -72,7 +73,7 @@
         /// <summary>
         /// Gets the margin between pages.
         /// </summary>
-        public double PDFPageMargin => _pdfView.PDFPageMargin;
+        public Size PDFPageMargin => _pdfView.PDFPageMargin;
 
         /// <summary>
         /// Invalidates PDF control.

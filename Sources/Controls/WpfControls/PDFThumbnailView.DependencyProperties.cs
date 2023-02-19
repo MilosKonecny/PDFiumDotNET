@@ -5,6 +5,7 @@
     using System.Windows;
     using System.Windows.Media;
     using PDFiumDotNET.Components.Contracts;
+    using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Page;
 
     /// <summary>
@@ -166,6 +167,9 @@
             }
 
             component.MainComponent.PropertyChanged += HandlePDFComponentPropertyChangedEvent;
+
+            // ToDo: Set margin if FontSize changes.
+            component.RenderManager.Margin = new PDFSize<double>(FontSize, 2d * FontSize);
             ScrollOwner?.InvalidateScrollInfo();
         }
 
