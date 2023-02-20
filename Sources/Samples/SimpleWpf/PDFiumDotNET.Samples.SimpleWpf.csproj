@@ -30,6 +30,9 @@
       <None Remove="Resources\Toolbar\BlueUI\icons8_rewind_40px.png" />
       <None Remove="Resources\Toolbar\BlueUI\icons8_search_property_40px.png" />
       <None Remove="Resources\Toolbar\BlueUI\icons8_skip_to_start_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_view_1col_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_view_2col_40px.png" />
+      <None Remove="Resources\Toolbar\BlueUI\icons8_view_2col_special_40px.png" />
       <None Remove="Resources\Toolbar\BlueUI\icons8_width_40px.png" />
       <None Remove="Resources\Toolbar\BlueUI\icons8_zoom_in_40px.png" />
       <None Remove="Resources\Toolbar\BlueUI\icons8_zoom_out_40px.png" />
@@ -60,6 +63,9 @@
       <Resource Include="Resources\Toolbar\BlueUI\icons8_rewind_40px.png" />
       <Resource Include="Resources\Toolbar\BlueUI\icons8_search_property_40px.png" />
       <Resource Include="Resources\Toolbar\BlueUI\icons8_skip_to_start_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_view_1col_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_view_2col_40px.png" />
+      <Resource Include="Resources\Toolbar\BlueUI\icons8_view_2col_special_40px.png" />
       <Resource Include="Resources\Toolbar\BlueUI\icons8_width_40px.png" />
       <Resource Include="Resources\Toolbar\BlueUI\icons8_zoom_in_40px.png" />
       <Resource Include="Resources\Toolbar\BlueUI\icons8_zoom_out_40px.png" />

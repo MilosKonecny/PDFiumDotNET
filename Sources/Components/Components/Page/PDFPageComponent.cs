@@ -13,7 +13,6 @@
     using PDFiumDotNET.Components.Contracts.Render;
     using PDFiumDotNET.Components.Contracts.Zoom;
     using PDFiumDotNET.Components.Find;
-    using PDFiumDotNET.Components.Helper;
     using PDFiumDotNET.Components.Render;
     using PDFiumDotNET.Components.Transformation;
     using PDFiumDotNET.Components.Zoom;
@@ -24,7 +23,8 @@
         #region Private fields
 
         private readonly List<PDFRectangle<double>> _selectionRectangles = new ();
-        private readonly PDFRenderManager _renderManager;
+        private PDFSize<double> _pageMargin;
+        private PDFRenderManager _renderManager;
         private int _pageIndexWithSelections;
         private Func<int> _findSelectionBackgroundFunc;
         private Func<int> _findSelectionBorderFunc;
@@ -132,6 +132,30 @@
             TextSelectionsRemoved?.Invoke(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// The method uses the given transformation interface for page size transformation.
+        /// </summary>
+        /// <param name="pageSizeTransformation">Page size transformation to use in page component.</param>
+        internal void Use(IPageSizeTransformation pageSizeTransformation)
+        {
+            PageSizeTransformation = pageSizeTransformation;
+            InvokePropertyChangedEvent(nameof(PageSizeTransformation));
+        }
+
+        /// <summary>
+        /// The method uses the given render manager in this page component.
+        /// </summary>
+        /// <param name="renderManager">Render manager to use for page render.</param>
+        /// <exception cref="ArgumentNullException">Exception is thrown in case <paramref name="renderManager"/> is <c>null</c>.</exception>
+        internal void Use(PDFRenderManager renderManager)
+        {
+            _renderManager?.DettachPageComponent();
+
+            _renderManager = renderManager ?? throw new ArgumentNullException(nameof(renderManager));
+            _renderManager.AttachPageComponent(this);
+            InvokePropertyChangedEvent(nameof(RenderManager));
+        }
+
         #endregion Internal methods
 
         #region Private methods
@@ -144,6 +168,29 @@
             _renderManager.CalculateDocumentArea();
             SetCurrentInformation(null);
             InvokePropertyChangedEvent(null);
+        }
+
+        private void ScanDocument()
+        {
+            if (PDFComponent.PDFiumBridge != null && PDFComponent.PDFiumDocument.IsValid)
+            {
+                PageCount = PDFComponent.PDFiumBridge.FPDF_GetPageCount(PDFComponent.PDFiumDocument);
+                if (PageCount > 0)
+                {
+                    for (var index = 0; index < PageCount; index++)
+                    {
+                        var newPage = new PDFPage(this, index);
+                        newPage.Build();
+                        Pages.Add(newPage);
+                    }
+
+                    SetCurrentInformation(Pages[0]);
+                }
+
+                _renderManager.CalculateDocumentArea();
+
+                InvokePropertyChangedEvent(null);
+            }
         }
 
         /// <summary>
@@ -177,6 +224,29 @@
         #endregion Private methods
 
         #region Implementation of IPDFPageComponent
+
+        /// <inheritdoc/>
+        public PDFSize<double> PageMargin
+        {
+            get
+            {
+                return _pageMargin;
+            }
+
+            set
+            {
+                if (_pageMargin != value)
+                {
+                    _pageMargin = value;
+                    if (RenderManager != null)
+                    {
+                        RenderManager.PageMargin = _pageMargin;
+                    }
+
+                    InvokePropertyChangedEvent();
+                }
+            }
+        }
 
         /// <inheritdoc/>
         public IPDFRenderManager RenderManager => _renderManager;

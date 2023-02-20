@@ -26,27 +26,29 @@
         /// <inheritdoc/>
         internal override void CalculateDocumentArea()
         {
-            if (PageComponent.PageCount == 0)
+            if (PageComponent == null || PageComponent.PageCount == 0)
             {
-                _requiredDocumentArea = new PDFSize<double>(Margin);
+                _requiredDocumentArea = new PDFSize<double>(PageMargin);
                 return;
             }
+
+            var zoomFactor = PageComponent.ZoomComponent != null ? PageComponent.ZoomComponent.CurrentZoomFactor : 1d;
 
             // Determine height of all pages and widest page.
             var width = 0d;
             var height = 0d;
             foreach (var page in PageComponent.Pages)
             {
-                height += page.Height * PageComponent.ZoomComponent.CurrentZoomFactor;
-                if (width < page.Width * PageComponent.ZoomComponent.CurrentZoomFactor)
+                height += page.Height * zoomFactor;
+                if (width < page.Width * zoomFactor)
                 {
-                    width = page.Width * PageComponent.ZoomComponent.CurrentZoomFactor;
+                    width = page.Width * zoomFactor;
                 }
             }
 
             // Add margins
-            height += Margin.Height * (PageComponent.PageCount + 1);
-            width += 2 * Margin.Width;
+            height += PageMargin.Height * (PageComponent.PageCount + 1);
+            width += 2 * PageMargin.Width;
 
             // Set document area
             _requiredDocumentArea = new PDFSize<double>(width, height);
@@ -55,19 +57,26 @@
         /// <inheritdoc/>
         internal override PDFRectangle<double> GetPagePosition(int pageIndex)
         {
+            if (PageComponent == null || PageComponent.PageCount == 0)
+            {
+                return new PDFRectangle<double>();
+            }
+
+            var zoomFactor = PageComponent.ZoomComponent != null ? PageComponent.ZoomComponent.CurrentZoomFactor : 1d;
+
             // Determine height of all pages above this page
             // and center this page on document area width.
-            var top = Margin.Height;
+            var top = PageMargin.Height;
             for (var index = 0; index < pageIndex; index++)
             {
-                top += Margin.Height + (PageComponent.Pages[index].Height * PageComponent.ZoomComponent.CurrentZoomFactor);
+                top += PageMargin.Height + (PageComponent.Pages[index].Height * zoomFactor);
             }
 
             return new PDFRectangle<double>(
                 (_requiredDocumentArea.Width - PageComponent.Pages[pageIndex].Width) / 2d,
                 top,
-                PageComponent.Pages[pageIndex].Width * PageComponent.ZoomComponent.CurrentZoomFactor,
-                PageComponent.Pages[pageIndex].Height * PageComponent.ZoomComponent.CurrentZoomFactor);
+                PageComponent.Pages[pageIndex].Width * zoomFactor,
+                PageComponent.Pages[pageIndex].Height * zoomFactor);
         }
 
         /// <inheritdoc/>
@@ -76,7 +85,14 @@
             // It should be mentioned. A viewport is a rectangle in the document area.
             var list = new List<IPDFPageRenderInfo>();
 
-            var top = Margin.Height;
+            if (PageComponent == null || PageComponent.PageCount == 0)
+            {
+                return list;
+            }
+
+            var zoomFactor = PageComponent.ZoomComponent != null ? PageComponent.ZoomComponent.CurrentZoomFactor : 1d;
+
+            var top = PageMargin.Height;
 
             var viewportWidthIsWider = viewportArea.Width > DocumentArea.Width;
             var horizontalOffset = viewportWidthIsWider ? (viewportArea.Width - DocumentArea.Width) / 2d : 0d;
@@ -87,8 +103,8 @@
             foreach (var page in PageComponent.Pages)
             {
                 var pageTop = top;
-                var pageBottom = top + (page.Height * PageComponent.ZoomComponent.CurrentZoomFactor);
-                top = pageBottom + Margin.Height;
+                var pageBottom = top + (page.Height * zoomFactor);
+                top = pageBottom + PageMargin.Height;
 
                 if (pageTop > viewportArea.Bottom)
                 {
@@ -104,10 +120,10 @@
 
                 // Page position in the viewport area relative to the top left point of the viewport area.
                 var relativePositionInViewportArea = new PDFRectangle<double>(
-                    horizontalOffset - viewportArea.Left + ((DocumentArea.Width - (page.Width * PageComponent.ZoomComponent.CurrentZoomFactor)) / 2d),
+                    horizontalOffset - viewportArea.Left + ((DocumentArea.Width - (page.Width * zoomFactor)) / 2d),
                     pageTop - viewportArea.Top,
-                    page.Width * PageComponent.ZoomComponent.CurrentZoomFactor,
-                    page.Height * PageComponent.ZoomComponent.CurrentZoomFactor);
+                    page.Width * zoomFactor,
+                    page.Height * zoomFactor);
 
                 // 'Move' viewport area rectangle to page coordinate system to compute visible part of page in viewport area.
                 var viewportInPageCoordinates = new PDFRectangle<double>(-relativePositionInViewportArea.X, -relativePositionInViewportArea.Y, viewportArea.Width, viewportArea.Height);
@@ -123,10 +139,10 @@
                 var info = new PDFPageRenderInfo(page)
                 {
                     PositionInDocumentArea = new PDFRectangle<double>(
-                        (DocumentArea.Width - (page.Width * PageComponent.ZoomComponent.CurrentZoomFactor)) / 2d,
+                        (DocumentArea.Width - (page.Width * zoomFactor)) / 2d,
                         pageTop,
-                        page.Width * PageComponent.ZoomComponent.CurrentZoomFactor,
-                        page.Height * PageComponent.ZoomComponent.CurrentZoomFactor),
+                        page.Width * zoomFactor,
+                        page.Height * zoomFactor),
                     RelativePositionInViewportArea = relativePositionInViewportArea,
                     VisiblePart = visiblePart,
                     VisiblePartInViewportArea = relativePositionInViewportArea.Intersect(new PDFRectangle<double>(0, 0, viewportArea.Width, viewportArea.Height)),

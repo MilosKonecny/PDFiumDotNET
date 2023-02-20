@@ -32,6 +32,15 @@
         IPDFPageComponent CreatePageComponent(string name, PageLayoutType pageLayout);
 
         /// <summary>
+        /// The method changes page layout in <see cref="IPDFPageComponent"/> defined by its name.
+        /// </summary>
+        /// <param name="name">Name of the <see cref="IPDFPageComponent"/> in which to change the page layout.</param>
+        /// <param name="pageLayout">Layout of <see cref="IPDFPageComponent"/> to use in the page component.</param>
+        /// <returns>Changed <see cref="IPDFPageComponent"/> if page component exists with specified name.
+        /// If there is no page component with specified name, returned value is <c>null</c>.</returns>
+        IPDFPageComponent ChangePageLayout(string name, PageLayoutType pageLayout);
+
+        /// <summary>
         /// Removes specified <see cref="IPDFPageComponent"/>. Component is identified by its name.
         /// </summary>
         /// <param name="name">Name of <see cref="IPDFPageComponent"/> to destroy and remove.</param>

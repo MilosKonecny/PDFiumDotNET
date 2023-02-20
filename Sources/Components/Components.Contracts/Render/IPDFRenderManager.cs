@@ -15,7 +15,7 @@
         /// <summary>
         /// Gets or sets the margins between pages.
         /// </summary>
-        PDFSize<double> Margin { get; set; }
+        PDFSize<double> PageMargin { get; set; }
 
         /// <summary>
         /// Gets the size of the document area in which all pages are rendered.

@@ -18,25 +18,7 @@
         /// <inheritdoc/>
         protected override void ProcessDocumentOpened(string file)
         {
-            if (PDFComponent.PDFiumBridge != null && PDFComponent.PDFiumDocument.IsValid)
-            {
-                PageCount = PDFComponent.PDFiumBridge.FPDF_GetPageCount(PDFComponent.PDFiumDocument);
-                if (PageCount > 0)
-                {
-                    for (var index = 0; index < PageCount; index++)
-                    {
-                        var newPage = new PDFPage(this, index);
-                        newPage.Build();
-                        Pages.Add(newPage);
-                    }
-
-                    SetCurrentInformation(Pages[0]);
-                }
-
-                _renderManager.CalculateDocumentArea();
-
-                InvokePropertyChangedEvent(null);
-            }
+            ScanDocument();
 
             base.ProcessDocumentOpened(file);
         }

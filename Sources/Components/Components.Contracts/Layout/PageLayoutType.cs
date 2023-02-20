@@ -14,5 +14,15 @@
         /// Layout of pages below each other - thumbnail size.
         /// </summary>
         Thumbnail,
+
+        /// <summary>
+        /// Layout of pages in two columns.
+        /// </summary>
+        TwoColumns,
+
+        /// <summary>
+        /// Layout of pages in two columns, but in first row is only one page.
+        /// </summary>
+        TwoColumnsSpecial,
     }
 }

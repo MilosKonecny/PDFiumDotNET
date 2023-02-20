@@ -153,8 +153,7 @@
                 <Button Command="{Binding Path=InformationCommand}" ToolTip="Document information">
                     <wpfControl:AutoDisabledImage Source="Resources\Toolbar\BlueUI\icons8_search_property_40px.png"/>
                 </Button>
-                <ToggleButton x:Name="_showAnnotationsToggleButton"
-                              Command="{Binding Path=ShowAnnotationsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" ToolTip="Show document annotations">
+                <ToggleButton Command="{Binding Path=ShowAnnotationsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" ToolTip="Show document annotations">
                     <wpfControl:AutoDisabledImage Source="Resources\Toolbar\BlueUI\icons8_note_40px.png"/>
                 </ToggleButton>
             </StackPanel>
@@ -223,7 +222,7 @@
                         </b:Interaction.Behaviors>
                     </TextBox>
                     <TextBlock Text="/" />
-                    <TextBox Text="{Binding Path=StandardPageComponent.PageCount, Mode=OneWay}"
+                    <TextBox Text="{Binding Path=ViewPageComponent.PageCount, Mode=OneWay}"
                              ToolTip="Not editable"
                              IsReadOnly="True" SelectionBrush="Transparent" />
                     <TextBlock Text=")" />
@@ -234,6 +233,17 @@
                 <Button Command="{Binding Path=GoToLastPageCommand}" ToolTip="Navigate to last page">
                     <wpfControl:AutoDisabledImage Source="Resources\Toolbar\BlueUI\icons8_end_40px.png"/>
                 </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,10,5">
+                <ToggleButton IsChecked="{Binding Path=IsViewOneColumnActive, Mode=OneWay}" Command="{Binding Path=ViewOneColumnCommand}" ToolTip="Pages in one column">
+                    <wpfControl:AutoDisabledImage Source="Resources\Toolbar\BlueUI\icons8_view_1col_40px.png"/>
+                </ToggleButton>
+                <ToggleButton IsChecked="{Binding Path=IsViewTwoColumnsActive, Mode=OneWay}" Command="{Binding Path=ViewTwoColumnsCommand}" ToolTip="Pages in two columns">
+                    <wpfControl:AutoDisabledImage Source="Resources\Toolbar\BlueUI\icons8_view_2col_40px.png"/>
+                </ToggleButton>
+                <ToggleButton IsChecked="{Binding Path=IsViewTwoColumnsSpecialActive, Mode=OneWay}" Command="{Binding Path=ViewTwoColumnsSpecialCommand}" ToolTip="Pages in two columns, one page in first row">
+                    <wpfControl:AutoDisabledImage Source="Resources\Toolbar\BlueUI\icons8_view_2col_special_40px.png"/>
+                </ToggleButton>
             </StackPanel>
         </WrapPanel>
         <!-- Bookmarks & Thumbnails -->
@@ -337,7 +347,7 @@
         <!-- PDF -->
         <ScrollViewer Grid.Row="4" Grid.Column="2" CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <wpfControl:PDFView x:Name="_pdfView"
-                                PDFPageComponent="{Binding Path=StandardPageComponent}"
+                                PDFPageComponent="{Binding Path=ViewPageComponent}"
                                 PDFZoomComponent="{Binding Path=ZoomComponent}" />
         </ScrollViewer>
         <!-- Find active -->
