@@ -3,6 +3,7 @@
     using System;
     using System.Collections.ObjectModel;
     using PDFiumDotNET.Components.Contracts.Action;
+    using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Destination;
     using PDFiumDotNET.Components.Contracts.EventArguments;
     using PDFiumDotNET.Components.Contracts.Find;
@@ -15,6 +16,11 @@
     /// </summary>
     public interface IPDFPageComponent : IPDFChildComponent
     {
+        /// <summary>
+        /// Gets or sets the margins between pages.
+        /// </summary>
+        PDFSize<double> PageMargin { get; set; }
+
         /// <summary>
         /// Gets the render manager helping to render PDF document.
         /// </summary>

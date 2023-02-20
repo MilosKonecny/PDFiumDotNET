@@ -90,8 +90,7 @@
         /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this property.</param>
         private static void HandlePDFPageBackgroundPropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            var view = o as PDFThumbnailView;
-            if (view == null)
+            if (o is not PDFThumbnailView view)
             {
                 return;
             }
@@ -106,8 +105,7 @@
         /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this property.</param>
         private static void HandlePDFPageBorderBrushPropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            var view = o as PDFThumbnailView;
-            if (view == null)
+            if (o is not PDFThumbnailView view)
             {
                 return;
             }
@@ -122,8 +120,7 @@
         /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this property.</param>
         private static void HandlePDFPageBorderThicknessPropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            var view = o as PDFThumbnailView;
-            if (view == null)
+            if (o is not PDFThumbnailView view)
             {
                 return;
             }
@@ -138,8 +135,7 @@
         /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this property.</param>
         private static void HandlePDFPageComponentPropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            var view = o as PDFThumbnailView;
-            if (view == null)
+            if (o is not PDFThumbnailView view)
             {
                 return;
             }
@@ -169,7 +165,7 @@
             component.MainComponent.PropertyChanged += HandlePDFComponentPropertyChangedEvent;
 
             // ToDo: Set margin if FontSize changes.
-            component.RenderManager.Margin = new PDFSize<double>(FontSize, 2d * FontSize);
+            component.RenderManager.PageMargin = new PDFSize<double>(FontSize, 2d * FontSize);
             ScrollOwner?.InvalidateScrollInfo();
         }
 

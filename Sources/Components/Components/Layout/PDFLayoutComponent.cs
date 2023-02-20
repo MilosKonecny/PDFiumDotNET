@@ -4,7 +4,6 @@
     using System.Linq;
     using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Page;
-    using PDFiumDotNET.Components.Contracts.Render;
     using PDFiumDotNET.Components.Page;
     using PDFiumDotNET.Components.Render;
     using PDFiumDotNET.Components.Transformation;
@@ -26,6 +25,30 @@
         #endregion Constructors
 
         #region Private methods
+
+        private static PDFRenderManager CreateRenderManager(PageLayoutType pageLayout)
+        {
+            PDFRenderManager renderManager;
+            switch (pageLayout)
+            {
+                case PageLayoutType.Thumbnail:
+                    renderManager = new PDFRenderManagerThumbnail();
+                    break;
+                case PageLayoutType.Standard:
+                    renderManager = new PDFRenderManagerStandard();
+                    break;
+                case PageLayoutType.TwoColumns:
+                    renderManager = new PDFRenderManagerTwoColumns(false);
+                    break;
+                case PageLayoutType.TwoColumnsSpecial:
+                    renderManager = new PDFRenderManagerTwoColumns(true);
+                    break;
+                default:
+                    throw new InvalidOperationException();
+            }
+
+            return renderManager;
+        }
 
         private PDFPageComponent GetPDFPageComponentByName(string name)
         {
@@ -84,10 +107,35 @@
             {
                 // We are using page transformation only for thumbnail layout.
                 var transformation = pageLayout == PageLayoutType.Thumbnail ? new PageSizeThumbnailTransformation() : null;
-                PDFRenderManager renderManager = pageLayout == PageLayoutType.Thumbnail ? new PDFRenderManagerThumbnail() : new PDFRenderManagerStandard();
+                PDFRenderManager renderManager = CreateRenderManager(pageLayout);
                 component = new PDFPageComponent(name, renderManager, transformation);
                 Attach(component);
             }
+
+            return component;
+        }
+
+        /// <inheritdoc/>
+        public IPDFPageComponent ChangePageLayout(string name, PageLayoutType pageLayout)
+        {
+            if (IsDisposed)
+            {
+                throw new ObjectDisposedException(nameof(PDFLayoutComponent));
+            }
+
+            if (this[name] is not PDFPageComponent component)
+            {
+                return null;
+            }
+
+            if (pageLayout == PageLayoutType.Thumbnail)
+            {
+                var transformation = new PageSizeThumbnailTransformation();
+                component.Use(transformation);
+            }
+
+            PDFRenderManager renderManager = CreateRenderManager(pageLayout);
+            component.Use(renderManager);
 
             return component;
         }

@@ -17,7 +17,7 @@
     {
         #region Private fields
 
-        private PDFSize<double> _margin;
+        private PDFSize<double> _pageMargin;
 
         #endregion Private fields
 
@@ -72,6 +72,7 @@
             }
 
             PageComponent.ZoomComponent.PropertyChanged += HandleZoomComponentPropertyChangedEvent;
+            PageMargin = PageComponent.PageMargin;
         }
 
         /// <summary>
@@ -124,18 +125,18 @@
         #region Implementation of IPDFRenderManager
 
         /// <inheritdoc/>
-        public PDFSize<double> Margin
+        public PDFSize<double> PageMargin
         {
             get
             {
-                return _margin;
+                return _pageMargin;
             }
 
             set
             {
-                if (_margin != value)
+                if (_pageMargin != value)
                 {
-                    _margin = value;
+                    _pageMargin = value;
                     CalculateDocumentArea();
                     InvokeDocumentAreaChangedEvent();
                 }

@@ -35,12 +35,13 @@
 
         private IView _view;
         private IPDFComponent _pdfComponent;
-        private IPDFPageComponent _standardPageComponent;
+        private IPDFPageComponent _viewPageComponent;
         private IPDFPageComponent _thumbnailPageComponent;
         private string _currentPageLabel;
         private int _currentPageIndex;
         private bool _isFindActive;
         private int _activeFindPage;
+        private PageLayoutType _pageLayoutType = PageLayoutType.Standard;
 
         #endregion Private fields
 
@@ -83,11 +84,11 @@
         /// <summary>
         /// Gets the page component.
         /// </summary>
-        public IPDFPageComponent StandardPageComponent
+        public IPDFPageComponent ViewPageComponent
         {
             get
             {
-                return _standardPageComponent;
+                return _viewPageComponent;
             }
         }
 
@@ -120,7 +121,7 @@
         {
             get
             {
-                return _standardPageComponent?.ZoomComponent;
+                return _viewPageComponent?.ZoomComponent;
             }
         }
 
@@ -132,16 +133,16 @@
             get
             {
                 return _pdfComponent != null
-                    && _standardPageComponent != null
-                    && _standardPageComponent.ZoomComponent != null
-                    ? _standardPageComponent.ZoomComponent.CurrentZoomPercentage : 100;
+                    && _viewPageComponent != null
+                    && _viewPageComponent.ZoomComponent != null
+                    ? _viewPageComponent.ZoomComponent.CurrentZoomPercentage : 100;
             }
 
             set
             {
-                if (_pdfComponent != null && _standardPageComponent != null && _standardPageComponent.ZoomComponent != null)
+                if (_pdfComponent != null && _viewPageComponent != null && _viewPageComponent.ZoomComponent != null)
                 {
-                    _standardPageComponent.ZoomComponent.CurrentZoomPercentage = value;
+                    _viewPageComponent.ZoomComponent.CurrentZoomPercentage = value;
                 }
             }
         }
@@ -161,7 +162,7 @@
                 if (!string.Equals(_currentPageLabel, value, StringComparison.OrdinalIgnoreCase)
                     && _pdfComponent != null)
                 {
-                    _standardPageComponent.NavigateToPage(value);
+                    _viewPageComponent.NavigateToPage(value);
                 }
             }
         }
@@ -181,7 +182,7 @@
                 if (_currentPageIndex != value
                     && _pdfComponent != null)
                 {
-                    _standardPageComponent.NavigateToPage(value);
+                    _viewPageComponent.NavigateToPage(value);
                 }
             }
         }
@@ -270,6 +271,39 @@
         /// </summary>
         public ObservableCollection<IPDFFindPage> FindResult { get; private set; }
 
+        /// <summary>
+        /// Gets the value indicating whether view with pages in one column is active.
+        /// </summary>
+        public bool IsViewOneColumnActive
+        {
+            get
+            {
+                return _pageLayoutType == PageLayoutType.Standard;
+            }
+        }
+
+        /// <summary>
+        /// Gets the value indicating whether view with pages in one column is active.
+        /// </summary>
+        public bool IsViewTwoColumnsActive
+        {
+            get
+            {
+                return _pageLayoutType == PageLayoutType.TwoColumns;
+            }
+        }
+
+        /// <summary>
+        /// Gets the value indicating whether view with pages in one column is active.
+        /// </summary>
+        public bool IsViewTwoColumnsSpecialActive
+        {
+            get
+            {
+                return _pageLayoutType == PageLayoutType.TwoColumnsSpecial;
+            }
+        }
+
         #endregion Public properties
 
         #region Public methods
@@ -287,11 +321,11 @@
 
             if (bookmark.Action != null)
             {
-                _standardPageComponent.PerformAction(bookmark.Action);
+                _viewPageComponent.PerformAction(bookmark.Action);
             }
             else if (bookmark.Destination != null)
             {
-                _standardPageComponent.NavigateToDestination(bookmark.Destination);
+                _viewPageComponent.NavigateToDestination(bookmark.Destination);
             }
         }
 
@@ -345,6 +379,11 @@
             GoToNextPageCommand = new ViewModelCommand(ExecuteGoToNextPageCommand, CanExecuteGoToNextPageCommand);
             GoToLastPageCommand = new ViewModelCommand(ExecuteGoToLastPageCommand, CanExecuteGoToLastPageCommand);
 
+            // Layout
+            ViewOneColumnCommand = new ViewModelCommand(ExecuteViewOneColumnCommand, CanExecuteViewOneColumnCommand);
+            ViewTwoColumnsCommand = new ViewModelCommand(ExecuteViewTwoColumnsCommand, CanExecuteViewTwoColumnsCommand);
+            ViewTwoColumnsSpecialCommand = new ViewModelCommand(ExecuteViewTwoColumnsSpecialCommand, CanExecuteViewTwoColumnsSpecialCommand);
+
             // Find commands
             FindCommand = new ViewModelCommand(ExecuteFindCommand, CanExecuteFindCommand);
             FindClearResultCommand = new ViewModelCommand(ExecuteFindClearResultCommand, CanExecuteFindClearResultCommand);
@@ -365,10 +404,10 @@
             };
 
             // We will use only two page components. One for thumbnails and one for standard view.
-            _standardPageComponent = _pdfComponent.LayoutComponent.CreatePageComponent(_standardPageComponentName, PageLayoutType.Standard);
+            _viewPageComponent = _pdfComponent.LayoutComponent.CreatePageComponent(_standardPageComponentName, _pageLayoutType);
             _thumbnailPageComponent = _pdfComponent.LayoutComponent.CreatePageComponent(_thumbnailPageComponentName, PageLayoutType.Thumbnail);
 
-            _standardPageComponent.ZoomComponent.PropertyChanged += (s, e) =>
+            _viewPageComponent.ZoomComponent.PropertyChanged += (s, e) =>
             {
                 if (string.Equals(nameof(IPDFZoomComponent.CurrentZoomFactor), e.PropertyName, StringComparison.OrdinalIgnoreCase)
                     || string.IsNullOrEmpty(e.PropertyName))
@@ -377,16 +416,16 @@
                 }
             };
 
-            _standardPageComponent.PropertyChanged += (s, e) =>
+            _viewPageComponent.PropertyChanged += (s, e) =>
             {
                 if (string.Equals(nameof(IPDFPageComponent.CurrentPageIndex), e.PropertyName, StringComparison.OrdinalIgnoreCase))
                 {
-                    _currentPageIndex = _standardPageComponent.CurrentPageIndex;
+                    _currentPageIndex = _viewPageComponent.CurrentPageIndex;
                     InvokePropertyChangedEvent(nameof(CurrentPageIndex));
                 }
                 else if (string.Equals(nameof(IPDFPageComponent.CurrentPageLabel), e.PropertyName, StringComparison.OrdinalIgnoreCase))
                 {
-                    _currentPageLabel = _standardPageComponent.CurrentPageLabel;
+                    _currentPageLabel = _viewPageComponent.CurrentPageLabel;
                     InvokePropertyChangedEvent(nameof(CurrentPageLabel));
                 }
             };
@@ -395,11 +434,11 @@
             {
                 if (string.Equals(nameof(IPDFPageComponent.CurrentPageIndex), e.PropertyName, StringComparison.OrdinalIgnoreCase))
                 {
-                    _standardPageComponent.NavigateToPage(_thumbnailPageComponent.CurrentPageIndex);
+                    _viewPageComponent.NavigateToPage(_thumbnailPageComponent.CurrentPageIndex);
                 }
             };
 
-            _standardPageComponent.PerformOutsideAction += (s, e) =>
+            _viewPageComponent.PerformOutsideAction += (s, e) =>
             {
                 if (e == null || e.Action == null)
                 {
@@ -467,11 +506,11 @@
 
                 if (value is IPDFFindPage page)
                 {
-                    _standardPageComponent.NavigateToFindPlace(page);
+                    _viewPageComponent.NavigateToFindPlace(page);
                 }
                 else if (value is IPDFFindPosition position)
                 {
-                    _standardPageComponent.NavigateToFindPlace(position);
+                    _viewPageComponent.NavigateToFindPlace(position);
                 }
             }
         }

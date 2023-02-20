@@ -122,13 +122,12 @@
         /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this property.</param>
         private static void HandlePDFPageMarginPropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            var view = o as PDFView;
-            if (view == null)
+            if (o is not PDFView view)
             {
                 return;
             }
 
-            view.PDFPageComponent.RenderManager.Margin = new PDFSize<double>(view.PDFPageMargin.Width, view.PDFPageMargin.Height);
+            view.PDFPageComponent.PageMargin = new PDFSize<double>(view.PDFPageMargin.Width, view.PDFPageMargin.Height);
             view.InvalidateVisual();
         }
 
@@ -139,8 +138,7 @@
         /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this property.</param>
         private static void HandlePDFPageBackgroundPropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            var view = o as PDFView;
-            if (view == null)
+            if (o is not PDFView view)
             {
                 return;
             }
@@ -155,8 +153,7 @@
         /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this property.</param>
         private static void HandlePDFPageComponentPropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            var view = o as PDFView;
-            if (view == null)
+            if (o is not PDFView view)
             {
                 return;
             }
@@ -179,8 +176,7 @@
         /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this property.</param>
         private static void HandlePDFZoomComponentPropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            var view = o as PDFView;
-            if (view == null)
+            if (o is not PDFView view)
             {
                 return;
             }
@@ -215,7 +211,7 @@
             component.NavigatedToPage += HandlePDFPageComponentNavigatedToPageEvent;
             component.TextSelectionsRemoved += HandlePDFPageComponentTextSelectionsRemovedEvent;
 
-            component.RenderManager.Margin = new PDFSize<double>(PDFPageMargin.Width, PDFPageMargin.Height);
+            component.PageMargin = new PDFSize<double>(PDFPageMargin.Width, PDFPageMargin.Height);
 
             ScrollOwner?.InvalidateScrollInfo();
         }
