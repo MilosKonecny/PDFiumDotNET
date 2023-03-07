@@ -40,14 +40,15 @@
         /// </summary>
         /// <param name="file">Pdf file to open.</param>
         /// <param name="password">Password for protected document.</param>
-        void OpenDocument(string file, string password);
+        OpenDocumentResult OpenDocument(string file, string password);
 
         /// <summary>
         /// Opens given pdf document.
         /// </summary>
         /// <param name="file">Pdf file to open.</param>
-        /// <param name="getPassword">Callback function used to get password in case the document is password protected.</param>
-        void OpenDocument(string file, Func<string> getPassword = null);
+        /// <param name="getPassword">The callback function is used when the PDF file to be opened is password-protected.
+        /// The function is called until a correct password or <c>null</c> is returned. If <c>null</c> is returned, the open is aborted.</param>
+        OpenDocumentResult OpenDocument(string file, Func<string> getPassword = null);
 
         /// <summary>
         /// Gets available document's information from opened PDF document.
