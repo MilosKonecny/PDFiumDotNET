@@ -346,6 +346,14 @@
             return message;
         }
 
+        private static void OpenDocumentResultMessage(OpenDocumentResult result)
+        {
+            // ToDo: Hard coded text
+            var caption = "Open PDF document failed!";
+            var text = "Error code: " + result.ToString();
+            MessageBox.Show(text, caption);
+        }
+
         #endregion Private methods
 
         #region Implementation of IViewModel

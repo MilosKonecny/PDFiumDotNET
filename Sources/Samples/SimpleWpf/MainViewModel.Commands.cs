@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
     using System.Windows.Controls.Primitives;
     using Microsoft.Win32;
+    using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Samples.SimpleWpf.CommonDialogs;
     using PDFiumDotNET.Samples.SimpleWpf.Dialogs;
@@ -140,7 +141,7 @@
                 return;
             }
 
-            _pdfComponent.OpenDocument(dialog.FileName, () =>
+            var result = _pdfComponent.OpenDocument(dialog.FileName, () =>
             {
                 // ToDo: Hard coded text.
                 var inputDialog = new TextInputDialog()
@@ -157,6 +158,11 @@
                 return null;
             });
             InvokePropertyChangedEvent();
+
+            if (result != OpenDocumentResult.Success)
+            {
+                OpenDocumentResultMessage(result);
+            }
         }
 
         private bool CanExecuteOpenCommand()
