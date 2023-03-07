@@ -6,16 +6,12 @@
     using PDFiumDotNET.Components.Bookmark;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Bookmark;
-    using PDFiumDotNET.Components.Contracts.Find;
     using PDFiumDotNET.Components.Contracts.Information;
     using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Observers;
-    using PDFiumDotNET.Components.Contracts.Page;
-    using PDFiumDotNET.Components.Find;
     using PDFiumDotNET.Components.Helper;
     using PDFiumDotNET.Components.Information;
     using PDFiumDotNET.Components.Layout;
-    using PDFiumDotNET.Components.Page;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
     /// <inheritdoc cref="IPDFComponent"/>
@@ -73,14 +69,18 @@
         }
 
         /// <inheritdoc/>
-        public void OpenDocument(string file, string password)
+        public OpenDocumentResult OpenDocument(string file, string password)
         {
-            OpenDocument(file, () => password);
+            // Abort in second call;
+            var callCounter = 0;
+            return OpenDocument(file, () => callCounter++ > 0 ? null : password);
         }
 
         /// <inheritdoc/>
-        public void OpenDocument(string file, Func<string> getPassword = null)
+        public OpenDocumentResult OpenDocument(string file, Func<string> getPassword = null)
         {
+            var result = OpenDocumentResult.UnknownError;
+
             FileName = Path.GetFileName(file);
             FileWithPath = file;
 
@@ -88,23 +88,43 @@
             PDFiumDocument = PDFiumBridge.FPDF_LoadDocument(file, null);
             if (!PDFiumDocument.IsValid)
             {
-                // Something went wrong. Check password...
+                // Something went wrong. Check password error ...
                 if (PDFiumBridge.FPDF_GetLastError() == FPDF_ERROR.FPDF_ERR_PASSWORD && getPassword != null)
                 {
-                    PDFiumDocument = PDFiumBridge.FPDF_LoadDocument(file, getPassword());
+                    while (!PDFiumDocument.IsValid)
+                    {
+                        var ret = getPassword();
+                        if (ret == null)
+                        {
+                            // Aborted
+                            return OpenDocumentResult.PasswordProtected;
+                        }
+
+                        PDFiumDocument = PDFiumBridge.FPDF_LoadDocument(file, ret);
+
+                        if (PDFiumDocument.IsValid || PDFiumBridge.FPDF_GetLastError() != FPDF_ERROR.FPDF_ERR_PASSWORD)
+                        {
+                            break;
+                        }
+                    }
                 }
             }
 
             IsDocumentOpened = PDFiumDocument.IsValid;
+
             InvokePropertyChangedEvent(nameof(IsDocumentOpened));
             if (IsDocumentOpened)
             {
                 ChildComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentOpened(file));
+                result = OpenDocumentResult.Success;
             }
             else
             {
                 ChildComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentOpenFailed(file));
+                result = (OpenDocumentResult)PDFiumBridge.FPDF_GetLastError();
             }
+
+            return result;
         }
 
         /// <inheritdoc/>
