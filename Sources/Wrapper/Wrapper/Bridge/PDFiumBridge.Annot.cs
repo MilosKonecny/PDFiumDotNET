@@ -769,6 +769,34 @@
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate bool FPDFAnnot_GetFormAdditionalActionJavaScript_Delegate(FPDF_FORMHANDLE hHandle, FPDF_ANNOTATION annot, int eventType, IntPtr buffer, ulong buflen);
+
+        private static FPDFAnnot_GetFormAdditionalActionJavaScript_Delegate FPDFAnnot_GetFormAdditionalActionJavaScriptStatic { get; set; }
+
+        /// <summary>
+        /// Get the JavaScript of an event of the annotation's additional actions. |buffer| is only modified if |buflen| is large enough to hold the whole
+        /// JavaScript string. If |buflen| is smaller, the total size of the JavaScript is still returned, but nothing is copied.
+        /// If there is no JavaScript for |event| in |annot|, an empty string is written to |buf| and 2 is returned,
+        /// denoting the size of the null terminator in the buffer.  On other errors, nothing is written to |buffer| and 0 is returned.
+        /// </summary>
+        /// <param name="hHandle">Handle to the form fill module, returned by FPDFDOC_InitFormFillEnvironment().</param>
+        /// <param name="annot">Handle to an interactive form annotation.</param>
+        /// <param name="eventType">Event type, one of the FPDF_ANNOT_AACTION_* values.</param>
+        /// <param name="buffer">Buffer for holding the value string, encoded in UTF-16LE.</param>
+        /// <param name="buflen">Length of the buffer in bytes.</param>
+        /// <returns>Returns the length of the string value in bytes, including the 2-byte null terminator.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDFAnnot_GetFormAdditionalActionJavaScript(FPDF_FORMHANDLE hHandle, FPDF_ANNOTATION annot, int event, FPDF_WCHAR* buffer, unsigned long buflen);.
+        /// </remarks>
+        public bool FPDFAnnot_GetFormAdditionalActionJavaScript(FPDF_FORMHANDLE hHandle, FPDF_ANNOTATION annot, int eventType, IntPtr buffer, ulong buflen)
+        {
+            lock (_syncObject)
+            {
+                return FPDFAnnot_GetFormAdditionalActionJavaScriptStatic(hHandle, annot, eventType, buffer, buflen);
+            }
+        }
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_HasKey_Delegate(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key);
 
         private static FPDFAnnot_HasKey_Delegate FPDFAnnot_HasKeyStatic { get; set; }
@@ -1090,6 +1118,33 @@
             lock (_syncObject)
             {
                 return FPDFAnnot_GetFormFieldNameStatic(handle, annot, buffer, buflen);
+            }
+        }
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate ulong FPDFAnnot_GetFormFieldAlternateName_Delegate(FPDF_FORMHANDLE hHandle, FPDF_ANNOTATION annot, IntPtr buffer, ulong buflen);
+
+        private static FPDFAnnot_GetFormFieldAlternateName_Delegate FPDFAnnot_GetFormFieldAlternateNameStatic { get; set; }
+
+        /// <summary>
+        /// Gets the alternate name of |annot|, which is an interactive form annotation.
+        /// |buffer| is only modified if |buflen| is longer than the length of contents.
+        /// In case of error, nothing will be added to |buffer| and the return value will be 0.
+        /// Note that return value of empty string is 2 for "\0\0".
+        /// </summary>
+        /// <param name="handle">Handle to the form fill module, returned by FPDFDOC_InitFormFillEnvironment().</param>
+        /// <param name="annot">Handle to an interactive form annotation.</param>
+        /// <param name="buffer">Buffer for holding the alternate name string, encoded in UTF-16LE.</param>
+        /// <param name="buflen">Length of the buffer in bytes.</param>
+        /// <returns>Returns the length of the string value in bytes.</returns>
+        /// <remarks>
+        /// PDF_EXPORT unsigned long FPDF_CALLCONV FPDFAnnot_GetFormFieldAlternateName(FPDF_FORMHANDLE hHandle, FPDF_ANNOTATION annot, FPDF_WCHAR* buffer, unsigned long buflen);.
+        /// </remarks>
+        public ulong FPDFAnnot_GetFormFieldAlternateName(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot, IntPtr buffer, ulong buflen)
+        {
+            lock (_syncObject)
+            {
+                return FPDFAnnot_GetFormFieldAlternateNameStatic(handle, annot, buffer, buflen);
             }
         }
 
@@ -1514,6 +1569,7 @@
         private static void LoadDllAnnotPart2()
         {
             FPDFAnnot_GetBorderStatic = GetPDFiumFunction<FPDFAnnot_GetBorder_Delegate>(nameof(FPDFAnnot_GetBorder));
+            FPDFAnnot_GetFormAdditionalActionJavaScriptStatic = GetPDFiumFunction<FPDFAnnot_GetFormAdditionalActionJavaScript_Delegate>(nameof(FPDFAnnot_GetFormAdditionalActionJavaScript));
             FPDFAnnot_HasKeyStatic = GetPDFiumFunction<FPDFAnnot_HasKey_Delegate>(nameof(FPDFAnnot_HasKey));
             FPDFAnnot_GetValueTypeStatic = GetPDFiumFunction<FPDFAnnot_GetValueType_Delegate>(nameof(FPDFAnnot_GetValueType));
             FPDFAnnot_SetStringValueStatic = GetPDFiumFunction<FPDFAnnot_SetStringValue_Delegate>(nameof(FPDFAnnot_SetStringValue));
@@ -1527,6 +1583,7 @@
             FPDFAnnot_GetFormFieldFlagsStatic = GetPDFiumFunction<FPDFAnnot_GetFormFieldFlags_Delegate>(nameof(FPDFAnnot_GetFormFieldFlags));
             FPDFAnnot_GetFormFieldAtPointStatic = GetPDFiumFunction<FPDFAnnot_GetFormFieldAtPoint_Delegate>(nameof(FPDFAnnot_GetFormFieldAtPoint));
             FPDFAnnot_GetFormFieldNameStatic = GetPDFiumFunction<FPDFAnnot_GetFormFieldName_Delegate>(nameof(FPDFAnnot_GetFormFieldName));
+            FPDFAnnot_GetFormFieldAlternateNameStatic = GetPDFiumFunction<FPDFAnnot_GetFormFieldAlternateName_Delegate>(nameof(FPDFAnnot_GetFormFieldAlternateName));
             FPDFAnnot_GetFormFieldTypeStatic = GetPDFiumFunction<FPDFAnnot_GetFormFieldType_Delegate>(nameof(FPDFAnnot_GetFormFieldType));
             FPDFAnnot_GetFormFieldValueStatic = GetPDFiumFunction<FPDFAnnot_GetFormFieldValue_Delegate>(nameof(FPDFAnnot_GetFormFieldValue));
             FPDFAnnot_GetOptionCountStatic = GetPDFiumFunction<FPDFAnnot_GetOptionCount_Delegate>(nameof(FPDFAnnot_GetOptionCount));

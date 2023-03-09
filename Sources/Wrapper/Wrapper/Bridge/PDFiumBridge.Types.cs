@@ -715,6 +715,36 @@
         }
 
         /// <summary>
+        /// Additional actions type of form field.
+        /// </summary>
+        internal enum FPDF_ANNOT_AACTION
+        {
+            /// <summary>
+            /// K, on key stroke, JavaScript action.
+            /// FPDF_ANNOT_AACTION_KEY_STROKE
+            /// </summary>
+            KEY_STROKE = 12,
+
+            /// <summary>
+            /// F, on format, JavaScript action.
+            /// FPDF_ANNOT_AACTION_FORMAT
+            /// </summary>
+            FORMAT = 13,
+
+            /// <summary>
+            /// V, on validate, JavaScript action.
+            /// FPDF_ANNOT_AACTION_VALIDATE
+            /// </summary>
+            VALIDATE = 14,
+
+            /// <summary>
+            /// C, on calculate, JavaScript action.
+            /// FPDF_ANNOT_AACTION_CALCULATE
+            /// </summary>
+            CALCULATE = 15,
+        }
+
+        /// <summary>
         /// Annotation color types.
         /// </summary>
         internal enum FPDFANNOT_COLORTYPES
