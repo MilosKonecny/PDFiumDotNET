@@ -57,6 +57,9 @@
 
             // Load the functions declared in annot header - fpdf_annot.h.
             LoadDllAnnotPart();
+
+            // Load the functions declared in annot header - fpdf_searchex.h.
+            LoadDllSearchExPart();
         }
 
         /// <summary>

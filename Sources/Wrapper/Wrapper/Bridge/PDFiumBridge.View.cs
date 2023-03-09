@@ -809,14 +809,18 @@
         /// <param name="height">The number of pixels in height for the bitmap. Must be greater than 0.</param>
         /// <param name="format">A number indicating for bitmap format, as defined above.</param>
         /// <param name="first_scan">A pointer to the first byte of the first line if using an external buffer.
-        /// If this parameter is NULL, then the a new buffer will be created.</param>
-        /// <param name="stride">Number of bytes for each scan line, for external buffer only.</param>
+        /// If this parameter is NULL, then a new buffer will be created.</param>
+        /// <param name="stride">Number of bytes for each scan line. The value must be 0 or greater.
+        /// When the value is 0, FPDFBitmap_CreateEx() will automatically calculate the appropriate value using |width| and |format|.
+        /// When using an external buffer, it is recommended for the caller to pass in the value.
+        /// When not using an external buffer, it is recommended for the caller to pass in 0.</param>
         /// <returns>The bitmap handle, or NULL if parameter error or out of memory.</returns>
         /// <remarks>
         /// Similar to FPDFBitmap_Create function, but allows for more formats and an external buffer is supported.
         /// The bitmap created by this function can be used in any place that a FPDF_BITMAP handle is required.
-        /// If an external buffer is used, then the application should destroy the buffer by itself.
-        /// FPDFBitmap_Destroy function will not destroy the buffer.
+        /// If an external buffer is used, then the caller should destroy the buffer.
+        /// FPDFBitmap_Destroy() will not destroy the buffer.
+        /// It is recommended to use FPDFBitmap_GetStride() to get the stride value.
         /// FPDF_EXPORT FPDF_BITMAP FPDF_CALLCONV FPDFBitmap_CreateEx(int width, int height, int format, void* first_scan, int stride);.
         /// </remarks>
         public FPDF_BITMAP FPDFBitmap_CreateEx(int width, int height, FPDFBitmapFormat format, IntPtr first_scan, int stride)
