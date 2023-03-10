@@ -1,8 +1,6 @@
 ﻿namespace PDFiumDotNET.Components.Find
 {
     using System;
-    using System.ComponentModel;
-    using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using PDFiumDotNET.Components.Contracts.Find;
     using PDFiumDotNET.Components.Page;
@@ -98,12 +96,13 @@
                         }
                     }
 
-                    var contextLength = 20;
-                    var foundPosition = PDFComponent.PDFiumBridge.FPDFText_GetSchResultIndex(findHandle);
-                    var foundCount = PDFComponent.PDFiumBridge.FPDFText_GetSchCount(findHandle);
+                    var contextLengthOneHalf = 20;
+                    var foundCharIndex = PDFComponent.PDFiumBridge.FPDFText_GetSchResultIndex(findHandle);
+                    var foundTextIndex = PDFComponent.PDFiumBridge.FPDFText_GetTextIndexFromCharIndex(textPageHandle, foundCharIndex);
+                    var foundTextCount = PDFComponent.PDFiumBridge.FPDFText_GetSchCount(findHandle);
 
-                    int startPosition = Math.Max(foundPosition - contextLength, 0);
-                    int endPosition = Math.Min(foundPosition + foundCount + contextLength, charsOnPage);
+                    int startPosition = Math.Max(foundTextIndex - contextLengthOneHalf, 0);
+                    int endPosition = Math.Min(foundTextIndex + foundTextCount + contextLengthOneHalf, charsOnPage);
                     var contextGlobal = Marshal.AllocHGlobal((2 * (endPosition - startPosition)) + 2);
                     var writtenCount = PDFComponent.PDFiumBridge.FPDFText_GetText(textPageHandle, startPosition, endPosition - startPosition, contextGlobal);
                     var context = text;
@@ -117,8 +116,8 @@
 
                     var position = new PDFFindPosition(findPage)
                     {
-                        Position = foundPosition,
-                        Length = foundCount,
+                        Position = foundTextIndex,
+                        Length = foundTextCount,
                         Context = context,
                     };
                     if (addPosition != null && !addPosition(findPage, position))
