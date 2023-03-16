@@ -4,6 +4,7 @@
         <OutputType>Exe</OutputType>
         <TargetFrameworks>netcoreapp3.1;net48;net5.0-windows;net6.0-windows;net7.0-windows</TargetFrameworks>
         <PlatformTarget>AnyCPU</PlatformTarget>
+        <UseWPF>true</UseWPF>
     </PropertyGroup>
 
     <ItemGroup>
