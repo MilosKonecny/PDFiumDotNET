@@ -86,7 +86,8 @@
         {
             lock (_syncObject)
             {
-                UsageCount--;
+                // ToDo: Workaround for issue #105
+                // UsageCount--;
                 if (UsageCount == 0)
                 {
                     FPDF_DestroyLibraryStatic();
