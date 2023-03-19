@@ -70,6 +70,9 @@
         private static void OperationGroup1(string description)
         {
             var pdfComponent = PDFFactory.PDFComponent;
+            var pageComponent = pdfComponent.LayoutComponent.CreatePageComponent("standard", PageLayoutType.Standard);
+            var zoomComponent = pageComponent.ZoomComponent;
+            var bookmarkComponent = pdfComponent.BookmarkComponent;
             var result = pdfComponent.OpenDocument(_pdfFile);
             if (result != OpenDocumentResult.Success)
             {
@@ -99,7 +102,6 @@
         private static void OperationGroup2(string description)
         {
             var pdfComponent = PDFFactory.PDFComponent;
-            var pageComponent = pdfComponent.LayoutComponent.CreatePageComponent("standard", PageLayoutType.Standard);
             var result = pdfComponent.OpenDocument(_pdfFile);
             if (result != OpenDocumentResult.Success)
             {
@@ -107,6 +109,7 @@
                 return;
             }
 
+            var pageComponent = pdfComponent.LayoutComponent.CreatePageComponent("standard", PageLayoutType.Standard);
             var zoomComponent = pageComponent.ZoomComponent;
             for (var index = 0; index < pageComponent.PageCount; index++)
             {
