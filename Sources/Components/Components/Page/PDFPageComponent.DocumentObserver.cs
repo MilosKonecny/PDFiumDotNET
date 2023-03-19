@@ -39,6 +39,21 @@
             base.ProcessDocumentClosing();
         }
 
+        /// <inheritdoc/>
+        protected override void InitializeComponentAfterAttachedTo()
+        {
+            if (MainComponent.IsDocumentOpened)
+            {
+                ScanDocument();
+            }
+            else
+            {
+                SetDefaultValues();
+            }
+
+            base.InitializeComponentAfterAttachedTo();
+        }
+
         #endregion Protected methods - overrides
     }
 }

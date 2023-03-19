@@ -1,7 +1,6 @@
 ﻿namespace PDFiumDotNET.Components.Bookmark
 {
     using PDFiumDotNET.Components.Contracts.Bookmark;
-    using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
     /// <inheritdoc cref="IPDFBookmarkComponent"/>
     internal sealed partial class PDFBookmarkComponent
@@ -11,41 +10,37 @@
         /// <inheritdoc/>
         protected override void ProcessDocumentOpening(string file)
         {
-            Bookmarks.Clear();
-            InvokePropertyChangedEvent(nameof(Bookmarks));
-
+            SetDefaultValues();
             base.ProcessDocumentOpening(file);
         }
 
         /// <inheritdoc/>
         protected override void ProcessDocumentOpened(string file)
         {
-            if (PDFComponent.PDFiumBridge == null || !PDFComponent.PDFiumDocument.IsValid)
-            {
-                return;
-            }
-
-            var bookmarkHandle = PDFComponent.PDFiumBridge.FPDFBookmark_GetFirstChild(PDFComponent.PDFiumDocument, FPDF_BOOKMARK.InvalidHandle);
-            while (bookmarkHandle.IsValid)
-            {
-                var newBookmark = new PDFBookmark(PDFComponent, bookmarkHandle);
-                newBookmark.Build();
-                Bookmarks.Add(newBookmark);
-                bookmarkHandle = PDFComponent.PDFiumBridge.FPDFBookmark_GetNextSibling(PDFComponent.PDFiumDocument, bookmarkHandle);
-            }
-
-            InvokePropertyChangedEvent(nameof(Bookmarks));
-
+            ScanDocument();
             base.ProcessDocumentOpened(file);
         }
 
         /// <inheritdoc/>
         protected override void ProcessDocumentClosing()
         {
-            Bookmarks.Clear();
-            InvokePropertyChangedEvent(nameof(Bookmarks));
-
+            SetDefaultValues();
             base.ProcessDocumentClosing();
+        }
+
+        /// <inheritdoc/>
+        protected override void InitializeComponentAfterAttachedTo()
+        {
+            if (MainComponent.IsDocumentOpened)
+            {
+                ScanDocument();
+            }
+            else
+            {
+                SetDefaultValues();
+            }
+
+            base.InitializeComponentAfterAttachedTo();
         }
 
         #endregion Protected methods - overrides

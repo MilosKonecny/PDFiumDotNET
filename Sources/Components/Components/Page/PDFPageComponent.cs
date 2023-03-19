@@ -172,25 +172,28 @@
 
         private void ScanDocument()
         {
-            if (PDFComponent.PDFiumBridge != null && PDFComponent.PDFiumDocument.IsValid)
+            if (PDFComponent.PDFiumBridge == null || !PDFComponent.PDFiumDocument.IsValid)
             {
-                PageCount = PDFComponent.PDFiumBridge.FPDF_GetPageCount(PDFComponent.PDFiumDocument);
-                if (PageCount > 0)
-                {
-                    for (var index = 0; index < PageCount; index++)
-                    {
-                        var newPage = new PDFPage(this, index);
-                        newPage.Build();
-                        Pages.Add(newPage);
-                    }
+                SetDefaultValues();
+                return;
+            }
 
-                    SetCurrentInformation(Pages[0]);
+            PageCount = PDFComponent.PDFiumBridge.FPDF_GetPageCount(PDFComponent.PDFiumDocument);
+            if (PageCount > 0)
+            {
+                for (var index = 0; index < PageCount; index++)
+                {
+                    var newPage = new PDFPage(this, index);
+                    newPage.Build();
+                    Pages.Add(newPage);
                 }
 
-                _renderManager.CalculateDocumentArea();
-
-                InvokePropertyChangedEvent(null);
+                SetCurrentInformation(Pages[0]);
             }
+
+            _renderManager.CalculateDocumentArea();
+
+            InvokePropertyChangedEvent(null);
         }
 
         /// <summary>
