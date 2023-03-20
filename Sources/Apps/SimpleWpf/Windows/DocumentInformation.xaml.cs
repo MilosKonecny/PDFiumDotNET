@@ -1,4 +1,4 @@
-﻿namespace PDFiumDotNET.Samples.SimpleWpf.Windows
+﻿namespace PDFiumDotNET.Apps.SimpleWpf.Windows
 {
     using System;
     using System.Windows;

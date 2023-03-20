@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: AssemblyTitle("PDFiumDotNET.App.ComponentsTest")]
+[assembly: AssemblyTitle("PDFiumDotNET.Apps.ComponentsTest")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCulture("")]

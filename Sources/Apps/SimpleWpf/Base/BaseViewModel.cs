@@ -1,4 +1,4 @@
-﻿namespace PDFiumDotNET.Samples.SimpleWpf.Base
+﻿namespace PDFiumDotNET.Apps.SimpleWpf.Base
 {
     using System.ComponentModel;
     using System.Runtime.CompilerServices;

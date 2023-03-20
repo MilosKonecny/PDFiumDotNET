@@ -1,4 +1,4 @@
-﻿namespace PDFiumDotNET.Samples.SimpleWpf
+﻿namespace PDFiumDotNET.Apps.SimpleWpf
 {
     using System;
     using System.Collections.ObjectModel;
@@ -8,6 +8,9 @@
     using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Controls.Primitives;
+    using PDFiumDotNET.Apps.SimpleWpf.Base;
+    using PDFiumDotNET.Apps.SimpleWpf.Contracts;
+    using PDFiumDotNET.Apps.SimpleWpf.Helper;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Bookmark;
     using PDFiumDotNET.Components.Contracts.Find;
@@ -15,9 +18,6 @@
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Zoom;
     using PDFiumDotNET.Components.Factory;
-    using PDFiumDotNET.Samples.SimpleWpf.Base;
-    using PDFiumDotNET.Samples.SimpleWpf.Contracts;
-    using PDFiumDotNET.Samples.SimpleWpf.Helper;
 
     /// <summary>
     /// View model class for <see cref="MainView"/>.

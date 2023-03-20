@@ -1,4 +1,4 @@
-﻿namespace PDFiumDotNET.Samples.SimpleWpf.Contracts
+﻿namespace PDFiumDotNET.Apps.SimpleWpf.Contracts
 {
     using System.Windows;
 

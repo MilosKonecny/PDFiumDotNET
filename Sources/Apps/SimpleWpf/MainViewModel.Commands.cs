@@ -1,4 +1,4 @@
-﻿namespace PDFiumDotNET.Samples.SimpleWpf
+﻿namespace PDFiumDotNET.Apps.SimpleWpf
 {
     using System;
     using System.Linq;
@@ -6,12 +6,12 @@
     using System.Threading.Tasks;
     using System.Windows.Controls.Primitives;
     using Microsoft.Win32;
+    using PDFiumDotNET.Apps.SimpleWpf.CommonDialogs;
+    using PDFiumDotNET.Apps.SimpleWpf.Dialogs;
+    using PDFiumDotNET.Apps.SimpleWpf.Helper;
+    using PDFiumDotNET.Apps.SimpleWpf.Windows;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Layout;
-    using PDFiumDotNET.Samples.SimpleWpf.CommonDialogs;
-    using PDFiumDotNET.Samples.SimpleWpf.Dialogs;
-    using PDFiumDotNET.Samples.SimpleWpf.Helper;
-    using PDFiumDotNET.Samples.SimpleWpf.Windows;
 
     /// <summary>
     /// View model class vor <see cref="MainView"/>.
