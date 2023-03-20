@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyTitle("PDFiumDotNET.Samples.SimpleWpf")]
+[assembly: AssemblyTitle("PDFiumDotNET.Apps.SimpleWpf")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCulture("")]

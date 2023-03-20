@@ -1,4 +1,4 @@
-namespace PDFiumDotNET.Samples.SimpleWinForms
+namespace PDFiumDotNET.Apps.SimpleWinForms
 {
     using System;
     using System.Windows.Forms;

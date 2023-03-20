@@ -1,9 +1,8 @@
-﻿namespace PDFiumDotNET.Samples.SimpleWpf
+﻿namespace PDFiumDotNET.Apps.SimpleWpf
 {
     using System.Windows;
-    using PDFiumDotNET.Components.Contracts.Basic;
+    using PDFiumDotNET.Apps.SimpleWpf.Contracts;
     using PDFiumDotNET.Components.Contracts.Bookmark;
-    using PDFiumDotNET.Samples.SimpleWpf.Contracts;
 
     /// <summary>
     /// The class implements simple grid window.

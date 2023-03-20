@@ -1,4 +1,4 @@
-﻿namespace PDFiumDotNET.Samples.SimpleWpf.Contracts
+﻿namespace PDFiumDotNET.Apps.SimpleWpf.Contracts
 {
     /// <summary>
     /// Interface defines base behaviour of view model.

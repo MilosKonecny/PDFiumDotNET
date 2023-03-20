@@ -1,4 +1,4 @@
-﻿namespace PDFiumDotNET.App.ComponentsTest.Exceptions
+﻿namespace PDFiumDotNET.Apps.ComponentsTest.Exceptions
 {
     using System;
     using System.Runtime.Serialization;
