@@ -1,4 +1,4 @@
-﻿namespace PDFiumDotNET.Apps.SimpleWpf.Converters
+﻿namespace PDFiumDotNET.Apps.PDFViewWPF.Converters
 {
     using System;
     using System.Globalization;

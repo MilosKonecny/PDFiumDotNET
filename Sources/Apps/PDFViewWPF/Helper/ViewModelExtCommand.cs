@@ -1,4 +1,4 @@
-﻿namespace PDFiumDotNET.Apps.SimpleWpf.Helper
+﻿namespace PDFiumDotNET.Apps.PDFViewWPF.Helper
 {
     using System;
     using System.Windows.Input;

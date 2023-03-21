@@ -1,7 +1,7 @@
-﻿namespace PDFiumDotNET.Apps.SimpleWpf
+﻿namespace PDFiumDotNET.Apps.PDFViewWPF
 {
     using System.Windows;
-    using PDFiumDotNET.Apps.SimpleWpf.Contracts;
+    using PDFiumDotNET.Apps.PDFViewWPF.Contracts;
     using PDFiumDotNET.Components.Contracts.Bookmark;
 
     /// <summary>

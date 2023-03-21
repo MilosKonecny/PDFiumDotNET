@@ -1,4 +1,4 @@
-﻿namespace PDFiumDotNET.Apps.SimpleWpf.Behaviors
+﻿namespace PDFiumDotNET.Apps.PDFViewWPF.Behaviors
 {
     using System;
     using System.Windows.Controls;

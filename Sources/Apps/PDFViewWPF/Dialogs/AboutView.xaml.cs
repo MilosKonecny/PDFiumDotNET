@@ -1,4 +1,4 @@
-﻿namespace PDFiumDotNET.Apps.SimpleWpf.Dialogs
+﻿namespace PDFiumDotNET.Apps.PDFViewWPF.Dialogs
 {
     using System.Diagnostics;
     using System.Windows;
