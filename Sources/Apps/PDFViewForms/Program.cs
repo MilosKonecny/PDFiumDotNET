@@ -1,10 +1,10 @@
-namespace PDFiumDotNET.Apps.SimpleWinForms
+namespace PDFiumDotNET.Apps.PDFViewForms
 {
     using System;
     using System.Windows.Forms;
 
     /// <summary>
-    /// Starter class of the sample application.
+    /// Starter class of the 'PDFViewForms' example application.
     /// </summary>
     internal static class Program
     {

@@ -1,11 +1,11 @@
-﻿namespace PDFiumDotNET.Apps.SimpleWpf.Dialogs
+﻿namespace PDFiumDotNET.Apps.PDFViewWPF.Dialogs
 {
     using System;
     using System.ComponentModel;
     using System.IO;
     using System.Reflection;
     using System.Windows;
-    using PDFiumDotNET.Apps.SimpleWpf.Base;
+    using PDFiumDotNET.Apps.PDFViewWPF.Base;
 
     /// <summary>
     /// View model class implements <see cref="INotifyPropertyChanged"/>.
@@ -47,7 +47,7 @@
         {
             get
             {
-                string resourceName = "PDFiumDotNET.Apps.SimpleWpf.Resources.Licenses.MyOwn.LICENSE";
+                string resourceName = "PDFiumDotNET.Apps.PDFViewWPF.Resources.Licenses.MyOwn.LICENSE";
                 if (IsDesignTime)
                 {
                     return resourceName;
@@ -64,7 +64,7 @@
         {
             get
             {
-                string resourceName = "PDFiumDotNET.Apps.SimpleWpf.Resources.Licenses.PDFium.LICENSE";
+                string resourceName = "PDFiumDotNET.Apps.PDFViewWPF.Resources.Licenses.PDFium.LICENSE";
                 if (IsDesignTime)
                 {
                     return resourceName;

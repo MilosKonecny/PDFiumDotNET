@@ -1,9 +1,9 @@
-namespace PDFiumDotNET.Apps.SimpleWinForms
+namespace PDFiumDotNET.Apps.PDFViewForms
 {
     using System.Windows.Forms;
 
     /// <summary>
-    /// Class implements main form of sample application.
+    /// Class implements main form of the 'PDFViewForms' example application.
     /// </summary>
     public partial class MainForm : Form
     {

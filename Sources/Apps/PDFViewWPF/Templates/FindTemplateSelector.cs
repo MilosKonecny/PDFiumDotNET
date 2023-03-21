@@ -1,4 +1,4 @@
-﻿namespace PDFiumDotNET.Apps.SimpleWpf.Templates
+﻿namespace PDFiumDotNET.Apps.PDFViewWPF.Templates
 {
     using System.Windows;
     using System.Windows.Controls;

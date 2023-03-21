@@ -1,4 +1,4 @@
-﻿namespace PDFiumDotNET.Apps.SimpleWpf
+﻿namespace PDFiumDotNET.Apps.PDFViewWPF
 {
     using System;
     using System.Linq;
@@ -6,10 +6,10 @@
     using System.Threading.Tasks;
     using System.Windows.Controls.Primitives;
     using Microsoft.Win32;
-    using PDFiumDotNET.Apps.SimpleWpf.CommonDialogs;
-    using PDFiumDotNET.Apps.SimpleWpf.Dialogs;
-    using PDFiumDotNET.Apps.SimpleWpf.Helper;
-    using PDFiumDotNET.Apps.SimpleWpf.Windows;
+    using PDFiumDotNET.Apps.PDFViewWPF.CommonDialogs;
+    using PDFiumDotNET.Apps.PDFViewWPF.Dialogs;
+    using PDFiumDotNET.Apps.PDFViewWPF.Helper;
+    using PDFiumDotNET.Apps.PDFViewWPF.Windows;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Layout;
 

@@ -1,4 +1,4 @@
-﻿namespace PDFiumDotNET.Apps.SimpleWpf
+﻿namespace PDFiumDotNET.Apps.PDFViewWPF
 {
     using System;
     using System.Collections.ObjectModel;
@@ -8,9 +8,9 @@
     using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Controls.Primitives;
-    using PDFiumDotNET.Apps.SimpleWpf.Base;
-    using PDFiumDotNET.Apps.SimpleWpf.Contracts;
-    using PDFiumDotNET.Apps.SimpleWpf.Helper;
+    using PDFiumDotNET.Apps.PDFViewWPF.Base;
+    using PDFiumDotNET.Apps.PDFViewWPF.Contracts;
+    using PDFiumDotNET.Apps.PDFViewWPF.Helper;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Bookmark;
     using PDFiumDotNET.Components.Contracts.Find;
@@ -60,13 +60,19 @@
         #region Public properties
 
         /// <summary>
-        /// Gets the name of used framework.
+        /// Gets the information for application's title.
         /// </summary>
-        public static string UsedFramework
+        public static string TitleInformation
         {
             get
             {
-                return RuntimeInformation.FrameworkDescription + " / " + RuntimeInformation.ProcessArchitecture;
+#if DEBUG
+                return RuntimeInformation.FrameworkDescription + " / " + RuntimeInformation.ProcessArchitecture + " / DEBUG";
+#elif RELEASE
+                return RuntimeInformation.FrameworkDescription + " / " + RuntimeInformation.ProcessArchitecture + " / RELEASE";
+#else
+                return RuntimeInformation.FrameworkDescription + " / " + RuntimeInformation.ProcessArchitecture + " / ???";
+#endif
             }
         }
 
@@ -304,7 +310,7 @@
             }
         }
 
-        #endregion Public properties
+#endregion Public properties
 
         #region Public methods
 

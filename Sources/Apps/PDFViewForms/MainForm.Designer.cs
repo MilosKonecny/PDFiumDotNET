@@ -1,4 +1,4 @@
-﻿namespace PDFiumDotNET.Apps.SimpleWinForms
+﻿namespace PDFiumDotNET.Apps.PDFViewForms
 {
     partial class MainForm
     {
@@ -36,7 +36,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Name = "MainForm";
-            this.Text = "PDFiumDotNET sample application";
+            this.Text = "PDFViewForms example application";
             this.ResumeLayout(false);
 
         }

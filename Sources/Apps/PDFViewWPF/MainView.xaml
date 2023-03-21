@@ -1,19 +1,19 @@
-﻿<Window x:Class="PDFiumDotNET.Apps.SimpleWpf.MainView"
+﻿<Window x:Class="PDFiumDotNET.Apps.PDFViewWPF.MainView"
         x:Name="MainViewName"
         x:Uid="MainViewUid"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:PDFiumDotNET.Apps.SimpleWpf"
+        xmlns:local="clr-namespace:PDFiumDotNET.Apps.PDFViewWPF"
         xmlns:wpfControl="clr-namespace:PDFiumDotNET.WpfControls;assembly=PDFiumDotNET.WpfControls"
-        xmlns:behaviors="clr-namespace:PDFiumDotNET.Apps.SimpleWpf.Behaviors"
+        xmlns:behaviors="clr-namespace:PDFiumDotNET.Apps.PDFViewWPF.Behaviors"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:templates="clr-namespace:PDFiumDotNET.Apps.SimpleWpf.Templates"
+        xmlns:templates="clr-namespace:PDFiumDotNET.Apps.PDFViewWPF.Templates"
         mc:Ignorable="d" 
         d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type local:MainViewModel}}"
         d:DesignHeight="300" d:DesignWidth="500"
-        Title="{Binding Path=UsedFramework, StringFormat=PDFiumDotNET sample application ({0})}">
+        Title="{Binding Path=TitleInformation, StringFormat=PDFViewWPF example application ({0})}">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
