@@ -206,7 +206,7 @@
         protected override void OnManipulationStarted(ManipulationStartedEventArgs e)
         {
             _zoomManipulationActive = false;
-            _startManipulationZoom = PDFZoomComponent.CurrentZoomFactor;
+            _startManipulationZoom = PDFPageComponent.ZoomComponent.CurrentZoomFactor;
             _startManipulationHorizontalOffset = HorizontalOffset;
             _startManipulationVerticalOffset = VerticalOffset;
 
@@ -228,7 +228,7 @@
                     _zoomManipulationActive = true;
                     var factor = (e.CumulativeManipulation.Scale.X + e.CumulativeManipulation.Scale.Y) / 2;
                     var newZoom = _startManipulationZoom * factor;
-                    PDFZoomComponent.CurrentZoomFactor = newZoom;
+                    PDFPageComponent.ZoomComponent.CurrentZoomFactor = newZoom;
                 }
             }
 
@@ -372,7 +372,7 @@
 
         private IPDFLink GetLinkOnPosition(Point point)
         {
-            // ToDo: Optimize this place. Don't iterate throught all pages in some cases.
+            // ToDo: Optimize this place. Don't iterate through all pages in some cases.
             foreach (var pageInfo in _renderedPages)
             {
                 if (point.X > pageInfo.RelativePositionInViewportArea.Left && point.X < pageInfo.RelativePositionInViewportArea.Right
@@ -384,8 +384,8 @@
                     point.Y -= pageInfo.RelativePositionInViewportArea.Top;
 
                     // Eliminate zoom factor
-                    point.X /= PDFZoomComponent.CurrentZoomFactor;
-                    point.Y /= PDFZoomComponent.CurrentZoomFactor;
+                    point.X /= PDFPageComponent.ZoomComponent.CurrentZoomFactor;
+                    point.Y /= PDFPageComponent.ZoomComponent.CurrentZoomFactor;
 
                     // Transform y axis from top-left position to the bottom-left.
                     point.Y = pageInfo.Page.Height - point.Y;

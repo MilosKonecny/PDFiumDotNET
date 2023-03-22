@@ -73,7 +73,7 @@
 
                     bitmap.Lock();
                     pageInfo.Page.RenderPageBitmap(
-                        PDFZoomComponent.CurrentZoomFactor,
+                        PDFPageComponent.ZoomComponent.CurrentZoomFactor,
                         (int)pageInfo.VisiblePart.Left,
                         (int)pageInfo.VisiblePart.Top,
                         (int)pageInfo.VisiblePart.Right,
