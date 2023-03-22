@@ -1,6 +1,9 @@
 ﻿namespace PDFiumDotNET.Components.Contracts.Zoom
 {
+    using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
+    using PDFiumDotNET.Components.Contracts.EventArguments;
 
     /// <summary>
     /// Interface defines functionality of zoom component.
@@ -43,5 +46,12 @@
         /// Decreases the zoom to the nearest value of <see cref="ZoomValues"/>.
         /// </summary>
         void DecreaseZoom();
+
+        /// <summary>
+        /// Occurs whenever the zoom is changed.
+        /// This event occurs always after <see cref="INotifyPropertyChanged.PropertyChanged"/> event.
+        /// <see cref="ZoomChangedEventArgs"/> provides previously and currently used zoom factor.
+        /// </summary>
+        event EventHandler<ZoomChangedEventArgs> ZoomChanged;
     }
 }
