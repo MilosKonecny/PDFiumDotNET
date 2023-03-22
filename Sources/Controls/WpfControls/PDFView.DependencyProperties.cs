@@ -47,12 +47,6 @@
         public static readonly DependencyProperty PDFPageComponentProperty
             = DependencyProperty.Register("PDFPageComponent", typeof(IPDFPageComponent), typeof(PDFView), new FrameworkPropertyMetadata(null, HandlePDFPageComponentPropertyChanged));
 
-        /// <summary>
-        /// Dependency property for 'PDFZoomComponent' - source of information to draw content.
-        /// </summary>
-        public static readonly DependencyProperty PDFZoomComponentProperty
-            = DependencyProperty.Register("PDFZoomComponent", typeof(IPDFZoomComponent), typeof(PDFView), new FrameworkPropertyMetadata(null, HandlePDFZoomComponentPropertyChanged));
-
         #endregion Dependency properties - register
 
         #region Dependency properties - properties
@@ -100,15 +94,6 @@
         {
             get => (IPDFPageComponent)GetValue(PDFPageComponentProperty);
             set => SetValue(PDFPageComponentProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the value of dependency property.
-        /// </summary>
-        public IPDFZoomComponent PDFZoomComponent
-        {
-            get => (IPDFZoomComponent)GetValue(PDFZoomComponentProperty);
-            set => SetValue(PDFZoomComponentProperty, value);
         }
 
         #endregion Dependency properties - properties
@@ -169,29 +154,6 @@
             }
         }
 
-        /// <summary>
-        /// Callback method is called whenever <see cref="PDFZoomComponent"/> property has changed value.
-        /// </summary>
-        /// <param name="o">The <see cref="DependencyObject"/> on which the property has changed value.</param>
-        /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this property.</param>
-        private static void HandlePDFZoomComponentPropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
-        {
-            if (o is not PDFView view)
-            {
-                return;
-            }
-
-            if (e.OldValue != null)
-            {
-                view.Unuse(e.OldValue as IPDFZoomComponent);
-            }
-
-            if (e.NewValue != null)
-            {
-                view.Use(e.NewValue as IPDFZoomComponent);
-            }
-        }
-
         #endregion Dependency properties - private callback methods
 
         #region Private methods
@@ -211,6 +173,8 @@
             component.NavigatedToPage += HandlePDFPageComponentNavigatedToPageEvent;
             component.TextSelectionsRemoved += HandlePDFPageComponentTextSelectionsRemovedEvent;
 
+            component.ZoomComponent.ZoomChanged += HandlePDFZoomComponentPropertyChangedEvent;
+
             component.PageMargin = new PDFSize<double>(PDFPageMargin.Width, PDFPageMargin.Height);
 
             ScrollOwner?.InvalidateScrollInfo();
@@ -228,28 +192,7 @@
             component.MainComponent.PropertyChanged -= HandlePDFComponentPropertyChangedEvent;
             component.NavigatedToPage -= HandlePDFPageComponentNavigatedToPageEvent;
             component.TextSelectionsRemoved -= HandlePDFPageComponentTextSelectionsRemovedEvent;
-            ScrollOwner?.InvalidateScrollInfo();
-        }
-
-        private void Use(IPDFZoomComponent component)
-        {
-            if (component == null)
-            {
-                return;
-            }
-
-            component.PropertyChanged += HandlePDFZoomComponentPropertyChangedEvent;
-            ScrollOwner?.InvalidateScrollInfo();
-        }
-
-        private void Unuse(IPDFZoomComponent component)
-        {
-            if (component == null)
-            {
-                return;
-            }
-
-            component.PropertyChanged -= HandlePDFZoomComponentPropertyChangedEvent;
+            component.ZoomComponent.ZoomChanged -= HandlePDFZoomComponentPropertyChangedEvent;
             ScrollOwner?.InvalidateScrollInfo();
         }
 
@@ -281,13 +224,13 @@
                 var page = PDFPageComponent.Pages[e.CurrentPageIndex - 1];
 
                 // Center vertically
-                var pageHeight = page.Height * PDFZoomComponent.CurrentZoomFactor;
-                var detailedPositionYFromTop = pageHeight - (e.DetailedPositionY * PDFZoomComponent.CurrentZoomFactor);
+                var pageHeight = page.Height * PDFPageComponent.ZoomComponent.CurrentZoomFactor;
+                var detailedPositionYFromTop = pageHeight - (e.DetailedPositionY * PDFPageComponent.ZoomComponent.CurrentZoomFactor);
                 verticalOffset += detailedPositionYFromTop - (ActualHeight / 2);
 
                 // Center horizontally
-                var pageWidth = page.Width * PDFZoomComponent.CurrentZoomFactor;
-                var detailedPositionXFromLeft = e.DetailedPositionX * PDFZoomComponent.CurrentZoomFactor;
+                var pageWidth = page.Width * PDFPageComponent.ZoomComponent.CurrentZoomFactor;
+                var detailedPositionXFromLeft = e.DetailedPositionX * PDFPageComponent.ZoomComponent.CurrentZoomFactor;
                 horizontalOffset = ((_documentArea.Width - pageWidth) / 2) + detailedPositionXFromLeft - (ActualWidth / 2);
             }
 
@@ -303,7 +246,7 @@
             Application.Current.Dispatcher.Invoke(() => InvalidateVisual());
         }
 
-        private void HandlePDFZoomComponentPropertyChangedEvent(object sender, PropertyChangedEventArgs e)
+        private void HandlePDFZoomComponentPropertyChangedEvent(object sender, ZoomChangedEventArgs e)
         {
             Application.Current.Dispatcher.Invoke(() => InvalidateVisual());
         }

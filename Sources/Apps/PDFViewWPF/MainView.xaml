@@ -348,8 +348,7 @@
         <!-- PDF -->
         <ScrollViewer Grid.Row="4" Grid.Column="2" CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <wpfControl:PDFView x:Name="_pdfView"
-                                PDFPageComponent="{Binding Path=ViewPageComponent}"
-                                PDFZoomComponent="{Binding Path=ZoomComponent}" />
+                                PDFPageComponent="{Binding Path=ViewPageComponent}" />
         </ScrollViewer>
         <!-- Find active -->
         <Grid Grid.Row="0" Grid.RowSpan="10" Grid.Column="0" Grid.ColumnSpan="10"

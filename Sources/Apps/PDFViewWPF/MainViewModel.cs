@@ -121,17 +121,6 @@
         }
 
         /// <summary>
-        /// Gets the zoom component.
-        /// </summary>
-        public IPDFZoomComponent ZoomComponent
-        {
-            get
-            {
-                return _viewPageComponent?.ZoomComponent;
-            }
-        }
-
-        /// <summary>
         /// Gets the current zoom in percentage.
         /// </summary>
         public int CurrentZoom

@@ -168,7 +168,7 @@
             if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
                 // Zoom
-                PDFZoomComponent?.DecreaseZoom();
+                PDFPageComponent.ZoomComponent?.DecreaseZoom();
             }
             else if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
             {
@@ -191,7 +191,7 @@
             if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
                 // Zoom
-                PDFZoomComponent?.DecreaseZoom();
+                PDFPageComponent.ZoomComponent?.DecreaseZoom();
             }
             else
             {
@@ -209,7 +209,7 @@
             if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
                 // Zoom
-                PDFZoomComponent?.IncreaseZoom();
+                PDFPageComponent.ZoomComponent?.IncreaseZoom();
             }
             else
             {
@@ -227,7 +227,7 @@
             if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
                 // Zoom
-                PDFZoomComponent?.IncreaseZoom();
+                PDFPageComponent.ZoomComponent?.IncreaseZoom();
             }
             else if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
             {
