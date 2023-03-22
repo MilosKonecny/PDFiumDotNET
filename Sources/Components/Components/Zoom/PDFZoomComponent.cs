@@ -3,16 +3,17 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using PDFiumDotNET.Components.Contracts.EventArguments;
     using PDFiumDotNET.Components.Contracts.Zoom;
 
     /// <inheritdoc cref="IPDFZoomComponent"/>
     internal sealed partial class PDFZoomComponent : PDFChildComponent, IPDFZoomComponent
     {
-        #region Private consts
+        #region Private constants
 
         private const double _doubleEpsilon = 0.01d;
 
-        #endregion Private consts
+        #endregion Private constants
 
         #region Private fields
 
@@ -38,15 +39,22 @@
 
         private void SetDefaultValues()
         {
+            // ToDo: Is it necessary to call this method?
+            // Perhaps the user has changed this list and it will be lost after the document was closed.
+            SetDefaultZoomList();
+
             CurrentZoomType = ZoomType.DefinedValue;
             CurrentZoomFactor = 1d;
-            SetDefaultZoomList();
-            InvokePropertyChangedEvent(null);
         }
 
         private void SetDefaultZoomList()
         {
             ZoomValues = new List<double> { 0.10, 0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 2.00, 4.00, 8.00 };
+        }
+
+        private void InvokeZoomChangedEvent(double oldZoomFactor, double newZoomFactor)
+        {
+            ZoomChanged?.Invoke(this, new ZoomChangedEventArgs(oldZoomFactor, newZoomFactor));
         }
 
         #endregion Private methods
@@ -73,6 +81,7 @@
             get => _currentZoomFactor;
             set
             {
+                var oldZoomFactor = _currentZoomFactor;
                 value = Math.Round(value, 2);
                 if (Math.Abs(_currentZoomFactor - value) > _doubleEpsilon)
                 {
@@ -86,7 +95,10 @@
                         _currentZoomFactor = ZoomValues.Last();
                     }
 
+                    var newZoomFactor = _currentZoomFactor;
+                    InvokeZoomChangedEvent(oldZoomFactor, newZoomFactor);
                     InvokePropertyChangedEvent();
+                    InvokePropertyChangedEvent(nameof(CurrentZoomPercentage));
                 }
             }
         }
@@ -153,6 +165,9 @@
                 CurrentZoomFactor = newValue[0];
             }
         }
+
+        /// <inheritdoc/>
+        public event EventHandler<ZoomChangedEventArgs> ZoomChanged;
 
         #endregion Implementation of IPDFZoomComponent
     }
