@@ -76,7 +76,7 @@
         }
 
         /// <summary>
-        /// The method detattaches page component.
+        /// The method detaches page component.
         /// </summary>
         internal virtual void DettachPageComponent()
         {
@@ -87,13 +87,50 @@
         }
 
         /// <summary>
-        /// The method returns all pages that lie at least partially in the defined viewport area.
+        /// The method returns all necessary information to render current content of PDF document.
         /// </summary>
         /// <param name="viewportArea">Viewport area of document area to draw.</param>
         /// <returns>Render information contains all pages to render and viewport area where the pages lie.</returns>
-        internal virtual IList<IPDFPageRenderInfo> GetPagesToRender(PDFRectangle<double> viewportArea)
+        internal virtual IPDFRenderInfo GetPagesToRender(PDFRectangle<double> viewportArea)
         {
-            return new List<IPDFPageRenderInfo>();
+            return new PDFRenderInfo
+            {
+                ZoomFactor = PageComponent?.ZoomComponent != null ? PageComponent.ZoomComponent.CurrentZoomFactor : 1d,
+                ViewportArea = viewportArea,
+                PagesToRender = new List<IPDFPageRenderInfo>(),
+            };
+        }
+
+        /// <summary>
+        /// The method calculates new horizontal offset to draw the page on center on the same position after zoom will change.
+        /// </summary>
+        /// <param name="renderInfo">Last render information used to render current content of PDF document.</param>
+        /// <param name="newZoomFactor">New zoom to use for computing of new horizontal offset.</param>
+        /// <returns>New horizontal offset.</returns>
+        internal virtual double GetHorizontalOffset(IPDFRenderInfo renderInfo, double newZoomFactor)
+        {
+            if (renderInfo == null)
+            {
+                throw new ArgumentNullException(nameof(renderInfo));
+            }
+
+            return renderInfo.ViewportArea.X;
+        }
+
+        /// <summary>
+        /// The method calculates new vertical offset to draw the page on center on the same position after zoom will change.
+        /// </summary>
+        /// <param name="renderInfo">Last render information used to render current content of PDF document.</param>
+        /// <param name="newZoomFactor">New zoom to use for computing of new vertical offset.</param>
+        /// <returns>New vertical offset.</returns>
+        internal virtual double GetVerticalOffset(IPDFRenderInfo renderInfo, double newZoomFactor)
+        {
+            if (renderInfo == null)
+            {
+                throw new ArgumentNullException(nameof(renderInfo));
+            }
+
+            return renderInfo.ViewportArea.X;
         }
 
         #endregion Protected virtual methods
@@ -147,10 +184,16 @@
         public PDFSize<double> DocumentArea => RequiredDocumentArea;
 
         /// <inheritdoc/>
-        public PDFRectangle<double> PagePosition(int pageIndex) => GetPagePosition(pageIndex);
+        public PDFRectangle<double> DeterminePagePosition(int pageIndex) => GetPagePosition(pageIndex);
 
         /// <inheritdoc/>
-        public IList<IPDFPageRenderInfo> PagesToRender(PDFRectangle<double> viewportArea) => GetPagesToRender(viewportArea);
+        public IPDFRenderInfo DetermineRenderInfo(PDFRectangle<double> viewportArea) => GetPagesToRender(viewportArea);
+
+        /// <inheritdoc/>
+        public double DetermineHorizontalOffset(IPDFRenderInfo renderInfo, double newZoomFactor) => GetHorizontalOffset(renderInfo, newZoomFactor);
+
+        /// <inheritdoc/>
+        public double DetermineVerticalOffset(IPDFRenderInfo renderInfo, double newZoomFactor) => GetVerticalOffset(renderInfo, newZoomFactor);
 
         /// <inheritdoc/>
         public event EventHandler<EventArgs> DocumentAreaChanged;

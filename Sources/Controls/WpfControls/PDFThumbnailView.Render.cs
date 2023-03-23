@@ -1,12 +1,10 @@
 ﻿namespace PDFiumDotNET.WpfControls
 {
-    using System;
     using System.Globalization;
     using System.Linq;
     using System.Windows;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
-    using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.WpfControls.Helper;
 
     /// <summary>
@@ -18,11 +16,17 @@
 
         private void RenderPages(DrawingContext drawingContext)
         {
+            if (_renderInformation?.PagesToRender == null || !_renderInformation.PagesToRender.Any())
+            {
+                RenderEmptyArea(drawingContext);
+                return;
+            }
+
             // Draw background
             drawingContext.DrawRectangle(Background, null, new Rect(0, 0, ViewportWidth, ViewportHeight));
 
             // Iterate the pages, adjust some values, and draw them.
-            foreach (var pageInfo in _renderedPages)
+            foreach (var pageInfo in _renderInformation.PagesToRender)
             {
                 // Draw page background
                 drawingContext.DrawRectangle(PDFPageBackground, null, new Rect(pageInfo.RelativePositionInViewportArea.X, pageInfo.RelativePositionInViewportArea.Y, pageInfo.RelativePositionInViewportArea.Width, pageInfo.RelativePositionInViewportArea.Height));

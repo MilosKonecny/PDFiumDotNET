@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Page;
+    using PDFiumDotNET.Components.Contracts.Render;
     using PDFiumDotNET.Components.Page;
 
     /// <summary>
@@ -81,22 +82,26 @@
         }
 
         /// <inheritdoc/>
-        internal override IList<IPDFPageRenderInfo> GetPagesToRender(PDFRectangle<double> viewportArea)
+        internal override IPDFRenderInfo GetPagesToRender(PDFRectangle<double> viewportArea)
         {
             // It should be mentioned. A viewport is a rectangle in the document area.
-            var list = new List<IPDFPageRenderInfo>();
+            var info = new PDFRenderInfo
+            {
+                ZoomFactor = PageComponent?.ZoomComponent != null ? PageComponent.ZoomComponent.CurrentZoomFactor : 1d,
+                ViewportArea = viewportArea,
+                PagesToRender = new List<IPDFPageRenderInfo>(),
+            };
 
             if (PageComponent == null || PageComponent.PageCount == 0)
             {
-                return list;
+                return info;
             }
 
-            var zoomFactor = PageComponent.ZoomComponent != null ? PageComponent.ZoomComponent.CurrentZoomFactor : 1d;
-
+            var zoomFactor = info.ZoomFactor;
             var top = PageMargin.Height;
-
             var viewportWidthIsWider = viewportArea.Width > DocumentArea.Width;
             var horizontalOffset = viewportWidthIsWider ? (viewportArea.Width - DocumentArea.Width) / 2d : 0d;
+            var list = new List<IPDFPageRenderInfo>();
 
             PDFPageRenderInfo nearestPageToCenter = null;
             var distanceToCenter = double.MaxValue;
@@ -137,7 +142,7 @@
                 visiblePart.Height = Math.Max(1d, visiblePart.Height);
 
                 // Create page render info
-                var info = new PDFPageRenderInfo(page)
+                var pageInfo = new PDFPageRenderInfo(page)
                 {
                     PositionInDocumentArea = new PDFRectangle<double>(
                         (DocumentArea.Width - (page.Width * zoomFactor)) / 2d,
@@ -158,10 +163,10 @@
                 if (distance < distanceToCenter)
                 {
                     distanceToCenter = distance;
-                    nearestPageToCenter = info;
+                    nearestPageToCenter = pageInfo;
                 }
 
-                list.Add(info);
+                list.Add(pageInfo);
             }
 
             if (nearestPageToCenter != null)
@@ -169,7 +174,30 @@
                 nearestPageToCenter.IsNearestToCenter = true;
             }
 
-            return list;
+            info.PagesToRender = list;
+            return info;
+        }
+
+        /// <inheritdoc/>
+        internal override double GetHorizontalOffset(IPDFRenderInfo renderInfo, double newZoomFactor)
+        {
+            if (renderInfo == null)
+            {
+                throw new ArgumentNullException(nameof(renderInfo));
+            }
+
+            return renderInfo.ViewportArea.X;
+        }
+
+        /// <inheritdoc/>
+        internal override double GetVerticalOffset(IPDFRenderInfo renderInfo, double newZoomFactor)
+        {
+            if (renderInfo == null)
+            {
+                throw new ArgumentNullException(nameof(renderInfo));
+            }
+
+            return renderInfo.ViewportArea.X;
         }
 
         #endregion Internal override methods
