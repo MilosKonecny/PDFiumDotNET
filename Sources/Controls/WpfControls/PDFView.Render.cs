@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
+    using System.Linq;
     using System.Windows;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
@@ -19,7 +20,7 @@
         #region Private methods - render related
 
         [Conditional("DEBUG")]
-        private void RenderDebugInfo(DrawingContext drawingContext, IList<IPDFPageRenderInfo> pages = null)
+        private void RenderDebugInfo(DrawingContext drawingContext, IEnumerable<IPDFPageRenderInfo> pages = null)
         {
             var documentRectangle = new PDFRectangle<double>(0, 0, _documentArea.Width, _documentArea.Height);
             var viewportRectangle = new PDFRectangle<double>(HorizontalOffset, VerticalOffset, _viewportArea.Width, _viewportArea.Height);
@@ -57,11 +58,17 @@
 
         private void RenderPages(DrawingContext drawingContext)
         {
+            if (_renderInformation?.PagesToRender == null || !_renderInformation.PagesToRender.Any())
+            {
+                RenderEmptyArea(drawingContext);
+                return;
+            }
+
             // Draw background
             drawingContext.DrawRectangle(Background, null, new Rect(0, 0, ViewportWidth, ViewportHeight));
 
             // Iterate the pages, adjust some values, and draw them.
-            foreach (var pageInfo in _renderedPages)
+            foreach (var pageInfo in _renderInformation.PagesToRender)
             {
                 // Draw page background
                 drawingContext.DrawRectangle(PDFPageBackground, null, new Rect(pageInfo.RelativePositionInViewportArea.X, pageInfo.RelativePositionInViewportArea.Y, pageInfo.RelativePositionInViewportArea.Width, pageInfo.RelativePositionInViewportArea.Height));
@@ -108,7 +115,7 @@
             // Draw background border - bottom
             drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Bottom), new Point(0, ViewportHeight), new Point(ViewportWidth, ViewportHeight));
 
-            RenderDebugInfo(drawingContext, _renderedPages);
+            RenderDebugInfo(drawingContext, _renderInformation.PagesToRender);
         }
 
         private void RenderEmptyArea(DrawingContext drawingContext)

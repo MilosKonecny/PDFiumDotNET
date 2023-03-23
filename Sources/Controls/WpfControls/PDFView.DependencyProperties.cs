@@ -8,7 +8,6 @@
     using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.EventArguments;
     using PDFiumDotNET.Components.Contracts.Page;
-    using PDFiumDotNET.Components.Contracts.Zoom;
 
     /// <summary>
     /// View class shows pages from opened PDF document.
@@ -216,7 +215,7 @@
         private void HandlePDFPageComponentNavigatedToPageEvent(object sender, NavigatedToPageEventArgs e)
         {
             // Current page is changed. Scroll to this page.
-            var verticalOffset = PDFPageComponent.RenderManager.PagePosition(e.CurrentPageIndex - 1).Y;
+            var verticalOffset = PDFPageComponent.RenderManager.DeterminePagePosition(e.CurrentPageIndex - 1).Y;
             var horizontalOffset = double.NaN;
             if (e.IsDetailedNavigation)
             {

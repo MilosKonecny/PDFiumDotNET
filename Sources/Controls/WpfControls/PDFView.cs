@@ -1,7 +1,6 @@
 ﻿namespace PDFiumDotNET.WpfControls
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
@@ -10,7 +9,7 @@
     using System.Windows.Media;
     using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Link;
-    using PDFiumDotNET.Components.Contracts.Page;
+    using PDFiumDotNET.Components.Contracts.Render;
 
     /// <summary>
     /// View class shows pages from opened PDF document.
@@ -20,9 +19,9 @@
         #region Private fields
 
         /// <summary>
-        /// List of rendered pages. Used to examine click, touch, ...
+        /// Render information with list of pages to render and other stuff. Used to examine click, touch, ...
         /// </summary>
-        private List<IPDFPageRenderInfo> _renderedPages = new ();
+        private IPDFRenderInfo _renderInformation;
 
         /// <summary>
         /// Permission for horizontal scroll.
@@ -156,22 +155,18 @@
 
                 // Determine pages to draw.
                 var viewportInDocument = new PDFRectangle<double>(HorizontalOffset, VerticalOffset, ViewportWidth, ViewportHeight);
-                _renderedPages.Clear();
-                _renderedPages.AddRange(PDFPageComponent.RenderManager.PagesToRender(viewportInDocument));
+                _renderInformation = PDFPageComponent.RenderManager.DetermineRenderInfo(viewportInDocument);
             }
 
-            if (_renderedPages.Count > 0)
+            RenderPages(drawingContext);
+
+            if (_renderInformation?.PagesToRender != null)
             {
-                RenderPages(drawingContext);
-                var pageInfo = _renderedPages.FirstOrDefault(pageInfo => pageInfo.IsNearestToCenter);
+                var pageInfo = _renderInformation.PagesToRender.FirstOrDefault(pageInfo => pageInfo.IsNearestToCenter);
                 if (pageInfo != null)
                 {
                     PDFPageComponent.SetCurrentPage(pageInfo.Page.PageIndex + 1);
                 }
-            }
-            else
-            {
-                RenderEmptyArea(drawingContext);
             }
         }
 
@@ -372,8 +367,13 @@
 
         private IPDFLink GetLinkOnPosition(Point point)
         {
+            if (_renderInformation == null || _renderInformation.PagesToRender == null)
+            {
+                return null;
+            }
+
             // ToDo: Optimize this place. Don't iterate through all pages in some cases.
-            foreach (var pageInfo in _renderedPages)
+            foreach (var pageInfo in _renderInformation.PagesToRender)
             {
                 if (point.X > pageInfo.RelativePositionInViewportArea.Left && point.X < pageInfo.RelativePositionInViewportArea.Right
                     && point.Y > pageInfo.RelativePositionInViewportArea.Top && point.Y < pageInfo.RelativePositionInViewportArea.Bottom)
@@ -429,7 +429,7 @@
         }
 
         /// <summary>
-        /// Datermines area where fit all pages of opened document.
+        /// Determines area where fit all pages of opened document.
         /// </summary>
         /// <param name="availableSize">Available size based on current layout of application.</param>
         /// <returns>Required size to show all pages of opened document.</returns>
@@ -444,14 +444,14 @@
         }
 
         /// <summary>
-        /// Reset all relevat status fields.
+        /// Reset all relevant status fields.
         /// </summary>
         private void ResetStatus()
         {
             _horizontalOffset = 0d;
             _verticalOffset = 0d;
             _documentArea = new Size(0, 0);
-            _renderedPages.Clear();
+            _renderInformation = null;
         }
 
         #endregion Private methods

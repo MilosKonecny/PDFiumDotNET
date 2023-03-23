@@ -1,7 +1,5 @@
 ﻿namespace PDFiumDotNET.WpfControls
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
@@ -10,6 +8,7 @@
     using System.Windows.Media;
     using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Page;
+    using PDFiumDotNET.Components.Contracts.Render;
 
     /// <summary>
     /// View class shows page thumbnails from opened PDF document.
@@ -19,9 +18,9 @@
         #region Private fields
 
         /// <summary>
-        /// List of rendered pages. Used to examine click, touch, ...
+        /// Render information with list of pages to render and other stuff. Used to examine click, touch, ...
         /// </summary>
-        private List<IPDFPageRenderInfo> _renderedPages = new ();
+        private IPDFRenderInfo _renderInformation;
 
         /// <summary>
         /// Page with touch down.
@@ -133,18 +132,10 @@
             {
                 // Determine pages to draw.
                 var viewportInDocument = new PDFRectangle<double>(HorizontalOffset, VerticalOffset, ViewportWidth, ViewportHeight);
-                _renderedPages.Clear();
-                _renderedPages.AddRange(PDFPageComponent.RenderManager.PagesToRender(viewportInDocument));
+                _renderInformation = PDFPageComponent.RenderManager.DetermineRenderInfo(viewportInDocument);
             }
 
-            if (_renderedPages.Count > 0)
-            {
-                RenderPages(drawingContext);
-            }
-            else
-            {
-                RenderEmptyArea(drawingContext);
-            }
+            RenderPages(drawingContext);
         }
 
         /// <inheritdoc/>
@@ -270,10 +261,10 @@
 
             _startDragPoint = new Point(-1, -1);
 
-            if (e != null)
+            if (e != null && _renderInformation?.PagesToRender != null)
             {
                 var point = e.GetPosition(this);
-                var page = _renderedPages.FirstOrDefault(p => point.X > p.RelativePositionInViewportArea.Left && point.X < p.RelativePositionInViewportArea.Right && point.Y > p.RelativePositionInViewportArea.Top && point.Y < p.RelativePositionInViewportArea.Bottom);
+                var page = _renderInformation.PagesToRender.FirstOrDefault(p => point.X > p.RelativePositionInViewportArea.Left && point.X < p.RelativePositionInViewportArea.Right && point.Y > p.RelativePositionInViewportArea.Top && point.Y < p.RelativePositionInViewportArea.Bottom);
                 if (page != null)
                 {
                     PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
@@ -286,10 +277,10 @@
         {
             base.OnTouchDown(e);
 
-            if (e != null)
+            if (e != null && _renderInformation?.PagesToRender != null)
             {
                 var point = e.GetTouchPoint(this).Position;
-                _onTouchDownPage = _renderedPages.FirstOrDefault(p => point.X > p.RelativePositionInViewportArea.Left && point.X < p.RelativePositionInViewportArea.Right && point.Y > p.RelativePositionInViewportArea.Top && point.Y < p.RelativePositionInViewportArea.Bottom);
+                _onTouchDownPage = _renderInformation.PagesToRender.FirstOrDefault(p => point.X > p.RelativePositionInViewportArea.Left && point.X < p.RelativePositionInViewportArea.Right && point.Y > p.RelativePositionInViewportArea.Top && point.Y < p.RelativePositionInViewportArea.Bottom);
             }
         }
 
@@ -298,10 +289,10 @@
         {
             base.OnTouchUp(e);
 
-            if (e != null)
+            if (e != null && _renderInformation?.PagesToRender != null)
             {
                 var point = e.GetTouchPoint(this).Position;
-                var page = _renderedPages.FirstOrDefault(p => point.X > p.RelativePositionInViewportArea.Left && point.X < p.RelativePositionInViewportArea.Right && point.Y > p.RelativePositionInViewportArea.Top && point.Y < p.RelativePositionInViewportArea.Bottom);
+                var page = _renderInformation.PagesToRender.FirstOrDefault(p => point.X > p.RelativePositionInViewportArea.Left && point.X < p.RelativePositionInViewportArea.Right && point.Y > p.RelativePositionInViewportArea.Top && point.Y < p.RelativePositionInViewportArea.Bottom);
                 if (page != null && _onTouchDownPage != null)
                 {
                     if (_onTouchDownPage.Page.PageIndex == page.Page.PageIndex)
@@ -348,7 +339,7 @@
         }
 
         /// <summary>
-        /// Datermines area where fit all pages of opened document.
+        /// Determines area where fit all pages of opened document.
         /// </summary>
         /// <param name="availableSize">Available size based on current layout of application.</param>
         /// <returns>Required size to show all pages of opened document.</returns>
@@ -363,13 +354,13 @@
         }
 
         /// <summary>
-        /// Reset all relevat status fields.
+        /// Reset all relevant status fields.
         /// </summary>
         private void ResetStatus()
         {
             _verticalOffset = 0d;
             _documentArea = new Size(0, 0);
-            _renderedPages.Clear();
+            _renderInformation = null;
             _onTouchDownPage = null;
         }
 

@@ -114,7 +114,7 @@
             for (var index = 0; index < pageComponent.PageCount; index++)
             {
                 pageComponent.NavigateToPage(index + 1);
-                var position1 = pageComponent.RenderManager.PagePosition(index);
+                var position1 = pageComponent.RenderManager.DeterminePagePosition(index);
                 if (index % 2 == 0)
                 {
                     zoomComponent.IncreaseZoom();
@@ -124,7 +124,7 @@
                     zoomComponent.DecreaseZoom();
                 }
 
-                var position2 = pageComponent.RenderManager.PagePosition(index);
+                var position2 = pageComponent.RenderManager.DeterminePagePosition(index);
             }
 
             pdfComponent.CloseDocument();

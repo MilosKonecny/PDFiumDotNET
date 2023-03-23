@@ -1,7 +1,6 @@
 ﻿namespace PDFiumDotNET.Components.Contracts.Render
 {
     using System;
-    using System.Collections.Generic;
     using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Page;
@@ -29,14 +28,30 @@
         /// <returns>Position of the page.</returns>
         /// <remarks><paramref name="pageIndex"/> should be between 0 (inclusive) and <see cref="IPDFPageComponent.PageCount"/>.
         /// If this condition is not met, the returned rectangle has zero size.</remarks>
-        PDFRectangle<double> PagePosition(int pageIndex);
+        PDFRectangle<double> DeterminePagePosition(int pageIndex);
 
         /// <summary>
-        /// The method returns all pages that lie at least partially in the defined viewport area.
+        /// The method determines all necessary information to render current content of PDF document.
         /// </summary>
         /// <param name="viewportArea">Viewport area of document area to draw.</param>
         /// <returns>Render information contains all pages to render and viewport area where the pages lie.</returns>
-        IList<IPDFPageRenderInfo> PagesToRender(PDFRectangle<double> viewportArea);
+        IPDFRenderInfo DetermineRenderInfo(PDFRectangle<double> viewportArea);
+
+        /// <summary>
+        /// The method determines new horizontal offset to draw the page on center on the same position after zoom will change.
+        /// </summary>
+        /// <param name="renderInfo">Last render information used to render current content of PDF document.</param>
+        /// <param name="newZoomFactor">New zoom to use for computing of new horizontal offset.</param>
+        /// <returns>New horizontal offset.</returns>
+        double DetermineHorizontalOffset(IPDFRenderInfo renderInfo, double newZoomFactor);
+
+        /// <summary>
+        /// The method determines new vertical offset to draw the page on center on the same position after zoom will change.
+        /// </summary>
+        /// <param name="renderInfo">Last render information used to render current content of PDF document.</param>
+        /// <param name="newZoomFactor">New zoom to use for computing of new vertical offset.</param>
+        /// <returns>New vertical offset.</returns>
+        double DetermineVerticalOffset(IPDFRenderInfo renderInfo, double newZoomFactor);
 
         /// <summary>
         /// Occurs when a document area changes.
