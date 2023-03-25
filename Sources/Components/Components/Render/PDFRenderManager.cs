@@ -35,11 +35,22 @@
         /// <summary>
         /// Gets the area into which all pages fit.
         /// </summary>
-        internal abstract PDFSize<double> RequiredDocumentArea { get; }
+        protected abstract PDFSize<double> RequiredDocumentArea { get; }
 
         #endregion Protected abstract properties
 
         #region Protected abstract methods
+
+        /// <summary>
+        /// The method calculates the position of page in document area.
+        /// </summary>
+        /// <param name="pageIndex">Index of page to calculate the position for.</param>
+        /// <returns>Position of page in document area.</returns>
+        protected abstract PDFRectangle<double> GetPagePosition(int pageIndex);
+
+        #endregion Protected abstract methods
+
+        #region Internal abstract methods
 
         /// <summary>
         /// This method should be called whenever the document area is to be calculated.
@@ -47,16 +58,9 @@
         /// </summary>
         internal abstract void CalculateDocumentArea();
 
-        /// <summary>
-        /// The method calculates the position of page in document area.
-        /// </summary>
-        /// <param name="pageIndex">Index of page to calculate the position for.</param>
-        /// <returns>Position of page in document area.</returns>
-        internal abstract PDFRectangle<double> GetPagePosition(int pageIndex);
+        #endregion Internal abstract methods
 
-        #endregion Protected abstract methods
-
-        #region Protected virtual methods
+        #region Internal virtual methods
 
         /// <summary>
         /// The method attaches page component and initializes render manager.
@@ -86,12 +90,16 @@
             }
         }
 
+        #endregion Internal virtual methods
+
+        #region Protected virtual methods
+
         /// <summary>
         /// The method returns all necessary information to render current content of PDF document.
         /// </summary>
         /// <param name="viewportArea">Viewport area of document area to draw.</param>
         /// <returns>Render information contains all pages to render and viewport area where the pages lie.</returns>
-        internal virtual IPDFRenderInfo GetPagesToRender(PDFRectangle<double> viewportArea)
+        protected virtual IPDFRenderInfo GetPagesToRender(PDFRectangle<double> viewportArea)
         {
             return new PDFRenderInfo
             {
@@ -107,7 +115,7 @@
         /// <param name="renderInfo">Last render information used to render current content of PDF document.</param>
         /// <param name="newZoomFactor">New zoom to use for computing of new horizontal offset.</param>
         /// <returns>New horizontal offset.</returns>
-        internal virtual double GetHorizontalOffset(IPDFRenderInfo renderInfo, double newZoomFactor)
+        protected virtual double GetHorizontalOffset(IPDFRenderInfo renderInfo, double newZoomFactor)
         {
             if (renderInfo == null)
             {
@@ -123,7 +131,7 @@
         /// <param name="renderInfo">Last render information used to render current content of PDF document.</param>
         /// <param name="newZoomFactor">New zoom to use for computing of new vertical offset.</param>
         /// <returns>New vertical offset.</returns>
-        internal virtual double GetVerticalOffset(IPDFRenderInfo renderInfo, double newZoomFactor)
+        protected virtual double GetVerticalOffset(IPDFRenderInfo renderInfo, double newZoomFactor)
         {
             if (renderInfo == null)
             {

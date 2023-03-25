@@ -38,10 +38,10 @@
                     renderManager = new PDFRenderManagerStandard();
                     break;
                 case PageLayoutType.TwoColumns:
-                    renderManager = new PDFRenderManagerTwoColumns(false);
+                    renderManager = new PDFRenderManagerTwoColumns2();
                     break;
                 case PageLayoutType.TwoColumnsSpecial:
-                    renderManager = new PDFRenderManagerTwoColumns(true);
+                    renderManager = new PDFRenderManagerTwoColumns1();
                     break;
                 default:
                     throw new InvalidOperationException();
