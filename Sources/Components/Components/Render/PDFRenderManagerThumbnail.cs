@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Render;
@@ -21,9 +22,6 @@
         #endregion Private fields
 
         #region Internal override methods
-
-        /// <inheritdoc/>
-        internal override PDFSize<double> RequiredDocumentArea => _requiredDocumentArea;
 
         /// <inheritdoc/>
         internal override void CalculateDocumentArea()
@@ -56,8 +54,15 @@
             _requiredDocumentArea = new PDFSize<double>(width, height);
         }
 
+        #endregion Internal override methods
+
+        #region Protected override methods
+
         /// <inheritdoc/>
-        internal override PDFRectangle<double> GetPagePosition(int pageIndex)
+        protected override PDFSize<double> RequiredDocumentArea => _requiredDocumentArea;
+
+        /// <inheritdoc/>
+        protected override PDFRectangle<double> GetPagePosition(int pageIndex)
         {
             if (PageComponent == null || PageComponent.PageCount == 0)
             {
@@ -82,7 +87,7 @@
         }
 
         /// <inheritdoc/>
-        internal override IPDFRenderInfo GetPagesToRender(PDFRectangle<double> viewportArea)
+        protected override IPDFRenderInfo GetPagesToRender(PDFRectangle<double> viewportArea)
         {
             // It should be mentioned. A viewport is a rectangle in the document area.
             var info = new PDFRenderInfo
@@ -179,7 +184,7 @@
         }
 
         /// <inheritdoc/>
-        internal override double GetHorizontalOffset(IPDFRenderInfo renderInfo, double newZoomFactor)
+        protected override double GetHorizontalOffset(IPDFRenderInfo renderInfo, double newZoomFactor)
         {
             if (renderInfo == null)
             {
@@ -190,7 +195,7 @@
         }
 
         /// <inheritdoc/>
-        internal override double GetVerticalOffset(IPDFRenderInfo renderInfo, double newZoomFactor)
+        protected override double GetVerticalOffset(IPDFRenderInfo renderInfo, double newZoomFactor)
         {
             if (renderInfo == null)
             {
@@ -200,6 +205,6 @@
             return renderInfo.ViewportArea.X;
         }
 
-        #endregion Internal override methods
+        #endregion Protected override methods
     }
 }
