@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Render;
@@ -173,10 +174,10 @@
             PDFPageRenderInfo nearestPageToCenter = null;
             var distanceToCenter = double.MaxValue;
 
-            for (var index = 0; index < PageRowCount; index++)
+            for (var rowIndex = 0; rowIndex < PageRowCount; rowIndex++)
             {
-                var leftPage = LeftPageInRow(index);
-                var rightPage = RightPageInRow(index);
+                var leftPage = LeftPageInRow(rowIndex);
+                var rightPage = RightPageInRow(rowIndex);
                 var leftPageHeight = leftPage == null ? 0d : leftPage.Height * zoomFactor;
                 var leftPageWidth = leftPage == null ? 0d : leftPage.Width * zoomFactor;
                 var rightPageHeight = rightPage == null ? 0d : rightPage.Height * zoomFactor;
@@ -233,7 +234,9 @@
                         RelativePositionInViewportArea = relativePositionInViewportArea,
                         VisiblePart = visiblePart,
                         VisiblePartInViewportArea = relativePositionInViewportArea.Intersect(new PDFRectangle<double>(0, 0, viewportArea.Width, viewportArea.Height)),
-                        IsNearestToCenter = false,
+                        IsClosestToCenter = false,
+                        PageRow = rowIndex,
+                        PageColumn = 0,
                     };
 
                     if (!pageInfo.VisiblePartInViewportArea.IsEmpty)
@@ -289,7 +292,9 @@
                         RelativePositionInViewportArea = relativePositionInViewportArea,
                         VisiblePart = visiblePart,
                         VisiblePartInViewportArea = relativePositionInViewportArea.Intersect(new PDFRectangle<double>(0, 0, viewportArea.Width, viewportArea.Height)),
-                        IsNearestToCenter = false,
+                        IsClosestToCenter = false,
+                        PageRow = rowIndex,
+                        PageColumn = 1,
                     };
 
                     if (!pageInfo.VisiblePartInViewportArea.IsEmpty)
@@ -312,12 +317,62 @@
 
             if (nearestPageToCenter != null)
             {
-                nearestPageToCenter.IsNearestToCenter = true;
+                nearestPageToCenter.IsClosestToCenter = true;
             }
 
             renderInfo.PagesToRender = list;
 
             return renderInfo;
+        }
+
+        /// <inheritdoc/>
+        protected override double GetHorizontalOffset(IPDFRenderInfo renderInfo, double newZoomFactor)
+        {
+            if (renderInfo == null)
+            {
+                throw new ArgumentNullException(nameof(renderInfo));
+            }
+
+            var pageClosestToCenter = renderInfo.PagesToRender.FirstOrDefault(page => page.IsClosestToCenter);
+            var pageColumn = pageClosestToCenter == null ? 0 : pageClosestToCenter.PageColumn;
+
+            var margins = (pageColumn + 1) * PageMargin.Width;
+
+            var newHorizontalOffset = renderInfo.ViewportArea.Left - margins;
+            newHorizontalOffset += renderInfo.ViewportArea.Width / 2;
+
+            newHorizontalOffset /= renderInfo.ZoomFactor;
+            newHorizontalOffset *= newZoomFactor;
+
+            newHorizontalOffset -= renderInfo.ViewportArea.Width / 2;
+            newHorizontalOffset += margins;
+
+            return newHorizontalOffset;
+        }
+
+        /// <inheritdoc/>
+        protected override double GetVerticalOffset(IPDFRenderInfo renderInfo, double newZoomFactor)
+        {
+            if (renderInfo == null)
+            {
+                throw new ArgumentNullException(nameof(renderInfo));
+            }
+
+            var pageClosestToCenter = renderInfo.PagesToRender.FirstOrDefault(page => page.IsClosestToCenter);
+            var pageRow = pageClosestToCenter == null ? 0 : pageClosestToCenter.PageRow;
+
+            var margins = (pageRow + 1) * PageMargin.Height;
+
+            var newVerticalOffset = renderInfo.ViewportArea.Top - margins;
+            newVerticalOffset += renderInfo.ViewportArea.Height / 2;
+
+            newVerticalOffset /= renderInfo.ZoomFactor;
+            newVerticalOffset *= newZoomFactor;
+
+            newVerticalOffset -= renderInfo.ViewportArea.Height / 2;
+            newVerticalOffset += margins;
+
+            return newVerticalOffset;
         }
 
         #endregion Protected override methods

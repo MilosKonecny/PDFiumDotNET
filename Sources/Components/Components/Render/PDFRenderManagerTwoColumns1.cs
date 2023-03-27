@@ -69,28 +69,6 @@
             return PageComponent.Pages[pageIndex];
         }
 
-        /// <inheritdoc/>
-        protected override double GetHorizontalOffset(IPDFRenderInfo renderInfo, double newZoomFactor)
-        {
-            if (renderInfo == null)
-            {
-                throw new ArgumentNullException(nameof(renderInfo));
-            }
-
-            return renderInfo.ViewportArea.X;
-        }
-
-        /// <inheritdoc/>
-        protected override double GetVerticalOffset(IPDFRenderInfo renderInfo, double newZoomFactor)
-        {
-            if (renderInfo == null)
-            {
-                throw new ArgumentNullException(nameof(renderInfo));
-            }
-
-            return renderInfo.ViewportArea.Y;
-        }
-
         #endregion Protected override methods
     }
 }
