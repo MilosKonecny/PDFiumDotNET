@@ -162,7 +162,7 @@
 
             if (_renderInformation?.PagesToRender != null)
             {
-                var pageInfo = _renderInformation.PagesToRender.FirstOrDefault(pageInfo => pageInfo.IsNearestToCenter);
+                var pageInfo = _renderInformation.PagesToRender.FirstOrDefault(pageInfo => pageInfo.IsClosestToCenter);
                 if (pageInfo != null)
                 {
                     PDFPageComponent.SetCurrentPage(pageInfo.Page.PageIndex + 1);

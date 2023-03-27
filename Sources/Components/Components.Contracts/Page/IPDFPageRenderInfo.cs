@@ -34,8 +34,20 @@
         PDFRectangle<double> VisiblePartInViewportArea { get; }
 
         /// <summary>
-        /// Gets or sets the value indicating that this side is closest to the center of the viewport.
+        /// Gets or sets the value indicating that this page is closest to the center of the viewport.
         /// </summary>
-        bool IsNearestToCenter { get; }
+        bool IsClosestToCenter { get; }
+
+        /// <summary>
+        /// Gets the row index where is the page rendered.
+        /// First page is in the row 0.
+        /// </summary>
+        int PageRow { get; }
+
+        /// <summary>
+        /// Gets the column index where is the page rendered.
+        /// First page in the row is in the column 0.
+        /// </summary>
+        int PageColumn { get; }
     }
 }

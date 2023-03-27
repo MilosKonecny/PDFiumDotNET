@@ -37,7 +37,13 @@
         public PDFRectangle<double> VisiblePartInViewportArea { get; internal set; }
 
         /// <inheritdoc/>
-        public bool IsNearestToCenter { get; set; }
+        public bool IsClosestToCenter { get; internal set; }
+
+        /// <inheritdoc/>
+        public int PageRow { get; internal set; }
+
+        /// <inheritdoc/>
+        public int PageColumn { get; internal set; }
 
         #endregion Implementation of IPDFPageRenderInfo
     }

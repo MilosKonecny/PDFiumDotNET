@@ -247,7 +247,12 @@
 
         private void HandlePDFZoomComponentPropertyChangedEvent(object sender, ZoomChangedEventArgs e)
         {
-            Application.Current.Dispatcher.Invoke(() => InvalidateVisual());
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                _horizontalOffset = PDFPageComponent.RenderManager.DetermineHorizontalOffset(_renderInformation, e.NewZoomFactor);
+                _verticalOffset = PDFPageComponent.RenderManager.DetermineVerticalOffset(_renderInformation, e.NewZoomFactor);
+                InvalidateVisual();
+            });
         }
 
         #endregion Private event handler methods

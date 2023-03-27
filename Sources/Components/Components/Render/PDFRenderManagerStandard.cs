@@ -156,7 +156,9 @@
                     RelativePositionInViewportArea = relativePositionInViewportArea,
                     VisiblePart = visiblePart,
                     VisiblePartInViewportArea = relativePositionInViewportArea.Intersect(new PDFRectangle<double>(0, 0, viewportArea.Width, viewportArea.Height)),
-                    IsNearestToCenter = false,
+                    IsClosestToCenter = false,
+                    PageRow = page.PageIndex,
+                    PageColumn = 0,
                 };
 
                 // Compute distance of this page to the center of viewport.
@@ -175,7 +177,7 @@
 
             if (nearestPageToCenter != null)
             {
-                nearestPageToCenter.IsNearestToCenter = true;
+                nearestPageToCenter.IsClosestToCenter = true;
             }
 
             info.PagesToRender = list;
@@ -190,7 +192,18 @@
                 throw new ArgumentNullException(nameof(renderInfo));
             }
 
-            return renderInfo.ViewportArea.X;
+            var margins = PageMargin.Width;
+
+            var newHorizontalOffset = renderInfo.ViewportArea.Left - margins;
+            newHorizontalOffset += renderInfo.ViewportArea.Width / 2;
+
+            newHorizontalOffset /= renderInfo.ZoomFactor;
+            newHorizontalOffset *= newZoomFactor;
+
+            newHorizontalOffset -= renderInfo.ViewportArea.Width / 2;
+            newHorizontalOffset += margins;
+
+            return newHorizontalOffset;
         }
 
         /// <inheritdoc/>
@@ -201,7 +214,21 @@
                 throw new ArgumentNullException(nameof(renderInfo));
             }
 
-            return renderInfo.ViewportArea.Y;
+            var pageClosestToCenter = renderInfo.PagesToRender.FirstOrDefault(page => page.IsClosestToCenter);
+            var pageRow = pageClosestToCenter == null ? 0 : pageClosestToCenter.PageRow;
+
+            var margins = (pageRow + 1) * PageMargin.Height;
+
+            var newVerticalOffset = renderInfo.ViewportArea.Top - margins;
+            newVerticalOffset += renderInfo.ViewportArea.Height / 2;
+
+            newVerticalOffset /= renderInfo.ZoomFactor;
+            newVerticalOffset *= newZoomFactor;
+
+            newVerticalOffset -= renderInfo.ViewportArea.Height / 2;
+            newVerticalOffset += margins;
+
+            return newVerticalOffset;
         }
 
         #endregion Protected override methods
