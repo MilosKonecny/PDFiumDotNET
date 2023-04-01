@@ -101,19 +101,70 @@
                 {
                 }
 #pragma warning restore CA1031 // Do not catch general exception types
+
+                if (ShowPageLabel)
+                {
+                    // Draw page label
+                    var ft = new FormattedText(
+                        pageInfo.Page.PageLabel,
+                        CultureInfo.InvariantCulture,
+                        FlowDirection.LeftToRight,
+                        new Typeface(FontFamily, FontStyle, FontWeight, FontStretch),
+                        FontSize,
+                        Foreground,
+                        VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                    var textLocation = new Point(pageInfo.RelativePositionInViewportArea.Left + ((pageInfo.RelativePositionInViewportArea.Right - pageInfo.RelativePositionInViewportArea.Left) / 2d) - (ft.WidthIncludingTrailingWhitespace / 2), pageInfo.RelativePositionInViewportArea.Bottom);
+                    drawingContext.DrawText(ft, textLocation);
+                }
+
+                // Draw page border - left
+                drawingContext.DrawLine(
+                    pageInfo.IsClosestToCenter ? new Pen(PDFPageActiveBorderBrush, PDFPageActiveBorderThickness.Left) : new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Left),
+                    new Point(pageInfo.RelativePositionInViewportArea.Left, pageInfo.RelativePositionInViewportArea.Top),
+                    new Point(pageInfo.RelativePositionInViewportArea.Left, pageInfo.RelativePositionInViewportArea.Bottom));
+
+                // Draw page border - top
+                drawingContext.DrawLine(
+                    pageInfo.IsClosestToCenter ? new Pen(PDFPageActiveBorderBrush, PDFPageActiveBorderThickness.Top) : new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Top),
+                    new Point(pageInfo.RelativePositionInViewportArea.Left, pageInfo.RelativePositionInViewportArea.Top),
+                    new Point(pageInfo.RelativePositionInViewportArea.Right, pageInfo.RelativePositionInViewportArea.Top));
+
+                // Draw page border - right
+                drawingContext.DrawLine(
+                    pageInfo.IsClosestToCenter ? new Pen(PDFPageActiveBorderBrush, PDFPageActiveBorderThickness.Right) : new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Right),
+                    new Point(pageInfo.RelativePositionInViewportArea.Right, pageInfo.RelativePositionInViewportArea.Top),
+                    new Point(pageInfo.RelativePositionInViewportArea.Right, pageInfo.RelativePositionInViewportArea.Bottom));
+
+                // Draw page border - bottom
+                drawingContext.DrawLine(
+                    pageInfo.IsClosestToCenter ? new Pen(PDFPageActiveBorderBrush, PDFPageActiveBorderThickness.Bottom) : new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Bottom),
+                    new Point(pageInfo.RelativePositionInViewportArea.Left, pageInfo.RelativePositionInViewportArea.Bottom),
+                    new Point(pageInfo.RelativePositionInViewportArea.Right, pageInfo.RelativePositionInViewportArea.Bottom));
             }
 
             // Draw background border - left
-            drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Left), new Point(0, 0), new Point(0, ViewportHeight));
+            drawingContext.DrawLine(
+                new Pen(BorderBrush, BorderThickness.Left),
+                new Point(0, 0),
+                new Point(0, ViewportHeight));
 
             // Draw background border - top
-            drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Top), new Point(0, 0), new Point(ViewportWidth, 0));
+            drawingContext.DrawLine(
+                new Pen(BorderBrush, BorderThickness.Top),
+                new Point(0, 0),
+                new Point(ViewportWidth, 0));
 
             // Draw background border - right
-            drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Right), new Point(ViewportWidth, 0), new Point(ViewportWidth, ViewportHeight));
+            drawingContext.DrawLine(
+                new Pen(BorderBrush, BorderThickness.Right),
+                new Point(ViewportWidth, 0),
+                new Point(ViewportWidth, ViewportHeight));
 
             // Draw background border - bottom
-            drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Bottom), new Point(0, ViewportHeight), new Point(ViewportWidth, ViewportHeight));
+            drawingContext.DrawLine(
+                new Pen(BorderBrush, BorderThickness.Bottom),
+                new Point(0, ViewportHeight),
+                new Point(ViewportWidth, ViewportHeight));
 
             RenderDebugInfo(drawingContext, _renderInformation.PagesToRender);
         }
