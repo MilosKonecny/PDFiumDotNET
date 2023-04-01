@@ -38,13 +38,43 @@
         /// Dependency property for 'PDFPageBackground' - source of information to draw content.
         /// </summary>
         public static readonly DependencyProperty PDFPageBackgroundProperty
-            = DependencyProperty.Register("PDFPageBackground", typeof(Brush), typeof(PDFView), new FrameworkPropertyMetadata(Brushes.White, HandlePDFPageBackgroundPropertyChanged));
+            = DependencyProperty.Register("PDFPageBackground", typeof(Brush), typeof(PDFView), new FrameworkPropertyMetadata(Brushes.White, HandlePropertyChanged));
+
+        /// <summary>
+        /// Dependency property for 'PDFPageActiveBorderBrush' - source of information to draw content.
+        /// </summary>
+        public static readonly DependencyProperty PDFPageActiveBorderBrushProperty
+            = DependencyProperty.Register("PDFPageActiveBorderBrush", typeof(Brush), typeof(PDFView), new FrameworkPropertyMetadata(Brushes.Black, HandlePropertyChanged));
+
+        /// <summary>
+        /// Dependency property for 'PDFPageActiveBorderThickness' - source of information to draw content.
+        /// </summary>
+        public static readonly DependencyProperty PDFPageActiveBorderThicknessProperty
+            = DependencyProperty.Register("PDFPageActiveBorderThickness", typeof(Thickness), typeof(PDFView), new FrameworkPropertyMetadata(new Thickness(1), HandlePropertyChanged));
+
+        /// <summary>
+        /// Dependency property for 'PDFPageBorderBrush' - source of information to draw content.
+        /// </summary>
+        public static readonly DependencyProperty PDFPageBorderBrushProperty
+            = DependencyProperty.Register("PDFPageBorderBrush", typeof(Brush), typeof(PDFView), new FrameworkPropertyMetadata(Brushes.DarkGray, HandlePropertyChanged));
+
+        /// <summary>
+        /// Dependency property for 'PDFPageBorderThickness' - source of information to draw content.
+        /// </summary>
+        public static readonly DependencyProperty PDFPageBorderThicknessProperty
+            = DependencyProperty.Register("PDFPageBorderThickness", typeof(Thickness), typeof(PDFView), new FrameworkPropertyMetadata(new Thickness(1), HandlePropertyChanged));
 
         /// <summary>
         /// Dependency property for 'PDFPageComponent' - source of information to draw content.
         /// </summary>
         public static readonly DependencyProperty PDFPageComponentProperty
             = DependencyProperty.Register("PDFPageComponent", typeof(IPDFPageComponent), typeof(PDFView), new FrameworkPropertyMetadata(null, HandlePDFPageComponentPropertyChanged));
+
+        /// <summary>
+        /// Dependency property for 'ShowPageLabel' - label will be drawn beneath of page.
+        /// </summary>
+        public static readonly DependencyProperty ShowPageLabelProperty =
+            DependencyProperty.Register("ShowPageLabel", typeof(bool), typeof(PDFView), new FrameworkPropertyMetadata(false, HandlePropertyChanged));
 
         #endregion Dependency properties - register
 
@@ -89,10 +119,55 @@
         /// <summary>
         /// Gets or sets the value of dependency property.
         /// </summary>
+        public Brush PDFPageActiveBorderBrush
+        {
+            get => (Brush)GetValue(PDFPageActiveBorderBrushProperty);
+            set => SetValue(PDFPageActiveBorderBrushProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the value of dependency property.
+        /// </summary>
+        public Thickness PDFPageActiveBorderThickness
+        {
+            get => (Thickness)GetValue(PDFPageActiveBorderThicknessProperty);
+            set => SetValue(PDFPageActiveBorderThicknessProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the value of dependency property.
+        /// </summary>
+        public Brush PDFPageBorderBrush
+        {
+            get => (Brush)GetValue(PDFPageBorderBrushProperty);
+            set => SetValue(PDFPageBorderBrushProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the value of dependency property.
+        /// </summary>
+        public Thickness PDFPageBorderThickness
+        {
+            get => (Thickness)GetValue(PDFPageBorderThicknessProperty);
+            set => SetValue(PDFPageBorderThicknessProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the value of dependency property.
+        /// </summary>
         public IPDFPageComponent PDFPageComponent
         {
             get => (IPDFPageComponent)GetValue(PDFPageComponentProperty);
             set => SetValue(PDFPageComponentProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the value of dependency property.
+        /// </summary>
+        public bool ShowPageLabel
+        {
+            get { return (bool)GetValue(ShowPageLabelProperty); }
+            set { SetValue(ShowPageLabelProperty, value); }
         }
 
         #endregion Dependency properties - properties
@@ -111,16 +186,20 @@
                 return;
             }
 
-            view.PDFPageComponent.PageMargin = new PDFSize<double>(view.PDFPageMargin.Width, view.PDFPageMargin.Height);
+            if (view.PDFPageComponent != null)
+            {
+                view.PDFPageComponent.PageMargin = new PDFSize<double>(view.PDFPageMargin.Width, view.PDFPageMargin.Height);
+            }
+
             view.InvalidateVisual();
         }
 
         /// <summary>
-        /// Callback method is called whenever <see cref="PDFPageBackground"/> property has changed value.
+        /// Callback method is called whenever 'simple' property has changed value.
         /// </summary>
         /// <param name="o">The <see cref="DependencyObject"/> on which the property has changed value.</param>
         /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this property.</param>
-        private static void HandlePDFPageBackgroundPropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        private static void HandlePropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             if (o is not PDFView view)
             {
