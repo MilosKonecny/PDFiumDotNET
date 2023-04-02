@@ -50,7 +50,7 @@
         /// Dependency property for 'PDFPageActiveBorderThickness' - source of information to draw content.
         /// </summary>
         public static readonly DependencyProperty PDFPageActiveBorderThicknessProperty
-            = DependencyProperty.Register("PDFPageActiveBorderThickness", typeof(Thickness), typeof(PDFView), new FrameworkPropertyMetadata(new Thickness(1), HandlePropertyChanged));
+            = DependencyProperty.Register("PDFPageActiveBorderThickness", typeof(Thickness), typeof(PDFView), new FrameworkPropertyMetadata(new Thickness(0.5), HandlePropertyChanged));
 
         /// <summary>
         /// Dependency property for 'PDFPageBorderBrush' - source of information to draw content.
@@ -62,7 +62,7 @@
         /// Dependency property for 'PDFPageBorderThickness' - source of information to draw content.
         /// </summary>
         public static readonly DependencyProperty PDFPageBorderThicknessProperty
-            = DependencyProperty.Register("PDFPageBorderThickness", typeof(Thickness), typeof(PDFView), new FrameworkPropertyMetadata(new Thickness(1), HandlePropertyChanged));
+            = DependencyProperty.Register("PDFPageBorderThickness", typeof(Thickness), typeof(PDFView), new FrameworkPropertyMetadata(new Thickness(0.5), HandlePropertyChanged));
 
         /// <summary>
         /// Dependency property for 'PDFPageComponent' - source of information to draw content.
@@ -75,6 +75,18 @@
         /// </summary>
         public static readonly DependencyProperty ShowPageLabelProperty =
             DependencyProperty.Register("ShowPageLabel", typeof(bool), typeof(PDFView), new FrameworkPropertyMetadata(false, HandlePropertyChanged));
+
+        /// <summary>
+        /// Dependency property for 'ActivatePageOnClick' - set current page where was clicked.
+        /// </summary>
+        public static readonly DependencyProperty ActivatePageOnClickProperty =
+            DependencyProperty.Register("ActivatePageOnClick", typeof(bool), typeof(PDFView), new FrameworkPropertyMetadata(false, HandlePropertyChanged));
+
+        /// <summary>
+        /// Dependency property for 'ActivatePageInCenter' - set current page where was clicked.
+        /// </summary>
+        public static readonly DependencyProperty ActivatePageInCenterProperty =
+            DependencyProperty.Register("ActivatePageInCenter", typeof(bool), typeof(PDFView), new FrameworkPropertyMetadata(true, HandlePropertyChanged));
 
         #endregion Dependency properties - register
 
@@ -168,6 +180,24 @@
         {
             get { return (bool)GetValue(ShowPageLabelProperty); }
             set { SetValue(ShowPageLabelProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the value of dependency property.
+        /// </summary>
+        public bool ActivatePageOnClick
+        {
+            get { return (bool)GetValue(ActivatePageOnClickProperty); }
+            set { SetValue(ActivatePageOnClickProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the value of dependency property.
+        /// </summary>
+        public bool ActivatePageInCenter
+        {
+            get { return (bool)GetValue(ActivatePageInCenterProperty); }
+            set { SetValue(ActivatePageInCenterProperty, value); }
         }
 
         #endregion Dependency properties - properties
@@ -293,6 +323,12 @@
 
         private void HandlePDFPageComponentNavigatedToPageEvent(object sender, NavigatedToPageEventArgs e)
         {
+            if (ActivatePageOnClick)
+            {
+                // Don't scroll the content to display the current page at the top of the viewport.
+                return;
+            }
+
             // Current page is changed. Scroll to this page.
             var verticalOffset = PDFPageComponent.RenderManager.DeterminePagePosition(e.CurrentPageIndex - 1).Y;
             var horizontalOffset = double.NaN;
