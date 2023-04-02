@@ -9,6 +9,7 @@
     using System.Windows.Media;
     using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Link;
+    using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Render;
 
     /// <summary>
@@ -22,6 +23,11 @@
         /// Render information with list of pages to render and other stuff. Used to examine click, touch, ...
         /// </summary>
         private IPDFRenderInfo _renderInformation;
+
+        /// <summary>
+        /// Point with mouse/touch down.
+        /// </summary>
+        private Point _downPoint;
 
         /// <summary>
         /// Permission for horizontal scroll.
@@ -160,7 +166,7 @@
 
             RenderPages(drawingContext);
 
-            if (_renderInformation?.PagesToRender != null)
+            if (_renderInformation?.PagesToRender != null && ActivatePageInCenter)
             {
                 var pageInfo = _renderInformation.PagesToRender.FirstOrDefault(pageInfo => pageInfo.IsClosestToCenter);
                 if (pageInfo != null)
@@ -288,7 +294,7 @@
                 else
                 {
                     var point = e.GetPosition(this);
-                    var link = GetLinkOnPosition(point);
+                    var link = GetLinkFromPoint(point);
                     if (link != null)
                     {
                         Cursor = Cursors.Hand;
@@ -310,6 +316,7 @@
                 _startHorizontalOffset = HorizontalOffset;
                 _startVerticalOffset = VerticalOffset;
                 _startDragPoint = e.GetPosition(this);
+                _downPoint = e.GetPosition(this);
             }
         }
 
@@ -323,18 +330,37 @@
             if (e != null)
             {
                 var point = e.GetPosition(this);
-                var link = GetLinkOnPosition(point);
-                if (link != null)
+                if (Distance(_downPoint, point) < 5)
                 {
-                    if (link.Action != null)
+                    var link = GetLinkFromPoint(point);
+                    if (link != null)
                     {
-                        PDFPageComponent.PerformAction(link.Action);
+                        if (link.Action != null)
+                        {
+                            PDFPageComponent.PerformAction(link.Action);
+                        }
+                        else if (link.Destination != null)
+                        {
+                            PDFPageComponent.NavigateToDestination(link.Destination);
+                        }
                     }
-                    else if (link.Destination != null)
+                    else if (ActivatePageOnClick)
                     {
-                        PDFPageComponent.NavigateToDestination(link.Destination);
+                        var page = PageFromPoint(point);
+                        PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
                     }
                 }
+            }
+        }
+
+        /// <inheritdoc/>
+        protected override void OnTouchDown(TouchEventArgs e)
+        {
+            base.OnTouchDown(e);
+
+            if (e != null && _renderInformation?.PagesToRender != null)
+            {
+                _downPoint = e.GetTouchPoint(this).Position;
             }
         }
 
@@ -346,16 +372,24 @@
             if (e != null)
             {
                 var point = e.GetTouchPoint(this).Position;
-                var link = GetLinkOnPosition(point);
-                if (link != null)
+                if (Distance(_downPoint, point) < 5)
                 {
-                    if (link.Action != null)
+                    var link = GetLinkFromPoint(point);
+                    if (link != null)
                     {
-                        PDFPageComponent.PerformAction(link.Action);
+                        if (link.Action != null)
+                        {
+                            PDFPageComponent.PerformAction(link.Action);
+                        }
+                        else if (link.Destination != null)
+                        {
+                            PDFPageComponent.NavigateToDestination(link.Destination);
+                        }
                     }
-                    else if (link.Destination != null)
+                    else if (ActivatePageOnClick)
                     {
-                        PDFPageComponent.NavigateToDestination(link.Destination);
+                        var page = PageFromPoint(point);
+                        PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
                     }
                 }
             }
@@ -365,34 +399,48 @@
 
         #region Private methods
 
-        private IPDFLink GetLinkOnPosition(Point point)
+        private static double Distance(Point point1, Point point2)
+        {
+            var dX = point1.X - point2.X;
+            var dY = point1.Y - point2.Y;
+            var val = Math.Sqrt((dX * dX) + (dY * dY));
+            return val;
+        }
+
+        private IPDFPageRenderInfo PageFromPoint(Point point)
+        {
+            return _renderInformation.PagesToRender.FirstOrDefault(p =>
+            {
+                return point.X > p.RelativePositionInViewportArea.Left
+                && point.X < p.RelativePositionInViewportArea.Right
+                && point.Y > p.RelativePositionInViewportArea.Top &&
+                point.Y < p.RelativePositionInViewportArea.Bottom;
+            });
+        }
+
+        private IPDFLink GetLinkFromPoint(Point point)
         {
             if (_renderInformation == null || _renderInformation.PagesToRender == null)
             {
                 return null;
             }
 
-            // ToDo: Optimize this place. Don't iterate through all pages in some cases.
-            foreach (var pageInfo in _renderInformation.PagesToRender)
+            var pageInfo = PageFromPoint(point);
+            if (pageInfo != null)
             {
-                if (point.X > pageInfo.RelativePositionInViewportArea.Left && point.X < pageInfo.RelativePositionInViewportArea.Right
-                    && point.Y > pageInfo.RelativePositionInViewportArea.Top && point.Y < pageInfo.RelativePositionInViewportArea.Bottom)
-                {
-                    // Mouse is over this page
-                    // Transform the point to the page.
-                    point.X -= pageInfo.RelativePositionInViewportArea.Left;
-                    point.Y -= pageInfo.RelativePositionInViewportArea.Top;
+                // Transform the point to the page.
+                point.X -= pageInfo.RelativePositionInViewportArea.Left;
+                point.Y -= pageInfo.RelativePositionInViewportArea.Top;
 
-                    // Eliminate zoom factor
-                    point.X /= PDFPageComponent.ZoomComponent.CurrentZoomFactor;
-                    point.Y /= PDFPageComponent.ZoomComponent.CurrentZoomFactor;
+                // Eliminate zoom factor
+                point.X /= PDFPageComponent.ZoomComponent.CurrentZoomFactor;
+                point.Y /= PDFPageComponent.ZoomComponent.CurrentZoomFactor;
 
-                    // Transform y axis from top-left position to the bottom-left.
-                    point.Y = pageInfo.Page.Height - point.Y;
+                // Transform y axis from top-left position to the bottom-left.
+                point.Y = pageInfo.Page.Height - point.Y;
 
-                    // Get the link on this position.
-                    return pageInfo.Page.GetLinkFromPoint(point.X, point.Y);
-                }
+                // Get the link on this position.
+                return pageInfo.Page.GetLinkFromPoint(point.X, point.Y);
             }
 
             return null;
