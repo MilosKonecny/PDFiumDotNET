@@ -46,6 +46,7 @@
         /// <summary>
         /// Gets or sets the value of dependency property.
         /// </summary>
+        [Category(Constants.PDFiumDotNETPropertyCategory)]
         public Brush PDFPageBackground
         {
             get => (Brush)GetValue(PDFPageBackgroundProperty);
@@ -55,6 +56,7 @@
         /// <summary>
         /// Gets or sets the value of dependency property.
         /// </summary>
+        [Category(Constants.PDFiumDotNETPropertyCategory)]
         public Brush PDFPageBorderBrush
         {
             get => (Brush)GetValue(PDFPageBorderBrushProperty);
@@ -64,6 +66,7 @@
         /// <summary>
         /// Gets or sets the value of dependency property.
         /// </summary>
+        [Category(Constants.PDFiumDotNETPropertyCategory)]
         public Thickness PDFPageBorderThickness
         {
             get => (Thickness)GetValue(PDFPageBorderThicknessProperty);
@@ -73,6 +76,7 @@
         /// <summary>
         /// Gets or sets the value of dependency property.
         /// </summary>
+        [Category(Constants.PDFiumDotNETPropertyCategory)]
         public IPDFPageComponent PDFPageComponent
         {
             get => (IPDFPageComponent)GetValue(PDFPageComponentProperty);
