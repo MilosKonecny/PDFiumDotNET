@@ -1,5 +1,7 @@
 ﻿namespace PDFiumDotNET.WinFormsControls
 {
+    using System.Drawing;
+
     partial class PDFControl
     {
         /// <summary> 
@@ -29,7 +31,8 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            AutoScroll = true;
+            AutoScrollMinSize = new Size(0, 0);
         }
 
         #endregion
