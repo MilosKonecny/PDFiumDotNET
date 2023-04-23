@@ -10,6 +10,11 @@
     internal interface IMainModel : INotifyPropertyChanged
     {
         /// <summary>
+        ///  Gets the file name of open file.
+        /// </summary>
+        string FileName { get; }
+
+        /// <summary>
         /// Gets the <see cref="IPDFPageComponent"/> used to view PDF document content in main view.
         /// </summary>
         IPDFPageComponent PDFPageComponentForView { get; }
@@ -40,5 +45,20 @@
         /// The method closes already opened file.
         /// </summary>
         void CloseFile();
+
+        /// <summary>
+        /// The method changes the layout of pages to one column.
+        /// </summary>
+        void ViewPagesInOneColumn();
+
+        /// <summary>
+        /// The method changes the layout of pages to two columns.
+        /// </summary>
+        void ViewPagesInTwoColumns();
+
+        /// <summary>
+        /// The method changes the layout of pages to two columns, where in the first row is only one page.
+        /// </summary>
+        void ViewPagesInTwoColumnsSpecial();
     }
 }

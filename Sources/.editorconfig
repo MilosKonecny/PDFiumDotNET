@@ -909,6 +909,7 @@ dotnet_diagnostic.SA1615.severity = none
 # SA1623: The documentation text within a C# property's <summary> tag does not match the accessors within the property.
 # Temporary disabled because <inheritdoc/> is ignored
 dotnet_diagnostic.SA1623.severity = none
+dotnet_diagnostic.CA1416.severity = suggestion
 
 ########################################
 # 

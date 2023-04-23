@@ -112,6 +112,7 @@
                 if (_horizontalOffset != value)
                 {
                     _horizontalOffset = value;
+                    AutoScrollPosition = new Point((int)_horizontalOffset, (int)_verticalOffset);
                     Invalidate();
                 }
             }
@@ -132,6 +133,7 @@
                 if (_verticalOffset != value)
                 {
                     _verticalOffset = value;
+                    AutoScrollPosition = new Point((int)_horizontalOffset, (int)_verticalOffset);
                     Invalidate();
                 }
             }
@@ -429,6 +431,13 @@
             _verticalOffset = 0d;
             _documentArea = new Size(0, 0);
             _renderInformation = null;
+        }
+
+        private void SetStatusForOpenedDocument()
+        {
+            var newSize = new Size(Width, Height);
+            UpdateViewportAreaSize(newSize);
+            UpdateDocumentAreaSize(DetermineDocumentAreaSize(newSize));
         }
 
         #endregion Private methods
