@@ -331,6 +331,7 @@
                     StringComparison.OrdinalIgnoreCase))
             {
                 ResetStatus();
+                SetStatusForOpenedDocument();
                 Invalidate();
             }
         }
@@ -367,6 +368,8 @@
             {
                 HorizontalOffset = horizontalOffset;
             }
+
+            AutoScrollPosition = new Point((int)_horizontalOffset, (int)_verticalOffset);
         }
 
         private void HandlePDFPageComponentTextSelectionsRemovedEvent(object sender, EventArgs e)
@@ -378,6 +381,7 @@
         {
             _horizontalOffset = PDFPageComponent.RenderManager.DetermineHorizontalOffset(_renderInformation, e.NewZoomFactor);
             _verticalOffset = PDFPageComponent.RenderManager.DetermineVerticalOffset(_renderInformation, e.NewZoomFactor);
+            AutoScrollPosition = new Point((int)_horizontalOffset, (int)_verticalOffset);
             Invalidate();
         }
 

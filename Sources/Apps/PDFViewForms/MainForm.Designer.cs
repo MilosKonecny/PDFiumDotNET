@@ -33,6 +33,7 @@
             splitContainer = new System.Windows.Forms.SplitContainer();
             tabControl = new System.Windows.Forms.TabControl();
             tabPageBookmarks = new System.Windows.Forms.TabPage();
+            treeViewBookmarks = new System.Windows.Forms.TreeView();
             tabPageThumbnails = new System.Windows.Forms.TabPage();
             tabPageFindText = new System.Windows.Forms.TabPage();
             menuStrip = new System.Windows.Forms.MenuStrip();
@@ -41,6 +42,23 @@
             toolStripMenuItemFileClose = new System.Windows.Forms.ToolStripMenuItem();
             toolStripMenuItemFileProperties = new System.Windows.Forms.ToolStripMenuItem();
             toolStripMenuItemFileExit = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItemNavigate = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItemNavigateFirstPage = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItemNavigatePreviousPage = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItemNavigateNextPage = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItemNavigateLastPage = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItemZoom = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItemZoomIncrease = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItemZoomDecrease = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            toolStripMenuItemZoomPageWidth = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItemZoomPageHeight = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItemView = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItemViewPagesInOneColumn = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItemViewPagesInTwoColumns = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItemViewPagesInTwoColumnsSpecial = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            toolStripMenuItemViewAnnotations = new System.Windows.Forms.ToolStripMenuItem();
             toolStripMenuItemHelp = new System.Windows.Forms.ToolStripMenuItem();
             toolStripMenuItemHelpAbout = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)splitContainer).BeginInit();
@@ -48,6 +66,7 @@
             splitContainer.Panel2.SuspendLayout();
             splitContainer.SuspendLayout();
             tabControl.SuspendLayout();
+            tabPageBookmarks.SuspendLayout();
             tabPageThumbnails.SuspendLayout();
             menuStrip.SuspendLayout();
             SuspendLayout();
@@ -73,7 +92,7 @@
             pdfControl.ActivatePageInCenter = true;
             pdfControl.ActivatePageOnClick = false;
             pdfControl.AutoScroll = true;
-            pdfControl.AutoScrollMinSize = new System.Drawing.Size(1255, 765);
+            pdfControl.AutoScrollMinSize = new System.Drawing.Size(1251, 765);
             pdfControl.BackColor = System.Drawing.SystemColors.ControlLight;
             pdfControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             pdfControl.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -89,13 +108,13 @@
             pdfControl.PDFPageComponent = null;
             pdfControl.PDFPageMargin = new System.Drawing.Size(5, 5);
             pdfControl.ShowPageLabel = false;
-            pdfControl.Size = new System.Drawing.Size(1255, 765);
+            pdfControl.Size = new System.Drawing.Size(1251, 765);
             pdfControl.TabIndex = 2;
             // 
             // splitContainer
             // 
-            splitContainer.Dock = System.Windows.Forms.DockStyle.Bottom;
-            splitContainer.Location = new System.Drawing.Point(0, 45);
+            splitContainer.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            splitContainer.Location = new System.Drawing.Point(0, 50);
             splitContainer.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             splitContainer.Name = "splitContainer";
             // 
@@ -108,7 +127,7 @@
             splitContainer.Panel2.Controls.Add(pdfControl);
             splitContainer.Size = new System.Drawing.Size(1889, 765);
             splitContainer.SplitterDistance = 628;
-            splitContainer.SplitterWidth = 6;
+            splitContainer.SplitterWidth = 10;
             splitContainer.TabIndex = 3;
             // 
             // tabControl
@@ -126,6 +145,7 @@
             // 
             // tabPageBookmarks
             // 
+            tabPageBookmarks.Controls.Add(treeViewBookmarks);
             tabPageBookmarks.Location = new System.Drawing.Point(4, 34);
             tabPageBookmarks.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             tabPageBookmarks.Name = "tabPageBookmarks";
@@ -134,6 +154,15 @@
             tabPageBookmarks.TabIndex = 0;
             tabPageBookmarks.Text = "Bookmarks";
             tabPageBookmarks.UseVisualStyleBackColor = true;
+            // 
+            // treeViewBookmarks
+            // 
+            treeViewBookmarks.Dock = System.Windows.Forms.DockStyle.Fill;
+            treeViewBookmarks.Location = new System.Drawing.Point(4, 5);
+            treeViewBookmarks.Name = "treeViewBookmarks";
+            treeViewBookmarks.Size = new System.Drawing.Size(612, 717);
+            treeViewBookmarks.TabIndex = 0;
+            treeViewBookmarks.AfterSelect += HandleTreeViewBookmarksAfterSelectEvent;
             // 
             // tabPageThumbnails
             // 
@@ -160,7 +189,7 @@
             // menuStrip
             // 
             menuStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
-            menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripMenuItemFile, toolStripMenuItemHelp });
+            menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripMenuItemFile, toolStripMenuItemNavigate, toolStripMenuItemZoom, toolStripMenuItemView, toolStripMenuItemHelp });
             menuStrip.Location = new System.Drawing.Point(0, 0);
             menuStrip.Name = "menuStrip";
             menuStrip.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
@@ -178,30 +207,145 @@
             // toolStripMenuItemFileOpen
             // 
             toolStripMenuItemFileOpen.Name = "toolStripMenuItemFileOpen";
-            toolStripMenuItemFileOpen.Size = new System.Drawing.Size(270, 34);
+            toolStripMenuItemFileOpen.Size = new System.Drawing.Size(194, 34);
             toolStripMenuItemFileOpen.Text = "&Open";
             toolStripMenuItemFileOpen.Click += HandleOpenMenuItemClickEvent;
             // 
             // toolStripMenuItemFileClose
             // 
             toolStripMenuItemFileClose.Name = "toolStripMenuItemFileClose";
-            toolStripMenuItemFileClose.Size = new System.Drawing.Size(270, 34);
+            toolStripMenuItemFileClose.Size = new System.Drawing.Size(194, 34);
             toolStripMenuItemFileClose.Text = "&Close";
             toolStripMenuItemFileClose.Click += HandleCloseMenuItemClickEvent;
             // 
             // toolStripMenuItemFileProperties
             // 
             toolStripMenuItemFileProperties.Name = "toolStripMenuItemFileProperties";
-            toolStripMenuItemFileProperties.Size = new System.Drawing.Size(270, 34);
+            toolStripMenuItemFileProperties.Size = new System.Drawing.Size(194, 34);
             toolStripMenuItemFileProperties.Text = "&Properties";
             toolStripMenuItemFileProperties.Click += HandlePropertiesMenuItemClickEvent;
             // 
             // toolStripMenuItemFileExit
             // 
             toolStripMenuItemFileExit.Name = "toolStripMenuItemFileExit";
-            toolStripMenuItemFileExit.Size = new System.Drawing.Size(270, 34);
+            toolStripMenuItemFileExit.Size = new System.Drawing.Size(194, 34);
             toolStripMenuItemFileExit.Text = "E&xit";
             toolStripMenuItemFileExit.Click += HandleExitMenuItemClickEvent;
+            // 
+            // toolStripMenuItemNavigate
+            // 
+            toolStripMenuItemNavigate.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripMenuItemNavigateFirstPage, toolStripMenuItemNavigatePreviousPage, toolStripMenuItemNavigateNextPage, toolStripMenuItemNavigateLastPage });
+            toolStripMenuItemNavigate.Name = "toolStripMenuItemNavigate";
+            toolStripMenuItemNavigate.Size = new System.Drawing.Size(98, 29);
+            toolStripMenuItemNavigate.Text = "Navigate";
+            // 
+            // toolStripMenuItemNavigateFirstPage
+            // 
+            toolStripMenuItemNavigateFirstPage.Name = "toolStripMenuItemNavigateFirstPage";
+            toolStripMenuItemNavigateFirstPage.Size = new System.Drawing.Size(270, 34);
+            toolStripMenuItemNavigateFirstPage.Text = "First page";
+            toolStripMenuItemNavigateFirstPage.Click += HandleNavigateFirstPageMenuItemClickEvent;
+            // 
+            // toolStripMenuItemNavigatePreviousPage
+            // 
+            toolStripMenuItemNavigatePreviousPage.Name = "toolStripMenuItemNavigatePreviousPage";
+            toolStripMenuItemNavigatePreviousPage.Size = new System.Drawing.Size(270, 34);
+            toolStripMenuItemNavigatePreviousPage.Text = "Previous page";
+            toolStripMenuItemNavigatePreviousPage.Click += HandleNavigatePreviousPageMenuItemClickEvent;
+            // 
+            // toolStripMenuItemNavigateNextPage
+            // 
+            toolStripMenuItemNavigateNextPage.Name = "toolStripMenuItemNavigateNextPage";
+            toolStripMenuItemNavigateNextPage.Size = new System.Drawing.Size(270, 34);
+            toolStripMenuItemNavigateNextPage.Text = "Next page";
+            toolStripMenuItemNavigateNextPage.Click += HandleNavigateNextPageMenuItemClickEvent;
+            // 
+            // toolStripMenuItemNavigateLastPage
+            // 
+            toolStripMenuItemNavigateLastPage.Name = "toolStripMenuItemNavigateLastPage";
+            toolStripMenuItemNavigateLastPage.Size = new System.Drawing.Size(270, 34);
+            toolStripMenuItemNavigateLastPage.Text = "Last page";
+            toolStripMenuItemNavigateLastPage.Click += HandleNavigateLastPageMenuItemClickEvent;
+            // 
+            // toolStripMenuItemZoom
+            // 
+            toolStripMenuItemZoom.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripMenuItemZoomIncrease, toolStripMenuItemZoomDecrease, toolStripMenuItem3, toolStripMenuItemZoomPageWidth, toolStripMenuItemZoomPageHeight });
+            toolStripMenuItemZoom.Name = "toolStripMenuItemZoom";
+            toolStripMenuItemZoom.Size = new System.Drawing.Size(76, 29);
+            toolStripMenuItemZoom.Text = "Zoom";
+            // 
+            // toolStripMenuItemZoomIncrease
+            // 
+            toolStripMenuItemZoomIncrease.Name = "toolStripMenuItemZoomIncrease";
+            toolStripMenuItemZoomIncrease.Size = new System.Drawing.Size(236, 34);
+            toolStripMenuItemZoomIncrease.Text = "&Increase zoom";
+            toolStripMenuItemZoomIncrease.Click += HandleIncreaseZoomMenuItemClickEvent;
+            // 
+            // toolStripMenuItemZoomDecrease
+            // 
+            toolStripMenuItemZoomDecrease.Name = "toolStripMenuItemZoomDecrease";
+            toolStripMenuItemZoomDecrease.Size = new System.Drawing.Size(236, 34);
+            toolStripMenuItemZoomDecrease.Text = "&Decrease zoom";
+            toolStripMenuItemZoomDecrease.Click += HandleDecreaseZoomMenuItemClickEvent;
+            // 
+            // toolStripMenuItem3
+            // 
+            toolStripMenuItem3.Name = "toolStripMenuItem3";
+            toolStripMenuItem3.Size = new System.Drawing.Size(233, 6);
+            // 
+            // toolStripMenuItemZoomPageWidth
+            // 
+            toolStripMenuItemZoomPageWidth.Name = "toolStripMenuItemZoomPageWidth";
+            toolStripMenuItemZoomPageWidth.Size = new System.Drawing.Size(236, 34);
+            toolStripMenuItemZoomPageWidth.Text = "Page &width";
+            toolStripMenuItemZoomPageWidth.Click += HandlePageWidthZoomMenuItemClickEvent;
+            // 
+            // toolStripMenuItemZoomPageHeight
+            // 
+            toolStripMenuItemZoomPageHeight.Name = "toolStripMenuItemZoomPageHeight";
+            toolStripMenuItemZoomPageHeight.Size = new System.Drawing.Size(236, 34);
+            toolStripMenuItemZoomPageHeight.Text = "Page &height";
+            toolStripMenuItemZoomPageHeight.Click += HandlePageHeightZoomMenuItemClickEvent;
+            // 
+            // toolStripMenuItemView
+            // 
+            toolStripMenuItemView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripMenuItemViewPagesInOneColumn, toolStripMenuItemViewPagesInTwoColumns, toolStripMenuItemViewPagesInTwoColumnsSpecial, toolStripMenuItem2, toolStripMenuItemViewAnnotations });
+            toolStripMenuItemView.Name = "toolStripMenuItemView";
+            toolStripMenuItemView.Size = new System.Drawing.Size(65, 29);
+            toolStripMenuItemView.Text = "View";
+            // 
+            // toolStripMenuItemViewPagesInOneColumn
+            // 
+            toolStripMenuItemViewPagesInOneColumn.Name = "toolStripMenuItemViewPagesInOneColumn";
+            toolStripMenuItemViewPagesInOneColumn.Size = new System.Drawing.Size(344, 34);
+            toolStripMenuItemViewPagesInOneColumn.Text = "Pages in one column";
+            toolStripMenuItemViewPagesInOneColumn.Click += HandleViewPagesInOneColumnMenuItemClickEvent;
+            // 
+            // toolStripMenuItemViewPagesInTwoColumns
+            // 
+            toolStripMenuItemViewPagesInTwoColumns.Name = "toolStripMenuItemViewPagesInTwoColumns";
+            toolStripMenuItemViewPagesInTwoColumns.Size = new System.Drawing.Size(344, 34);
+            toolStripMenuItemViewPagesInTwoColumns.Text = "Pages in two columns";
+            toolStripMenuItemViewPagesInTwoColumns.Click += HandleViewPagesInTwoColumnsMenuItemClickEvent;
+            // 
+            // toolStripMenuItemViewPagesInTwoColumnsSpecial
+            // 
+            toolStripMenuItemViewPagesInTwoColumnsSpecial.Name = "toolStripMenuItemViewPagesInTwoColumnsSpecial";
+            toolStripMenuItemViewPagesInTwoColumnsSpecial.Size = new System.Drawing.Size(344, 34);
+            toolStripMenuItemViewPagesInTwoColumnsSpecial.Text = "Pages in two columns special";
+            toolStripMenuItemViewPagesInTwoColumnsSpecial.Click += HandleViewPagesInTwoColumnsSpecialMenuItemClickEvent;
+            // 
+            // toolStripMenuItem2
+            // 
+            toolStripMenuItem2.Name = "toolStripMenuItem2";
+            toolStripMenuItem2.Size = new System.Drawing.Size(341, 6);
+            // 
+            // toolStripMenuItemViewAnnotations
+            // 
+            toolStripMenuItemViewAnnotations.Name = "toolStripMenuItemViewAnnotations";
+            toolStripMenuItemViewAnnotations.Size = new System.Drawing.Size(344, 34);
+            toolStripMenuItemViewAnnotations.Text = "Annotations";
+            toolStripMenuItemViewAnnotations.Click += HandleViewAnnotationsMenuItemClickEvent;
             // 
             // toolStripMenuItemHelp
             // 
@@ -233,6 +377,7 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer).EndInit();
             splitContainer.ResumeLayout(false);
             tabControl.ResumeLayout(false);
+            tabPageBookmarks.ResumeLayout(false);
             tabPageThumbnails.ResumeLayout(false);
             menuStrip.ResumeLayout(false);
             menuStrip.PerformLayout();
@@ -249,13 +394,31 @@
         private System.Windows.Forms.TabPage tabPageBookmarks;
         private System.Windows.Forms.TabPage tabPageThumbnails;
         private System.Windows.Forms.TabPage tabPageFindText;
+        private System.Windows.Forms.TreeView treeViewBookmarks;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFile;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFileOpen;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFileClose;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFileProperties;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFileExit;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemZoom;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemZoomIncrease;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemZoomDecrease;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemZoomPageWidth;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemZoomPageHeight;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemView;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemViewPagesInOneColumn;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemViewPagesInTwoColumns;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemViewPagesInTwoColumnsSpecial;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemViewAnnotations;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemHelp;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemHelpAbout;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemNavigate;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemNavigateFirstPage;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemNavigatePreviousPage;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemNavigateNextPage;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemNavigateLastPage;
     }
 }
