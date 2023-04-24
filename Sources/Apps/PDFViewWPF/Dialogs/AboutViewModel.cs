@@ -36,7 +36,7 @@
         {
             get
             {
-                return "Simple Wpf application provides information how to use PDFiumDotNET library";
+                return "WPF application provides information how to use PDFiumDotNET library";
             }
         }
 

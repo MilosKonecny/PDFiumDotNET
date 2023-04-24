@@ -4,7 +4,7 @@
     using PDFiumDotNET.Components.Contracts.Find;
 
     /// <summary>
-    /// Implements <see cref="IPDFFindPosition"/>.
+    /// The class implements functionality defined by <see cref="IPDFFindPosition"/>.
     /// </summary>
     internal class PDFFindPosition : IPDFFindPosition
     {

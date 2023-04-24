@@ -22,7 +22,7 @@
 
         #endregion Private fields
 
-        #region Test init and clean up
+        #region Test initialization and clean up
 
         /// <summary>
         /// Test class initialization method.
@@ -48,7 +48,7 @@
         {
         }
 
-        #endregion Test init and clean up
+        #endregion Test initialization and clean up
 
         /// <summary>
         /// Test for correct type of component.
@@ -86,7 +86,7 @@
             var pageComponentThumbnail = layoutComponent.CreatePageComponent("thumbnail", PageLayoutType.Thumbnail);
 
             component.OpenDocument(pdfFile, string.Empty);
-            Assert.IsTrue(component.IsDocumentOpened);
+            Assert.IsTrue(component.IsDocumentOpen);
 
             Assert.AreEqual(1, pageComponentStandard.CurrentPageIndex);
             Assert.AreEqual(1094, pageComponentStandard.PageCount);
@@ -113,7 +113,7 @@
             var pageComponentThumbnail = layoutComponent.CreatePageComponent("thumbnail", PageLayoutType.Thumbnail);
 
             component.OpenDocument(pdfFile, string.Empty);
-            Assert.IsTrue(component.IsDocumentOpened);
+            Assert.IsTrue(component.IsDocumentOpen);
 
             Assert.IsNotNull(pageComponentStandard.Pages);
             Assert.IsNotNull(pageComponentThumbnail.Pages);

@@ -333,7 +333,7 @@
                         </Button>
                         <TreeView Grid.Row="8"
                                   ItemsSource="{Binding Path=FindResult}"
-                                  SelectedItemChanged="TreeView_SelectedItemChanged"
+                                  SelectedItemChanged="HandleFindTreeViewSelectedItemChangedEvent"
                                   ItemTemplateSelector="{StaticResource ResourceKey=FindTemplateSelectorKey}">
                             <TreeView.ItemContainerStyle>
                                 <Style TargetType="{x:Type TreeViewItem}">

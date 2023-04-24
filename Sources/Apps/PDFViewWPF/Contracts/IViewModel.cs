@@ -1,7 +1,7 @@
 ﻿namespace PDFiumDotNET.Apps.PDFViewWPF.Contracts
 {
     /// <summary>
-    /// Interface defines base behaviour of view model.
+    /// Interface defines base behavior of view model.
     /// </summary>
     public interface IViewModel
     {

@@ -25,7 +25,7 @@
 
         /// <summary>
         /// (Revision 2) Print the document.
-        /// (Revision 3 or greater) Print the document (possibly not at the highest quality level, depending on whether bit 12 ist also set).
+        /// (Revision 3 or greater) Print the document (possibly not at the highest quality level, depending on whether bit 12 is also set).
         /// (Bit 3)
         /// </summary>
         PrintDocument = 0b100,
@@ -39,7 +39,7 @@
         /// <summary>
         /// (Revision 2) Copy or otherwise extract text and graphics from the document, including extracting text and graphics
         /// (in support of accessibility to users with disabilities or for other purposes).
-        /// (Revisiont 3 or greater) Copy or otherwise extract text and graphics from the document
+        /// (Revision 3 or greater) Copy or otherwise extract text and graphics from the document
         /// by operations other than that controlled by bit 10.
         /// (Bit 5)
         /// </summary>
@@ -77,7 +77,7 @@
         ExtractTextAndGraphicsDisabilities = 0b1000000000,
 
         /// <summary>
-        /// (Revistion 3 or greater) Assemble the document (insert, rotate, or delete pages and create bookmarks or thumbnail images),
+        /// (Revision 3 or greater) Assemble the document (insert, rotate, or delete pages and create bookmarks or thumbnail images),
         /// even if bit 4 is clear.
         /// (Bit 11)
         /// </summary>

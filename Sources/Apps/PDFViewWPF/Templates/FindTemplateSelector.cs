@@ -5,7 +5,7 @@
     using PDFiumDotNET.Components.Contracts.Find;
 
     /// <summary>
-    /// Template selector used for hiearchical tree to select two different templates.
+    /// Template selector used for hierarchical tree to select two different templates.
     /// </summary>
     public class FindTemplateSelector : DataTemplateSelector
     {

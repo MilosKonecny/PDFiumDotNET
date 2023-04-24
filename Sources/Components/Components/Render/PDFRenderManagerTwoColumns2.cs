@@ -1,9 +1,6 @@
 ﻿namespace PDFiumDotNET.Components.Render
 {
-    using System;
-    using System.Linq;
     using PDFiumDotNET.Components.Contracts.Page;
-    using PDFiumDotNET.Components.Contracts.Render;
 
     /// <summary>
     /// The class <see cref="PDFRenderManagerTwoColumns2"/> is derived from abstract <see cref="PDFRenderManagerTwoColumnsBase"/> class

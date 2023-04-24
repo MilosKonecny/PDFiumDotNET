@@ -2,7 +2,9 @@
 {
     using PDFiumDotNET.Components.Contracts.Zoom;
 
-    /// <inheritdoc cref="IPDFZoomComponent"/>
+    /// <summary>
+    /// The class implements functionality defined in <see cref="IPDFZoomComponent"/>.
+    /// </summary>
     internal sealed partial class PDFZoomComponent
     {
         #region Protected methods - overrides

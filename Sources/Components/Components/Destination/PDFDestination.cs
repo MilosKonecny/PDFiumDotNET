@@ -4,13 +4,15 @@
     using PDFiumDotNET.Components.Contracts.Destination;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
-    /// <inheritdoc cref="IPDFDestination"/>
+    /// <summary>
+    /// The class implements the functionality defined by <see cref="IPDFDestination"/>.
+    /// </summary>
     internal class PDFDestination : IPDFDestination
     {
         #region Private fields
 
         private readonly PDFComponent _mainComponent;
-        private FPDF_DEST _destinationHandle;
+        private readonly FPDF_DEST _destinationHandle;
 
         #endregion Private fields
 

@@ -24,12 +24,12 @@
     /// </summary>
     public partial class MainViewModel : BaseViewModel, IViewModel
     {
-        #region Private consts
+        #region Private constants
 
         private const string _standardPageComponentName = "StandardPageComponent";
         private const string _thumbnailPageComponentName = "ThumbnailPageComponent";
 
-        #endregion Private consts
+        #endregion Private constants
 
         #region Private fields
 
@@ -190,7 +190,7 @@
             get
             {
                 return _pdfComponent != null
-                    && _pdfComponent.IsDocumentOpened;
+                    && _pdfComponent.IsDocumentOpen;
             }
         }
 
@@ -202,7 +202,7 @@
             get
             {
                 return _pdfComponent == null
-                    || !_pdfComponent.IsDocumentOpened;
+                    || !_pdfComponent.IsDocumentOpen;
             }
         }
 
@@ -392,12 +392,12 @@
             FindClearResultCommand = new ViewModelCommand(ExecuteFindClearResultCommand, CanExecuteFindClearResultCommand);
             FindCancelCommand = new ViewModelCommand(ExecuteFindCancelCommand, CanExecuteFindCancelCommand);
 
-            // Initialize pdf component
+            // Initialize PDF component
             _pdfComponent = PDFFactory.PDFComponent;
 
             _pdfComponent.PropertyChanged += (s, e) =>
             {
-                if (string.Equals(nameof(IPDFComponent.IsDocumentOpened), e?.PropertyName, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(nameof(IPDFComponent.IsDocumentOpen), e?.PropertyName, StringComparison.OrdinalIgnoreCase))
                 {
                     IsFindActive = false;
                     FindResult.Clear();

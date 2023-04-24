@@ -4,7 +4,7 @@
     using System.Runtime.InteropServices;
 
     /// <summary>
-    /// Class contains win api native methods.
+    /// Class contains Windows API native methods.
     /// </summary>
     internal static class NativeMethods
     {
@@ -143,7 +143,7 @@
         public static extern bool FreeLibrary(IntPtr hLibModule);
 
         /// <summary>
-        /// Converts the struct array to <see cref="IntPtr"/> to provide parameter for win api functions.
+        /// Converts the structure array to <see cref="IntPtr"/> to provide parameter for Windows API functions.
         /// </summary>
         /// <typeparam name="T">Type of structure.</typeparam>
         /// <param name="array">Array to convert.</param>

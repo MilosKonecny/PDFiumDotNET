@@ -3,7 +3,7 @@
     using System;
 
     /// <summary>
-    /// Class implemenents different conversion methods.
+    /// Class implements various conversion methods.
     /// </summary>
     internal static class DataConverter
     {

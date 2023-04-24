@@ -54,7 +54,7 @@
         DateTimeOffset ModDate { get; }
 
         /// <summary>
-        /// Gets the document permisions.
+        /// Gets the document permissions.
         /// </summary>
         PDFPermissions DocumentPermissions { get; }
     }

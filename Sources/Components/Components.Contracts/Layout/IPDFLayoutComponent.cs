@@ -19,7 +19,7 @@
         /// Gets the <see cref="IPDFPageComponent"/> by its name.
         /// </summary>
         /// <param name="name">The name of <see cref="IPDFPageComponent"/> to return.</param>
-        /// <returns>Returns <see cref="IPDFPageComponent"/> that was createt with the specified name. Otherwise <c>null</c>.</returns>
+        /// <returns>Returns <see cref="IPDFPageComponent"/> that was created with the specified name. Otherwise <c>null</c>.</returns>
         IPDFPageComponent this[string name] { get; }
 
         /// <summary>

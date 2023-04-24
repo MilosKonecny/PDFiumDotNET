@@ -3,9 +3,6 @@ namespace PDFiumDotNET.Components.Test
     using System;
     using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Moq;
-    using PDFiumDotNET.Components.Contracts;
-    using PDFiumDotNET.Components.Contracts.Observers;
     using PDFiumDotNET.Components.Factory;
 
     // Disable "Remove the underscores from member name"
@@ -24,7 +21,7 @@ namespace PDFiumDotNET.Components.Test
 
         #endregion Private fields
 
-        #region Test init and clean up
+        #region Test initialization and clean up
 
         /// <summary>
         /// Test class initialization method.
@@ -50,7 +47,7 @@ namespace PDFiumDotNET.Components.Test
         {
         }
 
-        #endregion Test init and clean up
+        #endregion Test initialization and clean up
 
         /// <summary>
         /// Test for constructor.

@@ -5,7 +5,9 @@
     using PDFiumDotNET.Components.Page;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
-    /// <inheritdoc cref="IPDFBitmap"/>
+    /// <summary>
+    /// The class implements the functionality defined by <see cref="IPDFBitmap"/>.
+    /// </summary>
     internal class PDFBitmap : IPDFBitmap
     {
         #region Private fields

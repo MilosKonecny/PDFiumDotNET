@@ -1,9 +1,6 @@
 ﻿namespace PDFiumDotNET.Apps.PDFViewForms.About
 {
     using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Drawing;
     using System.IO;
     using System.Reflection;
     using System.Windows.Forms;

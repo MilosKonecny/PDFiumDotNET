@@ -12,7 +12,7 @@
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PDFSize{T}"/> struct.
+        /// Initializes a new instance of the <see cref="PDFSize{T}"/> structure.
         /// </summary>
         public PDFSize()
         {
@@ -21,7 +21,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PDFSize{T}"/> struct.
+        /// Initializes a new instance of the <see cref="PDFSize{T}"/> structure.
         /// </summary>
         /// <param name="width">Value for <see cref="Width"/> property.</param>
         /// <param name="height">Value for <see cref="Height"/> property.</param>
@@ -32,7 +32,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PDFSize{T}"/> struct.
+        /// Initializes a new instance of the <see cref="PDFSize{T}"/> structure.
         /// </summary>
         /// <param name="size"><see cref="PDFSize{T}"/> to copy values from.</param>
         public PDFSize(PDFSize<T> size)

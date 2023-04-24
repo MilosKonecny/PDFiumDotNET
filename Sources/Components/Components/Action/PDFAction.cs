@@ -8,13 +8,15 @@
     using PDFiumDotNET.Components.Destination;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
-    /// <inheritdoc cref="IPDFAction"/>
+    /// <summary>
+    /// The class implements the functionality defined by <see cref="IPDFAction"/>.
+    /// </summary>
     internal class PDFAction : IPDFAction
     {
         #region Private fields
 
         private readonly PDFComponent _mainComponent;
-        private FPDF_ACTION _actionHandle;
+        private readonly FPDF_ACTION _actionHandle;
 
         #endregion Private fields
 
