@@ -29,7 +29,7 @@
         /// Gets the Uri associated with action.
         /// Returned value is not <c>null</c> only if <see cref="ActionType"/> is <see cref="PDFActionType.Uri"/>.
         /// </summary>
-        /// <remarks>The string stored in a PDF is not in some cases uri conform text.</remarks>
+        /// <remarks>The string stored in a PDF is not in some cases URI conform text.</remarks>
 #pragma warning disable CA1056 // URI-like properties should not be strings
         string UriPath { get; }
 #pragma warning restore CA1056 // URI-like properties should not be strings

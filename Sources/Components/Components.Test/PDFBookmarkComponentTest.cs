@@ -23,7 +23,7 @@
 
         #endregion Private fields
 
-        #region Test init and clean up
+        #region Test initialization and clean up
 
         /// <summary>
         /// Test class initialization method.
@@ -49,7 +49,7 @@
         {
         }
 
-        #endregion Test init and clean up
+        #endregion Test initialization and clean up
 
         /// <summary>
         /// Test for correct type of component.
@@ -66,7 +66,7 @@
         }
 
         /// <summary>
-        /// Test for correct count of bookmaks.
+        /// Test for correct count of bookmarks.
         /// </summary>
         [TestMethod]
         public void PDFBookmarkComponent_EnumerateBookmarks_CheckCount_Success()
@@ -77,7 +77,7 @@
             var bookmarkComponent = component.BookmarkComponent;
 
             component.OpenDocument(pdfFile, string.Empty);
-            Assert.IsTrue(component.IsDocumentOpened);
+            Assert.IsTrue(component.IsDocumentOpen);
 
             var bookmarkCount = 0;
             Queue<IPDFBookmark> queue = new Queue<IPDFBookmark>(bookmarkComponent.Bookmarks);
@@ -110,7 +110,7 @@
         }
 
         /// <summary>
-        /// Test for correct count of bookmaks.
+        /// Test for correct count of bookmarks.
         /// </summary>
         [TestMethod]
         public void PDFBookmarkComponent_Bookmarks_CheckState_Success()
@@ -121,7 +121,7 @@
             var bookmarkComponent = component.BookmarkComponent;
 
             component.OpenDocument(pdfFile, string.Empty);
-            Assert.IsTrue(component.IsDocumentOpened);
+            Assert.IsTrue(component.IsDocumentOpen);
 
             var checkCount = 0;
             foreach (var bookmark in bookmarkComponent.Bookmarks)

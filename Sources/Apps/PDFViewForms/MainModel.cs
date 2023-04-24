@@ -116,7 +116,7 @@
         {
             get
             {
-                return PDFComponent != null ? PDFComponent.IsDocumentOpened : false;
+                return PDFComponent != null ? PDFComponent.IsDocumentOpen : false;
             }
         }
 

@@ -16,11 +16,11 @@
     [TestClass]
     public class PDFComponentTest
     {
-        #region Private consts
+        #region Private constants
 
         private const string _constDiversePagesPDF = "DiversePages.pdf";
 
-        #endregion Private consts
+        #endregion Private constants
 
         #region Private fields
 
@@ -29,7 +29,7 @@
 
         #endregion Private fields
 
-        #region Test init and clean up
+        #region Test initialization and clean up
 
         /// <summary>
         /// Test class initialization method.
@@ -55,7 +55,7 @@
         {
         }
 
-        #endregion Test init and clean up
+        #endregion Test initialization and clean up
 
         /// <summary>
         /// Test for constructor.
@@ -79,11 +79,11 @@
 
             var component = new PDFComponent();
             component.OpenDocument(pdfFile);
-            Assert.IsTrue(component.IsDocumentOpened);
+            Assert.IsTrue(component.IsDocumentOpen);
             component.CloseDocument();
-            Assert.IsFalse(component.IsDocumentOpened);
+            Assert.IsFalse(component.IsDocumentOpen);
             component.CloseDocument();
-            Assert.IsFalse(component.IsDocumentOpened);
+            Assert.IsFalse(component.IsDocumentOpen);
             component.Dispose();
         }
 
@@ -97,7 +97,7 @@
 
             var component = new PDFComponent();
             component.OpenDocument(pdfFile);
-            Assert.IsFalse(component.IsDocumentOpened);
+            Assert.IsFalse(component.IsDocumentOpen);
             component.Dispose();
         }
 
@@ -111,9 +111,9 @@
 
             var component = new PDFComponent();
             component.OpenDocument(pdfFile);
-            Assert.IsFalse(component.IsDocumentOpened);
+            Assert.IsFalse(component.IsDocumentOpen);
             component.OpenDocument(pdfFile, "pwd");
-            Assert.IsTrue(component.IsDocumentOpened);
+            Assert.IsTrue(component.IsDocumentOpen);
             component.CloseDocument();
             component.Dispose();
         }
@@ -134,7 +134,7 @@
             Assert.IsNotNull(bookmarkComponent);
 
             component.OpenDocument(pdfFile);
-            Assert.IsTrue(component.IsDocumentOpened);
+            Assert.IsTrue(component.IsDocumentOpen);
 
             layoutComponent = component.LayoutComponent;
             Assert.IsNotNull(layoutComponent);
@@ -210,9 +210,9 @@
             Assert.AreEqual(string.Empty, failedFile);
             Assert.AreEqual(string.Empty, openingFile);
 
-            // Open pdf document
+            // Open PDF document
             component.OpenDocument(pdfFileExists);
-            Assert.IsTrue(component.IsDocumentOpened);
+            Assert.IsTrue(component.IsDocumentOpen);
 
             // Check values
             Assert.AreEqual(0, documentClosedCounter);
@@ -228,9 +228,9 @@
             openedFile = string.Empty;
             openingFile = string.Empty;
 
-            // Close pdf document
+            // Close PDF document
             component.CloseDocument();
-            Assert.IsFalse(component.IsDocumentOpened);
+            Assert.IsFalse(component.IsDocumentOpen);
 
             // Check values
             Assert.AreEqual(1, documentClosedCounter);
@@ -249,9 +249,9 @@
             documentFailedCounter = 0;
             documentOpeningCounter = 0;
 
-            // Open pdf document that does not exist
+            // Open PDF document that does not exist
             component.OpenDocument(pdfFileDoesNotExist);
-            Assert.IsFalse(component.IsDocumentOpened);
+            Assert.IsFalse(component.IsDocumentOpen);
 
             // Check values
             Assert.AreEqual(0, documentClosedCounter);
@@ -267,9 +267,9 @@
             failedFile = string.Empty;
             openingFile = string.Empty;
 
-            // Close pdf document
+            // Close PDF document
             component.CloseDocument();
-            Assert.IsFalse(component.IsDocumentOpened);
+            Assert.IsFalse(component.IsDocumentOpen);
 
             // Check values
             Assert.AreEqual(0, documentClosedCounter);
@@ -288,9 +288,9 @@
             documentFailedCounter = 0;
             documentOpeningCounter = 0;
 
-            // Close not opened pdf document
+            // Close not opened PDF document
             component.CloseDocument();
-            Assert.IsFalse(component.IsDocumentOpened);
+            Assert.IsFalse(component.IsDocumentOpen);
 
             // Check values
             Assert.AreEqual(0, documentClosedCounter);

@@ -4,7 +4,9 @@
     using PDFiumDotNET.Components.Contracts.Bookmark;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
-    /// <inheritdoc cref="IPDFBookmarkComponent"/>
+    /// <summary>
+    /// The class implements the functionality defined by <see cref="IPDFBookmarkComponent"/>.
+    /// </summary>
     internal sealed partial class PDFBookmarkComponent : PDFChildComponent, IPDFBookmarkComponent
     {
         #region Constructors

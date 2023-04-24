@@ -7,7 +7,7 @@
     using System.Runtime.Serialization;
 
     /// <summary>
-    /// Exception class used in case when some function was not found in pdfium dll.
+    /// Exception class used in case when some function was not found in PDFium DLL.
     /// </summary>
     [Serializable]
     public class PDFiumFunctionNotFoundException : Exception

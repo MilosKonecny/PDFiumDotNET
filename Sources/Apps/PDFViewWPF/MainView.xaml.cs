@@ -50,6 +50,16 @@
             }
         }
 
+        private void HandleFindTreeViewSelectedItemChangedEvent(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (ViewModel == null)
+            {
+                return;
+            }
+
+            ViewModel.SelectedFindObject = e?.NewValue;
+        }
+
         #endregion Private event handler methods
 
         #region Implementation of IView
@@ -84,15 +94,5 @@
         }
 
         #endregion Implementation of IView
-
-        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            if (ViewModel == null)
-            {
-                return;
-            }
-
-            ViewModel.SelectedFindObject = e?.NewValue;
-        }
     }
 }

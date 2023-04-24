@@ -2,7 +2,9 @@
 {
     using PDFiumDotNET.Components.Contracts.Page;
 
-    /// <inheritdoc cref="IPDFPageComponent"/>
+    /// <summary>
+    /// The class implements functionality defined by <see cref="IPDFPageComponent"/>.
+    /// </summary>
     internal sealed partial class PDFPageComponent
     {
         #region Protected methods - overrides
@@ -42,7 +44,7 @@
         /// <inheritdoc/>
         protected override void InitializeComponentAfterAttachedTo()
         {
-            if (MainComponent.IsDocumentOpened)
+            if (MainComponent.IsDocumentOpen)
             {
                 ScanDocument();
             }

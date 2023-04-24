@@ -3,7 +3,7 @@
     using PDFiumDotNET.Components.Contracts.Find;
 
     /// <summary>
-    /// Implemeents <see cref="IPDFFindComponent"/>.
+    /// The class implements the functionality defined by <see cref="IPDFFindComponent"/>.
     /// </summary>
     internal sealed partial class PDFFindComponent
     {

@@ -3,7 +3,7 @@
     using System.Windows;
 
     /// <summary>
-    /// Interface defines base behaviour of view.
+    /// Interface defines base behavior of view.
     /// </summary>
     public interface IView
     {

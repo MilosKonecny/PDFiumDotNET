@@ -4,7 +4,7 @@
     using PDFiumDotNET.Components.Contracts.Action;
 
     /// <summary>
-    /// Event arguments class used to inform that the action outside of current pdf document is to perform.
+    /// Event arguments class used to inform that the action outside of current PDF document is to perform.
     /// </summary>
     public class PerformActionEventArgs : EventArgs
     {

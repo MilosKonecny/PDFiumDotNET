@@ -12,7 +12,7 @@
         /// Finds given text under defined circumstances.
         /// </summary>
         /// <param name="text">Text to find.</param>
-        /// <param name="caseSensitive">Perform case sensiitive find.</param>
+        /// <param name="caseSensitive">Perform case sensitive find.</param>
         /// <param name="wholeWords">Perform whole words find.</param>
         /// <param name="progress">Callback method.
         /// Parameter is actual page index where is text searched. First page has index 0.

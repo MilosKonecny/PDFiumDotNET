@@ -15,7 +15,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="DocumentInformation"/> class.
         /// </summary>
-        /// <param name="pdfComponent">Related pdf component.</param>
+        /// <param name="pdfComponent">Related PDF component.</param>
         public DocumentInformation(IPDFComponent pdfComponent)
         {
             if (pdfComponent == null)

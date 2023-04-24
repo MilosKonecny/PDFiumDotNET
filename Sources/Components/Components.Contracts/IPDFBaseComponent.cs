@@ -10,7 +10,7 @@
     public interface IPDFBaseComponent : INotifyPropertyChanged, IDisposable
     {
         /// <summary>
-        /// Gets the main (top parent) component where this componnent belongs.
+        /// Gets the main (top parent) component where this component belongs.
         /// <see cref="MainComponent"/> may be the same as <see cref="ParentComponent"/>.
         /// </summary>
         IPDFComponent MainComponent

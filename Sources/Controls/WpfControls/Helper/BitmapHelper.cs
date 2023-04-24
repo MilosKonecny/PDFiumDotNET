@@ -17,15 +17,15 @@
         /// </summary>
         /// <param name="bitmap">The bitmap to save.</param>
         /// <param name="pageNumber">Page number where is the bitmap from.</param>
-        /// <param name="onlyPageNumber"><c>true</c> - use format 'bitmap-{pageNumber}.bmp'; otherwise 'bitmap-{pageNumber}-{nr}.bmp', where 'nr' is fixed number leading to a unique file name.</param>
+        /// <param name="onlyPageNumber"><c>true</c> - use format 'bitmap-{pageNumber}.bmp'; otherwise 'bitmap-{pageNumber}-{number}.bmp', where 'number' is fixed number leading to a unique file name.</param>
         public static void Save(this WriteableBitmap bitmap, int pageNumber, bool onlyPageNumber)
         {
-            var nr = 0;
-            var filename = string.Format(CultureInfo.InvariantCulture, onlyPageNumber ? _filePathFormat1 : _filePathFormat2, pageNumber, nr);
+            var number = 0;
+            var filename = string.Format(CultureInfo.InvariantCulture, onlyPageNumber ? _filePathFormat1 : _filePathFormat2, pageNumber, number);
             while (!onlyPageNumber && File.Exists(filename))
             {
-                nr++;
-                filename = string.Format(CultureInfo.InvariantCulture, onlyPageNumber ? _filePathFormat1 : _filePathFormat2, pageNumber, nr);
+                number++;
+                filename = string.Format(CultureInfo.InvariantCulture, onlyPageNumber ? _filePathFormat1 : _filePathFormat2, pageNumber, number);
             }
 
             using (FileStream stream = new FileStream(filename, onlyPageNumber ? FileMode.Create : FileMode.CreateNew))

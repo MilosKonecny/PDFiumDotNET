@@ -10,7 +10,9 @@
     using PDFiumDotNET.Components.Destination;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
-    /// <inheritdoc cref="IPDFBookmark"/>
+    /// <summary>
+    /// The class implements the functionality defined by <see cref="IPDFBookmark"/>.
+    /// </summary>
     internal class PDFBookmark : IPDFBookmark
     {
         #region Private fields

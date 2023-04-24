@@ -14,19 +14,19 @@
     using PDFiumDotNET.Components.Contracts.Layout;
 
     /// <summary>
-    /// View model class vor <see cref="MainView"/>.
+    /// View model class for <see cref="MainView"/>.
     /// </summary>
     public partial class MainViewModel
     {
         #region Public properties - commands
 
         /// <summary>
-        /// Gets the open pdf command.
+        /// Gets the open PDF command.
         /// </summary>
         public ViewModelCommand OpenCommand { get; private set; }
 
         /// <summary>
-        /// Gets the close pdf command.
+        /// Gets the close PDF command.
         /// </summary>
         public ViewModelCommand CloseCommand { get; private set; }
 
@@ -167,7 +167,7 @@
 
         private bool CanExecuteOpenCommand()
         {
-            return _pdfComponent != null && !_pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && !_pdfComponent.IsDocumentOpen;
         }
 
         private void ExecuteCloseCommand()
@@ -182,7 +182,7 @@
 
         private bool CanExecuteCloseCommand()
         {
-            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpen;
         }
 
         private void ExecuteExitCommand()
@@ -218,12 +218,12 @@
 
         private bool CanExecuteInformationCommand()
         {
-            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpen;
         }
 
         private void ExecuteShowAnnotationsCommand(ToggleButton relatedButton)
         {
-            if (_pdfComponent != null && _pdfComponent.IsDocumentOpened && relatedButton != null)
+            if (_pdfComponent != null && _pdfComponent.IsDocumentOpen && relatedButton != null)
             {
                 _viewPageComponent.IsAnnotationToRender = !_viewPageComponent.IsAnnotationToRender;
                 InvokePropertyChangedEvent();
@@ -233,7 +233,7 @@
 
         private bool CanExecuteShowAnnotationsCommand(ToggleButton relatedButton)
         {
-            if (_pdfComponent == null || !_pdfComponent.IsDocumentOpened || relatedButton == null)
+            if (_pdfComponent == null || !_pdfComponent.IsDocumentOpen || relatedButton == null)
             {
                 return false;
             }
@@ -260,7 +260,7 @@
 
         private bool CanExecuteZoomWidthCommand()
         {
-            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpen;
         }
 
         private void ExecuteZoomHeightCommand()
@@ -281,7 +281,7 @@
 
         private bool CanExecuteZoomHeightCommand()
         {
-            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpen;
         }
 
         private void ExecuteZoomInCommand()
@@ -291,7 +291,7 @@
 
         private bool CanExecuteZoomInCommand()
         {
-            if (_pdfComponent == null || !_pdfComponent.IsDocumentOpened || _viewPageComponent == null)
+            if (_pdfComponent == null || !_pdfComponent.IsDocumentOpen || _viewPageComponent == null)
             {
                 return false;
             }
@@ -312,7 +312,7 @@
 
         private bool CanExecuteZoomOutCommand()
         {
-            if (_pdfComponent == null || !_pdfComponent.IsDocumentOpened || _viewPageComponent == null)
+            if (_pdfComponent == null || !_pdfComponent.IsDocumentOpen || _viewPageComponent == null)
             {
                 return false;
             }
@@ -333,7 +333,7 @@
 
         private bool CanExecuteGoToFirstPageCommand()
         {
-            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpen;
         }
 
         private void ExecuteGoToPreviousPageCommand()
@@ -343,7 +343,7 @@
 
         private bool CanExecuteGoToPreviousPageCommand()
         {
-            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpen;
         }
 
         private void ExecuteGoToNextPageCommand()
@@ -353,7 +353,7 @@
 
         private bool CanExecuteGoToNextPageCommand()
         {
-            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpen;
         }
 
         private void ExecuteGoToLastPageCommand()
@@ -363,7 +363,7 @@
 
         private bool CanExecuteGoToLastPageCommand()
         {
-            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpen;
         }
 
         private void ExecuteViewOneColumnCommand()
@@ -376,7 +376,7 @@
 
         private bool CanExecuteViewOneColumnCommand()
         {
-            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpen;
         }
 
         private void ExecuteViewTwoColumnsCommand()
@@ -389,7 +389,7 @@
 
         private bool CanExecuteViewTwoColumnsCommand()
         {
-            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpen;
         }
 
         private void ExecuteViewTwoColumnsSpecialCommand()
@@ -402,7 +402,7 @@
 
         private bool CanExecuteViewTwoColumnsSpecialCommand()
         {
-            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpen;
         }
 
         private async void ExecuteFindCommand()
@@ -411,8 +411,8 @@
             FindResult.Clear();
             IsFindActive = true;
 
-            // Cancelation token not used.
-            // The cancelation is implemented by the IsFindActive property
+            // Cancellation token not used.
+            // The cancellation is implemented by the IsFindActive property
             var ct = new CancellationToken();
             await Task.Factory.StartNew(
                 () =>
@@ -460,13 +460,13 @@
 
         private bool CanExecuteFindCommand()
         {
-            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpen;
         }
 
         private void ExecuteFindClearResultCommand()
         {
             FindResult.Clear();
-            if (_pdfComponent != null && _pdfComponent.IsDocumentOpened)
+            if (_pdfComponent != null && _pdfComponent.IsDocumentOpen)
             {
                 _viewPageComponent.FindComponent.ClearFindSelections();
             }
@@ -474,7 +474,7 @@
 
         private bool CanExecuteFindClearResultCommand()
         {
-            return _pdfComponent != null && _pdfComponent.IsDocumentOpened;
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpen;
         }
 
         private void ExecuteFindCancelCommand()

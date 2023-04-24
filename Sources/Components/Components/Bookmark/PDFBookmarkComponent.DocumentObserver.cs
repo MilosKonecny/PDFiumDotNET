@@ -2,7 +2,9 @@
 {
     using PDFiumDotNET.Components.Contracts.Bookmark;
 
-    /// <inheritdoc cref="IPDFBookmarkComponent"/>
+    /// <summary>
+    /// The class implements functionality defined by <see cref="IPDFBookmarkComponent"/>.
+    /// </summary>
     internal sealed partial class PDFBookmarkComponent
     {
         #region Protected methods - overrides
@@ -31,7 +33,7 @@
         /// <inheritdoc/>
         protected override void InitializeComponentAfterAttachedTo()
         {
-            if (MainComponent.IsDocumentOpened)
+            if (MainComponent.IsDocumentOpen)
             {
                 ScanDocument();
             }

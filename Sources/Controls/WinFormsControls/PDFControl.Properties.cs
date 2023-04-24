@@ -326,7 +326,7 @@
         {
             if (string.IsNullOrEmpty(e.PropertyName)
                 || string.Equals(
-                    nameof(IPDFComponent.IsDocumentOpened),
+                    nameof(IPDFComponent.IsDocumentOpen),
                     e.PropertyName,
                     StringComparison.OrdinalIgnoreCase))
             {

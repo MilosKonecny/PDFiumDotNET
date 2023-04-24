@@ -17,7 +17,7 @@
         /// </summary>
         static AutoDisabledImage()
         {
-            // Override the metadata of the IsEnabled and Source properties to be notified of changes
+            // Override the meta data of the IsEnabled and Source properties to be notified of changes
             IsEnabledProperty.OverrideMetadata(typeof(AutoDisabledImage), new FrameworkPropertyMetadata(true, new PropertyChangedCallback(PropertyChanged)));
             SourceProperty.OverrideMetadata(typeof(AutoDisabledImage), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(PropertyChanged)));
         }
@@ -27,7 +27,7 @@
         #region Protected properties
 
         /// <summary>
-        /// Gets value indicating whether the immage is grayed out.
+        /// Gets value indicating whether the image is grayed out.
         /// </summary>
         protected bool IsGrayedOut => Source is FormatConvertedBitmap;
 
@@ -70,13 +70,13 @@
                     // restore the original image
                     Source = ((FormatConvertedBitmap)Source).Source;
 
-                    // reset the Opcity Mask
+                    // reset the Opacity Mask
                     OpacityMask = null;
                 }
             }
             else
             {
-                // image is disabled (i.e. grayscale the original image)
+                // image is disabled (i.e. gray scale the original image)
                 if (!IsGrayedOut)
                 {
                     // Get the source bitmap

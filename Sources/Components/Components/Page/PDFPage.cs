@@ -10,7 +10,9 @@
     using PDFiumDotNET.Components.Link;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
-    /// <inheritdoc cref="IPDFPage"/>
+    /// <summary>
+    /// The class implements functionality defined by <see cref="IPDFPage"/>.
+    /// </summary>
     internal class PDFPage : IPDFPage
     {
         #region Private fields
@@ -39,12 +41,12 @@
         #region Public properties
 
         /// <summary>
-        /// Gets the original height - height obtained from pdf document.
+        /// Gets the original height - height obtained from PDF document.
         /// </summary>
         public double OriginalHeight { get; private set; }
 
         /// <summary>
-        /// Gets the original width - width obtained from pdf document.
+        /// Gets the original width - width obtained from PDF document.
         /// </summary>
         public double OriginalWidth { get; private set; }
 

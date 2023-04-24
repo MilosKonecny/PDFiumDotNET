@@ -62,7 +62,7 @@
         ObservableCollection<IPDFPage> Pages { get; }
 
         /// <summary>
-        /// Gets or sets the information whether the annotation objects ar to render.
+        /// Gets or sets the information whether the annotation objects are to render.
         /// </summary>
         bool IsAnnotationToRender { get; set; }
 
@@ -77,7 +77,7 @@
         Func<int> FindSelectionBorderFunc { get; set; }
 
         /// <summary>
-        /// Peforms the action defined in given <see cref="IPDFAction"/>.
+        /// Performs the action defined in given <see cref="IPDFAction"/>.
         /// </summary>
         /// <param name="action"><see cref="IPDFAction"/> defines action to perform.</param>
         /// <remarks>Only one type of action is performed: <see cref="PDFActionType.Goto"/>.</remarks>
@@ -130,7 +130,7 @@
         event EventHandler<NavigatedToPageEventArgs> NavigatedToPage;
 
         /// <summary>
-        /// Occurs whenever an action outside of the current pdf document is to perform.
+        /// Occurs whenever an action outside of the current PDF document is to perform.
         /// </summary>
         event EventHandler<PerformActionEventArgs> PerformOutsideAction;
 

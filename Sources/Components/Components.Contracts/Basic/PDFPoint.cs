@@ -12,7 +12,7 @@
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PDFPoint{T}"/> struct.
+        /// Initializes a new instance of the <see cref="PDFPoint{T}"/> structure.
         /// </summary>
         public PDFPoint()
         {
@@ -21,7 +21,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PDFPoint{T}"/> struct.
+        /// Initializes a new instance of the <see cref="PDFPoint{T}"/> structure.
         /// </summary>
         /// <param name="x">Value for <see cref="X"/> property.</param>
         /// <param name="y">Value for <see cref="Y"/> property.</param>
@@ -32,7 +32,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PDFPoint{T}"/> struct.
+        /// Initializes a new instance of the <see cref="PDFPoint{T}"/> structure.
         /// </summary>
         /// <param name="point"><see cref="PDFPoint{T}"/> to copy values from.</param>
         public PDFPoint(PDFPoint<T> point)

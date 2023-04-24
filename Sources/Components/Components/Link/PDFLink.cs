@@ -8,7 +8,9 @@
     using PDFiumDotNET.Components.Destination;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
-    /// <inheritdoc cref="IPDFLink"/>
+    /// <summary>
+    /// The class implements functionality defined by <see cref="IPDFLink"/>.
+    /// </summary>
     internal class PDFLink : IPDFLink
     {
         #region Private fields

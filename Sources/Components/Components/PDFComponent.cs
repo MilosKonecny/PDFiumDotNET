@@ -6,7 +6,9 @@
     using PDFiumDotNET.Wrapper.Bridge;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
-    /// <inheritdoc cref="IPDFComponent"/>
+    /// <summary>
+    /// The class implements the functionality defined by <see cref="IPDFComponent"/>.
+    /// </summary>
     internal sealed partial class PDFComponent : PDFBaseComponent, IPDFComponent
     {
         #region Constructors

@@ -36,9 +36,9 @@
             base.OnDetaching();
         }
 
-#endregion Protected override methods
+        #endregion Protected override methods
 
-#region Private event handler methods
+        #region Private event handler methods
 
         private void HandleAssociatedObjectGotFocusEvent(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -55,6 +55,6 @@
             }
         }
 
-#endregion Private event handler methods
+        #endregion Private event handler methods
     }
 }

@@ -14,7 +14,7 @@
         IPDFAction Action { get; }
 
         /// <summary>
-        /// Gets associated destionation of bookmark.
+        /// Gets associated destination of bookmark.
         /// </summary>
         IPDFDestination Destination { get; }
     }

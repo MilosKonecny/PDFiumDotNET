@@ -7,7 +7,7 @@
     using System.Runtime.Serialization;
 
     /// <summary>
-    /// Exception class used in case when pdfium dll was not found.
+    /// Exception class used in case when PDFium DLL was not found.
     /// </summary>
     [Serializable]
     public class PDFiumLibraryNotLoadedException : Exception
@@ -74,7 +74,7 @@
                 NativeMethods.LocalFree(lpMsgBuf);
             }
 
-            return new PDFiumLibraryNotLoadedException($"Dll '{library}' not loaded. System error: {lastWinError} - {message}");
+            return new PDFiumLibraryNotLoadedException($"DLL '{library}' not loaded. System error: {lastWinError} - {message}");
         }
     }
 }

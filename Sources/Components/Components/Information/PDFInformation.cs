@@ -57,7 +57,7 @@
         public DateTimeOffset ModDate { get; internal set; }
 
         /// <summary>
-        /// Gets the document permisions.
+        /// Gets the document permissions.
         /// </summary>
         public PDFPermissions DocumentPermissions { get; internal set; }
 

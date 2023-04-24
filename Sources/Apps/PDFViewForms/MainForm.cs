@@ -99,7 +99,7 @@ namespace PDFiumDotNET.Apps.PDFViewForms
         {
             var dlg = new OpenFileDialog
             {
-                // Disable "Method 'xxxx' passes a literal string as parameter 'yyyy' of a call to 'zzzz'."
+                // Disable "Method 'X' passes a literal string as parameter 'Y' of a call to 'Z'."
 #pragma warning disable CA1303
                 // ToDo: Hard coded text
                 Filter = "PDF file (*.pdf)|*.pdf|All files (*.*)|*.*",

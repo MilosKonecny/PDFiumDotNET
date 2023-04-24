@@ -14,7 +14,9 @@
     using PDFiumDotNET.Components.Layout;
     using static PDFiumDotNET.Wrapper.Bridge.PDFiumBridge;
 
-    /// <inheritdoc cref="IPDFComponent"/>
+    /// <summary>
+    /// The class implements the functionality defined by <see cref="IPDFComponent"/>.
+    /// </summary>
     internal sealed partial class PDFComponent
     {
         #region Implementation of IPDFComponent
@@ -62,7 +64,7 @@
         }
 
         /// <inheritdoc/>
-        public bool IsDocumentOpened
+        public bool IsDocumentOpen
         {
             get;
             private set;
@@ -110,10 +112,10 @@
                 }
             }
 
-            IsDocumentOpened = PDFiumDocument.IsValid;
+            IsDocumentOpen = PDFiumDocument.IsValid;
 
-            InvokePropertyChangedEvent(nameof(IsDocumentOpened));
-            if (IsDocumentOpened)
+            InvokePropertyChangedEvent(nameof(IsDocumentOpen));
+            if (IsDocumentOpen)
             {
                 ChildComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentOpened(file));
                 result = OpenDocumentResult.Success;
@@ -133,7 +135,7 @@
             FileName = null;
             FileWithPath = null;
 
-            if (!IsDocumentOpened)
+            if (!IsDocumentOpen)
             {
                 // Nothing to close.
                 return;
@@ -142,8 +144,8 @@
             ChildComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentClosing());
             PDFiumBridge.FPDF_CloseDocument(PDFiumDocument);
             PDFiumDocument = FPDF_DOCUMENT.InvalidHandle;
-            IsDocumentOpened = false;
-            InvokePropertyChangedEvent(nameof(IsDocumentOpened));
+            IsDocumentOpen = false;
+            InvokePropertyChangedEvent(nameof(IsDocumentOpen));
             ChildComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentClosed());
         }
 
@@ -155,7 +157,7 @@
             get
             {
                 var retValue = new PDFInformation();
-                if (!IsDocumentOpened)
+                if (!IsDocumentOpen)
                 {
                     return retValue;
                 }

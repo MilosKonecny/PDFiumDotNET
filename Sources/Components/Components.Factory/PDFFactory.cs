@@ -1,7 +1,5 @@
 ﻿namespace PDFiumDotNET.Components.Factory
 {
-    using System;
-    using System.Linq;
     using PDFiumDotNET.Components.Contracts;
 
     /// <summary>
@@ -17,7 +15,7 @@
             get
             {
                 ////// Other possibility to get the instance from already loaded assembly.
-                ////// The condition 'already loaded' should be fullfilled by another part of application.
+                ////// The condition 'already loaded' should be fulfilled by another part of application.
                 ////// For example MEF.
                 ////var specificType = AppDomain.CurrentDomain.GetAssemblies()
                 ////    .SelectMany(x => x.GetTypes())

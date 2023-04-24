@@ -14,7 +14,7 @@
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PDFRectangle{T}"/> struct.
+        /// Initializes a new instance of the <see cref="PDFRectangle{T}"/> structure.
         /// </summary>
         public PDFRectangle()
         {
@@ -25,7 +25,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PDFRectangle{T}"/> struct.
+        /// Initializes a new instance of the <see cref="PDFRectangle{T}"/> structure.
         /// </summary>
         /// <param name="x">Value for <see cref="X"/> property.</param>
         /// <param name="y">Value for <see cref="Y"/> property.</param>
@@ -40,7 +40,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PDFRectangle{T}"/> struct.
+        /// Initializes a new instance of the <see cref="PDFRectangle{T}"/> structure.
         /// </summary>
         /// <param name="location">Values for <see cref="X"/> and <see cref="Y"/> properties.</param>
         /// <param name="size">Values for <see cref="Width"/> and <see cref="Height"/> properties.</param>
@@ -53,7 +53,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PDFRectangle{T}"/> struct.
+        /// Initializes a new instance of the <see cref="PDFRectangle{T}"/> structure.
         /// </summary>
         /// <param name="rectangle"><see cref="PDFRectangle{T}"/> to copy values from.</param>
         public PDFRectangle(PDFRectangle<T> rectangle)
@@ -214,7 +214,7 @@
         /// Gets the string containing information about rectangle values.
         /// </summary>
         /// <returns>String containing rectangle values.</returns>
-        /// <exception cref="InvalidOperationException">Thrown for unsuported type. Implement this type.</exception>
+        /// <exception cref="InvalidOperationException">Thrown for unsupported type. Implement this type.</exception>
         public string Info()
         {
             string x1, y1, x2, y2, w, h;

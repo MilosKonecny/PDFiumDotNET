@@ -17,7 +17,9 @@
     using PDFiumDotNET.Components.Transformation;
     using PDFiumDotNET.Components.Zoom;
 
-    /// <inheritdoc cref="IPDFPageComponent"/>
+    /// <summary>
+    /// The class implements functionality defined by <see cref="IPDFPageComponent"/>.
+    /// </summary>
     internal sealed partial class PDFPageComponent : PDFChildComponent, IPDFPageComponent
     {
         #region Private fields
@@ -330,14 +332,10 @@
         /// <inheritdoc/>
         public ObservableCollection<IPDFPage> Pages { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the information whether the annotation objects ar to render.
-        /// </summary>
+        /// <inheritdoc/>
         public bool IsAnnotationToRender { get; set; }
 
-        /// <summary>
-        /// Gets or set the function to obtain color to use to draw find selection rectangle.
-        /// </summary>
+        /// <inheritdoc/>
         public Func<int> FindSelectionBackgroundFunc
         {
             get
@@ -355,9 +353,7 @@
             }
         }
 
-        /// <summary>
-        /// Gets or set the function to obtain color to use to draw find selection rectangle.
-        /// </summary>
+        /// <inheritdoc/>
         public Func<int> FindSelectionBorderFunc
         {
             get
@@ -519,11 +515,7 @@
         /// <inheritdoc/>
         public event EventHandler<PerformActionEventArgs> PerformOutsideAction;
 
-        /// <summary>
-        /// Occurs whenever text selections were removed.
-        /// </summary>
-        /// <remarks>For example. It was some text selected to show found text.
-        /// When the new find is started, this event is called.</remarks>
+        /// <inheritdoc/>
         public event EventHandler<EventArgs> TextSelectionsRemoved;
 
         #endregion Implementation of IPDFPageComponent

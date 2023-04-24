@@ -58,7 +58,7 @@
         }
 
         /// <summary>
-        /// Clenaup method called after every test method is completed.
+        /// Cleanup method called after every test method is completed.
         /// </summary>
         [TestCleanup]
         public void CleanupTest()

@@ -1,16 +1,13 @@
 ﻿namespace PDFiumDotNET.Components.Contracts
 {
     using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
     using PDFiumDotNET.Components.Contracts.Bookmark;
-    using PDFiumDotNET.Components.Contracts.Find;
     using PDFiumDotNET.Components.Contracts.Information;
     using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Page;
 
     /// <summary>
-    /// Defines functionality of main component used in namespace <see cref="PDFiumDotNET.Components"/>.
+    /// Defines functionality of main component.
     /// This component is parent component for every <see cref="IPDFChildComponent"/>.
     /// </summary>
     public interface IPDFComponent : IPDFBaseComponent
@@ -26,26 +23,26 @@
         IPDFBookmarkComponent BookmarkComponent { get; }
 
         /// <summary>
-        /// Gets a value indicating whether pdf document is opened or not.
+        /// Gets a value indicating whether PDF document is open or not.
         /// </summary>
-        bool IsDocumentOpened { get; }
+        bool IsDocumentOpen { get; }
 
         /// <summary>
-        /// Closes pdf document.
+        /// Closes PDF document.
         /// </summary>
         void CloseDocument();
 
         /// <summary>
-        /// Opens given pdf document.
+        /// Opens given PDF document.
         /// </summary>
-        /// <param name="file">Pdf file to open.</param>
+        /// <param name="file">PDF file to open.</param>
         /// <param name="password">Password for protected document.</param>
         OpenDocumentResult OpenDocument(string file, string password);
 
         /// <summary>
-        /// Opens given pdf document.
+        /// Opens given PDF document.
         /// </summary>
-        /// <param name="file">Pdf file to open.</param>
+        /// <param name="file">PDF file to open.</param>
         /// <param name="getPassword">The callback function is used when the PDF file to be opened is password-protected.
         /// The function is called until a correct password or <c>null</c> is returned. If <c>null</c> is returned, the open is aborted.</param>
         OpenDocumentResult OpenDocument(string file, Func<string> getPassword = null);
