@@ -30,6 +30,10 @@
         private int _pageIndexWithSelections;
         private Func<int> _findSelectionBackgroundFunc;
         private Func<int> _findSelectionBorderFunc;
+        private int _currentPageIndex;
+        private string _currentPageLabel;
+        private int _pageCount;
+        private bool _isAnnotationToRender;
 
         #endregion Private fields
 
@@ -44,10 +48,10 @@
         public PDFPageComponent(string pageComponentName, PDFRenderManager renderManager, IPageSizeTransformation pageSizeTransformation)
         {
             Name = pageComponentName;
-            _renderManager = renderManager ?? throw new ArgumentNullException(nameof(renderManager));
+            RenderManager = renderManager ?? throw new ArgumentNullException(nameof(renderManager));
             PageSizeTransformation = pageSizeTransformation;
 
-            _renderManager.AttachPageComponent(this);
+            (RenderManager as PDFRenderManager)?.AttachPageComponent(this);
 
             Pages = new ObservableCollection<IPDFPage>();
         }
@@ -111,17 +115,8 @@
                 newPageLabel = page.PageLabel;
             }
 
-            if (CurrentPageIndex != newPageIndex)
-            {
-                CurrentPageIndex = newPageIndex;
-                InvokePropertyChangedEvent(nameof(CurrentPageIndex));
-            }
-
-            if (!string.Equals(CurrentPageLabel, newPageLabel, StringComparison.Ordinal))
-            {
-                CurrentPageLabel = newPageLabel;
-                InvokePropertyChangedEvent(nameof(CurrentPageLabel));
-            }
+            CurrentPageIndex = newPageIndex;
+            CurrentPageLabel = newPageLabel;
         }
 
         /// <summary>
@@ -151,10 +146,10 @@
         /// <exception cref="ArgumentNullException">Exception is thrown in case <paramref name="renderManager"/> is <c>null</c>.</exception>
         internal void Use(PDFRenderManager renderManager)
         {
-            _renderManager?.DettachPageComponent();
+            (RenderManager as PDFRenderManager)?.DettachPageComponent();
 
-            _renderManager = renderManager ?? throw new ArgumentNullException(nameof(renderManager));
-            _renderManager.AttachPageComponent(this);
+            RenderManager = renderManager ?? throw new ArgumentNullException(nameof(renderManager));
+            (RenderManager as PDFRenderManager).AttachPageComponent(this);
             InvokePropertyChangedEvent(nameof(RenderManager));
         }
 
@@ -167,7 +162,7 @@
             ClearSelectionRectangles();
             PageCount = 0;
             Pages.Clear();
-            _renderManager.CalculateDocumentArea();
+            (RenderManager as PDFRenderManager)?.CalculateDocumentArea();
             SetCurrentInformation(null);
             InvokePropertyChangedEvent(null);
         }
@@ -193,7 +188,7 @@
                 SetCurrentInformation(Pages[0]);
             }
 
-            _renderManager.CalculateDocumentArea();
+            (RenderManager as PDFRenderManager).CalculateDocumentArea();
 
             InvokePropertyChangedEvent(null);
         }
@@ -254,7 +249,22 @@
         }
 
         /// <inheritdoc/>
-        public IPDFRenderManager RenderManager => _renderManager;
+        public IPDFRenderManager RenderManager
+        {
+            get
+            {
+                return _renderManager;
+            }
+
+            set
+            {
+                if (_renderManager != (value as PDFRenderManager))
+                {
+                    _renderManager = value as PDFRenderManager;
+                    InvokePropertyChangedEvent();
+                }
+            }
+        }
 
         /// <inheritdoc/>
         public IPDFFindComponent FindComponent
@@ -301,15 +311,37 @@
         /// <inheritdoc/>
         public int CurrentPageIndex
         {
-            get;
-            private set;
+            get
+            {
+                return _currentPageIndex;
+            }
+
+            private set
+            {
+                if (_currentPageIndex != value)
+                {
+                    _currentPageIndex = value;
+                    InvokePropertyChangedEvent();
+                }
+            }
         }
 
         /// <inheritdoc/>
         public string CurrentPageLabel
         {
-            get;
-            private set;
+            get
+            {
+                return _currentPageLabel;
+            }
+
+            private set
+            {
+                if (!string.Equals(CurrentPageLabel, value, StringComparison.Ordinal))
+                {
+                    _currentPageLabel = value;
+                    InvokePropertyChangedEvent();
+                }
+            }
         }
 
         /// <inheritdoc/>
@@ -327,13 +359,43 @@
         }
 
         /// <inheritdoc/>
-        public int PageCount { get; private set; }
+        public int PageCount
+        {
+            get
+            {
+                return _pageCount;
+            }
+
+            private set
+            {
+                if (_pageCount != value)
+                {
+                    _pageCount = value;
+                    InvokePropertyChangedEvent();
+                }
+            }
+        }
 
         /// <inheritdoc/>
         public ObservableCollection<IPDFPage> Pages { get; private set; }
 
         /// <inheritdoc/>
-        public bool IsAnnotationToRender { get; set; }
+        public bool IsAnnotationToRender
+        {
+            get
+            {
+                return _isAnnotationToRender;
+            }
+
+            set
+            {
+                if (_isAnnotationToRender != value)
+                {
+                    _isAnnotationToRender = value;
+                    InvokePropertyChangedEvent();
+                }
+            }
+        }
 
         /// <inheritdoc/>
         public Func<int> FindSelectionBackgroundFunc
