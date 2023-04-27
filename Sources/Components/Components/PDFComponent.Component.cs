@@ -19,6 +19,12 @@
     /// </summary>
     internal sealed partial class PDFComponent
     {
+        #region Private fields
+
+        private bool _isDocumentOpen;
+
+        #endregion Private fields
+
         #region Implementation of IPDFComponent
 
         /// <inheritdoc/>
@@ -66,8 +72,19 @@
         /// <inheritdoc/>
         public bool IsDocumentOpen
         {
-            get;
-            private set;
+            get
+            {
+                return _isDocumentOpen;
+            }
+
+            private set
+            {
+                if (_isDocumentOpen != value)
+                {
+                    _isDocumentOpen = value;
+                    InvokePropertyChangedEvent();
+                }
+            }
         }
 
         /// <inheritdoc/>
@@ -114,7 +131,6 @@
 
             IsDocumentOpen = PDFiumDocument.IsValid;
 
-            InvokePropertyChangedEvent(nameof(IsDocumentOpen));
             if (IsDocumentOpen)
             {
                 ChildComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentOpened(file));
@@ -145,7 +161,6 @@
             PDFiumBridge.FPDF_CloseDocument(PDFiumDocument);
             PDFiumDocument = FPDF_DOCUMENT.InvalidHandle;
             IsDocumentOpen = false;
-            InvokePropertyChangedEvent(nameof(IsDocumentOpen));
             ChildComponents.OfType<IPDFDocumentObserver>().ToList().ForEach(a => a.DocumentClosed());
         }
 
