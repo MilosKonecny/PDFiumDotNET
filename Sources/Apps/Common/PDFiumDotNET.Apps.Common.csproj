@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netcoreapp3.1;net48;net5.0-windows;net6.0-windows;net7.0-windows</TargetFrameworks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="..\..\Common\AssemblyGlobalInfo.cs" Link="AssemblyGlobalInfo.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Resources\Licenses\MyOwn\" />
+      <Folder Include="Resources\Licenses\PDFium\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="..\..\..\Libs\PDFium\x64\LICENSE" Link="Resources\Licenses\PDFium\LICENSE" />
+      <None Include="..\..\..\LICENSE" Link="Resources\Licenses\MyOwn\LICENSE" />
+    </ItemGroup>
+
+</Project>
