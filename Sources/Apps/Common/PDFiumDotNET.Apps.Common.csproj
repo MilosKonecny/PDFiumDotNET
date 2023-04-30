@@ -9,13 +9,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Resources\Licenses\MyOwn\" />
-      <Folder Include="Resources\Licenses\PDFium\" />
+        <Folder Include="Resources\Licenses\MyOwn\" />
+        <Folder Include="Resources\Licenses\PDFium\" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Include="..\..\..\Libs\PDFium\x64\LICENSE" Link="Resources\Licenses\PDFium\LICENSE" />
-      <None Include="..\..\..\LICENSE" Link="Resources\Licenses\MyOwn\LICENSE" />
+        <EmbeddedResource Include="..\..\..\Libs\PDFium\x64\LICENSE" Link="Resources\Licenses\PDFium\LICENSE" />
+        <EmbeddedResource Include="..\..\..\LICENSE" Link="Resources\Licenses\MyOwn\LICENSE" />
     </ItemGroup>
 
 </Project>

@@ -11,7 +11,7 @@
         #region Private fields
 
         private long _currentMemoryUsage;
-        private long _minimumMemoryUsage;
+        private long _minimumMemoryUsage = long.MaxValue;
         private long _maximumMemoryUsage;
 
         #endregion Private fields

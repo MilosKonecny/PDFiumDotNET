@@ -11,6 +11,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Resources\Licenses\**" />
+      <EmbeddedResource Remove="Resources\Licenses\**" />
+      <None Remove="Resources\Licenses\**" />
+      <Page Remove="Resources\Licenses\**" />
+    </ItemGroup>
+
+    <ItemGroup>
       <None Remove="Resources\Menu\BlueUI\icons8_about.ico" />
       <None Remove="Resources\Menu\BlueUI\icons8_close.ico" />
       <None Remove="Resources\Menu\BlueUI\icons8_pdf.ico" />
@@ -79,16 +86,7 @@
         <ProjectReference Include="..\..\Components\Components.Contracts\PDFiumDotNET.Components.Contracts.csproj" />
         <ProjectReference Include="..\..\Components\Components.Factory\PDFiumDotNET.Components.Factory.csproj" />
         <ProjectReference Include="..\..\Controls\WpfControls\PDFiumDotNET.WpfControls.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Resources\Licenses\MyOwn\" />
-      <Folder Include="Resources\Licenses\PDFium\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Include="..\..\..\Libs\PDFium\x64\LICENSE" Link="Resources\Licenses\PDFium\LICENSE" />
-      <EmbeddedResource Include="..\..\..\LICENSE" Link="Resources\Licenses\MyOwn\LICENSE" />
+        <ProjectReference Include="..\Common\PDFiumDotNET.Apps.Common.csproj" />
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
