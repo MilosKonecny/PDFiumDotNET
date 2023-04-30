@@ -14,11 +14,7 @@
       <ProjectReference Include="..\..\Components\Components.Contracts\PDFiumDotNET.Components.Contracts.csproj" />
       <ProjectReference Include="..\..\Components\Components.Factory\PDFiumDotNET.Components.Factory.csproj" />
       <ProjectReference Include="..\..\Controls\WinFormsControls\PDFiumDotNET.WinFormsControls.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Include="..\..\..\Libs\PDFium\x64\LICENSE" Link="Resources\Licenses\PDFium\LICENSE" />
-        <EmbeddedResource Include="..\..\..\LICENSE" Link="Resources\Licenses\MyOwn\LICENSE" />
+      <ProjectReference Include="..\Common\PDFiumDotNET.Apps.Common.csproj" />
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">

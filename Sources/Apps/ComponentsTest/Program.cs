@@ -8,6 +8,7 @@
     using System.Windows;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
+    using PDFiumDotNET.Apps.Common;
     using PDFiumDotNET.Apps.ComponentsTest.Exceptions;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Bitmap;
@@ -24,6 +25,7 @@
         private const string _pdfFile = @"..\..\..\..\..\..\TestData\PDFs\Precalculus.pdf";
         private static int _testCount = 1000;
         private static int _executedOperationGroups = 0;
+        private static MemoryUsage _memoryUsage = new();
 
         private static List<Tuple<char, ConsoleKey, string, Action<string>>> _tests = new ()
         {
@@ -217,15 +219,16 @@
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.SetCursorPosition(0, 1);
-            Console.WriteLine($"Memory usage after start: {Process.GetCurrentProcess().PrivateMemorySize64 / 1024} KiB       ");
+            Console.WriteLine($"Memory usage after start: {_memoryUsage.CurrentMemoryUsage} KiB       ");
             Console.ResetColor();
         }
 
         private static void PrintMemoryUsage()
         {
+            _memoryUsage.GatherMemoryUsage();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.SetCursorPosition(0, 2);
-            Console.WriteLine($"Memory usage: {Process.GetCurrentProcess().PrivateMemorySize64 / 1024} KiB       ");
+            Console.WriteLine($"Memory usage: {_memoryUsage.CurrentMemoryUsage} KiB (min: {_memoryUsage.MinimumMemoryUsage}, max: {_memoryUsage.MaximumMemoryUsage}         ");
             Console.ResetColor();
         }
 

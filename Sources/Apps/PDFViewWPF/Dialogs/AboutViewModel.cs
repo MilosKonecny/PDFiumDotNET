@@ -1,10 +1,8 @@
 ﻿namespace PDFiumDotNET.Apps.PDFViewWPF.Dialogs
 {
-    using System;
     using System.ComponentModel;
-    using System.IO;
-    using System.Reflection;
     using System.Windows;
+    using PDFiumDotNET.Apps.Common;
     using PDFiumDotNET.Apps.PDFViewWPF.Base;
 
     /// <summary>
@@ -13,6 +11,9 @@
     public class AboutViewModel : BaseViewModel
     {
         #region Private fields
+
+        private Licenses _licenses = new Licenses();
+
         #endregion Private fields
 
         #region Constructors
@@ -27,7 +28,7 @@
 
         #endregion Constructors
 
-        #region Public static properties
+        #region Public properties
 
         /// <summary>
         /// Gets about text.
@@ -43,7 +44,7 @@
         /// <summary>
         /// Gets my own license text.
         /// </summary>
-        public static string MyOwnLicense
+        public string MyOwnLicense
         {
             get
             {
@@ -53,14 +54,14 @@
                     return resourceName;
                 }
 
-                return ReadEmbededResource(resourceName);
+                return _licenses.MyOwnLicense;
             }
         }
 
         /// <summary>
         /// Gets PDFium license text.
         /// </summary>
-        public static string PDFiumLicense
+        public string PDFiumLicense
         {
             get
             {
@@ -70,11 +71,11 @@
                     return resourceName;
                 }
 
-                return ReadEmbededResource(resourceName);
+                return _licenses.PDFiumLicense;
             }
         }
 
-        #endregion Public static properties
+        #endregion Public properties
 
         #region Private properties
 
@@ -87,61 +88,5 @@
         }
 
         #endregion Private properties
-
-        #region Private methods
-
-        private static string CreateMessageFromException(Exception e)
-        {
-            var message = e.Message;
-            e = e.InnerException;
-            while (e != null)
-            {
-                message += Environment.NewLine;
-                message += e.Message;
-            }
-
-            return message;
-        }
-
-        private static string ReadEmbededResource(string resourceName)
-        {
-            try
-            {
-                var assembly = Assembly.GetExecutingAssembly();
-                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-                {
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        return reader.ReadToEnd();
-                    }
-                }
-            }
-            catch (ArgumentNullException e1)
-            {
-                return CreateMessageFromException(e1);
-            }
-            catch (ArgumentException e2)
-            {
-                return CreateMessageFromException(e2);
-            }
-            catch (FileLoadException e3)
-            {
-                return CreateMessageFromException(e3);
-            }
-            catch (FileNotFoundException e4)
-            {
-                return CreateMessageFromException(e4);
-            }
-            catch (BadImageFormatException e5)
-            {
-                return CreateMessageFromException(e5);
-            }
-            catch (NotImplementedException e6)
-            {
-                return CreateMessageFromException(e6);
-            }
-        }
-
-        #endregion Private methods
     }
 }
