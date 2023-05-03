@@ -43,7 +43,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.WpfControls", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.WinFormsControls", "Controls\WinFormsControls\PDFiumDotNET.WinFormsControls.csproj", "{A963D334-F2FF-4AF8-B775-626714EC42C3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.Apps.ComponentsTest", "Apps\ComponentsTest\PDFiumDotNET.Apps.ComponentsTest.csproj", "{2E14AF98-9503-4BA3-AAFA-D33B016CAAC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.Apps.TestComponents", "Apps\TestComponents\PDFiumDotNET.Apps.TestComponents.csproj", "{2E14AF98-9503-4BA3-AAFA-D33B016CAAC2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFiumDotNET.Apps.Common", "Apps\Common\PDFiumDotNET.Apps.Common.csproj", "{A01F44B8-9EC3-48C8-B0C1-54BB9AF4BB90}"
 EndProject

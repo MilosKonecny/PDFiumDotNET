@@ -1,4 +1,4 @@
-﻿namespace PDFiumDotNET.Apps.ComponentsTest
+﻿namespace PDFiumDotNET.Apps.TestComponents
 {
     using System;
 
