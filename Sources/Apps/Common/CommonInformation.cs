@@ -14,7 +14,7 @@
         {
             get
             {
-                return Framework + " / " + Framework + " / " + Configuration;
+                return Framework + " / " + Architecture + " / " + Configuration;
             }
         }
 
