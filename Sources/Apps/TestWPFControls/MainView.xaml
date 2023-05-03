@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PDFiumDotNET.Apps.TestWPFControls"
-        xmlns:wpfcontrols="clr-namespace:PDFiumDotNET.WpfControls;assembly=PDFiumDotNET.WpfControls"
+        xmlns:controls="clr-namespace:PDFiumDotNET.WpfControls;assembly=PDFiumDotNET.WpfControls"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type local:MainViewModel}}"
         Title="{Binding Path=TitleInformation, StringFormat=Test WPF controls ({0})}"
@@ -66,7 +66,7 @@
         <TextBox Grid.Row="2" Grid.Column="0" IsReadOnly="True" Text="{Binding Path=TestInfo}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
 
         <ScrollViewer Grid.Row="2" Grid.Column="2" CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <wpfcontrols:PDFView x:Name="_pdfView" Grid.Row="2" Grid.Column="2" PDFPageComponent="{Binding Path=ViewPageComponent}"/>
+            <controls:PDFView x:Name="_pdfView" Grid.Row="2" Grid.Column="2" PDFPageComponent="{Binding Path=ViewPageComponent}"/>
         </ScrollViewer>
 
         <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3">

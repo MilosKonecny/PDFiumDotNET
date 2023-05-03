@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "PDFiumDotNET.Apps.ComponentsTest": {
+    "PDFiumDotNET.Apps.TestComponents": {
       "commandName": "Project",
       "nativeDebugging": true
     }

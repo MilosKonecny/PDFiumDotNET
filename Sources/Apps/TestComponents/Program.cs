@@ -1,14 +1,13 @@
-﻿namespace PDFiumDotNET.Apps.ComponentsTest
+﻿namespace PDFiumDotNET.Apps.TestComponents
 {
     using System;
     using System.Collections.Generic;
     using System.Reflection;
-    using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using PDFiumDotNET.Apps.Common;
-    using PDFiumDotNET.Apps.ComponentsTest.Exceptions;
+    using PDFiumDotNET.Apps.TestComponents.Exceptions;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Bitmap;
     using PDFiumDotNET.Components.Contracts.Layout;
