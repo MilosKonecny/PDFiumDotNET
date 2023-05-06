@@ -39,6 +39,17 @@
         #region Public properties
 
         /// <summary>
+        /// Gets icon8 license text.
+        /// </summary>
+        public static string Icon8License
+        {
+            get
+            {
+                return "https://icons8.com";
+            }
+        }
+
+        /// <summary>
         /// Gets my own license text.
         /// </summary>
         public string MyOwnLicense

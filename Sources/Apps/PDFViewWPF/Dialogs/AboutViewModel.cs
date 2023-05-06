@@ -42,6 +42,17 @@
         }
 
         /// <summary>
+        /// Gets icon8 license text.
+        /// </summary>
+        public static string Icon8License
+        {
+            get
+            {
+                return Licenses.Icon8License;
+            }
+        }
+
+        /// <summary>
         /// Gets my own license text.
         /// </summary>
         public string MyOwnLicense
