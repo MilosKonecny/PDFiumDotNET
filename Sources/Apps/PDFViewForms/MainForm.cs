@@ -4,6 +4,7 @@ namespace PDFiumDotNET.Apps.PDFViewForms
     using System.Collections.ObjectModel;
     using System.Drawing;
     using System.Windows.Forms;
+    using PDFiumDotNET.Apps.Common;
     using PDFiumDotNET.Apps.PDFViewForms.About;
     using PDFiumDotNET.Apps.PDFViewForms.Contracts;
     using PDFiumDotNET.Components.Contracts.Bookmark;
@@ -64,6 +65,8 @@ namespace PDFiumDotNET.Apps.PDFViewForms
             base.OnLoad(e);
 
             Presenter.ViewInitialized(this);
+
+            Text += " (" + CommonInformation.Info + ")";
         }
 
         #endregion Protected override methods
