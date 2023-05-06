@@ -5,9 +5,9 @@
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Globalization;
-    using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Controls.Primitives;
+    using PDFiumDotNET.Apps.Common;
     using PDFiumDotNET.Apps.PDFViewWPF.Base;
     using PDFiumDotNET.Apps.PDFViewWPF.Contracts;
     using PDFiumDotNET.Apps.PDFViewWPF.Helper;
@@ -66,13 +66,7 @@
         {
             get
             {
-#if DEBUG
-                return RuntimeInformation.FrameworkDescription + " / " + RuntimeInformation.ProcessArchitecture + " / DEBUG";
-#elif RELEASE
-                return RuntimeInformation.FrameworkDescription + " / " + RuntimeInformation.ProcessArchitecture + " / RELEASE";
-#else
-                return RuntimeInformation.FrameworkDescription + " / " + RuntimeInformation.ProcessArchitecture + " / ???";
-#endif
+                return CommonInformation.Info;
             }
         }
 
