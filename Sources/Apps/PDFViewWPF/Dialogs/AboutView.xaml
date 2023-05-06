@@ -49,11 +49,8 @@
                                  Text="{Binding Path=PDFiumLicense, Mode=OneWay}" />
                     </TabItem>
                     <TabItem Header="Icons8">
-                        <TextBlock>
-                            <Hyperlink NavigateUri="https://icons8.com" RequestNavigate="HandleHyperlinkRequestNavigateEvent">
-                                https://icons8.com
-                            </Hyperlink>
-                        </TextBlock>
+                        <TextBox IsReadOnly="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                                 Text="{Binding Path=Icon8License, Mode=OneWay}" />
                     </TabItem>
                 </TabControl>
             </TabItem>
