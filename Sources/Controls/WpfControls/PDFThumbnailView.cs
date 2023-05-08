@@ -72,6 +72,11 @@
         /// </summary>
         private double _startVerticalOffset;
 
+        /// <summary>
+        /// Variable contains page index with focus rectangle. Value is 1 based.
+        /// </summary>
+        private int _focusedPage = -1;
+
         #endregion Private fields
 
         #region Constructors
@@ -93,6 +98,58 @@
         }
 
         #endregion Constructors
+
+        #region Public properties
+
+        /// <summary>
+        /// Gets or sets the index of focused page. Value is 1 based.
+        /// </summary>
+        public int FocusedPage
+        {
+            get
+            {
+                return _focusedPage;
+            }
+
+            set
+            {
+                if (_focusedPage != value - 1)
+                {
+                    _focusedPage = value - 1;
+
+                    if (PDFFocusedPageScrollOnChange)
+                    {
+                        var firstOrDefault = _renderInformation?.PagesToRender?.FirstOrDefault(page => page.Page.PageIndex == _focusedPage);
+                        if (firstOrDefault != null)
+                        {
+                            // Page is visible.
+                            // Invalidate to redraw control.
+                            InvalidateVisual();
+                        }
+                        else
+                        {
+                            var pagePosition = PDFPageComponent.RenderManager.DeterminePagePosition(_focusedPage);
+                            var verticalOffset = pagePosition.Y + pagePosition.Height - (ActualHeight / 2);
+                            VerticalOffset = verticalOffset;
+                            if (VerticalOffset != verticalOffset)
+                            {
+                                // Scroll was not performed. We are at the top, or bottom.
+                                // Invalidate to redraw control.
+                                InvalidateVisual();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Scroll to the page is not required.
+                        // Invalidate to redraw control.
+                        InvalidateVisual();
+                    }
+                }
+            }
+        }
+
+        #endregion Public properties
 
         #region Protected override methods
 

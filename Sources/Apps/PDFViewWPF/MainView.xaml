@@ -284,8 +284,9 @@
                     <ScrollViewer BorderThickness="0"
                               CanContentScroll="True" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
                         <wpfControl:PDFThumbnailView x:Name="_pdfThumbnailView"
-                                                 BorderThickness="0"
-                                                 PDFPageComponent="{Binding Path=ThumbnailPageComponent}"/>
+                                                     BorderThickness="0"
+                                                     PDFFocusedPage="{Binding Path=ViewPageComponent.CurrentPageIndex}"
+                                                     PDFPageComponent="{Binding Path=ThumbnailPageComponent}"/>
                     </ScrollViewer>
                 </Border>
             </TabItem>

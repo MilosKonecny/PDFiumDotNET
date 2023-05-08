@@ -63,16 +63,28 @@
                 drawingContext.DrawText(ft, textLocation);
 
                 // Draw page border - left
-                drawingContext.DrawLine(new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Left), new Point(pageInfo.RelativePositionInViewportArea.Left, pageInfo.RelativePositionInViewportArea.Top), new Point(pageInfo.RelativePositionInViewportArea.Left, pageInfo.RelativePositionInViewportArea.Bottom));
+                drawingContext.DrawLine(
+                    pageInfo.Page.PageIndex == FocusedPage ? new Pen(PDFFocusedPageBorderBrush, PDFFocusedPageBorderThickness.Top) : new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Top),
+                    new Point(pageInfo.RelativePositionInViewportArea.Left, pageInfo.RelativePositionInViewportArea.Top),
+                    new Point(pageInfo.RelativePositionInViewportArea.Left, pageInfo.RelativePositionInViewportArea.Bottom));
 
                 // Draw page border - top
-                drawingContext.DrawLine(new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Top), new Point(pageInfo.RelativePositionInViewportArea.Left, pageInfo.RelativePositionInViewportArea.Top), new Point(pageInfo.RelativePositionInViewportArea.Right, pageInfo.RelativePositionInViewportArea.Top));
+                drawingContext.DrawLine(
+                    pageInfo.Page.PageIndex == FocusedPage ? new Pen(PDFFocusedPageBorderBrush, PDFFocusedPageBorderThickness.Top) : new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Top),
+                    new Point(pageInfo.RelativePositionInViewportArea.Left, pageInfo.RelativePositionInViewportArea.Top),
+                    new Point(pageInfo.RelativePositionInViewportArea.Right, pageInfo.RelativePositionInViewportArea.Top));
 
                 // Draw page border - right
-                drawingContext.DrawLine(new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Right), new Point(pageInfo.RelativePositionInViewportArea.Right, pageInfo.RelativePositionInViewportArea.Top), new Point(pageInfo.RelativePositionInViewportArea.Right, pageInfo.RelativePositionInViewportArea.Bottom));
+                drawingContext.DrawLine(
+                    pageInfo.Page.PageIndex == FocusedPage ? new Pen(PDFFocusedPageBorderBrush, PDFFocusedPageBorderThickness.Top) : new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Top),
+                    new Point(pageInfo.RelativePositionInViewportArea.Right, pageInfo.RelativePositionInViewportArea.Top),
+                    new Point(pageInfo.RelativePositionInViewportArea.Right, pageInfo.RelativePositionInViewportArea.Bottom));
 
                 // Draw page border - bottom
-                drawingContext.DrawLine(new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Bottom), new Point(pageInfo.RelativePositionInViewportArea.Left, pageInfo.RelativePositionInViewportArea.Bottom), new Point(pageInfo.RelativePositionInViewportArea.Right, pageInfo.RelativePositionInViewportArea.Bottom));
+                drawingContext.DrawLine(
+                    pageInfo.Page.PageIndex == FocusedPage ? new Pen(PDFFocusedPageBorderBrush, PDFFocusedPageBorderThickness.Top) : new Pen(PDFPageBorderBrush, PDFPageBorderThickness.Top),
+                    new Point(pageInfo.RelativePositionInViewportArea.Left, pageInfo.RelativePositionInViewportArea.Bottom),
+                    new Point(pageInfo.RelativePositionInViewportArea.Right, pageInfo.RelativePositionInViewportArea.Bottom));
             }
 
             // Draw background border - left
