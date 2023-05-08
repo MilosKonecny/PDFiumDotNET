@@ -19,19 +19,43 @@
         /// Dependency property for 'PDFPageBackground' - source of information to draw content.
         /// </summary>
         public static readonly DependencyProperty PDFPageBackgroundProperty
-            = DependencyProperty.Register("PDFPageBackground", typeof(Brush), typeof(PDFThumbnailView), new FrameworkPropertyMetadata(Brushes.White, HandlePDFPageBackgroundPropertyChanged));
+            = DependencyProperty.Register("PDFPageBackground", typeof(Brush), typeof(PDFThumbnailView), new FrameworkPropertyMetadata(Brushes.White, HandlePropertyChanged));
 
         /// <summary>
         /// Dependency property for 'PDFPageBorderBrush' - source of information to draw content.
         /// </summary>
         public static readonly DependencyProperty PDFPageBorderBrushProperty
-            = DependencyProperty.Register("PDFPageBorderBrush", typeof(Brush), typeof(PDFThumbnailView), new FrameworkPropertyMetadata(Brushes.Black, HandlePDFPageBorderBrushPropertyChanged));
+            = DependencyProperty.Register("PDFPageBorderBrush", typeof(Brush), typeof(PDFThumbnailView), new FrameworkPropertyMetadata(Brushes.Black, HandlePropertyChanged));
 
         /// <summary>
         /// Dependency property for 'PDFPageBorderThickness' - source of information to draw content.
         /// </summary>
         public static readonly DependencyProperty PDFPageBorderThicknessProperty
-            = DependencyProperty.Register("PDFPageBorderThickness", typeof(Thickness), typeof(PDFThumbnailView), new FrameworkPropertyMetadata(new Thickness(0.5), HandlePDFPageBorderThicknessPropertyChanged));
+            = DependencyProperty.Register("PDFPageBorderThickness", typeof(Thickness), typeof(PDFThumbnailView), new FrameworkPropertyMetadata(new Thickness(0.5), HandlePropertyChanged));
+
+        /// <summary>
+        /// Dependency property for 'PDFFocusedPage' - source of information to draw content.
+        /// </summary>
+        public static readonly DependencyProperty PDFFocusedPageProperty
+            = DependencyProperty.Register("PDFFocusedPage", typeof(int), typeof(PDFThumbnailView), new FrameworkPropertyMetadata(-1, HandleFocusedPagePropertyChanged));
+
+        /// <summary>
+        /// Dependency property for 'PDFFocusedPageScrollOnChange' - source of information to draw content.
+        /// </summary>
+        public static readonly DependencyProperty PDFFocusedPageScrollOnChangeProperty
+            = DependencyProperty.Register("PDFFocusedPageScrollOnChange", typeof(bool), typeof(PDFThumbnailView), new FrameworkPropertyMetadata(true, HandlePropertyChanged));
+
+        /// <summary>
+        /// Dependency property for 'PDFFocusedPageBorderBrush' - source of information to draw content.
+        /// </summary>
+        public static readonly DependencyProperty PDFFocusedPageBorderBrushProperty
+            = DependencyProperty.Register("PDFFocusedPageBorderBrush", typeof(Brush), typeof(PDFThumbnailView), new FrameworkPropertyMetadata(Brushes.Black, HandlePropertyChanged));
+
+        /// <summary>
+        /// Dependency property for 'PDFFocusedPageBorderThickness' - source of information to draw content.
+        /// </summary>
+        public static readonly DependencyProperty PDFFocusedPageBorderThicknessProperty
+            = DependencyProperty.Register("PDFFocusedPageBorderThickness", typeof(Thickness), typeof(PDFThumbnailView), new FrameworkPropertyMetadata(new Thickness(2), HandlePropertyChanged));
 
         /// <summary>
         /// Dependency property for 'PDFPageComponent' - source of information to draw content.
@@ -77,6 +101,46 @@
         /// Gets or sets the value of dependency property.
         /// </summary>
         [Category(Constants.PDFiumDotNETPropertyCategory)]
+        public int PDFFocusedPage
+        {
+            get => (int)GetValue(PDFFocusedPageProperty);
+            set => SetValue(PDFFocusedPageProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the value of dependency property.
+        /// </summary>
+        [Category(Constants.PDFiumDotNETPropertyCategory)]
+        public bool PDFFocusedPageScrollOnChange
+        {
+            get => (bool)GetValue(PDFFocusedPageScrollOnChangeProperty);
+            set => SetValue(PDFFocusedPageScrollOnChangeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the value of dependency property.
+        /// </summary>
+        [Category(Constants.PDFiumDotNETPropertyCategory)]
+        public Brush PDFFocusedPageBorderBrush
+        {
+            get => (Brush)GetValue(PDFFocusedPageBorderBrushProperty);
+            set => SetValue(PDFFocusedPageBorderBrushProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the value of dependency property.
+        /// </summary>
+        [Category(Constants.PDFiumDotNETPropertyCategory)]
+        public Thickness PDFFocusedPageBorderThickness
+        {
+            get => (Thickness)GetValue(PDFFocusedPageBorderThicknessProperty);
+            set => SetValue(PDFFocusedPageBorderThicknessProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the value of dependency property.
+        /// </summary>
+        [Category(Constants.PDFiumDotNETPropertyCategory)]
         public IPDFPageComponent PDFPageComponent
         {
             get => (IPDFPageComponent)GetValue(PDFPageComponentProperty);
@@ -88,11 +152,11 @@
         #region Dependency properties - private callback methods
 
         /// <summary>
-        /// Callback method is called whenever <see cref="PDFPageBackground"/> property has changed value.
+        /// Callback method is called whenever common property has changed value.
         /// </summary>
         /// <param name="o">The <see cref="DependencyObject"/> on which the property has changed value.</param>
         /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this property.</param>
-        private static void HandlePDFPageBackgroundPropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        private static void HandlePropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             if (o is not PDFThumbnailView view)
             {
@@ -103,33 +167,18 @@
         }
 
         /// <summary>
-        /// Callback method is called whenever <see cref="PDFPageBorderBrush"/> property has changed value.
+        /// Callback method is called whenever <see cref="PDFFocusedPage"/> property has changed value.
         /// </summary>
         /// <param name="o">The <see cref="DependencyObject"/> on which the property has changed value.</param>
         /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this property.</param>
-        private static void HandlePDFPageBorderBrushPropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        private static void HandleFocusedPagePropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             if (o is not PDFThumbnailView view)
             {
                 return;
             }
 
-            view.InvalidateVisual();
-        }
-
-        /// <summary>
-        /// Callback method is called whenever <see cref="PDFPageBorderThickness"/> property has changed value.
-        /// </summary>
-        /// <param name="o">The <see cref="DependencyObject"/> on which the property has changed value.</param>
-        /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this property.</param>
-        private static void HandlePDFPageBorderThicknessPropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
-        {
-            if (o is not PDFThumbnailView view)
-            {
-                return;
-            }
-
-            view.InvalidateVisual();
+            view.FocusedPage = (int)e.NewValue;
         }
 
         /// <summary>
