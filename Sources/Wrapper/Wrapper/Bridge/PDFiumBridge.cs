@@ -49,6 +49,15 @@
             // Load the functions declared in view header - fpdfview.h.
             LoadDllViewPart();
 
+            // Load the functions declared in view header - fpdf_ppo.h.
+            LoadDllPpoPart();
+
+            // Load the functions declared in view header - fpdf_edit.h.
+            LoadDllEditPart();
+
+            // Load the functions declared in view header - fpdf_save.h.
+            LoadDllSavePart();
+
             // Load the functions declared in doc header - fpdf_doc.h.
             LoadDllDocPart();
 
