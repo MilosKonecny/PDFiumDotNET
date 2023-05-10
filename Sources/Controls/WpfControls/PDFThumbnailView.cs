@@ -115,9 +115,10 @@
             {
                 if (_focusedPage != value - 1)
                 {
+                    // value 0 means no current page
                     _focusedPage = value - 1;
 
-                    if (PDFFocusedPageScrollOnChange)
+                    if (PDFFocusedPageScrollOnChange && _focusedPage != -1)
                     {
                         var firstOrDefault = _renderInformation?.PagesToRender?.FirstOrDefault(page => page.Page.PageIndex == _focusedPage);
                         if (firstOrDefault != null)
@@ -141,7 +142,7 @@
                     }
                     else
                     {
-                        // Scroll to the page is not required.
+                        // Scroll to the page is not required or invalid page was set.
                         // Invalidate to redraw control.
                         InvalidateVisual();
                     }
