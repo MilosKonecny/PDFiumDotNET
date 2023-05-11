@@ -5,7 +5,6 @@
     using System.IO;
     using System.Runtime.CompilerServices;
     using PDFiumDotNET.Apps.Common;
-    using PDFiumDotNET.Apps.PDFViewWPF.Helper;
     using PDFiumDotNET.Apps.TestWPFControls.Contracts;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Layout;

@@ -10,7 +10,6 @@
     using PDFiumDotNET.Apps.Common;
     using PDFiumDotNET.Apps.PDFViewWPF.Base;
     using PDFiumDotNET.Apps.PDFViewWPF.Contracts;
-    using PDFiumDotNET.Apps.PDFViewWPF.Helper;
     using PDFiumDotNET.Components.Contracts;
     using PDFiumDotNET.Components.Contracts.Bookmark;
     using PDFiumDotNET.Components.Contracts.Find;
