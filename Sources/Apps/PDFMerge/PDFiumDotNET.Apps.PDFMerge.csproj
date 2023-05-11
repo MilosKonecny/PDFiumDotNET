@@ -7,7 +7,41 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Resources\BlueUI\icons8_alphabetical_sorting_2_40px_1.png" />
+      <None Remove="Resources\BlueUI\icons8_alphabetical_sorting_40px.png" />
+      <None Remove="Resources\BlueUI\icons8_create_40px.png" />
+      <None Remove="Resources\BlueUI\icons8_delete_file_40px.png" />
+      <None Remove="Resources\BlueUI\icons8_down_40px.png" />
+      <None Remove="Resources\BlueUI\icons8_info_40px.png" />
+      <None Remove="Resources\BlueUI\icons8_opened_folder_40px_1.png" />
+      <None Remove="Resources\BlueUI\icons8_up_40px.png" />
+      <None Remove="Resources\BlueUI\icons8_waste_40px.png" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Compile Include="..\..\Common\AssemblyGlobalInfo.cs" Link="AssemblyGlobalInfo.cs" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Controls\WpfControls\PDFiumDotNET.WpfControls.csproj" />
+      <ProjectReference Include="..\..\Wrapper\Wrapper\PDFiumDotNET.Wrapper.csproj" />
+      <ProjectReference Include="..\Common\PDFiumDotNET.Apps.Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="Resources\BlueUI\icons8_alphabetical_sorting_2_40px_1.png" />
+      <Resource Include="Resources\BlueUI\icons8_alphabetical_sorting_40px.png" />
+      <Resource Include="Resources\BlueUI\icons8_create_40px.png" />
+      <Resource Include="Resources\BlueUI\icons8_delete_file_40px.png" />
+      <Resource Include="Resources\BlueUI\icons8_down_40px.png" />
+      <Resource Include="Resources\BlueUI\icons8_info_40px.png" />
+      <Resource Include="Resources\BlueUI\icons8_opened_folder_40px_1.png" />
+      <Resource Include="Resources\BlueUI\icons8_up_40px.png" />
+      <Resource Include="Resources\BlueUI\icons8_waste_40px.png" />
+    </ItemGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="mkdir &quot;$(TargetDir)PDFium\x86&quot;&#xD;&#xA;mkdir &quot;$(TargetDir)PDFium\x64&quot;&#xD;&#xA;copy &quot;$(ProjectDir)..\..\..\Libs\PDFium\x86\*.*&quot; &quot;$(TargetDir)PDFium\x86&quot;&#xD;&#xA;copy &quot;$(ProjectDir)..\..\..\Libs\PDFium\x64\*.*&quot; &quot;$(TargetDir)PDFium\x64&quot;" />
+    </Target>
 
 </Project>
