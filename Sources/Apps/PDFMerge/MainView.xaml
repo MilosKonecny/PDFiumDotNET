@@ -4,9 +4,162 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PDFiumDotNET.Apps.PDFMerge"
+        xmlns:wpfcontrols="clr-namespace:PDFiumDotNET.WpfControls;assembly=PDFiumDotNET.WpfControls"
         d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type local:MainViewModel}}"
         mc:Ignorable="d"
-        Title="{Binding Path=Title}" Height="450" Width="800">
+        Title="{Binding Path=Title}" Height="450" Width="800"
+        AllowDrop="True"
+        PreviewDragEnter="HandleWindowPreviewDragEnterEvent"
+        PreviewDragOver="HandleWindowPreviewDragOverEvent"
+        PreviewDragLeave="HandleWindowPreviewDragLeaveEvent"
+        PreviewDrop="HandleWindowPreviewDropEvent">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityKey"/>
+    </Window.Resources>
     <Grid>
+        <Grid Margin="5" Visibility="{Binding Path=IsAboutAreaVisible, Converter={StaticResource ResourceKey=BoolToVisibilityKey}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TabControl>
+                <TabItem Header="About">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="License"/>
+                        <TextBox Grid.Row="2" IsReadOnly="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                                 Text="{Binding Path=MyOwnLicense, Mode=OneWay}" />
+                    </Grid>
+                </TabItem>
+                <TabItem Header="OSS Licenses">
+                    <TabControl>
+                        <TabItem Header="PDFium">
+                            <TextBox IsReadOnly="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                                 Text="{Binding Path=PDFiumLicense, Mode=OneWay}" />
+                        </TabItem>
+                        <TabItem Header="Icons8">
+                            <TextBox IsReadOnly="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                                 Text="{Binding Path=Icon8License, Mode=OneWay}" />
+                        </TabItem>
+                    </TabControl>
+                </TabItem>
+            </TabControl>
+            <Button Grid.Row="2" MaxWidth="200" Content="OK" Command="{Binding Path=CloseAboutCommand}"/>
+        </Grid>
+        <Grid Margin="5" Visibility="{Binding Path=IsWorkAreaVisible, Converter={StaticResource ResourceKey=BoolToVisibilityKey}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <DockPanel Grid.Row="0" LastChildFill="True">
+                <Button Height="20" Width="20" DockPanel.Dock="Right" Command="{Binding Path=ChoosePDFFileToCreateCommand}">
+                    <wpfcontrols:AutoDisabledImage Height="16" Width="16" Source="Resources\BlueUI\icons8_opened_folder_40px_1.png"/>
+                </Button>
+                <TextBlock Grid.Row="0" DockPanel.Dock="Left" VerticalAlignment="Center" Text="PDF file to create:" />
+                <TextBox Margin="5,0" Text="{Binding Path=PDFFileToCreate}" />
+            </DockPanel>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Height" Value="32"/>
+                            <Setter Property="Width" Value="32"/>
+                            <Setter Property="Margin" Value="0,0,0,5"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button Command="{Binding Path=MoveUpElementCommand}" ToolTip="Move up selected file">
+                        <wpfcontrols:AutoDisabledImage Source="Resources\BlueUI\icons8_up_40px.png"/>
+                    </Button>
+                    <Button Command="{Binding Path=RemoveElementCommand}" ToolTip="Remove selected file">
+                        <wpfcontrols:AutoDisabledImage Source="Resources\BlueUI\icons8_delete_file_40px.png"/>
+                    </Button>
+                    <Button Command="{Binding Path=MoveDownElementCommand}" ToolTip="Move down selected file">
+                        <wpfcontrols:AutoDisabledImage Source="Resources\BlueUI\icons8_down_40px.png"/>
+                    </Button>
+                    <Button Command="{Binding Path=SortElementsAscendingCommand}" ToolTip="Sort files ascending">
+                        <wpfcontrols:AutoDisabledImage Source="Resources\BlueUI\icons8_alphabetical_sorting_40px.png"/>
+                    </Button>
+                    <Button Command="{Binding Path=SortElementsDescendingCommand}" ToolTip="Sort files descending">
+                        <wpfcontrols:AutoDisabledImage Source="Resources\BlueUI\icons8_alphabetical_sorting_2_40px_1.png"/>
+                    </Button>
+                </StackPanel>
+                <ListBox Grid.Column="2"
+                     ItemsSource="{Binding Path=FilesToMerge}" SelectedIndex="{Binding Path=SelectedFileIndex}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock FontWeight="Bold" Text="{Binding Path=PDFFile}"/>
+                                <Grid Margin="20,0,0,0" HorizontalAlignment="Stretch">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="5"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" IsChecked="{Binding Path=MergeAllPages}" Content="Merge all pages" IsEnabled="False"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Count of empty pages before:"/>
+                                    <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Path=AddPagesBeforeMergedDocument}" IsReadOnly="True" Width="100"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Count of empty pages after:"/>
+                                    <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Path=AddPagesAfterMergedDocument}" IsReadOnly="True" Width="100"/>
+                                </Grid>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <TextBlock Grid.Column="2" Margin="0, 0, 50, 10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Text="Use drag &amp; drop..."/>
+            </Grid>
+
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Command="{Binding Path=AboutCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <wpfcontrols:AutoDisabledImage Margin="5" Height="24" Width="24" Source="Resources\BlueUI\icons8_info_40px.png"/>
+                        <TextBlock Text="About" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="6" Command="{Binding Path=RemoveAllElementsCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <wpfcontrols:AutoDisabledImage Margin="5" Height="24" Width="24" Source="Resources\BlueUI\icons8_waste_40px.png"/>
+                        <TextBlock Text="Remove all files" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="8" Command="{Binding Path=MergeElementsCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <wpfcontrols:AutoDisabledImage Margin="5" Height="24" Width="24" Source="Resources\BlueUI\icons8_create_40px.png"/>
+                        <TextBlock Text="Merge" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+        </Grid>
     </Grid>
 </Window>
