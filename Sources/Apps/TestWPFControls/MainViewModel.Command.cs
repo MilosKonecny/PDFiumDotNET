@@ -1,7 +1,7 @@
 ﻿namespace PDFiumDotNET.Apps.TestWPFControls
 {
     using System.Windows;
-    using PDFiumDotNET.Apps.PDFViewWPF.Helper;
+    using PDFiumDotNET.Apps.Common;
 
     /// <summary>
     /// View model class for <see cref="MainView"/>.
