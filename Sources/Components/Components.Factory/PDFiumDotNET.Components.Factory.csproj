@@ -9,8 +9,15 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\Wrapper\Wrapper\PDFiumDotNET.Wrapper.csproj" />
         <ProjectReference Include="..\Components.Contracts\PDFiumDotNET.Components.Contracts.csproj" />
         <ProjectReference Include="..\Components\PDFiumDotNET.Components.csproj" />
     </ItemGroup>
+
+    <!-- NuGet things -->
+    <PropertyGroup>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <Title>PDFiumDotNET Components Factory</Title>
+    </PropertyGroup>
 
 </Project>

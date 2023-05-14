@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <AdditionalFiles Remove=".editorconfig" />
+        <AdditionalFiles Remove=".editorconfig" />
     </ItemGroup>
 
     <ItemGroup>
@@ -14,6 +14,146 @@
 
     <ItemGroup>
         <Compile Include="..\..\Common\AssemblyGlobalInfo.cs" Link="AssemblyGlobalInfo.cs" />
+    </ItemGroup>
+
+    <!-- NuGet things -->
+    <PropertyGroup>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <Title>PDFiumDotNET Wrapper</Title>
+    </PropertyGroup>
+    <ItemGroup>
+        <Folder Include="PDFium\" />
+        <Folder Include="PDFium\x64\" />
+        <Folder Include="PDFium\x86\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+        <!--net48-->
+        <Content Include="..\..\..\Libs\PDFium\x86\pdfium.dll" Pack="true" PackagePath="\lib\net48\x86\" link="PDFium\x86\pdfium.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x64\pdfium.dll" Pack="true" PackagePath="\lib\net48\x64\" link="PDFium\x64\pdfium.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x86\LICENSE" Pack="true" PackagePath="\lib\net48\x86\" link="PDFium\x86\LICENSE">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x64\LICENSE" Pack="true" PackagePath="\lib\net48\x64\" link="PDFium\x64\LICENSE">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+        <!--net5.0-->
+        <Content Include="..\..\..\Libs\PDFium\x86\pdfium.dll" Pack="true" PackagePath="\lib\net5.0\x86\" link="PDFium\x86\pdfium.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x64\pdfium.dll" Pack="true" PackagePath="\lib\net5.0\x64\" link="PDFium\x64\pdfium.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x86\LICENSE" Pack="true" PackagePath="\lib\net5.0\x86\" link="PDFium\x86\LICENSE">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x64\LICENSE" Pack="true" PackagePath="\lib\net5.0\x64\" link="PDFium\x64\LICENSE">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+        <!--net5.0-windows7.0-->
+        <Content Include="..\..\..\Libs\PDFium\x86\pdfium.dll" Pack="true" PackagePath="\lib\net5.0-windows7.0\x86\" link="PDFium\x86\pdfium.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x64\pdfium.dll" Pack="true" PackagePath="\lib\net5.0-windows7.0\x64\" link="PDFium\x64\pdfium.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x86\LICENSE" Pack="true" PackagePath="\lib\net5.0-windows7.0\x86\" link="PDFium\x86\LICENSE">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x64\LICENSE" Pack="true" PackagePath="\lib\net5.0-windows7.0\x64\" link="PDFium\x64\LICENSE">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+        <!--net6.0-->
+        <Content Include="..\..\..\Libs\PDFium\x86\pdfium.dll" Pack="true" PackagePath="\lib\net6.0\x86\" link="PDFium\x86\pdfium.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x64\pdfium.dll" Pack="true" PackagePath="\lib\net6.0\x64\" link="PDFium\x64\pdfium.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x86\LICENSE" Pack="true" PackagePath="\lib\net6.0\x86\" link="PDFium\x86\LICENSE">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x64\LICENSE" Pack="true" PackagePath="\lib\net6.0\x64\" link="PDFium\x64\LICENSE">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+        <!--net6.0-windows7.0-->
+        <Content Include="..\..\..\Libs\PDFium\x86\pdfium.dll" Pack="true" PackagePath="\lib\net6.0-windows7.0\x86\" link="PDFium\x86\pdfium.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x64\pdfium.dll" Pack="true" PackagePath="\lib\net6.0-windows7.0\x64\" link="PDFium\x64\pdfium.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x86\LICENSE" Pack="true" PackagePath="\lib\net6.0-windows7.0\x86\" link="PDFium\x86\LICENSE">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x64\LICENSE" Pack="true" PackagePath="\lib\net6.0-windows7.0\x64\" link="PDFium\x64\LICENSE">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+        <!--net7.0-->
+        <Content Include="..\..\..\Libs\PDFium\x86\pdfium.dll" Pack="true" PackagePath="\lib\net7.0\x86\" link="PDFium\x86\pdfium.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x64\pdfium.dll" Pack="true" PackagePath="\lib\net7.0\x64\" link="PDFium\x64\pdfium.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x86\LICENSE" Pack="true" PackagePath="\lib\net7.0\x86\" link="PDFium\x86\LICENSE">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x64\LICENSE" Pack="true" PackagePath="\lib\net7.0\x64\" link="PDFium\x64\LICENSE">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+        <!--net7.0-windows7.0-->
+        <Content Include="..\..\..\Libs\PDFium\x86\pdfium.dll" Pack="true" PackagePath="\lib\net7.0-windows7.0\x86\" link="PDFium\x86\pdfium.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x64\pdfium.dll" Pack="true" PackagePath="\lib\net7.0-windows7.0\x64\" link="PDFium\x64\pdfium.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x86\LICENSE" Pack="true" PackagePath="\lib\net7.0-windows7.0\x86\" link="PDFium\x86\LICENSE">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x64\LICENSE" Pack="true" PackagePath="\lib\net7.0-windows7.0\x64\" link="PDFium\x64\LICENSE">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+        <!--netcoreapp3.1-->
+        <Content Include="..\..\..\Libs\PDFium\x86\pdfium.dll" Pack="true" PackagePath="\lib\netcoreapp3.1\x86\" link="PDFium\x86\pdfium.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x64\pdfium.dll" Pack="true" PackagePath="\lib\netcoreapp3.1\x64\" link="PDFium\x64\pdfium.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x86\LICENSE" Pack="true" PackagePath="\lib\netcoreapp3.1\x86\" link="PDFium\x86\LICENSE">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x64\LICENSE" Pack="true" PackagePath="\lib\netcoreapp3.1\x64\" link="PDFium\x64\LICENSE">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+        <!--netstandard2.1-->
+        <Content Include="..\..\..\Libs\PDFium\x86\pdfium.dll" Pack="true" PackagePath="\lib\netstandard2.1\x86\" link="PDFium\x86\pdfium.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x64\pdfium.dll" Pack="true" PackagePath="\lib\netstandard2.1\x64\" link="PDFium\x64\pdfium.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x86\LICENSE" Pack="true" PackagePath="\lib\netstandard2.1\x86\" link="PDFium\x86\LICENSE">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\..\Libs\PDFium\x64\LICENSE" Pack="true" PackagePath="\lib\netstandard2.1\x64\" link="PDFium\x64\LICENSE">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
 </Project>

@@ -11,6 +11,15 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\Components\Components.Contracts\PDFiumDotNET.Components.Contracts.csproj" />
+        <ProjectReference Include="..\..\Components\Components.Factory\PDFiumDotNET.Components.Factory.csproj" />
+        <ProjectReference Include="..\..\Components\Components\PDFiumDotNET.Components.csproj" />
+        <ProjectReference Include="..\..\Wrapper\Wrapper\PDFiumDotNET.Wrapper.csproj" />
     </ItemGroup>
+
+    <!-- NuGet things -->
+    <PropertyGroup>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <Title>PDFiumDotNET WPFControls</Title>
+    </PropertyGroup>
 
 </Project>
