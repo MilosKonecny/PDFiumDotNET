@@ -13,8 +13,8 @@ using System.Runtime.InteropServices;
 
 [assembly: NeutralResourcesLanguage("en", UltimateResourceFallbackLocation.MainAssembly)]
 
-[assembly: AssemblyVersion("0.01.00.000")]
-[assembly: AssemblyFileVersion("0.1.0.0")]
+[assembly: AssemblyVersion("0.01.01.000")]
+[assembly: AssemblyFileVersion("0.1.1.0")]
 
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]

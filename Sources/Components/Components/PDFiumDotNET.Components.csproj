@@ -13,4 +13,10 @@
         <ProjectReference Include="..\Components.Contracts\PDFiumDotNET.Components.Contracts.csproj" />
     </ItemGroup>
 
+    <!-- NuGet things -->
+    <PropertyGroup>
+        <Title>PDFiumDotNET Components</Title>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    </PropertyGroup>
+
 </Project>

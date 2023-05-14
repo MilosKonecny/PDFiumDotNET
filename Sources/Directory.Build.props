@@ -13,4 +13,37 @@
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
     </PropertyGroup>
 
+    <!-- NuGet things -->
+    <PropertyGroup>
+        <Authors>Miloš Konečný</Authors>
+        <Company>Miloš Konečný OSS</Company>
+        <Product>PDFiumDotNET</Product>
+        <Copyright>Copyright © Miloš Konečný 2020</Copyright>
+        <Version>0.1.1</Version>
+        <PackageProjectUrl>https://github.com/MilosKonecny/PDFiumDotNET</PackageProjectUrl>
+        <PackageReadmeFile>LICENSE</PackageReadmeFile>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/MilosKonecny/PDFiumDotNET</RepositoryUrl>
+        <PackageTags>PDFium;WPF;View PDF</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+        <IncludeSymbols>False</IncludeSymbols>
+        <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
+        <Description>
+            PDFiumDotNET library is C# wrapper for Google's PDFium library. The classes allow access all the information provided by PDFium.
+            If you want to use only information from PDF document, use PDFiumDotNET.Factory.
+            If you want to render PDF document, use PDFiumDotNET.WpfControls.
+        </Description>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Include="..\..\..\LICENSE">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+        <None Include="..\..\..\Release\ReadMe.md">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+    </ItemGroup>
+
 </Project>

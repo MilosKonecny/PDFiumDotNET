@@ -8,4 +8,10 @@
         <Compile Include="..\..\Common\AssemblyGlobalInfo.cs" Link="AssemblyGlobalInfo.cs" />
     </ItemGroup>
 
+    <!-- NuGet things -->
+    <PropertyGroup>
+        <Title>PDFiumDotNET Components Contracts</Title>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    </PropertyGroup>
+
 </Project>
