@@ -40,7 +40,7 @@
             <Pack>True</Pack>
             <PackagePath>\</PackagePath>
         </None>
-        <None Include="..\..\..\Release\ReadMe.md">
+        <None Include="..\..\Resources\NuGet\ReadMe.md">
             <Pack>True</Pack>
             <PackagePath>\</PackagePath>
         </None>

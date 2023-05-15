@@ -1,4 +1,4 @@
-#dotnet clean --configuration Release
+dotnet clean --configuration Release
 
 dotnet build --configuration Release
 
