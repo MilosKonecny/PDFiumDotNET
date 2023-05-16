@@ -119,7 +119,7 @@
         {
             if (renderInfo == null)
             {
-                throw new ArgumentNullException(nameof(renderInfo));
+                return 0d;
             }
 
             return renderInfo.ViewportArea.X;
@@ -135,7 +135,7 @@
         {
             if (renderInfo == null)
             {
-                throw new ArgumentNullException(nameof(renderInfo));
+                return 0d;
             }
 
             return renderInfo.ViewportArea.X;

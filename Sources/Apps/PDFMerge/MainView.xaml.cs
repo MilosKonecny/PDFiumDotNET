@@ -51,7 +51,7 @@
         /// <inheritdoc/>
         public void ShowExceptionInfo(string title, Exception ex)
         {
-            ShowMessage(title, ex.Message);
+            ShowMessage(title, ex?.Message);
         }
 
         #endregion Implementation of IView
