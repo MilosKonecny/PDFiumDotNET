@@ -190,7 +190,7 @@
         {
             if (renderInfo == null)
             {
-                throw new ArgumentNullException(nameof(renderInfo));
+                return 0d;
             }
 
             var margins = PageMargin.Width;
@@ -212,7 +212,7 @@
         {
             if (renderInfo == null)
             {
-                throw new ArgumentNullException(nameof(renderInfo));
+                return 0d;
             }
 
             var pageClosestToCenter = renderInfo.PagesToRender.FirstOrDefault(page => page.IsClosestToCenter);
