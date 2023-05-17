@@ -13,6 +13,12 @@
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(STRONGNAMEKEYFILEFOLDER)' != ''">
+        <DefineConstants>$(DefineConstants);STRONGNAMEUSED</DefineConstants>
+        <SignAssembly>True</SignAssembly>
+        <AssemblyOriginatorKeyFile>$(STRONGNAMEKEYFILEFOLDER)\PDFiumDotNETStrongNameKey.snk</AssemblyOriginatorKeyFile>
+    </PropertyGroup>
+
     <!-- NuGet things -->
     <PropertyGroup>
         <Authors>Miloš Konečný</Authors>
