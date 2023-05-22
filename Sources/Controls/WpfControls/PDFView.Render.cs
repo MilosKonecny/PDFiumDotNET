@@ -75,26 +75,34 @@
 
                 try
                 {
-                    var bitmap = new WriteableBitmap((int)pageInfo.VisiblePart.Width, (int)pageInfo.VisiblePart.Height, 96, 96, PixelFormats.Bgra32, null);
+                    // Improve quality by rendering to bigger image.
+                    // Prepare rendering data.
+                    var factor = 1.5d;
+                    var zoomFactor = factor * PDFPageComponent.ZoomComponent.CurrentZoomFactor;
+                    var visiblePart = new PDFRectangle<double>(factor * pageInfo.VisiblePart.Left, factor * pageInfo.VisiblePart.Top, factor * pageInfo.VisiblePart.Width, factor * pageInfo.VisiblePart.Height);
+
+                    var bitmap = new WriteableBitmap((int)visiblePart.Width, (int)visiblePart.Height, 72, 72, PixelFormats.Bgra32, null);
                     var format = BitmapFormatConverter.GetFormat(bitmap.Format);
 
+                    // Render page content into bitmap.
                     bitmap.Lock();
                     pageInfo.Page.RenderPageBitmap(
-                        PDFPageComponent.ZoomComponent.CurrentZoomFactor,
-                        (int)pageInfo.VisiblePart.Left,
-                        (int)pageInfo.VisiblePart.Top,
-                        (int)pageInfo.VisiblePart.Right,
-                        (int)pageInfo.VisiblePart.Bottom,
-                        (int)pageInfo.VisiblePart.Width,
-                        (int)pageInfo.VisiblePart.Height,
+                        zoomFactor,
+                        (int)visiblePart.Left,
+                        (int)visiblePart.Top,
+                        (int)visiblePart.Left + (int)visiblePart.Width,
+                        (int)visiblePart.Top + (int)visiblePart.Height,
+                        (int)visiblePart.Width,
+                        (int)visiblePart.Height,
                         format,
                         bitmap.BackBuffer,
                         bitmap.BackBufferStride);
-                    bitmap.AddDirtyRect(new Int32Rect(0, 0, (int)pageInfo.VisiblePart.Width, (int)pageInfo.VisiblePart.Height));
+                    bitmap.AddDirtyRect(new Int32Rect(0, 0, (int)visiblePart.Width, (int)visiblePart.Height));
                     bitmap.Unlock();
 
-                    // Draw page content.
+                    // Draw bitmap into drawing context.
                     drawingContext.DrawImage(bitmap, new Rect(pageInfo.VisiblePartInViewportArea.X, pageInfo.VisiblePartInViewportArea.Y, pageInfo.VisiblePartInViewportArea.Width, pageInfo.VisiblePartInViewportArea.Height));
+                    GC.Collect();
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
                 catch
