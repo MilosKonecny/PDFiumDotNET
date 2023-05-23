@@ -360,10 +360,13 @@
                 horizontalOffset = ((_documentArea.Width - pageWidth) / 2) + detailedPositionXFromLeft - (ActualWidth / 2);
             }
 
-            VerticalOffset = verticalOffset;
-            if (!double.IsNaN(horizontalOffset))
+            if (double.IsNaN(horizontalOffset))
             {
-                HorizontalOffset = horizontalOffset;
+                VerticalOffset = verticalOffset;
+            }
+            else
+            {
+                SetOffsets(horizontalOffset, verticalOffset, true);
             }
         }
 
