@@ -5,6 +5,7 @@
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Media;
+    using PDFiumDotNET.WpfControls.Helper;
 
     /// <summary>
     /// View class shows pages from opened PDF document.
@@ -31,7 +32,7 @@
             private set
             {
                 value = Math.Max(0, Math.Min(value, ExtentWidth - ViewportWidth));
-                if (_horizontalOffset != value)
+                if (!DoubleHelper.OffsetsAreEqual(_horizontalOffset, value))
                 {
                     _horizontalOffset = value;
                     InvalidateVisual();
@@ -52,7 +53,7 @@
             private set
             {
                 value = Math.Max(0, Math.Min(value, ExtentHeight - ViewportHeight));
-                if (_verticalOffset != value)
+                if (!DoubleHelper.OffsetsAreEqual(_verticalOffset, value))
                 {
                     _verticalOffset = value;
                     InvalidateVisual();

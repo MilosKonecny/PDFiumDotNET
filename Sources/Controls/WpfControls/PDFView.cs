@@ -11,6 +11,7 @@
     using PDFiumDotNET.Components.Contracts.Link;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Render;
+    using PDFiumDotNET.WpfControls.Helper;
 
     /// <summary>
     /// View class shows pages from opened PDF document.
@@ -156,8 +157,10 @@
             if (PDFPageComponent != null)
             {
                 // Check the position of viewport area in document area.
-                HorizontalOffset = Math.Min(HorizontalOffset, _documentArea.Width - _viewportArea.Width);
-                VerticalOffset = Math.Min(VerticalOffset, _documentArea.Height - _viewportArea.Height);
+                SetOffsets(
+                    Math.Min(HorizontalOffset, _documentArea.Width - _viewportArea.Width),
+                    Math.Min(VerticalOffset, _documentArea.Height - _viewportArea.Height),
+                    false);
 
                 // Determine pages to draw.
                 var viewportInDocument = new PDFRectangle<double>(HorizontalOffset, VerticalOffset, ViewportWidth, ViewportHeight);
@@ -221,15 +224,17 @@
             {
                 if ((e.Manipulators.Count() == 1 || e.IsInertial) && !_zoomManipulationActive)
                 {
-                    HorizontalOffset = _startManipulationHorizontalOffset - e.CumulativeManipulation.Translation.X;
-                    VerticalOffset = _startManipulationVerticalOffset - e.CumulativeManipulation.Translation.Y;
+                    SetOffsets(
+                        _startManipulationHorizontalOffset - e.CumulativeManipulation.Translation.X,
+                        _startManipulationVerticalOffset - e.CumulativeManipulation.Translation.Y,
+                        true);
                 }
                 else if (e.Manipulators.Count() == 2)
                 {
                     _zoomManipulationActive = true;
                     var factor = (e.CumulativeManipulation.Scale.X + e.CumulativeManipulation.Scale.Y) / 2;
                     var newZoom = _startManipulationZoom * factor;
-                    PDFPageComponent.ZoomComponent.CurrentZoomFactor = newZoom;
+                    SetZoom(newZoom);
                 }
             }
 
@@ -287,8 +292,10 @@
                     if (_startDragPoint.X != -1 && _startDragPoint.Y != -1)
                     {
                         var newDragPoint = e.GetPosition(this);
-                        HorizontalOffset = _startHorizontalOffset + _startDragPoint.X - newDragPoint.X;
-                        VerticalOffset = _startVerticalOffset + _startDragPoint.Y - newDragPoint.Y;
+                        SetOffsets(
+                            _startHorizontalOffset + _startDragPoint.X - newDragPoint.X,
+                            _startVerticalOffset + _startDragPoint.Y - newDragPoint.Y,
+                            true);
                     }
                 }
                 else
@@ -500,6 +507,43 @@
             _verticalOffset = 0d;
             _documentArea = new Size(0, 0);
             _renderInformation = null;
+        }
+
+        /// <summary>
+        /// The method sets both offsets at the same time and invalidate is called only once if required.
+        /// </summary>
+        /// <param name="horizontalOffset">New horizontal offset.</param>
+        /// <param name="verticalOffset">New vertical offset.</param>
+        /// <param name="callInvalidate"><c>true</c> - call the invalidate if at least one of the offsets has changed. <c>false</c> - don't call invalidate.</param>
+        private void SetOffsets(double horizontalOffset, double verticalOffset, bool callInvalidate)
+        {
+            horizontalOffset = Math.Max(0, Math.Min(horizontalOffset, ExtentWidth - ViewportWidth));
+            verticalOffset = Math.Max(0, Math.Min(verticalOffset, ExtentHeight - ViewportHeight));
+
+            if (!DoubleHelper.OffsetsAreEqual(horizontalOffset, HorizontalOffset)
+                || !DoubleHelper.OffsetsAreEqual(verticalOffset, VerticalOffset))
+            {
+                _horizontalOffset = horizontalOffset;
+                _verticalOffset = verticalOffset;
+
+                if (callInvalidate)
+                {
+                    InvalidateVisual();
+                    ScrollOwner?.InvalidateScrollInfo();
+                }
+            }
+        }
+
+        /// <summary>
+        /// The method sets zoom factor in zoom component.
+        /// </summary>
+        /// <param name="newZoomFactor">New zoom factor to set in zoom component.</param>
+        private void SetZoom(double newZoomFactor)
+        {
+            if (!DoubleHelper.ZoomsAreEqual(PDFPageComponent.ZoomComponent.CurrentZoomFactor, newZoomFactor))
+            {
+                PDFPageComponent.ZoomComponent.CurrentZoomFactor = newZoomFactor;
+            }
         }
 
         #endregion Private methods
