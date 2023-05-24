@@ -7,9 +7,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:PDFiumDotNET.Apps.PDFViewWPF"
         xmlns:wpfControl="clr-namespace:PDFiumDotNET.WpfControls;assembly=PDFiumDotNET.WpfControls"
-        xmlns:behaviors="clr-namespace:PDFiumDotNET.Apps.PDFViewWPF.Behaviors"
-        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:templates="clr-namespace:PDFiumDotNET.Apps.PDFViewWPF.Templates"
+        xmlns:controls="clr-namespace:PDFiumDotNET.Apps.PDFViewWPF.Controls"
         mc:Ignorable="d" 
         d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type local:MainViewModel}}"
         d:DesignHeight="300" d:DesignWidth="500"
@@ -141,6 +140,12 @@
                     <Setter Property="BorderThickness" Value="0,0,0,1"/>
                     <Setter Property="Padding" Value="2,0"/>
                 </Style>
+                <Style TargetType="controls:TextBoxEnter">
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                    <Setter Property="Padding" Value="2,0"/>
+                </Style>
             </WrapPanel.Resources>
             <StackPanel Orientation="Horizontal" Margin="0,5,10,5">
                 <Button Command="{Binding Path=OpenCommand}" ToolTip="Open PDF document">
@@ -170,18 +175,14 @@
                 </Button>
                 <StackPanel Orientation="Horizontal" Margin="10,0">
                     <TextBlock Text="Zoom:" />
-                    <TextBox Text="{Binding Path=CurrentZoom}"
-                             IsReadOnly="{Binding Path=IsDocumentClosed}">
+                    <controls:TextBoxEnter Text="{Binding Path=CurrentZoom}" IsReadOnly="{Binding Path=IsDocumentClosed}">
                         <TextBox.ToolTip>
                             <StackPanel>
                                 <TextBlock Text="Enter desired zoom factor"/>
                                 <TextBlock Text="Press enter or navigate away"/>
                             </StackPanel>
                         </TextBox.ToolTip>
-                        <b:Interaction.Behaviors>
-                            <behaviors:TextBoxEnterBehavior />
-                        </b:Interaction.Behaviors>
-                    </TextBox>
+                    </controls:TextBoxEnter>
                     <TextBlock Text="%" />
                 </StackPanel>
                 <Button Command="{Binding Path=ZoomInCommand}" ToolTip="Zoom in">
@@ -197,31 +198,23 @@
                 </Button>
                 <StackPanel Orientation="Horizontal" Margin="10,0">
                     <TextBlock Text="Page:" />
-                    <TextBox Text="{Binding Path=CurrentPageLabel}"
-                             IsReadOnly="{Binding Path=IsDocumentClosed}">
+                    <controls:TextBoxEnter Text="{Binding Path=CurrentPageLabel}" IsReadOnly="{Binding Path=IsDocumentClosed}">
                         <TextBox.ToolTip>
                             <StackPanel>
                                 <TextBlock Text="Enter the page label to navigate to this page"/>
                                 <TextBlock Text="Press enter or navigate away"/>
                             </StackPanel>
                         </TextBox.ToolTip>
-                        <b:Interaction.Behaviors>
-                            <behaviors:TextBoxEnterBehavior />
-                        </b:Interaction.Behaviors>
-                    </TextBox>
+                    </controls:TextBoxEnter>
                     <TextBlock Text="(" />
-                    <TextBox Text="{Binding Path=CurrentPageIndex}"
-                             IsReadOnly="{Binding Path=IsDocumentClosed}">
+                    <controls:TextBoxEnter Text="{Binding Path=CurrentPageIndex}" IsReadOnly="{Binding Path=IsDocumentClosed}">
                         <TextBox.ToolTip>
                             <StackPanel>
                                 <TextBlock Text="Enter the page number to navigate to this page"/>
                                 <TextBlock Text="Press enter or navigate away"/>
                             </StackPanel>
                         </TextBox.ToolTip>
-                        <b:Interaction.Behaviors>
-                            <behaviors:TextBoxEnterBehavior />
-                        </b:Interaction.Behaviors>
-                    </TextBox>
+                    </controls:TextBoxEnter>
                     <TextBlock Text="/" />
                     <TextBox Text="{Binding Path=ViewPageComponent.PageCount, Mode=OneWay}"
                              ToolTip="Not editable"
