@@ -1,6 +1,8 @@
 ﻿namespace PDFiumDotNET.Wrapper.Bridge
 {
     using System;
+    using System.Collections.Generic;
+    using System.IO;
     using System.Runtime.InteropServices;
     using PDFiumDotNET.Wrapper.Exceptions;
 
@@ -38,8 +40,32 @@
 
         private static void LoadDll()
         {
-            // Determine and load pdfium library
-            _libraryName = Environment.Is64BitProcess ? "PDFium\\x64\\pdfium.dll" : "PDFium\\x86\\pdfium.dll";
+            var libraryNames = new List<string>();
+
+            // Library is 'pdfium.dll' in sub-folder 'PDFium\x64' or 'PDFium\x86'
+            libraryNames.Add(Environment.Is64BitProcess ? "PDFium\\x64\\pdfium.dll" : "PDFium\\x86\\pdfium.dll");
+
+            // Library is in the same folder and name is 'pdfium.x64.dll' or 'pdfium.x86.dll'.
+            libraryNames.Add(Environment.Is64BitProcess ? "pdfium.x64.dll" : "pdfium.x86.dll");
+
+            // Library is in the same folder and name is 'pdfium.dll'
+            libraryNames.Add("pdfium.dll");
+
+            foreach (var libraryName in libraryNames)
+            {
+                if (File.Exists(libraryName))
+                {
+                    _libraryName = libraryName;
+                    break;
+                }
+            }
+
+            if (string.IsNullOrEmpty(_libraryName))
+            {
+                throw PDFiumLibraryNotLoadedException.CreateException(libraryNames);
+            }
+
+            // Load the library
             _libraryHandle = NativeMethods.LoadLibrary(_libraryName);
             if (_libraryHandle == IntPtr.Zero)
             {
