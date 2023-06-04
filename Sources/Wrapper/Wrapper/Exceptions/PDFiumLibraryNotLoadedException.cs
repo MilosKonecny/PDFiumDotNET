@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Linq;
     using System.Runtime.InteropServices;
     using System.Runtime.Serialization;
 
@@ -46,6 +47,17 @@
         protected PDFiumLibraryNotLoadedException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
+        }
+
+        /// <summary>
+        /// Creates an <see cref="PDFiumLibraryNotLoadedException"/> exception with the information that the library was found.
+        /// </summary>
+        /// <param name="libraryNames">Library names tried to load.</param>
+        /// <returns>Created exception.</returns>
+        public static PDFiumLibraryNotLoadedException CreateException(List<string> libraryNames)
+        {
+            var names = libraryNames.Aggregate(string.Empty, (agg, next) => agg + (string.IsNullOrEmpty(agg) ? string.Empty : ", ") + "'" + next + "'");
+            return new PDFiumLibraryNotLoadedException($"No DLL was found. The following were tried to load: {names}.");
         }
 
         /// <summary>
