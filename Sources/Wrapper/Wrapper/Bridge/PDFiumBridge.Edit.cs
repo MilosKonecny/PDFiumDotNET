@@ -78,6 +78,45 @@
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate bool FPDF_MovePages_Delegate(FPDF_DOCUMENT document, int[] page_indices, ulong page_indices_len, int dest_page_index);
+
+        private static FPDF_MovePages_Delegate FPDF_MovePagesStatic { get; set; }
+
+        /// <summary>
+        /// Experimental API.
+        /// Move the given pages to a new index position.
+        /// </summary>
+        /// <param name="document">Handle to a document.</param>
+        /// <param name="page_indices">The ordered list of pages to move. No duplicates allowed.</param>
+        /// <param name="page_indices_len">The number of elements in |page_indices|.</param>
+        /// <param name="dest_page_index">The new index position to which the pages in |page_indices| are moved.</param>
+        /// <returns>Returns TRUE on success. If it returns FALSE, the document may be left in an indeterminate state.</returns>
+        /// <remarks>
+        /// Example: The PDF document starts out with pages [A, B, C, D], with indices
+        /// [0, 1, 2, 3].
+        ///
+        /// >  Move(doc, [3, 2], 2, 1); // returns true
+        /// >  // The document has pages [A, D, C, B].
+        /// >
+        /// >  Move(doc, [0, 4, 3], 3, 1); // returns false
+        /// >  // Returned false because index 4 is out of range.
+        /// >
+        /// >  Move(doc, [0, 3, 1], 3, 2); // returns false
+        /// >  // Returned false because index 2 is out of range for 3 page indices.
+        /// >
+        /// >  Move(doc, [2, 2], 2, 0); // returns false
+        /// >  // Returned false because [2, 2] contains duplicates.
+        /// FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDF_MovePages(FPDF_DOCUMENT document, const int* page_indices, unsigned long page_indices_len, int dest_page_index);.
+        /// </remarks>
+        public bool FPDF_MovePages(FPDF_DOCUMENT document, int[] page_indices, ulong page_indices_len, int dest_page_index)
+        {
+            lock (_syncObject)
+            {
+                return FPDF_MovePagesStatic(document, page_indices, page_indices_len, dest_page_index);
+            }
+        }
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFPage_GetRotation_Delegate(FPDF_PAGE page);
 
         private static FPDFPage_GetRotation_Delegate FPDFPage_GetRotationStatic { get; set; }
@@ -133,6 +172,7 @@
             FPDF_CreateNewDocumentStatic = GetPDFiumFunction<FPDF_CreateNewDocument_Delegate>(nameof(FPDF_CreateNewDocument));
             FPDFPage_NewStatic = GetPDFiumFunction<FPDFPage_New_Delegate>(nameof(FPDFPage_New));
             FPDFPage_DeleteStatic = GetPDFiumFunction<FPDFPage_Delete_Delegate>(nameof(FPDFPage_Delete));
+            FPDF_MovePagesStatic = GetPDFiumFunction<FPDF_MovePages_Delegate>(nameof(FPDF_MovePages));
             FPDFPage_GetRotationStatic = GetPDFiumFunction<FPDFPage_GetRotation_Delegate>(nameof(FPDFPage_GetRotation));
             FPDFPage_SetRotationStatic = GetPDFiumFunction<FPDFPage_SetRotation_Delegate>(nameof(FPDFPage_SetRotation));
         }

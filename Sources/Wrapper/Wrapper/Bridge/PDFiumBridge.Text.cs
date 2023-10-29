@@ -125,6 +125,32 @@
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate int FPDFText_IsHyphen_Delegate(FPDF_TEXTPAGE text_page, int index);
+
+        private static FPDFText_IsHyphen_Delegate FPDFText_IsHyphenStatic { get; set; }
+
+        /// <summary>
+        /// Get if a character in a page is a hyphen.
+        /// </summary>
+        /// <param name="text_page">Handle to a text page information structure. Returned by <see cref="FPDFText_LoadPage"/> function.</param>
+        /// <param name="index">Zero-based index of the character.</param>
+        /// <returns>
+        /// 1 if the character is a hyphen.
+        /// 0 if the character is not a hyphen.
+        /// -1 if there was an error.
+        /// </returns>
+        /// <remarks>
+        /// FPDF_EXPORT int FPDF_CALLCONV FPDFText_IsHyphen(FPDF_TEXTPAGE text_page, int index);.
+        /// </remarks>
+        public int FPDFText_IsHyphen(FPDF_TEXTPAGE text_page, int index)
+        {
+            lock (_syncObject)
+            {
+                return FPDFText_IsHyphenStatic(text_page, index);
+            }
+        }
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFText_HasUnicodeMapError_Delegate(FPDF_TEXTPAGE text_page, int index);
 
         private static FPDFText_HasUnicodeMapError_Delegate FPDFText_HasUnicodeMapErrorStatic { get; set; }
@@ -867,6 +893,7 @@
             FPDFText_CountCharsStatic = GetPDFiumFunction<FPDFText_CountChars_Delegate>(nameof(FPDFText_CountChars));
             FPDFText_GetUnicodeStatic = GetPDFiumFunction<FPDFText_GetUnicode_Delegate>(nameof(FPDFText_GetUnicode));
             FPDFText_IsGeneratedStatic = GetPDFiumFunction<FPDFText_IsGenerated_Delegate>(nameof(FPDFText_IsGenerated));
+            FPDFText_IsHyphenStatic = GetPDFiumFunction<FPDFText_IsHyphen_Delegate>(nameof(FPDFText_IsHyphen));
             FPDFText_HasUnicodeMapErrorStatic = GetPDFiumFunction<FPDFText_HasUnicodeMapError_Delegate>(nameof(FPDFText_HasUnicodeMapError));
             FPDFText_GetFontSizeStatic = GetPDFiumFunction<FPDFText_GetFontSize_Delegate>(nameof(FPDFText_GetFontSize));
             FPDFText_GetFontInfoStatic = GetPDFiumFunction<FPDFText_GetFontInfo_Delegate>(nameof(FPDFText_GetFontInfo));
