@@ -332,6 +332,26 @@
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate FPDF_PERMISSIONS FPDF_GetDocUserPermissions_Delegate(FPDF_DOCUMENT document);
+
+        private static FPDF_GetDocUserPermissions_Delegate FPDF_GetDocUserPermissionsStatic { get; set; }
+
+        /// <summary>
+        /// Get user file permission flags of the document.
+        /// </summary>
+        /// <param name="document">Handle to a document. Returned by <see cref="FPDF_LoadDocument"/>.</param>
+        /// <returns>A 32-bit integer indicating permission flags. Please refer to the PDF Reference for detailed descriptions.
+        /// If the document is not protected, 0xffffffff will be returned.
+        /// Always returns user permissions, even if the document was unlocked by the owner.</returns>
+        public FPDF_PERMISSIONS FPDF_GetDocUserPermissions(FPDF_DOCUMENT document)
+        {
+            lock (_syncObject)
+            {
+                return FPDF_GetDocUserPermissionsStatic(document);
+            }
+        }
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDF_GetSecurityHandlerRevision_Delegate(FPDF_DOCUMENT document);
 
         private static FPDF_GetSecurityHandlerRevision_Delegate FPDF_GetSecurityHandlerRevisionStatic { get; set; }
@@ -1233,6 +1253,7 @@
             FPDF_DocumentHasValidCrossReferenceTableStatic = GetPDFiumFunction<FPDF_DocumentHasValidCrossReferenceTable_Delegate>(nameof(FPDF_DocumentHasValidCrossReferenceTable));
             FPDF_GetTrailerEndsStatic = GetPDFiumFunction<FPDF_GetTrailerEnds_Delegate>(nameof(FPDF_GetTrailerEnds));
             FPDF_GetDocPermissionsStatic = GetPDFiumFunction<FPDF_GetDocPermissions_Delegate>(nameof(FPDF_GetDocPermissions));
+            FPDF_GetDocUserPermissionsStatic = GetPDFiumFunction<FPDF_GetDocUserPermissions_Delegate>(nameof(FPDF_GetDocUserPermissions));
             FPDF_GetSecurityHandlerRevisionStatic = GetPDFiumFunction<FPDF_GetSecurityHandlerRevision_Delegate>(nameof(FPDF_GetSecurityHandlerRevision));
             FPDF_GetPageCountStatic = GetPDFiumFunction<FPDF_GetPageCount_Delegate>(nameof(FPDF_GetPageCount));
             FPDF_LoadPageStatic = GetPDFiumFunction<FPDF_LoadPage_Delegate>(nameof(FPDF_LoadPage));

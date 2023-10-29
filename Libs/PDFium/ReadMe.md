@@ -4,7 +4,7 @@ PDFiumDotNET uses modified version of PDFium. The modification fixes error handl
 
 Compilation of PDFium is based on the solution from [bblanchon/pdfium-binaries](https://github.com/bblanchon)
 
-Actually used PDFium version: [5640](https://pdfium.googlesource.com/pdfium/+/refs/heads/chromium/5640).
+Actually used PDFium version: [6094](https://pdfium.googlesource.com/pdfium/+/refs/heads/chromium/6094).
 
 # Modifications in PDFium sources:
 

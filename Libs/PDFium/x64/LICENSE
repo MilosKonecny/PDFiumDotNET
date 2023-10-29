@@ -497,7 +497,7 @@ Legal Terms
 //---------------------------------------------------------------------------------
 //
 //  Little Color Management System
-//  Copyright (c) 1998-2022 Marti Maria Saguer
+//  Copyright (c) 1998-2023 Marti Maria Saguer
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the "Software"),
@@ -519,7 +519,7 @@ Legal Terms
 //
 //---------------------------------------------------------------------------------
 //
-// Version 2.14 
+// Version 2.15 
 //
 
 # END lcms license note
@@ -566,7 +566,7 @@ Legal Terms
 # BEGIN zlib license
 
 /* zlib.h -- interface of the 'zlib' general purpose compression library
-  version 1.2.13, October 13th, 2022
+  version 1.2.13.1, October xxth, 2022
 
   Copyright (C) 1995-2022 Jean-loup Gailly and Mark Adler
 
@@ -693,7 +693,7 @@ best of our understanding.
 The Modified (3-clause) BSD License
 ===================================
 
-Copyright (C)2009-2022 D. R. Commander.  All Rights Reserved.<br>
+Copyright (C)2009-2023 D. R. Commander.  All Rights Reserved.<br>
 Copyright (C)2015 Viktor Szathmáry.  All Rights Reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -804,7 +804,7 @@ THE DATA FILES OR SOFTWARE.
 
 COPYRIGHT AND PERMISSION NOTICE
 
-Copyright © 1991-2022 Unicode, Inc. All rights reserved.
+Copyright © 1991-2023 Unicode, Inc. All rights reserved.
 Distributed under the Terms of Use in https://www.unicode.org/copyright.html.
 
 Permission is hereby granted, free of charge, to any person obtaining
