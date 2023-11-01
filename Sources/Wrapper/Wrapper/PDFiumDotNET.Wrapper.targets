@@ -1,0 +1,21 @@
+<Project>
+    <!-- See https://aka.ms/dotnet/msbuild/customize for more details on customizing your build -->
+    <ItemGroup >
+        <Content Include="$(MSBuildThisFileDirectory)..\native\PDFium\x64\LICENSE">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Link>PDFium\x64\LICENSE</Link>
+        </Content>
+        <Content Include="$(MSBuildThisFileDirectory)..\native\PDFium\x64\pdfium.dll">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Link>PDFium\x64\pdfium.dll</Link>
+        </Content>
+        <Content Include="$(MSBuildThisFileDirectory)..\native\PDFium\x86\LICENSE">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Link>PDFium\x86\LICENSE</Link>
+        </Content>
+        <Content Include="$(MSBuildThisFileDirectory)..\native\PDFium\x86\pdfium.dll">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Link>PDFium\x86\pdfium.dll</Link>
+        </Content>
+    </ItemGroup>
+</Project>
