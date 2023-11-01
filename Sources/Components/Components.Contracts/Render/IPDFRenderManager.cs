@@ -22,6 +22,11 @@
         PDFSize<double> DocumentArea { get; }
 
         /// <summary>
+        /// Gets the widest row of pages. Count of pages in row depends on layout - one page in row, or two pages in row.
+        /// </summary>
+        double WidestPageRow { get; }
+
+        /// <summary>
         /// The method determines where is particular page positioned.
         /// </summary>
         /// <param name="pageIndex">The index of the page for which the position is to be determined.</param>
