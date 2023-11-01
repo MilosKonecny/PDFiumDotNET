@@ -25,7 +25,7 @@
         <Company>Miloš Konečný OSS</Company>
         <Product>PDFiumDotNET</Product>
         <Copyright>Copyright © Miloš Konečný 2020-2023</Copyright>
-        <Version>1.0.1</Version>
+        <Version>1.0.2</Version>
         <PackageProjectUrl>https://github.com/MilosKonecny/PDFiumDotNET</PackageProjectUrl>
         <PackageReadmeFile>LICENSE</PackageReadmeFile>
         <RepositoryType>git</RepositoryType>
@@ -37,8 +37,8 @@
         <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
         <Description>
             PDFiumDotNET library is C# wrapper for Google's PDFium library. The classes allow access all the information provided by PDFium.
-            If you want to use only information from PDF document, use PDFiumDotNET.Factory.
-            If you want to render PDF document, use PDFiumDotNET.WpfControls.
+            If you want to use only information from PDF document, use PDFiumDotNET.Wrapper, PDFiumDotNET.Components.Contracts, PDFiumDotNET.Components and PDFiumDotNET.Factory.
+            If you want to render a PDF document, also use PDFiumDotNET.WpfControls.
         </Description>
     </PropertyGroup>
     <ItemGroup>
