@@ -251,11 +251,7 @@
                 return;
             }
 
-            var page = pageComponent.CurrentPage;
-            if (page != null)
-            {
-                zoomComponent.CurrentZoomFactor = _view.PDFActualWidth / (page.Width + (2 * _view.PDFPageMargin.Width));
-            }
+            zoomComponent.CurrentZoomFactor = _view.PDFActualWidth / pageComponent.RenderManager.WidestPageRow;
         }
 
         private bool CanExecuteZoomWidthCommand()

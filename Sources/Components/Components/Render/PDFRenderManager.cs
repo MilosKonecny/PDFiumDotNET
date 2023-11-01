@@ -192,6 +192,9 @@
         public PDFSize<double> DocumentArea => RequiredDocumentArea;
 
         /// <inheritdoc/>
+        public double WidestPageRow { get; protected set; }
+
+        /// <inheritdoc/>
         public PDFRectangle<double> DeterminePagePosition(int pageIndex) => GetPagePosition(pageIndex);
 
         /// <inheritdoc/>
