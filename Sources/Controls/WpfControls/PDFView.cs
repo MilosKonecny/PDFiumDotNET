@@ -7,10 +7,12 @@
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
     using System.Windows.Media;
+    using System.Windows.Threading;
     using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Link;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Render;
+    using PDFiumDotNET.WpfControls.Extensions;
     using PDFiumDotNET.WpfControls.Helper;
 
     /// <summary>
@@ -95,6 +97,16 @@
         /// </summary>
         private double _startVerticalOffset;
 
+        /// <summary>
+        /// Timer is used to control the redraw memory usage.
+        /// </summary>
+        private DispatcherTimer _drawTimer = new DispatcherTimer();
+
+        /// <summary>
+        /// Variable used to control the redraw memory usage.
+        /// </summary>
+        private bool _isInvalidateFromTimer = false;
+
         #endregion Private fields
 
         #region Constructors
@@ -116,6 +128,21 @@
         public PDFView()
         {
             IsManipulationEnabled = true;
+            _drawTimer.Interval = TimeSpan.FromMilliseconds(TimerInterval);
+            if (!this.IsDesignTime())
+            {
+                _drawTimer.Tick += (s, e) =>
+                {
+                    System.Diagnostics.Debug.WriteLine("Draw timer tick.");
+                    if (UseTimerForDraw && PDFPageComponent.MainComponent.IsDocumentOpen)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Draw timer invalidate");
+                        _isInvalidateFromTimer = true;
+                        InvalidateVisual();
+                        _drawTimer.Stop();
+                    }
+                };
+            }
         }
 
         #endregion Constructors

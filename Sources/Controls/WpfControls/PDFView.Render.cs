@@ -73,42 +73,50 @@
                 // Draw page background
                 drawingContext.DrawRectangle(PDFPageBackground, null, new Rect(pageInfo.RelativePositionInViewportArea.X, pageInfo.RelativePositionInViewportArea.Y, pageInfo.RelativePositionInViewportArea.Width, pageInfo.RelativePositionInViewportArea.Height));
 
-                try
+                if (!UseTimerForDraw || (UseTimerForDraw && _isInvalidateFromTimer))
                 {
-                    // Improve quality by rendering to bigger image.
-                    // Prepare rendering data.
-                    var factor = 1.5d;
-                    var zoomFactor = factor * PDFPageComponent.ZoomComponent.CurrentZoomFactor;
-                    var visiblePart = new PDFRectangle<double>(factor * pageInfo.VisiblePart.Left, factor * pageInfo.VisiblePart.Top, factor * pageInfo.VisiblePart.Width, factor * pageInfo.VisiblePart.Height);
+                    Debug.WriteLine("Render draw page content");
+                    try
+                    {
+                        // Improve quality by rendering to bigger image.
+                        // Prepare rendering data.
+                        var factor = 1.5d;
+                        var zoomFactor = factor * PDFPageComponent.ZoomComponent.CurrentZoomFactor;
+                        var visiblePart = new PDFRectangle<double>(factor * pageInfo.VisiblePart.Left, factor * pageInfo.VisiblePart.Top, factor * pageInfo.VisiblePart.Width, factor * pageInfo.VisiblePart.Height);
 
-                    var bitmap = new WriteableBitmap((int)visiblePart.Width, (int)visiblePart.Height, 72, 72, PixelFormats.Bgra32, null);
-                    var format = BitmapFormatConverter.GetFormat(bitmap.Format);
+                        var bitmap = new WriteableBitmap((int)visiblePart.Width, (int)visiblePart.Height, 72, 72, PixelFormats.Bgra32, null);
+                        var format = BitmapFormatConverter.GetFormat(bitmap.Format);
 
-                    // Render page content into bitmap.
-                    bitmap.Lock();
-                    pageInfo.Page.RenderPageBitmap(
-                        zoomFactor,
-                        (int)visiblePart.Left,
-                        (int)visiblePart.Top,
-                        (int)visiblePart.Left + (int)visiblePart.Width,
-                        (int)visiblePart.Top + (int)visiblePart.Height,
-                        (int)visiblePart.Width,
-                        (int)visiblePart.Height,
-                        format,
-                        bitmap.BackBuffer,
-                        bitmap.BackBufferStride);
-                    bitmap.AddDirtyRect(new Int32Rect(0, 0, (int)visiblePart.Width, (int)visiblePart.Height));
-                    bitmap.Unlock();
+                        // Render page content into bitmap.
+                        bitmap.Lock();
+                        pageInfo.Page.RenderPageBitmap(
+                            zoomFactor,
+                            (int)visiblePart.Left,
+                            (int)visiblePart.Top,
+                            (int)visiblePart.Left + (int)visiblePart.Width,
+                            (int)visiblePart.Top + (int)visiblePart.Height,
+                            (int)visiblePart.Width,
+                            (int)visiblePart.Height,
+                            format,
+                            bitmap.BackBuffer,
+                            bitmap.BackBufferStride);
+                        bitmap.AddDirtyRect(new Int32Rect(0, 0, (int)visiblePart.Width, (int)visiblePart.Height));
+                        bitmap.Unlock();
 
-                    // Draw bitmap into drawing context.
-                    drawingContext.DrawImage(bitmap, new Rect(pageInfo.VisiblePartInViewportArea.X, pageInfo.VisiblePartInViewportArea.Y, pageInfo.VisiblePartInViewportArea.Width, pageInfo.VisiblePartInViewportArea.Height));
-                    GC.Collect();
-                }
+                        // Draw bitmap into drawing context.
+                        drawingContext.DrawImage(bitmap, new Rect(pageInfo.VisiblePartInViewportArea.X, pageInfo.VisiblePartInViewportArea.Y, pageInfo.VisiblePartInViewportArea.Width, pageInfo.VisiblePartInViewportArea.Height));
+                        if (UseGCCollect)
+                        {
+                            Debug.WriteLine("GC.Collect called");
+                            GC.Collect();
+                        }
+                    }
 #pragma warning disable CA1031 // Do not catch general exception types
-                catch
-                {
-                }
+                    catch
+                    {
+                    }
 #pragma warning restore CA1031 // Do not catch general exception types
+                }
 
                 if (ShowPageLabel)
                 {
@@ -175,6 +183,20 @@
                 new Point(ViewportWidth, ViewportHeight));
 
             RenderDebugInfo(drawingContext, _renderInformation.PagesToRender);
+
+            if (UseTimerForDraw)
+            {
+                Debug.WriteLine("Render use timer for draw");
+                if (!_isInvalidateFromTimer)
+                {
+                    Debug.WriteLine("Render start draw timer");
+                    _drawTimer.Start();
+                    return;
+                }
+
+                Debug.WriteLine("Render reset _isInvalidateFromTimer");
+                _isInvalidateFromTimer = false;
+            }
         }
 
         private void RenderEmptyArea(DrawingContext drawingContext)
