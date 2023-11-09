@@ -2,12 +2,13 @@
 {
     using System;
     using System.Linq;
+    using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
     using System.Windows.Media;
-    using System.Windows.Threading;
+    using System.Windows.Media.Imaging;
     using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Link;
     using PDFiumDotNET.Components.Contracts.Page;
@@ -98,14 +99,19 @@
         private double _startVerticalOffset;
 
         /// <summary>
-        /// Timer is used to control the redraw memory usage.
+        /// Variable used for optimized rendering of whole working area.
         /// </summary>
-        private DispatcherTimer _drawTimer = new DispatcherTimer();
+        private WriteableBitmap _renderBitmap = null;
 
         /// <summary>
-        /// Variable used to control the redraw memory usage.
+        /// Variable used for rendering of one page.
         /// </summary>
-        private bool _isInvalidateFromTimer = false;
+        private IntPtr _renderBuffer = IntPtr.Zero;
+
+        /// <summary>
+        /// Variable contains size of allocated render buffer.
+        /// </summary>
+        private int _bufferSize;
 
         #endregion Private fields
 
@@ -128,19 +134,18 @@
         public PDFView()
         {
             IsManipulationEnabled = true;
-            _drawTimer.Interval = TimeSpan.FromMilliseconds(TimerInterval);
+
             if (!this.IsDesignTime())
             {
-                _drawTimer.Tick += (s, e) =>
+                Loaded += (s, e) =>
                 {
-                    System.Diagnostics.Debug.WriteLine("Draw timer tick.");
-                    if (UseTimerForDraw && PDFPageComponent.MainComponent.IsDocumentOpen)
+                    Window.GetWindow(this).Closing += (s2, e2) =>
                     {
-                        System.Diagnostics.Debug.WriteLine("Draw timer invalidate");
-                        _isInvalidateFromTimer = true;
-                        InvalidateVisual();
-                        _drawTimer.Stop();
-                    }
+                        if (_renderBuffer != IntPtr.Zero)
+                        {
+                            Marshal.FreeHGlobal(_renderBuffer);
+                        }
+                    };
                 };
             }
         }

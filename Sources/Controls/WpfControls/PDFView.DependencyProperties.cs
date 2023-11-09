@@ -88,24 +88,6 @@
         public static readonly DependencyProperty ActivatePageInCenterProperty =
             DependencyProperty.Register("ActivatePageInCenter", typeof(bool), typeof(PDFView), new FrameworkPropertyMetadata(true, HandlePropertyChanged));
 
-        /// <summary>
-        /// Dependency property for 'UseGCCollect' - set current page where was clicked.
-        /// </summary>
-        public static readonly DependencyProperty UseGCCollectProperty =
-            DependencyProperty.Register("UseGCCollect", typeof(bool), typeof(PDFView), new FrameworkPropertyMetadata(false, HandlePropertyChanged));
-
-        /// <summary>
-        /// Dependency property for 'UseTimerForDraw' - set current page where was clicked.
-        /// </summary>
-        public static readonly DependencyProperty UseTimerForDrawProperty =
-            DependencyProperty.Register("UseTimerForDraw", typeof(bool), typeof(PDFView), new FrameworkPropertyMetadata(false, HandlePropertyChanged));
-
-        /// <summary>
-        /// Dependency property for 'TimerInterval' - set current page where was clicked.
-        /// </summary>
-        public static readonly DependencyProperty TimerIntervalProperty =
-            DependencyProperty.Register("TimerInterval", typeof(int), typeof(PDFView), new FrameworkPropertyMetadata(100, HandleTimerIntervalPropertyChanged, HandleTimerIntervalPropertyCoerceValue));
-
         #endregion Dependency properties - register
 
         #region Dependency properties - properties
@@ -230,34 +212,6 @@
             set { SetValue(ActivatePageInCenterProperty, value); }
         }
 
-        /// <summary>
-        /// Gets or sets the value of dependency property.
-        /// </summary>
-        [Category(Constants.PDFiumDotNETPropertyCategory)]
-        public bool UseGCCollect
-        {
-            get { return (bool)GetValue(UseGCCollectProperty); }
-            set { SetValue(UseGCCollectProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the value of dependency property.
-        /// </summary>
-        public bool UseTimerForDraw
-        {
-            get { return (bool)GetValue(UseTimerForDrawProperty); }
-            set { SetValue(UseTimerForDrawProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the value of dependency property.
-        /// </summary>
-        public int TimerInterval
-        {
-            get { return (int)GetValue(TimerIntervalProperty); }
-            set { SetValue(TimerIntervalProperty, value); }
-        }
-
         #endregion Dependency properties - properties
 
         #region Dependency properties - private callback methods
@@ -295,51 +249,6 @@
             }
 
             view.InvalidateVisual();
-        }
-
-        /// <summary>
-        /// Callback method is called whenever <see cref="TimerIntervalProperty"/> has changed value.
-        /// </summary>
-        /// <param name="o">The <see cref="DependencyObject"/> on which the property has changed value.</param>
-        /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this property.</param>
-        private static void HandleTimerIntervalPropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
-        {
-            if (o is not PDFView view)
-            {
-                return;
-            }
-
-            view._drawTimer.Interval = TimeSpan.FromMilliseconds((int)e.NewValue);
-        }
-
-        /// <summary>
-        /// Callback method is called whenever a dependency property
-        /// value <see cref="TimerIntervalProperty"/> is being re-evaluated, or coercion is specifically requested.
-        /// </summary>
-        /// <param name="o">The object that the property exists on.
-        /// When the callback is invoked, the property should be changed.</param>
-        /// <param name="baseValue">The new value of the property, prior to any coercion attempt.</param>
-        /// <returns>Accepted value for property <see cref="TimerIntervalProperty"/>.</returns>
-        private static object HandleTimerIntervalPropertyCoerceValue(DependencyObject o, object baseValue)
-        {
-            if (o is not PDFView view)
-            {
-                return 100;
-            }
-
-            if (baseValue is not int)
-            {
-                return 100;
-            }
-
-            var value = (int)baseValue;
-
-            if (value <= 0)
-            {
-                return 100;
-            }
-
-            return value;
         }
 
         /// <summary>
