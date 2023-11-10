@@ -1,14 +1,18 @@
 ﻿namespace PDFiumDotNET.WpfControls
 {
+    using System;
     using System.Linq;
+    using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
     using System.Windows.Media;
+    using System.Windows.Media.Imaging;
     using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Contracts.Render;
+    using PDFiumDotNET.WpfControls.Extensions;
 
     /// <summary>
     /// View class shows page thumbnails from opened PDF document.
@@ -77,6 +81,21 @@
         /// </summary>
         private int _focusedPage = -1;
 
+        /// <summary>
+        /// Variable used for optimized rendering of whole working area.
+        /// </summary>
+        private WriteableBitmap _renderBitmap = null;
+
+        /// <summary>
+        /// Variable used for rendering of one page.
+        /// </summary>
+        private IntPtr _renderBuffer = IntPtr.Zero;
+
+        /// <summary>
+        /// Variable contains size of allocated render buffer.
+        /// </summary>
+        private int _bufferSize;
+
         #endregion Private fields
 
         #region Constructors
@@ -95,6 +114,17 @@
         public PDFThumbnailView()
         {
             IsManipulationEnabled = true;
+
+            if (!this.IsDesignTime())
+            {
+                Unloaded += (s, e) =>
+                {
+                    if (_renderBuffer != IntPtr.Zero)
+                    {
+                        Marshal.FreeHGlobal(_renderBuffer);
+                    }
+                };
+            }
         }
 
         #endregion Constructors
