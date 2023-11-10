@@ -20,5 +20,12 @@
         /// <param name="page">Page to transform height for.</param>
         /// <returns>Transformed height.</returns>
         double Height(PDFPage page);
+
+        /// <summary>
+        /// Gets the zoom of transformation. It is used max of with zoom and height zoom.
+        /// </summary>
+        /// <param name="page">Page to transform height for.</param>
+        /// <returns>Transformation zoom.</returns>
+        double TransformationZoom(PDFPage page);
     }
 }

@@ -32,6 +32,14 @@
             return (page.OriginalHeight * 200d) / Math.Max(page.OriginalWidth, page.OriginalHeight);
         }
 
+        /// <inheritdoc/>
+        public double TransformationZoom(PDFPage page)
+        {
+            var withZoom = Width(page) / page.OriginalWidth;
+            var heightZoom = Height(page) / page.OriginalHeight;
+            return Math.Max(withZoom, heightZoom);
+        }
+
         #endregion Implementation of IPageSizeTransformation
     }
 }

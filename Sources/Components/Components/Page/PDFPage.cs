@@ -110,6 +110,15 @@
         }
 
         /// <inheritdoc/>
+        public double TransformationZoom
+        {
+            get
+            {
+                return _pageComponent.PageSizeTransformation == null ? 1d : _pageComponent.PageSizeTransformation.TransformationZoom(this);
+            }
+        }
+
+        /// <inheritdoc/>
         public string PageLabel { get; private set; }
 
         /// <inheritdoc/>
