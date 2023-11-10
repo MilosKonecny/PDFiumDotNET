@@ -1,14 +1,10 @@
 ﻿namespace PDFiumDotNET.WpfControls
 {
     using System;
-    using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
-    using System.Numerics;
-    using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Media;
-    using System.Windows.Media.Imaging;
     using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.WpfControls.Helper;
     using PDFiumDotNET.WpfControls.WritableBitmapExtension;
@@ -22,7 +18,7 @@
 
         private void RenderPages(DrawingContext drawingContext)
         {
-            if (_renderInformation?.PagesToRender == null || !_renderInformation.PagesToRender.Any())
+            if (RenderInformation?.PagesToRender == null || !RenderInformation.PagesToRender.Any())
             {
                 RenderEmptyArea(drawingContext);
                 return;
@@ -37,24 +33,19 @@
             }
 
             // Check, initialize writable bitmap and buffer
-            if (_renderBuffer == IntPtr.Zero
-                || _renderBitmap == null
-                || _renderBitmap.PixelWidth != intViewportWidth
-                || _renderBitmap.PixelHeight != intViewportHeight)
+            if (RenderBuffer == IntPtr.Zero
+                || RenderBitmap == null
+                || RenderBitmap.PixelWidth != intViewportWidth
+                || RenderBitmap.PixelHeight != intViewportHeight)
             {
-                _bufferSize = 4 * intViewportWidth * intViewportHeight;
-                if (_renderBuffer != IntPtr.Zero)
-                {
-                    Marshal.FreeHGlobal(_renderBuffer);
-                }
-
-                _renderBuffer = Marshal.AllocHGlobal(_bufferSize);
-                _renderBitmap = new WriteableBitmap(intViewportWidth, intViewportHeight, 96, 96, PixelFormats.Bgra32, null);
+                var bufferSize = 4 * intViewportWidth * intViewportHeight;
+                InitializeRenderBuffer(bufferSize);
+                InitializeRenderBitmap(intViewportWidth, intViewportHeight);
             }
 
-            var format = BitmapFormatConverter.GetFormat(_renderBitmap.Format);
+            var format = BitmapFormatConverter.GetFormat(RenderBitmap.Format);
 
-            using (var wbe = new WritableBitmapEx(_renderBitmap))
+            using (var wbe = new WritableBitmapEx(RenderBitmap))
             {
                 wbe.Clear();
 
@@ -62,9 +53,9 @@
                 drawingContext.DrawRectangle(Background, null, new Rect(0, 0, ViewportWidth, ViewportHeight));
 
                 // Iterate the pages, adjust some values, and draw them.
-                foreach (var pageInfo in _renderInformation.PagesToRender)
+                foreach (var pageInfo in RenderInformation.PagesToRender)
                 {
-                    var zoomFactor = pageInfo.Page.TransformationZoom;
+                    var zoomFactor = pageInfo.Page.TransformationZoom * PDFPageComponent.ZoomComponent.CurrentZoomFactor;
 
                     // Draw page background
                     drawingContext.DrawRectangle(
@@ -79,7 +70,7 @@
                     try
                     {
                         // Clear buffer
-                        NativeMethods.SetMemory(_renderBuffer, 0, _bufferSize);
+                        ClearRenderBuffer();
 
                         var visiblePart = new PDFRectangle<int>(
                             (int)pageInfo.VisiblePart.Left,
@@ -99,13 +90,13 @@
                             visiblePart.Width,
                             visiblePart.Height,
                             format,
-                            _renderBuffer,
+                            RenderBuffer,
                             visiblePartStride);
 
                         // Copy buffer with rendered page into bitmap.
                         wbe.CopyImageBuffer(
-                            _renderBuffer,
-                            _bufferSize,
+                            RenderBuffer,
+                            RenderBufferSize,
                             (int)(pageInfo.VisiblePartInViewportArea.X + 0.5d),
                             (int)(pageInfo.VisiblePartInViewportArea.Y + 0.5d),
                             visiblePartStride,
@@ -168,7 +159,7 @@
             }
 
             // Draw all pages into drawing context.
-            drawingContext.DrawImage(_renderBitmap, new Rect(0, 0, ViewportWidth, ViewportHeight));
+            drawingContext.DrawImage(RenderBitmap, new Rect(0, 0, ViewportWidth, ViewportHeight));
         }
 
         private void RenderEmptyArea(DrawingContext drawingContext)

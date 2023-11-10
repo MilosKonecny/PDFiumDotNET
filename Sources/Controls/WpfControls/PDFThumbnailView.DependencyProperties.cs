@@ -218,7 +218,7 @@
             component.MainComponent.PropertyChanged += HandlePDFComponentPropertyChangedEvent;
 
             // ToDo: Set margin if FontSize changes.
-            component.RenderManager.PageMargin = new PDFSize<double>(FontSize, 2d * FontSize);
+            component.PageMargin = new PDFSize<double>(FontSize, 2d * FontSize);
             ScrollOwner?.InvalidateScrollInfo();
         }
 

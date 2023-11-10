@@ -2,66 +2,25 @@
 {
     using System;
     using System.Linq;
-    using System.Runtime.InteropServices;
     using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Controls.Primitives;
     using System.Windows.Input;
     using System.Windows.Media;
-    using System.Windows.Media.Imaging;
     using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Link;
     using PDFiumDotNET.Components.Contracts.Page;
-    using PDFiumDotNET.Components.Contracts.Render;
-    using PDFiumDotNET.WpfControls.Extensions;
     using PDFiumDotNET.WpfControls.Helper;
 
     /// <summary>
     /// View class shows pages from opened PDF document.
     /// </summary>
-    public partial class PDFView : Control, IScrollInfo
+    public partial class PDFView : PDFViewBase
     {
         #region Private fields
-
-        /// <summary>
-        /// Render information with list of pages to render and other stuff. Used to examine click, touch, ...
-        /// </summary>
-        private IPDFRenderInfo _renderInformation;
 
         /// <summary>
         /// Point with mouse/touch down.
         /// </summary>
         private Point _downPoint;
-
-        /// <summary>
-        /// Permission for horizontal scroll.
-        /// </summary>
-        private bool _canHorizontallyScroll;
-
-        /// <summary>
-        /// Permission for vertical scroll.
-        /// </summary>
-        private bool _canVerticallyScroll;
-
-        /// <summary>
-        /// Offset of viewport in x axis.
-        /// </summary>
-        private double _horizontalOffset;
-
-        /// <summary>
-        /// Offset of viewport in y axis.
-        /// </summary>
-        private double _verticalOffset;
-
-        /// <summary>
-        /// The area where all pages will fit.
-        /// </summary>
-        private Size _documentArea = new Size(0, 0);
-
-        /// <summary>
-        /// The area visible to user.
-        /// </summary>
-        private Size _viewportArea = new Size(0, 0);
 
         /// <summary>
         /// Zoom at manipulation start.
@@ -98,21 +57,6 @@
         /// </summary>
         private double _startVerticalOffset;
 
-        /// <summary>
-        /// Variable used for optimized rendering of whole working area.
-        /// </summary>
-        private WriteableBitmap _renderBitmap = null;
-
-        /// <summary>
-        /// Variable used for rendering of one page.
-        /// </summary>
-        private IntPtr _renderBuffer = IntPtr.Zero;
-
-        /// <summary>
-        /// Variable contains size of allocated render buffer.
-        /// </summary>
-        private int _bufferSize;
-
         #endregion Private fields
 
         #region Constructors
@@ -134,20 +78,19 @@
         public PDFView()
         {
             IsManipulationEnabled = true;
-
-            if (!this.IsDesignTime())
-            {
-                Unloaded += (s, e) =>
-                {
-                    if (_renderBuffer != IntPtr.Zero)
-                    {
-                        Marshal.FreeHGlobal(_renderBuffer);
-                    }
-                };
-            }
         }
 
         #endregion Constructors
+
+        #region Protected override properties
+
+        /// <inheritdoc/>
+        protected override IPDFPageComponent ControlPDFPageComponent => PDFPageComponent;
+
+        /// <inheritdoc/>
+        protected override bool IsZoomSupported => true;
+
+        #endregion Protected override properties
 
         #region Protected override methods
 
@@ -187,20 +130,20 @@
             {
                 // Check the position of viewport area in document area.
                 SetOffsets(
-                    Math.Min(HorizontalOffset, _documentArea.Width - _viewportArea.Width),
-                    Math.Min(VerticalOffset, _documentArea.Height - _viewportArea.Height),
+                    Math.Min(HorizontalOffset, DocumentArea.Width - ViewportArea.Width),
+                    Math.Min(VerticalOffset, DocumentArea.Height - ViewportArea.Height),
                     false);
 
                 // Determine pages to draw.
                 var viewportInDocument = new PDFRectangle<double>(HorizontalOffset, VerticalOffset, ViewportWidth, ViewportHeight);
-                _renderInformation = PDFPageComponent.RenderManager.DetermineRenderInfo(viewportInDocument);
+                RenderInformation = PDFPageComponent.RenderManager.DetermineRenderInfo(viewportInDocument);
             }
 
             RenderPages(drawingContext);
 
-            if (_renderInformation?.PagesToRender != null && ActivatePageInCenter)
+            if (RenderInformation?.PagesToRender != null && ActivatePageInCenter)
             {
-                var pageInfo = _renderInformation.PagesToRender.FirstOrDefault(pageInfo => pageInfo.IsClosestToCenter);
+                var pageInfo = RenderInformation.PagesToRender.FirstOrDefault(pageInfo => pageInfo.IsClosestToCenter);
                 if (pageInfo != null)
                 {
                     PDFPageComponent.SetCurrentPage(pageInfo.Page.PageIndex + 1);
@@ -394,7 +337,7 @@
         {
             base.OnTouchDown(e);
 
-            if (e != null && _renderInformation?.PagesToRender != null)
+            if (e != null && RenderInformation?.PagesToRender != null)
             {
                 _downPoint = e.GetTouchPoint(this).Position;
             }
@@ -445,7 +388,7 @@
 
         private IPDFPageRenderInfo PageFromPoint(Point point)
         {
-            return _renderInformation.PagesToRender.FirstOrDefault(p =>
+            return RenderInformation.PagesToRender.FirstOrDefault(p =>
             {
                 return point.X > p.RelativePositionInViewportArea.Left
                 && point.X < p.RelativePositionInViewportArea.Right
@@ -456,7 +399,7 @@
 
         private IPDFLink GetLinkFromPoint(Point point)
         {
-            if (_renderInformation == null || _renderInformation.PagesToRender == null)
+            if (RenderInformation == null || RenderInformation.PagesToRender == null)
             {
                 return null;
             }
@@ -483,36 +426,6 @@
         }
 
         /// <summary>
-        /// Update the viewport size.
-        /// </summary>
-        /// <param name="newSize">New size to use for viewport.</param>
-        private void UpdateViewportAreaSize(Size newSize)
-        {
-            if (_viewportArea == newSize)
-            {
-                return;
-            }
-
-            _viewportArea = newSize;
-            ScrollOwner?.InvalidateScrollInfo();
-        }
-
-        /// <summary>
-        /// Update the viewport size.
-        /// </summary>
-        /// <param name="newSize">New size to use for viewport.</param>
-        private void UpdateDocumentAreaSize(Size newSize)
-        {
-            if (_documentArea == newSize)
-            {
-                return;
-            }
-
-            _documentArea = newSize;
-            ScrollOwner?.InvalidateScrollInfo();
-        }
-
-        /// <summary>
         /// Determines area where fit all pages of opened document.
         /// </summary>
         /// <param name="availableSize">Available size based on current layout of application.</param>
@@ -525,17 +438,6 @@
             }
 
             return new Size(PDFPageComponent.RenderManager.DocumentArea.Width, PDFPageComponent.RenderManager.DocumentArea.Height);
-        }
-
-        /// <summary>
-        /// Reset all relevant status fields.
-        /// </summary>
-        private void ResetStatus()
-        {
-            _horizontalOffset = 0d;
-            _verticalOffset = 0d;
-            _documentArea = new Size(0, 0);
-            _renderInformation = null;
         }
 
         /// <summary>
@@ -552,8 +454,8 @@
             if (!DoubleHelper.OffsetsAreEqual(horizontalOffset, HorizontalOffset)
                 || !DoubleHelper.OffsetsAreEqual(verticalOffset, VerticalOffset))
             {
-                _horizontalOffset = horizontalOffset;
-                _verticalOffset = verticalOffset;
+                HorizontalOffset = horizontalOffset;
+                VerticalOffset = verticalOffset;
 
                 if (callInvalidate)
                 {

@@ -1,30 +1,18 @@
 ﻿namespace PDFiumDotNET.WpfControls
 {
-    using System;
     using System.Linq;
-    using System.Runtime.InteropServices;
     using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Controls.Primitives;
     using System.Windows.Input;
     using System.Windows.Media;
-    using System.Windows.Media.Imaging;
     using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Page;
-    using PDFiumDotNET.Components.Contracts.Render;
-    using PDFiumDotNET.WpfControls.Extensions;
 
     /// <summary>
     /// View class shows page thumbnails from opened PDF document.
     /// </summary>
-    public partial class PDFThumbnailView : Control, IScrollInfo
+    public partial class PDFThumbnailView : PDFViewBase
     {
         #region Private fields
-
-        /// <summary>
-        /// Render information with list of pages to render and other stuff. Used to examine click, touch, ...
-        /// </summary>
-        private IPDFRenderInfo _renderInformation;
 
         /// <summary>
         /// Page with touch down.
@@ -32,29 +20,9 @@
         private IPDFPageRenderInfo _onTouchDownPage;
 
         /// <summary>
-        /// Permission for horizontal scroll.
+        /// Horizontal offset at manipulation start.
         /// </summary>
-        private bool _canHorizontallyScroll;
-
-        /// <summary>
-        /// Permission for vertical scroll.
-        /// </summary>
-        private bool _canVerticallyScroll;
-
-        /// <summary>
-        /// Offset of viewport in y axis.
-        /// </summary>
-        private double _verticalOffset;
-
-        /// <summary>
-        /// The area where all pages will fit.
-        /// </summary>
-        private Size _documentArea = new Size(0, 0);
-
-        /// <summary>
-        /// The area visible to user.
-        /// </summary>
-        private Size _viewportArea = new Size(0, 0);
+        private double _startManipulationHorizontalOffset;
 
         /// <summary>
         /// Vertical offset at manipulation start.
@@ -81,21 +49,6 @@
         /// </summary>
         private int _focusedPage = -1;
 
-        /// <summary>
-        /// Variable used for optimized rendering of whole working area.
-        /// </summary>
-        private WriteableBitmap _renderBitmap = null;
-
-        /// <summary>
-        /// Variable used for rendering of one page.
-        /// </summary>
-        private IntPtr _renderBuffer = IntPtr.Zero;
-
-        /// <summary>
-        /// Variable contains size of allocated render buffer.
-        /// </summary>
-        private int _bufferSize;
-
         #endregion Private fields
 
         #region Constructors
@@ -114,17 +67,6 @@
         public PDFThumbnailView()
         {
             IsManipulationEnabled = true;
-
-            if (!this.IsDesignTime())
-            {
-                Unloaded += (s, e) =>
-                {
-                    if (_renderBuffer != IntPtr.Zero)
-                    {
-                        Marshal.FreeHGlobal(_renderBuffer);
-                    }
-                };
-            }
         }
 
         #endregion Constructors
@@ -150,7 +92,7 @@
 
                     if (PDFFocusedPageScrollOnChange && _focusedPage != -1)
                     {
-                        var firstOrDefault = _renderInformation?.PagesToRender?.FirstOrDefault(page => page.Page.PageIndex == _focusedPage);
+                        var firstOrDefault = RenderInformation?.PagesToRender?.FirstOrDefault(page => page.Page.PageIndex == _focusedPage);
                         if (firstOrDefault != null)
                         {
                             // Page is visible.
@@ -181,6 +123,16 @@
         }
 
         #endregion Public properties
+
+        #region Protected override properties
+
+        /// <inheritdoc/>
+        protected override IPDFPageComponent ControlPDFPageComponent => PDFPageComponent;
+
+        /// <inheritdoc/>
+        protected override bool IsZoomSupported => false;
+
+        #endregion Protected override properties
 
         #region Protected override methods
 
@@ -220,7 +172,7 @@
             {
                 // Determine pages to draw.
                 var viewportInDocument = new PDFRectangle<double>(HorizontalOffset, VerticalOffset, ViewportWidth, ViewportHeight);
-                _renderInformation = PDFPageComponent.RenderManager.DetermineRenderInfo(viewportInDocument);
+                RenderInformation = PDFPageComponent.RenderManager.DetermineRenderInfo(viewportInDocument);
             }
 
             RenderPages(drawingContext);
@@ -256,6 +208,7 @@
         /// <inheritdoc/>
         protected override void OnManipulationStarted(ManipulationStartedEventArgs e)
         {
+            _startManipulationHorizontalOffset = HorizontalOffset;
             _startManipulationVerticalOffset = VerticalOffset;
 
             base.OnManipulationStarted(e);
@@ -266,6 +219,7 @@
         {
             if (e != null && e.CumulativeManipulation != null)
             {
+                HorizontalOffset = _startManipulationHorizontalOffset - e.CumulativeManipulation.Translation.X;
                 VerticalOffset = _startManipulationVerticalOffset - e.CumulativeManipulation.Translation.Y;
             }
 
@@ -323,6 +277,7 @@
                     if (_startDragPoint.X != -1 && _startDragPoint.Y != -1)
                     {
                         var newDragPoint = e.GetPosition(this);
+                        HorizontalOffset = _startHorizontalOffset + _startDragPoint.X - newDragPoint.X;
                         VerticalOffset = _startVerticalOffset + _startDragPoint.Y - newDragPoint.Y;
                     }
                 }
@@ -349,10 +304,10 @@
 
             _startDragPoint = new Point(-1, -1);
 
-            if (e != null && _renderInformation?.PagesToRender != null)
+            if (e != null && RenderInformation?.PagesToRender != null)
             {
                 var point = e.GetPosition(this);
-                var page = _renderInformation.PagesToRender.FirstOrDefault(p => point.X > p.RelativePositionInViewportArea.Left && point.X < p.RelativePositionInViewportArea.Right && point.Y > p.RelativePositionInViewportArea.Top && point.Y < p.RelativePositionInViewportArea.Bottom);
+                var page = RenderInformation.PagesToRender.FirstOrDefault(p => point.X > p.RelativePositionInViewportArea.Left && point.X < p.RelativePositionInViewportArea.Right && point.Y > p.RelativePositionInViewportArea.Top && point.Y < p.RelativePositionInViewportArea.Bottom);
                 if (page != null)
                 {
                     PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
@@ -365,10 +320,10 @@
         {
             base.OnTouchDown(e);
 
-            if (e != null && _renderInformation?.PagesToRender != null)
+            if (e != null && RenderInformation?.PagesToRender != null)
             {
                 var point = e.GetTouchPoint(this).Position;
-                _onTouchDownPage = _renderInformation.PagesToRender.FirstOrDefault(p => point.X > p.RelativePositionInViewportArea.Left && point.X < p.RelativePositionInViewportArea.Right && point.Y > p.RelativePositionInViewportArea.Top && point.Y < p.RelativePositionInViewportArea.Bottom);
+                _onTouchDownPage = RenderInformation.PagesToRender.FirstOrDefault(p => point.X > p.RelativePositionInViewportArea.Left && point.X < p.RelativePositionInViewportArea.Right && point.Y > p.RelativePositionInViewportArea.Top && point.Y < p.RelativePositionInViewportArea.Bottom);
             }
         }
 
@@ -377,10 +332,10 @@
         {
             base.OnTouchUp(e);
 
-            if (e != null && _renderInformation?.PagesToRender != null)
+            if (e != null && RenderInformation?.PagesToRender != null)
             {
                 var point = e.GetTouchPoint(this).Position;
-                var page = _renderInformation.PagesToRender.FirstOrDefault(p => point.X > p.RelativePositionInViewportArea.Left && point.X < p.RelativePositionInViewportArea.Right && point.Y > p.RelativePositionInViewportArea.Top && point.Y < p.RelativePositionInViewportArea.Bottom);
+                var page = RenderInformation.PagesToRender.FirstOrDefault(p => point.X > p.RelativePositionInViewportArea.Left && point.X < p.RelativePositionInViewportArea.Right && point.Y > p.RelativePositionInViewportArea.Top && point.Y < p.RelativePositionInViewportArea.Bottom);
                 if (page != null && _onTouchDownPage != null)
                 {
                     if (_onTouchDownPage.Page.PageIndex == page.Page.PageIndex)
@@ -397,36 +352,6 @@
         #region Private methods
 
         /// <summary>
-        /// Update the viewport size.
-        /// </summary>
-        /// <param name="newSize">New size to use for viewport.</param>
-        private void UpdateViewportAreaSize(Size newSize)
-        {
-            if (_viewportArea == newSize)
-            {
-                return;
-            }
-
-            _viewportArea = newSize;
-            ScrollOwner?.InvalidateScrollInfo();
-        }
-
-        /// <summary>
-        /// Update the viewport size.
-        /// </summary>
-        /// <param name="newSize">New size to use for viewport.</param>
-        private void UpdateDocumentAreaSize(Size newSize)
-        {
-            if (_documentArea == newSize)
-            {
-                return;
-            }
-
-            _documentArea = newSize;
-            ScrollOwner?.InvalidateScrollInfo();
-        }
-
-        /// <summary>
         /// Determines area where fit all pages of opened document.
         /// </summary>
         /// <param name="availableSize">Available size based on current layout of application.</param>
@@ -439,17 +364,6 @@
             }
 
             return new Size(PDFPageComponent.RenderManager.DocumentArea.Width, PDFPageComponent.RenderManager.DocumentArea.Height);
-        }
-
-        /// <summary>
-        /// Reset all relevant status fields.
-        /// </summary>
-        private void ResetStatus()
-        {
-            _verticalOffset = 0d;
-            _documentArea = new Size(0, 0);
-            _renderInformation = null;
-            _onTouchDownPage = null;
         }
 
         #endregion Private methods
