@@ -357,7 +357,7 @@
                 // Center horizontally
                 var pageWidth = page.Width * PDFPageComponent.ZoomComponent.CurrentZoomFactor;
                 var detailedPositionXFromLeft = e.DetailedPositionX * PDFPageComponent.ZoomComponent.CurrentZoomFactor;
-                horizontalOffset = ((_documentArea.Width - pageWidth) / 2) + detailedPositionXFromLeft - (ActualWidth / 2);
+                horizontalOffset = ((DocumentArea.Width - pageWidth) / 2) + detailedPositionXFromLeft - (ActualWidth / 2);
             }
 
             if (double.IsNaN(horizontalOffset))
@@ -379,8 +379,8 @@
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                _horizontalOffset = PDFPageComponent.RenderManager.DetermineHorizontalOffset(_renderInformation, e.NewZoomFactor);
-                _verticalOffset = PDFPageComponent.RenderManager.DetermineVerticalOffset(_renderInformation, e.NewZoomFactor);
+                HorizontalOffset = PDFPageComponent.RenderManager.DetermineHorizontalOffset(RenderInformation, e.NewZoomFactor);
+                VerticalOffset = PDFPageComponent.RenderManager.DetermineVerticalOffset(RenderInformation, e.NewZoomFactor);
                 InvalidateVisual();
             });
         }

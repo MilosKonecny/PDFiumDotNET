@@ -275,7 +275,7 @@
             <TabItem Header="Thumbnails">
                 <Border Margin="3" BorderThickness="1" BorderBrush="{Binding ElementName=_tabControl, Path=BorderBrush}">
                     <ScrollViewer BorderThickness="0"
-                              CanContentScroll="True" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+                              CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                         <wpfControl:PDFThumbnailView x:Name="_pdfThumbnailView"
                                                      BorderThickness="0"
                                                      PDFFocusedPage="{Binding Path=ViewPageComponent.CurrentPageIndex}"

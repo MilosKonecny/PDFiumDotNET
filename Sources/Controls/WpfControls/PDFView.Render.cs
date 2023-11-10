@@ -5,10 +5,8 @@
     using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
-    using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Media;
-    using System.Windows.Media.Imaging;
     using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.WpfControls.Helper;
@@ -24,8 +22,8 @@
         [Conditional("DEBUG")]
         private void RenderDebugInfo(DrawingContext drawingContext, IEnumerable<IPDFPageRenderInfo> pages = null)
         {
-            var documentRectangle = new PDFRectangle<double>(0, 0, _documentArea.Width, _documentArea.Height);
-            var viewportRectangle = new PDFRectangle<double>(HorizontalOffset, VerticalOffset, _viewportArea.Width, _viewportArea.Height);
+            var documentRectangle = new PDFRectangle<double>(0, 0, DocumentArea.Width, DocumentArea.Height);
+            var viewportRectangle = new PDFRectangle<double>(HorizontalOffset, VerticalOffset, ViewportArea.Width, ViewportArea.Height);
 
             var text = $"Document area: {documentRectangle}{Environment.NewLine}";
             text += $"Viewport area: {viewportRectangle}{Environment.NewLine}";
@@ -60,7 +58,7 @@
 
         private void RenderPages(DrawingContext drawingContext)
         {
-            if (_renderInformation?.PagesToRender == null || !_renderInformation.PagesToRender.Any())
+            if (RenderInformation?.PagesToRender == null || !RenderInformation.PagesToRender.Any())
             {
                 RenderEmptyArea(drawingContext);
                 return;
@@ -80,24 +78,19 @@
             }
 
             // Check, initialize writable bitmap and buffer
-            if (_renderBuffer == IntPtr.Zero
-                || _renderBitmap == null
-                || _renderBitmap.PixelWidth != intViewportWidthFactor
-                || _renderBitmap.PixelHeight != intViewportHeightFactor)
+            if (RenderBuffer == IntPtr.Zero
+                || RenderBitmap == null
+                || RenderBitmap.PixelWidth != intViewportWidthFactor
+                || RenderBitmap.PixelHeight != intViewportHeightFactor)
             {
-                _bufferSize = 4 * intViewportWidthFactor * intViewportHeightFactor;
-                if (_renderBuffer != IntPtr.Zero)
-                {
-                    Marshal.FreeHGlobal(_renderBuffer);
-                }
-
-                _renderBuffer = Marshal.AllocHGlobal(_bufferSize);
-                _renderBitmap = new WriteableBitmap(intViewportWidthFactor, intViewportHeightFactor, 96, 96, PixelFormats.Bgra32, null);
+                var bufferSize = 4 * intViewportWidthFactor * intViewportHeightFactor;
+                InitializeRenderBuffer(bufferSize);
+                InitializeRenderBitmap(intViewportWidthFactor, intViewportHeightFactor);
             }
 
-            var format = BitmapFormatConverter.GetFormat(_renderBitmap.Format);
+            var format = BitmapFormatConverter.GetFormat(RenderBitmap.Format);
 
-            using (var wbe = new WritableBitmapEx(_renderBitmap))
+            using (var wbe = new WritableBitmapEx(RenderBitmap))
             {
                 wbe.Clear();
 
@@ -105,7 +98,7 @@
                 drawingContext.DrawRectangle(Background, null, new Rect(0, 0, ViewportWidth, ViewportHeight));
 
                 // Iterate the pages, adjust some values, and draw them.
-                foreach (var pageInfo in _renderInformation.PagesToRender)
+                foreach (var pageInfo in RenderInformation.PagesToRender)
                 {
                     // Draw page background
                     drawingContext.DrawRectangle(
@@ -120,7 +113,7 @@
                     try
                     {
                         // Clear buffer
-                        NativeMethods.SetMemory(_renderBuffer, 0, _bufferSize);
+                        ClearRenderBuffer();
 
                         var visiblePart = new PDFRectangle<int>(
                             (int)(factor * pageInfo.VisiblePart.Left),
@@ -140,13 +133,13 @@
                             visiblePart.Width,
                             visiblePart.Height,
                             format,
-                            _renderBuffer,
+                            RenderBuffer,
                             visiblePartStride);
 
                         // Copy buffer with rendered page into bitmap.
                         wbe.CopyImageBuffer(
-                            _renderBuffer,
-                            _bufferSize,
+                            RenderBuffer,
+                            RenderBufferSize,
                             (int)(factor * pageInfo.VisiblePartInViewportArea.X + 0.5d),
                             (int)(factor * pageInfo.VisiblePartInViewportArea.Y + 0.5d),
                             visiblePartStride,
@@ -224,9 +217,9 @@
             }
 
             // Draw all pages into drawing context.
-            drawingContext.DrawImage(_renderBitmap, new Rect(0, 0, ViewportWidth, ViewportHeight));
+            drawingContext.DrawImage(RenderBitmap, new Rect(0, 0, ViewportWidth, ViewportHeight));
 
-            RenderDebugInfo(drawingContext, _renderInformation.PagesToRender);
+            RenderDebugInfo(drawingContext, RenderInformation.PagesToRender);
         }
 
         private void RenderEmptyArea(DrawingContext drawingContext)
