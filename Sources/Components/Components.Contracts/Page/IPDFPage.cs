@@ -24,6 +24,12 @@
         double Height { get; }
 
         /// <summary>
+        /// Gets the transformation zoom if any transformation was applied.
+        /// Return value is 1 if there is no transformation.
+        /// </summary>
+        double TransformationZoom { get; }
+
+        /// <summary>
         /// Gets page label defined in PDF document.
         /// </summary>
         string PageLabel { get; }
