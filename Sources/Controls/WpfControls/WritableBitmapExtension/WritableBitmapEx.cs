@@ -83,6 +83,7 @@
                 // Check the offsets pointing behind buffer.
                 if (sourceOffset + stride > bufferLength || destinationOffset + stride > _bufferSize)
                 {
+                    // It seems that the cause of this is due to the rounding of double to int.
                     continue;
                 }
 

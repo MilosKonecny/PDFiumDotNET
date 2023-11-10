@@ -137,15 +137,12 @@
 
             if (!this.IsDesignTime())
             {
-                Loaded += (s, e) =>
+                Unloaded += (s, e) =>
                 {
-                    Window.GetWindow(this).Closing += (s2, e2) =>
+                    if (_renderBuffer != IntPtr.Zero)
                     {
-                        if (_renderBuffer != IntPtr.Zero)
-                        {
-                            Marshal.FreeHGlobal(_renderBuffer);
-                        }
-                    };
+                        Marshal.FreeHGlobal(_renderBuffer);
+                    }
                 };
             }
         }

@@ -74,6 +74,11 @@
             var intViewportWidthFactor = (int)(factor * ViewportWidth + 0.5d);
             var intViewportHeightFactor = (int)(factor * ViewportHeight + 0.5d);
 
+            if (intViewportWidthFactor <= 0 || intViewportHeightFactor <= 0)
+            {
+                return;
+            }
+
             // Check, initialize writable bitmap and buffer
             if (_renderBuffer == IntPtr.Zero
                 || _renderBitmap == null
