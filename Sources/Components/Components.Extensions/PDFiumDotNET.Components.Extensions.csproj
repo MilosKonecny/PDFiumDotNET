@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.1;net48;net6.0;net6.0-windows;net7.0;net7.0-windows</TargetFrameworks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="..\..\Common\AssemblyGlobalInfo.cs" Link="AssemblyGlobalInfo.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Components.Contracts\PDFiumDotNET.Components.Contracts.csproj" />
+        <ProjectReference Include="..\Components.Factory\PDFiumDotNET.Components.Factory.csproj" />
+        <ProjectReference Include="..\Components\PDFiumDotNET.Components.csproj" />
+    </ItemGroup>
+
+    <!-- NuGet things -->
+    <PropertyGroup>
+        <Title>PDFiumDotNET Components Extensions</Title>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    </PropertyGroup>
+
+</Project>

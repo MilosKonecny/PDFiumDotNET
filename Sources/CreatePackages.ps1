@@ -62,6 +62,7 @@ Copy-Item ".\Wrapper\Wrapper\bin\Release\*.nupkg" $nuget_folder
 Copy-Item ".\Components\Components.Contracts\bin\Release\*.nupkg" $nuget_folder
 Copy-Item ".\Components\Components\bin\Release\*.nupkg" $nuget_folder
 Copy-Item ".\Components\Components.Factory\bin\Release\*.nupkg" $nuget_folder
+Copy-Item ".\Components\Components.Extensions\bin\Release\*.nupkg" $nuget_folder
 Copy-Item ".\Controls\WpfControls\bin\Release\*.nupkg" $nuget_folder
 
 # Copy binaries
