@@ -37,7 +37,8 @@
         <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
         <Description>
             PDFiumDotNET library is C# wrapper for Google's PDFium library. The classes allow access all the information provided by PDFium.
-            If you want to use only information from PDF document, use PDFiumDotNET.Wrapper, PDFiumDotNET.Components.Contracts, PDFiumDotNET.Components and PDFiumDotNET.Factory.
+            If you want to use only information from PDF document, use PDFiumDotNET.Components.Factory.
+            If you want to obtain PDF Component via dependency injection, use PDFiumDotNET.Components.Extensions
             If you want to render a PDF document, also use PDFiumDotNET.WpfControls.
         </Description>
     </PropertyGroup>
