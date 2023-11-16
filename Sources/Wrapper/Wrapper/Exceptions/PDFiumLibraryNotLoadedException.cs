@@ -10,7 +10,6 @@
     /// <summary>
     /// Exception class used in case when PDFium DLL was not found.
     /// </summary>
-    [Serializable]
     public class PDFiumLibraryNotLoadedException : Exception
     {
         /// <summary>
@@ -36,16 +35,6 @@
         /// <param name="innerException">The exception that is the cause of the current exception, or a null reference if no inner exception is specified.</param>
         public PDFiumLibraryNotLoadedException([Localizable(false)] string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PDFiumLibraryNotLoadedException"/> class.
-        /// </summary>
-        /// <param name="info">The System.Runtime.Serialization.SerializationInfo that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The System.Runtime.Serialization.StreamingContext that contains contextual information about the source or destination.</param>
-        protected PDFiumLibraryNotLoadedException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
 

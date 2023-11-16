@@ -30,7 +30,7 @@ $release_folder=".\..\Release\"
 $nuget_folder=".\..\Release\NuGet\"
 $binaries_folder=".\..\Release\Binaries\"
 $all_folders=($release_folder,$nuget_folder,$binaries_folder)
-$net_subfolders=('net5.0-windows','net6.0-windows','net7.0-windows','net48','netcoreapp3.1')
+$net_subfolders=(('net5.0-windows','net5.0'),('net6.0-windows','net6.0'),('net7.0-windows','net7.0'),('net8.0-windows','net8.0'),('net48','net48'),('netcoreapp3.1','netcoreapp3.1'))
 
 # Create base folders
 foreach($one_folder in $all_folders)
@@ -41,7 +41,7 @@ foreach($one_folder in $all_folders)
 # Create net subfolders
 foreach($one_subfolder in $net_subfolders)
 {
-	$one_folder = $binaries_folder + $one_subfolder + '\'
+	$one_folder = $binaries_folder + $one_subfolder[0] + '\'
 	CreateFolder $one_folder
 }
 
@@ -69,49 +69,53 @@ Copy-Item ".\Controls\WpfControls\bin\Release\*.nupkg" $nuget_folder
 WriteHeader "Copy binaries"
 foreach($one_net_subfolder in $net_subfolders)
 {
-	$target_folder = $binaries_folder + $one_net_subfolder + '\'
+	$target_folder = $binaries_folder + $one_net_subfolder[0] + '\'
 	# wrapper
-	$source_folder = '.\Wrapper\Wrapper\bin\Release\' + $one_net_subfolder + '\'
+	$source_folder = '.\Wrapper\Wrapper\bin\Release\' + $one_net_subfolder[1] + '\'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Wrapper.dll'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Wrapper.xml'
 	# components contracts
-	$source_folder = '.\Components\Components.Contracts\bin\Release\' + $one_net_subfolder + '\'
+	$source_folder = '.\Components\Components.Contracts\bin\Release\' + $one_net_subfolder[1] + '\'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Components.Contracts.dll'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Components.Contracts.xml'
 	# components 
-	$source_folder = '.\Components\Components\bin\Release\' + $one_net_subfolder + '\'
+	$source_folder = '.\Components\Components\bin\Release\' + $one_net_subfolder[1] + '\'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Components.dll'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Components.xml'
 	# components factory
-	$source_folder = '.\Components\Components.Factory\bin\Release\' + $one_net_subfolder + '\'
+	$source_folder = '.\Components\Components.Factory\bin\Release\' + $one_net_subfolder[1] + '\'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Components.Factory.dll'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Components.Factory.xml'
+	# components extensions
+	$source_folder = '.\Components\Components.Extension\bin\Release\' + $one_net_subfolder[1] + '\'
+	CopyFile $source_folder $target_folder 'PDFiumDotNET.Components.Extension.dll'
+	CopyFile $source_folder $target_folder 'PDFiumDotNET.Components.Extension.xml'
 	# controls WPFControls
-	$source_folder = '.\Controls\WpfControls\bin\Release\' + $one_net_subfolder + '\'
+	$source_folder = '.\Controls\WpfControls\bin\Release\' + $one_net_subfolder[0] + '\'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.WpfControls.dll'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.WpfControls.xml'
 	# controls WinFormsControls
-	$source_folder = '.\Controls\WinFormsControls\bin\Release\' + $one_net_subfolder + '\'
+	$source_folder = '.\Controls\WinFormsControls\bin\Release\' + $one_net_subfolder[0] + '\'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.WinFormsControls.dll'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.WinFormsControls.xml'
 	# apps Common
-	$source_folder = '.\Apps\Common\bin\Release\' + $one_net_subfolder + '\'
+	$source_folder = '.\Apps\Common\bin\Release\' + $one_net_subfolder[0] + '\'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Apps.Common.dll'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Apps.Common.xml'
 	# apps PDFMerge
-	$source_folder = '.\Apps\PDFMerge\bin\Release\' + $one_net_subfolder + '\'
+	$source_folder = '.\Apps\PDFMerge\bin\Release\' + $one_net_subfolder[0] + '\'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Apps.PDFMerge.exe'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Apps.PDFMerge.xml'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Apps.PDFMerge.dll'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Apps.PDFMerge.runtimeconfig.json'
 	# apps PDFViewForms
-	$source_folder = '.\Apps\PDFViewForms\bin\Release\' + $one_net_subfolder + '\'
+	$source_folder = '.\Apps\PDFViewForms\bin\Release\' + $one_net_subfolder[0] + '\'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Apps.PDFViewForms.exe'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Apps.PDFViewForms.xml'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Apps.PDFViewForms.dll'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Apps.PDFViewForms.runtimeconfig.json'
 	# apps PDFViewWPF
-	$source_folder = '.\Apps\PDFViewWPF\bin\Release\' + $one_net_subfolder + '\'
+	$source_folder = '.\Apps\PDFViewWPF\bin\Release\' + $one_net_subfolder[0] + '\'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Apps.PDFViewWPF.exe'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Apps.PDFViewWPF.xml'
 	CopyFile $source_folder $target_folder 'PDFiumDotNET.Apps.PDFViewWPF.dll'
@@ -122,7 +126,7 @@ foreach($one_net_subfolder in $net_subfolders)
 WriteHeader "Copy PDFium"
 foreach($one_net_subfolder in $net_subfolders)
 {
-	$target_folder = $binaries_folder + $one_net_subfolder + '\PDFium\'
+	$target_folder = $binaries_folder + $one_net_subfolder[0] + '\PDFium\'
 	$target_folder_x86 = $target_folder + 'x86\'
 	$target_folder_x64 = $target_folder + 'x64\'
 	CreateFolder $target_folder
