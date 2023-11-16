@@ -6,7 +6,6 @@
     /// <summary>
     /// Specific exception is thrown on request to terminate the application.
     /// </summary>
-    [Serializable]
     public class TerminateApplicationRequiredException : Exception
     {
         /// <summary>
@@ -34,16 +33,6 @@
         /// the current exception is raised in a catch block that handles the inner exception.</param>
         public TerminateApplicationRequiredException(string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TerminateApplicationRequiredException"/> class.
-        /// </summary>
-        /// <param name="info">The System.Runtime.Serialization.SerializationInfo that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The System.Runtime.Serialization.StreamingContext that contains contextual information about the source or destination.</param>
-        protected TerminateApplicationRequiredException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
 

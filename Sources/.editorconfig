@@ -626,7 +626,7 @@ dotnet_diagnostic.CA2234.severity = warning
 dotnet_diagnostic.CA2235.severity = warning
 
 # CA2237: Mark ISerializable types with serializable
-dotnet_diagnostic.CA2237.severity = warning
+dotnet_diagnostic.CA2237.severity = none
 
 # CA2241: Provide correct arguments to formatting methods
 dotnet_diagnostic.CA2241.severity = warning
@@ -951,6 +951,7 @@ dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
 dotnet_style_namespace_match_folder = true:suggestion
 dotnet_style_allow_multiple_blank_lines_experimental = true:silent
 dotnet_style_allow_statement_immediately_after_block_experimental = true:silent
+dotnet_style_prefer_collection_expression = true:suggestion
 
 ########################################
 # 

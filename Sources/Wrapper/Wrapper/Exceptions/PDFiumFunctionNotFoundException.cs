@@ -9,7 +9,6 @@
     /// <summary>
     /// Exception class used in case when some function was not found in PDFium DLL.
     /// </summary>
-    [Serializable]
     public class PDFiumFunctionNotFoundException : Exception
     {
         /// <summary>
@@ -35,16 +34,6 @@
         /// <param name="innerException">The exception that is the cause of the current exception, or a null reference if no inner exception is specified.</param>
         public PDFiumFunctionNotFoundException([Localizable(false)] string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PDFiumFunctionNotFoundException"/> class.
-        /// </summary>
-        /// <param name="info">The System.Runtime.Serialization.SerializationInfo that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The System.Runtime.Serialization.StreamingContext that contains contextual information about the source or destination.</param>
-        protected PDFiumFunctionNotFoundException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
 
