@@ -21,7 +21,11 @@
         /// </summary>
         /// <param name="document">Handle to the document.</param>
         /// <param name="bookmark">Handle to the current bookmark. Pass NULL for the first top level item.</param>
-        /// <returns>Returns a handle to the first child of |bookmark| or the first top-level bookmark item. NULL if no child or top-level bookmark found.</returns>
+        /// <returns>
+        /// Returns a handle to the first child of |bookmark| or the first top-level bookmark item.
+        /// NULL if no child or top-level bookmark found.
+        /// Note that another name for the bookmarks is the document outline, as described in ISO 32000-1:2008, section 12.3.3.
+        /// </returns>
         /// <remarks>
         /// FPDF_EXPORT FPDF_BOOKMARK FPDF_CALLCONV FPDFBookmark_GetFirstChild(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark);.
         /// </remarks>
