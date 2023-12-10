@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Text;
     using System.Threading.Tasks;
     using System.Windows;
     using PDFiumDotNET.Components.Contracts;
@@ -21,7 +22,7 @@
 
             var count = CountOfTestCycles;
             TestInfo = "Open, navigate to every page, close" + Environment.NewLine;
-            TestInfo += $"Test1 start: {MemoryUsage}" + Environment.NewLine;
+            TestInfo += CreateTestInfo("Test1 start");
 
             for (var docIndex = 0; docIndex < count; docIndex++)
             {
@@ -48,7 +49,7 @@
                 }
 
                 SetMemoryUsage();
-                TestInfo += $"Cycle {docIndex}: {MemoryUsage}" + Environment.NewLine;
+                TestInfo += CreateTestInfo($"Cycle {docIndex}");
             }
 
             IsTestActive = false;
@@ -62,7 +63,7 @@
 
             var count = CountOfTestCycles;
             TestInfo = "Open, navigate to every fiftieth page, use all zooms twice, close" + Environment.NewLine;
-            TestInfo += $"Test2 start: {MemoryUsage}" + Environment.NewLine;
+            TestInfo += CreateTestInfo("Test2 start");
 
             for (var docIndex = 0; docIndex < count; docIndex++)
             {
@@ -117,7 +118,7 @@
                 }
 
                 SetMemoryUsage();
-                TestInfo += $"Cycle {docIndex}: {MemoryUsage}" + Environment.NewLine;
+                TestInfo += CreateTestInfo($"Cycle {docIndex}");
             }
 
             IsTestActive = false;
@@ -131,7 +132,7 @@
 
             var count = CountOfTestCycles;
             TestInfo = "Open, scroll whole way down by 100, close" + Environment.NewLine;
-            TestInfo += $"Test3 start: {MemoryUsage}" + Environment.NewLine;
+            TestInfo += CreateTestInfo("Test3 start");
 
             for (var docIndex = 0; docIndex < count; docIndex++)
             {
@@ -160,7 +161,7 @@
                 }
 
                 SetMemoryUsage();
-                TestInfo += $"Cycle {docIndex}: {MemoryUsage}" + Environment.NewLine;
+                TestInfo += CreateTestInfo($"Cycle {docIndex}");
             }
 
             IsTestActive = false;
@@ -174,7 +175,7 @@
 
             var count = CountOfTestCycles;
             TestInfo = "Open, jump to every bookmark destination, close" + Environment.NewLine;
-            TestInfo += $"Test4 start: {MemoryUsage}" + Environment.NewLine;
+            TestInfo += CreateTestInfo("Test4 start");
 
             for (var docIndex = 0; docIndex < count; docIndex++)
             {
@@ -205,7 +206,7 @@
                 }
 
                 SetMemoryUsage();
-                TestInfo += $"Cycle {docIndex}: {MemoryUsage}" + Environment.NewLine;
+                TestInfo += CreateTestInfo($"Cycle {docIndex}");
             }
 
             IsTestActive = false;
@@ -231,6 +232,16 @@
             }
 
             return list;
+        }
+
+        private string CreateTestInfo(string startText)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine(startText);
+            sb.AppendLine($"    {PrivateMemoryUsage}");
+            sb.AppendLine($"    {PhysicalMemoryUsage}");
+            sb.AppendLine($"    {VirtualMemoryUsage}");
+            return sb.ToString();
         }
 
         #endregion Private methods

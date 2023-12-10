@@ -12,10 +12,18 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ActionDescription"/> class.
         /// </summary>
-        public ActionDescription(char actionCharacter, ConsoleKey actionConsoleKey, string description, string text, string groupText, Action<ActionDescription> action)
+        public ActionDescription(
+            char actionCharacter,
+            ConsoleKey actionConsoleKey,
+            bool withCTRLModifier,
+            string description,
+            string text,
+            string groupText,
+            Action<ActionDescription> action)
         {
             ActionCharacter = actionCharacter;
             ActionConsoleKey = actionConsoleKey;
+            WithCTRLModifier = withCTRLModifier;
             Description = description;
             Text = text;
             GroupText = groupText;
@@ -36,6 +44,11 @@
         /// Gets the <see cref="ConsoleKey"/> that starts the action.
         /// </summary>
         public ConsoleKey ActionConsoleKey { get; }
+
+        /// <summary>
+        /// Gets the information whether the CTRL key have to be pressed.
+        /// </summary>
+        public bool WithCTRLModifier { get; }
 
         /// <summary>
         /// Gets the action description.
