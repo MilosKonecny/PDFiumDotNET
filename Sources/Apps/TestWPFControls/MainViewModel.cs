@@ -2,6 +2,7 @@
 {
     using System;
     using System.ComponentModel;
+    using System.Globalization;
     using System.IO;
     using System.Runtime.CompilerServices;
     using PDFiumDotNET.Apps.Common;
@@ -91,13 +92,50 @@
         }
 
         /// <summary>
-        /// Gets the memory usage text.
+        /// Gets the private memory usage text.
         /// </summary>
-        public string MemoryUsage
+        public string PrivateMemoryUsage
         {
             get
             {
-                return $"Memory usage: {_memoryUsage.CurrentMemoryUsage} KiB (min: {_memoryUsage.MinimumMemoryUsage}, max: {_memoryUsage.MaximumMemoryUsage})";
+                return string.Format(
+                    CultureInfo.InvariantCulture,
+                    "Private memory usage: {0,12:N0} KiB (min: {1,12:N0}, max: {2,12:N0})",
+                    _memoryUsage.CurrentPrivateMemoryUsage,
+                    _memoryUsage.MinimumPrivateMemoryUsage,
+                    _memoryUsage.MaximumPrivateMemoryUsage);
+            }
+        }
+
+        /// <summary>
+        /// Gets the physical memory usage text.
+        /// </summary>
+        public string PhysicalMemoryUsage
+        {
+            get
+            {
+                return string.Format(
+                    CultureInfo.InvariantCulture,
+                    "Physical memory usage: {0,12:N0} KiB (min: {1,12:N0}, max: {2,12:N0})",
+                    _memoryUsage.CurrentWorkingSetMemoryUsage,
+                    _memoryUsage.MinimumWorkingSetMemoryUsage,
+                    _memoryUsage.MaximumWorkingSetMemoryUsage);
+            }
+        }
+
+        /// <summary>
+        /// Gets the virtual memory usage text.
+        /// </summary>
+        public string VirtualMemoryUsage
+        {
+            get
+            {
+                return string.Format(
+                    CultureInfo.InvariantCulture,
+                    "Virtual memory usage: {0,12:N0} KiB (min: {1,12:N0}, max: {2,12:N0})",
+                    _memoryUsage.CurrentVirtualMemoryUsage,
+                    _memoryUsage.MinimumVirtualMemoryUsage,
+                    _memoryUsage.MaximumVirtualMemoryUsage);
             }
         }
 
