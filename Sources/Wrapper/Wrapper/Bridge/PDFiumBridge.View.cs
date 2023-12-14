@@ -125,7 +125,7 @@
         /// If |password|'s encoding and the PDF's expected encoding do not match, FPDF_LoadDocument() will automatically convert |password| to the other encoding.
         /// FPDF_EXPORT FPDF_DOCUMENT FPDF_CALLCONV FPDF_LoadDocument(FPDF_STRING file_path, FPDF_BYTESTRING password);.
         /// </remarks>
-        public FPDF_DOCUMENT FPDF_LoadDocument([MarshalAs(UnmanagedType.LPStr)] string file_path, [MarshalAs(UnmanagedType.LPStr)] string password)
+        public FPDF_DOCUMENT FPDF_LoadDocument(string file_path, string password)
         {
             lock (_syncObject)
             {

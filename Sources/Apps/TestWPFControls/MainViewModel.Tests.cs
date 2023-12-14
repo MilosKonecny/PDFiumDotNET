@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows;
@@ -238,9 +239,9 @@
         {
             var sb = new StringBuilder();
             sb.AppendLine(startText);
-            sb.AppendLine($"    {PrivateMemoryUsage}");
-            sb.AppendLine($"    {PhysicalMemoryUsage}");
-            sb.AppendLine($"    {VirtualMemoryUsage}");
+            sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "    {0}", PrivateMemoryUsage));
+            sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "    {0}", PhysicalMemoryUsage));
+            sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "    {0}", VirtualMemoryUsage));
             return sb.ToString();
         }
 
