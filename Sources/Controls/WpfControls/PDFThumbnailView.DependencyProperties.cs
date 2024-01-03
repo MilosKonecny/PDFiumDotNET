@@ -229,7 +229,11 @@
                 return;
             }
 
-            component.MainComponent.PropertyChanged -= HandlePDFComponentPropertyChangedEvent;
+            if (component.MainComponent != null)
+            {
+                component.MainComponent.PropertyChanged -= HandlePDFComponentPropertyChangedEvent;
+            }
+
             ScrollOwner?.InvalidateScrollInfo();
         }
 

@@ -309,10 +309,19 @@
 
             component.FindSelectionBackgroundFunc = null;
             component.FindSelectionBorderFunc = null;
-            component.MainComponent.PropertyChanged -= HandlePDFComponentPropertyChangedEvent;
             component.NavigatedToPage -= HandlePDFPageComponentNavigatedToPageEvent;
             component.TextSelectionsRemoved -= HandlePDFPageComponentTextSelectionsRemovedEvent;
-            component.ZoomComponent.ZoomChanged -= HandlePDFZoomComponentPropertyChangedEvent;
+
+            if (component.MainComponent != null)
+            {
+                component.MainComponent.PropertyChanged -= HandlePDFComponentPropertyChangedEvent;
+            }
+
+            if (component.ZoomComponent != null)
+            {
+                component.ZoomComponent.ZoomChanged -= HandlePDFZoomComponentPropertyChangedEvent;
+            }
+
             ScrollOwner?.InvalidateScrollInfo();
         }
 

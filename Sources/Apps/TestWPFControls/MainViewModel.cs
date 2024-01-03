@@ -11,6 +11,7 @@
     using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Page;
     using PDFiumDotNET.Components.Factory;
+    using PDFiumDotNET.WpfControls;
 
     /// <summary>
     /// View model class for <see cref="MainView"/>.
@@ -29,9 +30,10 @@
         #region Private fields
 
         private readonly PageLayoutType _pageLayoutType = PageLayoutType.Standard;
-        private readonly MemoryUsage _memoryUsage = new ();
+        private readonly MemoryUsage _memoryUsage = new MemoryUsage();
         private string _pdfFileToUse;
         private IView _view;
+        private PDFView _pdfView;
         private IPDFComponent _pdfComponent;
         private IPDFPageComponent _viewPageComponent;
         private IPDFPageComponent _thumbnailPageComponent;
@@ -40,6 +42,7 @@
         private bool _isTestStopPending;
         private int _countOfTestCycles = 10;
         private int _currentTestCycle = 0;
+        private bool _showMemoryUsageOnlyTwoTimes;
         private string _testInfo;
 
         #endregion Private fields
@@ -51,17 +54,13 @@
         /// </summary>
         public MainViewModel()
         {
-            if (File.Exists(Path.GetFullPath(_pdfFile1)))
-            {
-                _pdfFileToUse = Path.GetFullPath(_pdfFile1);
-            }
-            else if (File.Exists(Path.GetFullPath(_pdfFile2)))
+            if (File.Exists(Path.GetFullPath(_pdfFile2)))
             {
                 _pdfFileToUse = Path.GetFullPath(_pdfFile2);
             }
             else
             {
-                _pdfFileToUse = "'Precalculus.pdf' not found!";
+                _pdfFileToUse = Path.GetFullPath(_pdfFile1);
             }
         }
 
@@ -100,10 +99,10 @@
             {
                 return string.Format(
                     CultureInfo.InvariantCulture,
-                    "Private memory usage: {0,12:N0} KiB (min: {1,12:N0}, max: {2,12:N0})",
-                    _memoryUsage.CurrentPrivateMemoryUsage,
-                    _memoryUsage.MinimumPrivateMemoryUsage,
-                    _memoryUsage.MaximumPrivateMemoryUsage);
+                    "Private memory usage:\t{0,14:N0} KiB (min: {1,14:N0}, max: {2,14:N0})",
+                    _memoryUsage.PrivateMemory.CurrentMemoryUsage,
+                    _memoryUsage.PrivateMemory.MinimumMemoryUsage,
+                    _memoryUsage.PrivateMemory.MaximumMemoryUsage);
             }
         }
 
@@ -116,10 +115,10 @@
             {
                 return string.Format(
                     CultureInfo.InvariantCulture,
-                    "Physical memory usage: {0,12:N0} KiB (min: {1,12:N0}, max: {2,12:N0})",
-                    _memoryUsage.CurrentWorkingSetMemoryUsage,
-                    _memoryUsage.MinimumWorkingSetMemoryUsage,
-                    _memoryUsage.MaximumWorkingSetMemoryUsage);
+                    "Physical memory usage:\t{0,14:N0} KiB (min: {1,14:N0}, max: {2,14:N0})",
+                    _memoryUsage.PhysicalMemory.CurrentMemoryUsage,
+                    _memoryUsage.PhysicalMemory.MinimumMemoryUsage,
+                    _memoryUsage.PhysicalMemory.MaximumMemoryUsage);
             }
         }
 
@@ -132,10 +131,26 @@
             {
                 return string.Format(
                     CultureInfo.InvariantCulture,
-                    "Virtual memory usage: {0,12:N0} KiB (min: {1,12:N0}, max: {2,12:N0})",
-                    _memoryUsage.CurrentVirtualMemoryUsage,
-                    _memoryUsage.MinimumVirtualMemoryUsage,
-                    _memoryUsage.MaximumVirtualMemoryUsage);
+                    "Virtual memory usage:\t{0,14:N0} KiB (min: {1,14:N0}, max: {2,14:N0})",
+                    _memoryUsage.VirtualMemory.CurrentMemoryUsage,
+                    _memoryUsage.VirtualMemory.MinimumMemoryUsage,
+                    _memoryUsage.VirtualMemory.MaximumMemoryUsage);
+            }
+        }
+
+        /// <summary>
+        /// Gets the managed memory usage text.
+        /// </summary>
+        public string ManagedMemoryUsage
+        {
+            get
+            {
+                return string.Format(
+                    CultureInfo.InvariantCulture,
+                    "Managed memory usage:\t{0,14:N0} KiB (min: {1,14:N0}, max: {2,14:N0})",
+                    _memoryUsage.ManagedMemory.CurrentMemoryUsage,
+                    _memoryUsage.ManagedMemory.MinimumMemoryUsage,
+                    _memoryUsage.ManagedMemory.MaximumMemoryUsage);
             }
         }
 
@@ -253,6 +268,26 @@
         }
 
         /// <summary>
+        /// Gets or sets the value indicating whether the memory usage should be shown only two times.
+        /// </summary>
+        public bool ShowMemoryUsageOnlyTwoTimes
+        {
+            get
+            {
+                return _showMemoryUsageOnlyTwoTimes;
+            }
+
+            set
+            {
+                if (_showMemoryUsageOnlyTwoTimes != value)
+                {
+                    _showMemoryUsageOnlyTwoTimes = value;
+                    InvokePropertyChangedEvent();
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the information about current test.
         /// </summary>
         public string TestInfo
@@ -289,10 +324,49 @@
 
         #region Private methods
 
-        private void SetMemoryUsage()
+        private void GUIPrepareForTest()
         {
-            _memoryUsage.GatherMemoryUsage();
-            InvokePropertyChangedEvent(nameof(MemoryUsage));
+            var a = new Action(() =>
+            {
+                // Initialize PDF component
+                _pdfComponent = PDFFactory.PDFComponent;
+
+                // We will use only two page components. One for thumbnails and one for standard view.
+                _viewPageComponent = _pdfComponent.LayoutComponent.CreatePageComponent(_standardPageComponentName, _pageLayoutType);
+                _thumbnailPageComponent = _pdfComponent.LayoutComponent.CreatePageComponent(_thumbnailPageComponentName, PageLayoutType.Thumbnail);
+
+                InvokePropertyChangedEvent(nameof(PDFComponent));
+                InvokePropertyChangedEvent(nameof(ViewPageComponent));
+                InvokePropertyChangedEvent(nameof(ThumbnailPageComponent));
+
+                _pdfView = new PDFView
+                {
+                    PDFPageComponent = _viewPageComponent,
+                };
+
+                _view.PDFViewContainer.Content = _pdfView;
+            });
+            a.SafeInvoke();
+        }
+
+        private void GUICleanupAfterTest()
+        {
+            var a = new Action(() =>
+            {
+                _view.PDFViewContainer.Content = null;
+                _pdfView.PDFPageComponent = null;
+                _pdfView = null;
+
+                _pdfComponent.Dispose();
+                _pdfComponent = null;
+                _viewPageComponent = null;
+                _thumbnailPageComponent = null;
+
+                InvokePropertyChangedEvent(nameof(PDFComponent));
+                InvokePropertyChangedEvent(nameof(ViewPageComponent));
+                InvokePropertyChangedEvent(nameof(ThumbnailPageComponent));
+            });
+            a.SafeInvoke();
         }
 
         #endregion Private methods
@@ -307,18 +381,13 @@
         {
             _view = view ?? throw new ArgumentNullException(nameof(view));
 
+            TestResetMemoryUsageCommand = new ViewModelCommand(ExecuteTestResetMemoryUsageCommand, CanExecuteTestResetMemoryUsageCommand);
+            TestGCCollectCommand = new ViewModelCommand(ExecuteTestGCCollectCommand, CanExecuteTestGCCollectCommand);
             Test1Command = new ViewModelCommand(ExecuteTest1Command, CanExecuteTest1Command);
             Test2Command = new ViewModelCommand(ExecuteTest2Command, CanExecuteTest2Command);
             Test3Command = new ViewModelCommand(ExecuteTest3Command, CanExecuteTest3Command);
             Test4Command = new ViewModelCommand(ExecuteTest4Command, CanExecuteTest4Command);
             StopTestCommand = new ViewModelCommand(ExecuteStopTestCommand, CanExecuteStopTestCommand);
-
-            // Initialize PDF component
-            _pdfComponent = PDFFactory.PDFComponent;
-
-            // We will use only two page components. One for thumbnails and one for standard view.
-            _viewPageComponent = _pdfComponent.LayoutComponent.CreatePageComponent(_standardPageComponentName, _pageLayoutType);
-            _thumbnailPageComponent = _pdfComponent.LayoutComponent.CreatePageComponent(_thumbnailPageComponentName, PageLayoutType.Thumbnail);
         }
 
         #endregion Implementation of IViewModel

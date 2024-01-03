@@ -1,5 +1,6 @@
 ﻿namespace PDFiumDotNET.Apps.TestWPFControls.Contracts
 {
+    using System.Windows.Controls;
     using PDFiumDotNET.WpfControls;
 
     /// <summary>
@@ -8,8 +9,8 @@
     public interface IView
     {
         /// <summary>
-        /// Gets the <see cref="PDFView"/> control.
+        /// Gets the container for <see cref="PDFView"/> control.
         /// </summary>
-        PDFView PDFViewControl { get; }
+        ScrollViewer PDFViewContainer { get; }
     }
 }

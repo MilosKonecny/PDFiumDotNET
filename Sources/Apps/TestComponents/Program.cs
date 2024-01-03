@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.IO;
     using System.Reflection;
     using System.Windows;
     using System.Windows.Media;
@@ -19,16 +20,73 @@
     /// </summary>
     internal class Program
     {
+        private const int _lineForStartInfo1 = 0;
+        private const int _lineForStartInfo2 = 1;
+        private const int _lineForMemoryUsage1 = 2;
+        private const int _lineForMemoryUsage2 = 3;
+        private const int _lineForMemoryUsage3 = 4;
+        private const int _lineForMemoryUsage4 = 5;
+        private const int _lineForExecutedOperationGroups = 6;
+        private const int _lineForStates1 = 7;
+        private const int _lineForStates2 = 8;
+        private const int _lineForError = 9;
+        private const int _lineForTestGroup = 10;
+        private const int _lineForSingleTest = 11;
+        private const int _lineForFirstAvailableCommand = 13;
+
         private const int _minTestCount = 2;
         private const int _maxTestCount = 2000;
-        private const string _pdfFile = @"..\..\..\..\..\..\TestData\PDFs\Precalculus.pdf";
+        private const string _pdfFile1 = @"Precalculus.pdf";
+        private const string _pdfFile2 = @"..\..\..\..\..\..\TestData\PDFs\Precalculus.pdf";
         private static int _testCount = 100;
+        private static bool _showMemoryUsageOnlyTwoTimes = false;
         private static int _executedOperationGroups = 0;
         private static MemoryUsage _memoryUsage = new ();
         private static bool _cancelOperation = false;
+        private static string _pdfFileToUse;
 
         private static List<ActionDescription> _tests = new ()
         {
+            new ActionDescription(
+                'c',
+                ConsoleKey.Oem102,
+                true,
+                "This action stops the executed test.",
+                "Exit application",
+                "Exit application",
+                StopTest),
+            new ActionDescription(
+                'x',
+                ConsoleKey.Oem102,
+                false,
+                "This action terminates the application.",
+                "Exit application",
+                "Exit application",
+                ExitApplication),
+            new ActionDescription(
+                'r',
+                ConsoleKey.Oem102,
+                false,
+                "This action resets min/max memory usage to current.",
+                "Reset memory usage",
+                "Reset memory usage",
+                ResetMinMax),
+            new ActionDescription(
+                '1',
+                ConsoleKey.Oem102,
+                false,
+                "Change flag indicating whether the memory usage is shown only after last test.",
+                "Change show memory usage",
+                "Change show memory usage",
+                ChangeShowMemoryUsageOnlyTwoTimes),
+            new ActionDescription(
+                '2',
+                ConsoleKey.Oem102,
+                false,
+                "This action forces an immediate garbage collection of all generations.",
+                "Collect GC",
+                "Collect GC",
+                FreeMemory),
             new ActionDescription(
                 '\0',
                 ConsoleKey.UpArrow,
@@ -61,38 +119,6 @@
                 "Decrease 'several times' for operation group by 100",
                 "Decrease 'several times' for operation group by 100",
                 Decrease100TestCount),
-            new ActionDescription(
-                'c',
-                ConsoleKey.Oem102,
-                true,
-                "This action stops the executed test.",
-                "Exit application",
-                "Exit application",
-                StopTest),
-            new ActionDescription(
-                'r',
-                ConsoleKey.Oem102,
-                false,
-                "This action resets min/max memory usage to current.",
-                "Reset memory usage",
-                "Reset memory usage",
-                ResetMinMax),
-            new ActionDescription(
-                'x',
-                ConsoleKey.Oem102,
-                false,
-                "This action terminates the application.",
-                "Exit application",
-                "Exit application",
-                ExitApplication),
-            new ActionDescription(
-                '1',
-                ConsoleKey.Oem102,
-                false,
-                "This action forces an immediate garbage collection of all generations.",
-                "Collect GC",
-                "Collect GC",
-                FreeMemory),
             new ActionDescription(
                 'a',
                 ConsoleKey.Oem102,
@@ -163,6 +189,11 @@
             _testCount = Math.Max(_testCount - 100, _minTestCount);
         }
 
+        private static void ChangeShowMemoryUsageOnlyTwoTimes(ActionDescription description)
+        {
+            _showMemoryUsageOnlyTwoTimes = !_showMemoryUsageOnlyTwoTimes;
+        }
+
         private static void FreeMemory(ActionDescription description)
         {
             GC.Collect();
@@ -175,10 +206,11 @@
             var pageComponent = pdfComponent.LayoutComponent.CreatePageComponent("standard", PageLayoutType.Standard);
             var zoomComponent = pageComponent.ZoomComponent;
             var bookmarkComponent = pdfComponent.BookmarkComponent;
-            var result = pdfComponent.OpenDocument(_pdfFile);
+
+            var result = pdfComponent.OpenDocument(_pdfFileToUse);
             if (result != OpenDocumentResult.Success)
             {
-                PrintError($"Document not open! {result}");
+                PrintError($"Document '{_pdfFileToUse}' not open! {result}");
                 return;
             }
 
@@ -192,12 +224,14 @@
         {
             for (var index = 0; index < _testCount; index++)
             {
-                PrintMemoryUsage();
+                if (!_showMemoryUsageOnlyTwoTimes)
+                {
+                    PrintMemoryUsage();
+                }
+
                 SetProgressForGroup(description.GroupText, index, _testCount);
                 OperationGroup1(description);
-                PrintMemoryUsage();
                 PrintExecutedOperationGroups();
-
                 if (_cancelOperation)
                 {
                     break;
@@ -210,20 +244,21 @@
         private static void OperationGroup2(ActionDescription description)
         {
             var pdfComponent = PDFFactory.PDFComponent;
-            var result = pdfComponent.OpenDocument(_pdfFile);
+            var pageComponent = pdfComponent.LayoutComponent.CreatePageComponent("standard", PageLayoutType.Standard);
+            var zoomComponent = pageComponent.ZoomComponent;
+            var bookmarkComponent = pdfComponent.BookmarkComponent;
+
+            var result = pdfComponent.OpenDocument(_pdfFileToUse);
             if (result != OpenDocumentResult.Success)
             {
                 PrintError($"Document not open! {result}");
                 return;
             }
 
-            var pageComponent = pdfComponent.LayoutComponent.CreatePageComponent("standard", PageLayoutType.Standard);
-            var zoomComponent = pageComponent.ZoomComponent;
             for (var index = 0; index < pageComponent.PageCount; index++)
             {
-                PrintMemoryUsage();
-                SetProgressForTest(description.Text, index, pageComponent.PageCount);
                 pageComponent.NavigateToPage(index + 1);
+
                 var position1 = pageComponent.RenderManager.DeterminePagePosition(index);
                 if (index % 2 == 0)
                 {
@@ -235,7 +270,6 @@
                 }
 
                 var position2 = pageComponent.RenderManager.DeterminePagePosition(index);
-
                 if (_cancelOperation)
                 {
                     break;
@@ -245,8 +279,6 @@
             pdfComponent.CloseDocument();
             pdfComponent.Dispose();
 
-            ClearProgressForTest();
-
             _executedOperationGroups++;
         }
 
@@ -254,12 +286,14 @@
         {
             for (var index = 0; index < _testCount; index++)
             {
-                PrintMemoryUsage();
+                if (!_showMemoryUsageOnlyTwoTimes)
+                {
+                    PrintMemoryUsage();
+                }
+
                 SetProgressForGroup(description.GroupText, index, _testCount);
                 OperationGroup2(description);
-                PrintMemoryUsage();
                 PrintExecutedOperationGroups();
-
                 if (_cancelOperation)
                 {
                     break;
@@ -273,23 +307,33 @@
         {
             var pdfComponent = PDFFactory.PDFComponent;
             var pageComponent = pdfComponent.LayoutComponent.CreatePageComponent("standard", PageLayoutType.Standard);
-            var result = pdfComponent.OpenDocument(_pdfFile);
+            var zoomComponent = pageComponent.ZoomComponent;
+            var bookmarkComponent = pdfComponent.BookmarkComponent;
+
+            var result = pdfComponent.OpenDocument(_pdfFileToUse);
             if (result != OpenDocumentResult.Success)
             {
                 PrintError($"Document not open! {result}");
                 return;
             }
 
-            var zoomComponent = pageComponent.ZoomComponent;
-            zoomComponent.CurrentZoomFactor = 0.1;
+            double width = 0d;
+            double height = 0d;
+            WriteableBitmap bitmap = null;
+            var format = BitmapFormat.BitmapBGRA;
+
+            //////zoomComponent.CurrentZoomFactor = 0.1;
             for (var index = 0; index < pageComponent.PageCount; index++)
             {
-                PrintMemoryUsage();
                 SetProgressForTest(description.Text, index, pageComponent.PageCount);
                 var page = pageComponent.Pages[index];
 
-                var bitmap = new WriteableBitmap((int)page.Width, (int)page.Height, 96, 96, PixelFormats.Bgra32, null);
-                var format = BitmapFormat.BitmapBGRA;
+                if (bitmap == null || width != page.Width || height != page.Height)
+                {
+                    width = page.Width;
+                    height = page.Height;
+                    bitmap = new WriteableBitmap((int)page.Width, (int)page.Height, 96, 96, PixelFormats.Bgra32, null);
+                }
 
                 bitmap.Lock();
                 page.RenderPageBitmap(
@@ -324,10 +368,13 @@
         {
             for (var index = 0; index < _testCount; index++)
             {
-                PrintMemoryUsage();
+                if (!_showMemoryUsageOnlyTwoTimes)
+                {
+                    PrintMemoryUsage();
+                }
+
                 SetProgressForGroup(description.GroupText, index, _testCount);
                 OperationGroup3(description);
-                PrintMemoryUsage();
                 PrintExecutedOperationGroups();
 
                 if (_cancelOperation)
@@ -355,11 +402,18 @@
 
         private static void PrintStartInfo()
         {
-            Console.SetCursorPosition(0, 0);
+            Console.SetCursorPosition(0, _lineForStartInfo1);
             Console.WriteLine(CommonInformation.Info);
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.SetCursorPosition(0, 1);
-            Console.WriteLine($"Memory usage after start: Private={_memoryUsage.CurrentPrivateMemoryUsage:N0} / Physical={_memoryUsage.CurrentWorkingSetMemoryUsage:N0} / Virtual={_memoryUsage.CurrentVirtualMemoryUsage:N0} KiB       ");
+            Console.SetCursorPosition(0, _lineForStartInfo2);
+            Console.WriteLine(
+                string.Format(
+                    CultureInfo.InvariantCulture,
+                    "Memory usage after start: Private={0:N0} / Physical={1:N0} / Virtual={2:N0} / Managed={3:N0} KiB       ",
+                    _memoryUsage.PrivateMemory.CurrentMemoryUsage,
+                    _memoryUsage.PhysicalMemory.CurrentMemoryUsage,
+                    _memoryUsage.VirtualMemory.CurrentMemoryUsage,
+                    _memoryUsage.ManagedMemory.CurrentMemoryUsage));
             Console.ResetColor();
         }
 
@@ -367,61 +421,79 @@
         {
             _memoryUsage.GatherMemoryUsage();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.SetCursorPosition(0, 2);
+            Console.SetCursorPosition(0, _lineForMemoryUsage1);
             Console.WriteLine(
                 string.Format(
                     CultureInfo.InvariantCulture,
-                    "Private memory usage   : {0,12:N0} KiB (min: {1,12:N0} max: {2,12:N0})         ",
-                    _memoryUsage.CurrentPrivateMemoryUsage,
-                    _memoryUsage.MinimumPrivateMemoryUsage,
-                    _memoryUsage.MaximumPrivateMemoryUsage));
-            Console.SetCursorPosition(0, 3);
+                    "Private memory usage           : {0,13:N0} KiB (min: {1,13:N0} max: {2,13:N0})         ",
+                    _memoryUsage.PrivateMemory.CurrentMemoryUsage,
+                    _memoryUsage.PrivateMemory.MinimumMemoryUsage,
+                    _memoryUsage.PrivateMemory.MaximumMemoryUsage));
+            Console.SetCursorPosition(0, _lineForMemoryUsage2);
             Console.WriteLine(
                 string.Format(
                     CultureInfo.InvariantCulture,
-                    "Physical memory usage  : {0,12:N0} KiB (min: {1,12:N0} max: {2,12:N0})         ",
-                    _memoryUsage.CurrentWorkingSetMemoryUsage,
-                    _memoryUsage.MinimumWorkingSetMemoryUsage,
-                    _memoryUsage.MaximumWorkingSetMemoryUsage));
-            Console.SetCursorPosition(0, 4);
+                    "Physical memory usage          : {0,13:N0} KiB (min: {1,13:N0} max: {2,13:N0})         ",
+                    _memoryUsage.PhysicalMemory.CurrentMemoryUsage,
+                    _memoryUsage.PhysicalMemory.MinimumMemoryUsage,
+                    _memoryUsage.PhysicalMemory.MaximumMemoryUsage));
+            Console.SetCursorPosition(0, _lineForMemoryUsage3);
             Console.WriteLine(
                 string.Format(
                     CultureInfo.InvariantCulture,
-                    "Virtual memory usage   : {0,12:N0} KiB (min: {1,12:N0} max: {2,12:N0})         ",
-                    _memoryUsage.CurrentVirtualMemoryUsage,
-                    _memoryUsage.MinimumVirtualMemoryUsage,
-                    _memoryUsage.MaximumVirtualMemoryUsage));
+                    "Virtual memory usage           : {0,13:N0} KiB (min: {1,13:N0} max: {2,13:N0})         ",
+                    _memoryUsage.VirtualMemory.CurrentMemoryUsage,
+                    _memoryUsage.VirtualMemory.MinimumMemoryUsage,
+                    _memoryUsage.VirtualMemory.MaximumMemoryUsage));
+            Console.SetCursorPosition(0, _lineForMemoryUsage4);
+            Console.WriteLine(
+                string.Format(
+                    CultureInfo.InvariantCulture,
+                    "Allocated managed memory usage : {0,13:N0} KiB (min: {1,13:N0} max: {2,13:N0})         ",
+                    _memoryUsage.ManagedMemory.CurrentMemoryUsage,
+                    _memoryUsage.ManagedMemory.MinimumMemoryUsage,
+                    _memoryUsage.ManagedMemory.MaximumMemoryUsage));
             Console.ResetColor();
         }
 
         private static void PrintExecutedOperationGroups()
         {
-            Console.SetCursorPosition(0, 5);
+            Console.SetCursorPosition(0, _lineForExecutedOperationGroups);
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write($"Executed operation groups: {_executedOperationGroups}   ");
             Console.ResetColor();
         }
 
+        private static void PrintStates()
+        {
+            Console.SetCursorPosition(0, _lineForStates1);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"Count of 'Several times' for operation group = {_testCount}    ");
+            Console.SetCursorPosition(0, _lineForStates2);
+            Console.WriteLine($"Show memory usage only after the last test = {_showMemoryUsageOnlyTwoTimes}    ");
+            Console.ResetColor();
+        }
+
         private static void PrintAvailableCommands()
         {
-            Console.SetCursorPosition(0, 6);
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"'Several times' for operation group = {_testCount}    ");
-            Console.ResetColor();
-
-            Console.SetCursorPosition(0, 7);
+            Console.SetCursorPosition(0, _lineForFirstAvailableCommand);
             Console.WriteLine($"Available commands (count: {_tests.Count})    ");
             foreach (var test in _tests)
             {
                 var ctrl = test.WithCTRLModifier ? "CTRL + " : string.Empty;
                 object key = test.ActionCharacter != '\0' ? test.ActionCharacter : test.ActionConsoleKey;
-                Console.WriteLine($"  {ctrl}{key} - {test.Description}");
+                Console.WriteLine(
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        "{0,12} - {1}",
+                        ctrl.ToString() + key.ToString(),
+                        test.Description));
             }
         }
 
         private static void PrintError(string error)
         {
-            Console.SetCursorPosition(0, 10 + _tests.Count);
+            Console.SetCursorPosition(0, _lineForError);
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(error);
             Console.ResetColor();
@@ -430,33 +502,33 @@
         private static void ClearError()
         {
             var text = new string(' ', Console.BufferWidth);
-            Console.SetCursorPosition(0, 10 + _tests.Count);
+            Console.SetCursorPosition(0, _lineForError);
             Console.WriteLine(text);
         }
 
         private static void SetProgressForGroup(string text, int position, int length)
         {
-            Console.SetCursorPosition(0, 12 + _tests.Count);
+            Console.SetCursorPosition(0, _lineForTestGroup);
             Console.WriteLine($"{text}: {100 * position / length}%");
         }
 
         private static void ClearProgressForGroup()
         {
             var text = new string(' ', Console.BufferWidth);
-            Console.SetCursorPosition(0, 12 + _tests.Count);
+            Console.SetCursorPosition(0, _lineForTestGroup);
             Console.WriteLine(text);
         }
 
         private static void SetProgressForTest(string text, int position, int length)
         {
-            Console.SetCursorPosition(0, 13 + _tests.Count);
+            Console.SetCursorPosition(0, _lineForSingleTest);
             Console.WriteLine($"{text}: {100 * position / length}%");
         }
 
         private static void ClearProgressForTest()
         {
             var text = new string(' ', Console.BufferWidth);
-            Console.SetCursorPosition(0, 13 + _tests.Count);
+            Console.SetCursorPosition(0, _lineForSingleTest);
             Console.WriteLine(text);
         }
 
@@ -470,6 +542,7 @@
                 var actionConsoleKeyOk = test.ActionConsoleKey != ConsoleKey.Oem102 && test.ActionConsoleKey == key.Key;
                 if (ctrlOk && (actionCharacterOk || actionConsoleKeyOk))
                 {
+                    PrintMemoryUsage();
                     test.Action(test);
                     PrintMemoryUsage();
                     break;
@@ -482,6 +555,15 @@
         /// </summary>
         public static void Main()
         {
+            if (File.Exists(Path.GetFullPath(_pdfFile2)))
+            {
+                _pdfFileToUse = Path.GetFullPath(_pdfFile2);
+            }
+            else
+            {
+                _pdfFileToUse = Path.GetFullPath(_pdfFile1);
+            }
+
             Console.CancelKeyPress += (s, e) =>
             {
                 _cancelOperation = true;
@@ -501,8 +583,8 @@
                         PrintStartInfo();
                         while (true)
                         {
-                            PrintMemoryUsage();
                             PrintExecutedOperationGroups();
+                            PrintStates();
                             PrintAvailableCommands();
 
                             var key = Console.ReadKey(true);

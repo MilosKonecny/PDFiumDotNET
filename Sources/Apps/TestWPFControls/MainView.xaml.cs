@@ -1,6 +1,7 @@
 ﻿namespace PDFiumDotNET.Apps.TestWPFControls
 {
     using System.Windows;
+    using System.Windows.Controls;
     using PDFiumDotNET.Apps.TestWPFControls.Contracts;
     using PDFiumDotNET.WpfControls;
 
@@ -39,7 +40,7 @@
         #region Implementation of IView
 
         /// <inheritdoc/>
-        public PDFView PDFViewControl => _pdfView;
+        public ScrollViewer PDFViewContainer => _pdfViewContainer;
 
         #endregion Implementation of IView
     }

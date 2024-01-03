@@ -10,15 +10,10 @@
     {
         #region Private fields
 
-        private long _currentPrivateMemoryUsage;
-        private long _minimumPrivateMemoryUsage = long.MaxValue;
-        private long _maximumPrivateMemoryUsage;
-        private long _currentVirtualMemoryUsage;
-        private long _minimumVirtualMemoryUsage = long.MaxValue;
-        private long _maximumVirtualMemoryUsage;
-        private long _currentWorkingSetMemoryUsage;
-        private long _minimumWorkingSetMemoryUsage = long.MaxValue;
-        private long _maximumWorkingSetMemoryUsage;
+        private readonly MemoryInfo _privateMemory = new ();
+        private readonly MemoryInfo _virtualMemory = new ();
+        private readonly MemoryInfo _physicalMemory = new ();
+        private readonly MemoryInfo _managedMemory = new ();
 
         #endregion Private fields
 
@@ -40,33 +35,11 @@
         /// Gets the current private memory usage of current process.
         /// (Private memory allocated for the associated process.)
         /// </summary>
-        public long CurrentPrivateMemoryUsage
+        public MemoryInfo PrivateMemory
         {
             get
             {
-                return _currentPrivateMemoryUsage;
-            }
-        }
-
-        /// <summary>
-        /// Gets the minimum private memory usage of current process since this class was instantiated.
-        /// </summary>
-        public long MinimumPrivateMemoryUsage
-        {
-            get
-            {
-                return _minimumPrivateMemoryUsage;
-            }
-        }
-
-        /// <summary>
-        /// Gets the maximum private memory usage of current process since this class was instantiated.
-        /// </summary>
-        public long MaximumPrivateMemoryUsage
-        {
-            get
-            {
-                return _maximumPrivateMemoryUsage;
+                return _privateMemory;
             }
         }
 
@@ -74,67 +47,35 @@
         /// Gets the current virtual memory usage of current process.
         /// (Virtual memory allocated for the associated process.)
         /// </summary>
-        public long CurrentVirtualMemoryUsage
+        public MemoryInfo VirtualMemory
         {
             get
             {
-                return _currentVirtualMemoryUsage;
+                return _virtualMemory;
             }
         }
 
         /// <summary>
-        /// Gets the minimum virtual memory usage of current process since this class was instantiated.
-        /// </summary>
-        public long MinimumVirtualMemoryUsage
-        {
-            get
-            {
-                return _minimumVirtualMemoryUsage;
-            }
-        }
-
-        /// <summary>
-        /// Gets the maximum virtual memory usage of current process since this class was instantiated.
-        /// </summary>
-        public long MaximumVirtualMemoryUsage
-        {
-            get
-            {
-                return _maximumVirtualMemoryUsage;
-            }
-        }
-
-        /// <summary>
-        /// Gets the current working set memory usage of current process.
+        /// Gets the current physical memory usage of current process.
         /// (Physical memory allocated for the associated process.)
         /// </summary>
-        public long CurrentWorkingSetMemoryUsage
+        public MemoryInfo PhysicalMemory
         {
             get
             {
-                return _currentWorkingSetMemoryUsage;
+                return _physicalMemory;
             }
         }
 
         /// <summary>
-        /// Gets the minimum working set memory usage of current process since this class was instantiated.
+        /// Gets the currently allocated managed memory of current process.
+        /// (A number that is the best available approximation of the number of bytes currently allocated in managed memory.)
         /// </summary>
-        public long MinimumWorkingSetMemoryUsage
+        public MemoryInfo ManagedMemory
         {
             get
             {
-                return _minimumWorkingSetMemoryUsage;
-            }
-        }
-
-        /// <summary>
-        /// Gets the maximum working set memory usage of current process since this class was instantiated.
-        /// </summary>
-        public long MaximumWorkingSetMemoryUsage
-        {
-            get
-            {
-                return _maximumWorkingSetMemoryUsage;
+                return _managedMemory;
             }
         }
 
@@ -147,15 +88,10 @@
         /// </summary>
         public void GatherMemoryUsage()
         {
-            _currentPrivateMemoryUsage = Process.GetCurrentProcess().PrivateMemorySize64 / 1024;
-            _minimumPrivateMemoryUsage = Math.Min(_minimumPrivateMemoryUsage, _currentPrivateMemoryUsage);
-            _maximumPrivateMemoryUsage = Math.Max(_maximumPrivateMemoryUsage, _currentPrivateMemoryUsage);
-            _currentVirtualMemoryUsage = Process.GetCurrentProcess().VirtualMemorySize64 / 1024;
-            _minimumVirtualMemoryUsage = Math.Min(_minimumVirtualMemoryUsage, _currentVirtualMemoryUsage);
-            _maximumVirtualMemoryUsage = Math.Max(_maximumVirtualMemoryUsage, _currentVirtualMemoryUsage);
-            _currentWorkingSetMemoryUsage = Process.GetCurrentProcess().WorkingSet64 / 1024;
-            _minimumWorkingSetMemoryUsage = Math.Min(_minimumWorkingSetMemoryUsage, _currentWorkingSetMemoryUsage);
-            _maximumWorkingSetMemoryUsage = Math.Max(_maximumWorkingSetMemoryUsage, _currentWorkingSetMemoryUsage);
+            _privateMemory.CurrentMemoryUsage = Process.GetCurrentProcess().PrivateMemorySize64 / 1024;
+            _virtualMemory.CurrentMemoryUsage = Process.GetCurrentProcess().VirtualMemorySize64 / 1024;
+            _physicalMemory.CurrentMemoryUsage = Process.GetCurrentProcess().WorkingSet64 / 1024;
+            _managedMemory.CurrentMemoryUsage = GC.GetTotalMemory(true) / 1024;
         }
 
         /// <summary>
@@ -163,12 +99,10 @@
         /// </summary>
         public void Reset()
         {
-            _minimumPrivateMemoryUsage = long.MaxValue;
-            _maximumPrivateMemoryUsage = 0;
-            _minimumVirtualMemoryUsage = long.MaxValue;
-            _maximumVirtualMemoryUsage = 0;
-            _minimumWorkingSetMemoryUsage = long.MaxValue;
-            _maximumWorkingSetMemoryUsage = 0;
+            _privateMemory.Reset();
+            _virtualMemory.Reset();
+            _physicalMemory.Reset();
+            _managedMemory.Reset();
             GatherMemoryUsage();
         }
 
