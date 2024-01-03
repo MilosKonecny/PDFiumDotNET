@@ -11,6 +11,16 @@
         #region Public properties - commands
 
         /// <summary>
+        /// Gets the command for reset memory usage.
+        /// </summary>
+        public ViewModelCommand TestResetMemoryUsageCommand { get; set; }
+
+        /// <summary>
+        /// Gets the command for test GC.Collect.
+        /// </summary>
+        public ViewModelCommand TestGCCollectCommand { get; set; }
+
+        /// <summary>
         /// Gets the command for test 1.
         /// </summary>
         public ViewModelCommand Test1Command { get; private set; }
@@ -38,6 +48,26 @@
         #endregion Public properties - commands
 
         #region Private methods - command related
+
+        private void ExecuteTestResetMemoryUsageCommand()
+        {
+            TestResetMemoryUsage();
+        }
+
+        private bool CanExecuteTestResetMemoryUsageCommand()
+        {
+            return !IsTestActive;
+        }
+
+        private void ExecuteTestGCCollectCommand()
+        {
+            TestGCCollect();
+        }
+
+        private bool CanExecuteTestGCCollectCommand()
+        {
+            return !IsTestActive;
+        }
 
         private async void ExecuteTest1Command()
         {

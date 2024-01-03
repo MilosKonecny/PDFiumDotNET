@@ -51,22 +51,22 @@
                 <TextBlock Text="{Binding Path=PDFDocument}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Path=MemoryUsage}"/>
+                <CheckBox Content="Show Memory Usage Only Two Times" IsChecked="{Binding Path=ShowMemoryUsageOnlyTwoTimes}" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Count of test cycles: "/>
-                <TextBox Text="{Binding Path=CountOfTestCycles}" MinWidth="50"/>
+                <TextBlock Text="Count of test cycles: " VerticalAlignment="Center"/>
+                <TextBox Text="{Binding Path=CountOfTestCycles}" MinWidth="50" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Current cycle: "/>
-                <TextBlock Text="{Binding Path=CurrentTestCycle}"/>
+                <TextBlock Text="Current cycle: " VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding Path=CurrentTestCycle}" VerticalAlignment="Center"/>
             </StackPanel>
         </StackPanel>
 
         <TextBox Grid.Row="2" Grid.Column="0" IsReadOnly="True" Text="{Binding Path=TestInfo}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
 
-        <ScrollViewer Grid.Row="2" Grid.Column="2" CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <controls:PDFView x:Name="_pdfView" Grid.Row="2" Grid.Column="2" PDFPageComponent="{Binding Path=ViewPageComponent}"/>
+        <ScrollViewer x:Name="_pdfViewContainer" Grid.Row="2" Grid.Column="2" CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <!--<controls:PDFView x:Name="_pdfView" Grid.Row="2" Grid.Column="2" PDFPageComponent="{Binding Path=ViewPageComponent}"/>-->
         </ScrollViewer>
 
         <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3">
@@ -80,12 +80,18 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="3"/>
                 <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3"/>
+                <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="Test 1" Command="{Binding Path=Test1Command}"/>
-            <Button Grid.Column="2" Content="Test 2" Command="{Binding Path=Test2Command}"/>
-            <Button Grid.Column="4" Content="Test 3" Command="{Binding Path=Test3Command}"/>
-            <Button Grid.Column="6" Content="Test 4" Command="{Binding Path=Test4Command}"/>
-            <Button Grid.Column="8" Content="Stop test" Command="{Binding Path=StopTestCommand}"/>
+            <Button Grid.Column="0" Content="Reset usage" Command="{Binding Path=TestResetMemoryUsageCommand}"/>
+            <Button Grid.Column="2" Content="GC.Collect" Command="{Binding Path=TestGCCollectCommand}"/>
+            <Button Grid.Column="4" Content="Test 1" Command="{Binding Path=Test1Command}"/>
+            <Button Grid.Column="6" Content="Test 2" Command="{Binding Path=Test2Command}"/>
+            <Button Grid.Column="8" Content="Test 3" Command="{Binding Path=Test3Command}"/>
+            <Button Grid.Column="10" Content="Test 4" Command="{Binding Path=Test4Command}"/>
+            <Button Grid.Column="12" Content="Stop test" Command="{Binding Path=StopTestCommand}"/>
         </Grid>
     </Grid>
 </Window>

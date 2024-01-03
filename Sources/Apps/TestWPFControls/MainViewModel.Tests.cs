@@ -16,20 +16,38 @@
     {
         #region Private methods - test
 
+        private void TestResetMemoryUsage()
+        {
+            TestInfo = "Reset memory usage" + Environment.NewLine;
+            TestInfo += CreateTestInfo("Reset memory usage - start");
+            _memoryUsage.Reset();
+            TestInfo += CreateTestInfo("Reset memory usage - end");
+        }
+
+        private void TestGCCollect()
+        {
+            TestInfo = "GC.Collect()" + Environment.NewLine;
+            TestInfo += CreateTestInfo("GC.Collect() - start");
+            GC.Collect();
+            TestInfo += CreateTestInfo("GC.Collect() - end");
+        }
+
         private async Task Test1()
         {
             IsTestActive = true;
-            SetMemoryUsage();
+
+            TestInfo = "Open, navigate to every page, close" + Environment.NewLine;
+            TestInfo += CreateTestInfo("Test 1 - start");
 
             var count = CountOfTestCycles;
-            TestInfo = "Open, navigate to every page, close" + Environment.NewLine;
-            TestInfo += CreateTestInfo("Test1 start");
-
             for (var docIndex = 0; docIndex < count; docIndex++)
             {
-                CurrentTestCycle = docIndex;
+                GUIPrepareForTest();
+
+                CurrentTestCycle = docIndex + 1;
                 OpenDocumentResult result;
                 Application.Current.Dispatcher.Invoke(() => result = _pdfComponent.OpenDocument(_pdfFileToUse));
+                await Task.Delay(1).ConfigureAwait(false);
 
                 for (var pageIndex = 0; pageIndex < _viewPageComponent.PageCount; pageIndex++)
                 {
@@ -39,20 +57,24 @@
                     {
                         break;
                     }
-
-                    SetMemoryUsage();
                 }
 
-                Application.Current.Dispatcher.Invoke(() => _pdfComponent.CloseDocument());
+                Application.Current.Dispatcher.Invoke(_pdfComponent.CloseDocument);
+                GUICleanupAfterTest();
+                await Task.Delay(1).ConfigureAwait(false);
+
                 if (IsTestStopPending)
                 {
                     break;
                 }
 
-                SetMemoryUsage();
-                TestInfo += CreateTestInfo($"Cycle {docIndex}");
+                if (!ShowMemoryUsageOnlyTwoTimes)
+                {
+                    TestInfo += CreateTestInfo($"Cycle {CurrentTestCycle}");
+                }
             }
 
+            TestInfo += CreateTestInfo("Test1 - end");
             IsTestActive = false;
             IsTestStopPending = false;
         }
@@ -60,18 +82,23 @@
         private async Task Test2()
         {
             IsTestActive = true;
-            SetMemoryUsage();
+
+            TestInfo = "Open, navigate to every fiftieth page, use all zooms twice, close" + Environment.NewLine;
+            TestInfo += CreateTestInfo("Test 2 - start");
 
             var count = CountOfTestCycles;
-            TestInfo = "Open, navigate to every fiftieth page, use all zooms twice, close" + Environment.NewLine;
-            TestInfo += CreateTestInfo("Test2 start");
-
             for (var docIndex = 0; docIndex < count; docIndex++)
             {
-                CurrentTestCycle = docIndex;
+                GUIPrepareForTest();
+
+                CurrentTestCycle = docIndex + 1;
                 OpenDocumentResult result;
-                Application.Current.Dispatcher.Invoke(() => result = _pdfComponent.OpenDocument(_pdfFileToUse));
-                Application.Current.Dispatcher.Invoke(() => _viewPageComponent.NavigateToPage(1));
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    result = _pdfComponent.OpenDocument(_pdfFileToUse);
+                    _viewPageComponent.NavigateToPage(1);
+                });
+                await Task.Delay(1).ConfigureAwait(false);
 
                 for (var pageIndex = 0; pageIndex < _viewPageComponent.PageCount; pageIndex += 50)
                 {
@@ -82,24 +109,33 @@
                     do
                     {
                         currentZoom = _viewPageComponent.ZoomComponent.CurrentZoomFactor;
-                        Application.Current.Dispatcher.Invoke(() => _viewPageComponent.ZoomComponent.IncreaseZoom());
-                        Application.Current.Dispatcher.Invoke(() => _viewPageComponent.NavigateToPage(pageIndex + 1));
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            _viewPageComponent.ZoomComponent.IncreaseZoom();
+                            _viewPageComponent.NavigateToPage(pageIndex + 1);
+                        });
                         await Task.Delay(1).ConfigureAwait(false);
                     }
                     while (Math.Abs(currentZoom - _viewPageComponent.ZoomComponent.CurrentZoomFactor) > double.Epsilon);
                     do
                     {
                         currentZoom = _viewPageComponent.ZoomComponent.CurrentZoomFactor;
-                        Application.Current.Dispatcher.Invoke(() => _viewPageComponent.ZoomComponent.DecreaseZoom());
-                        Application.Current.Dispatcher.Invoke(() => _viewPageComponent.NavigateToPage(pageIndex + 1));
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            _viewPageComponent.ZoomComponent.DecreaseZoom();
+                            _viewPageComponent.NavigateToPage(pageIndex + 1);
+                        });
                         await Task.Delay(1).ConfigureAwait(false);
                     }
                     while (Math.Abs(currentZoom - _viewPageComponent.ZoomComponent.CurrentZoomFactor) > double.Epsilon);
                     do
                     {
                         currentZoom = _viewPageComponent.ZoomComponent.CurrentZoomFactor;
-                        Application.Current.Dispatcher.Invoke(() => _viewPageComponent.ZoomComponent.IncreaseZoom());
-                        Application.Current.Dispatcher.Invoke(() => _viewPageComponent.NavigateToPage(pageIndex + 1));
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            _viewPageComponent.ZoomComponent.IncreaseZoom();
+                            _viewPageComponent.NavigateToPage(pageIndex + 1);
+                        });
                         await Task.Delay(1).ConfigureAwait(false);
                     }
                     while (Math.Abs(1.0 - _viewPageComponent.ZoomComponent.CurrentZoomFactor) > double.Epsilon);
@@ -108,20 +144,24 @@
                     {
                         break;
                     }
-
-                    SetMemoryUsage();
                 }
 
-                Application.Current.Dispatcher.Invoke(() => _pdfComponent.CloseDocument());
+                Application.Current.Dispatcher.Invoke(_pdfComponent.CloseDocument);
+                GUICleanupAfterTest();
+                await Task.Delay(1).ConfigureAwait(false);
+
                 if (IsTestStopPending)
                 {
                     break;
                 }
 
-                SetMemoryUsage();
-                TestInfo += CreateTestInfo($"Cycle {docIndex}");
+                if (!ShowMemoryUsageOnlyTwoTimes)
+                {
+                    TestInfo += CreateTestInfo($"Cycle {CurrentTestCycle}");
+                }
             }
 
+            TestInfo += CreateTestInfo("Test2 - end");
             IsTestActive = false;
             IsTestStopPending = false;
         }
@@ -129,42 +169,50 @@
         private async Task Test3()
         {
             IsTestActive = true;
-            SetMemoryUsage();
 
             var count = CountOfTestCycles;
-            TestInfo = "Open, scroll whole way down by 100, close" + Environment.NewLine;
-            TestInfo += CreateTestInfo("Test3 start");
+            TestInfo = "Open, scroll whole way down by 200, close" + Environment.NewLine;
+            TestInfo += CreateTestInfo("Test 3 - start");
 
             for (var docIndex = 0; docIndex < count; docIndex++)
             {
-                CurrentTestCycle = docIndex;
+                GUIPrepareForTest();
+
+                CurrentTestCycle = docIndex + 1;
                 OpenDocumentResult result;
-                Application.Current.Dispatcher.Invoke(() => result = _pdfComponent.OpenDocument(_pdfFileToUse));
-                Application.Current.Dispatcher.Invoke(() => _viewPageComponent.NavigateToPage(1));
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    result = _pdfComponent.OpenDocument(_pdfFileToUse);
+                    _viewPageComponent.NavigateToPage(1);
+                });
                 await Task.Delay(1).ConfigureAwait(false);
 
-                for (var offset = 0; offset < Math.Max(_view.PDFViewControl.ExtentHeight, _view.PDFViewControl.ActualHeight); offset += 100)
+                for (var offset = 0; offset < Math.Max(_pdfView.ExtentHeight, _pdfView.ActualHeight); offset += 200)
                 {
-                    Application.Current.Dispatcher.Invoke(() => _view.PDFViewControl.ScrollOwner.ScrollToVerticalOffset(offset));
+                    Application.Current.Dispatcher.Invoke(() => _pdfView.ScrollOwner.ScrollToVerticalOffset(offset));
                     await Task.Delay(1).ConfigureAwait(false);
                     if (IsTestStopPending)
                     {
                         break;
                     }
-
-                    SetMemoryUsage();
                 }
 
                 Application.Current.Dispatcher.Invoke(() => _pdfComponent.CloseDocument());
+                GUICleanupAfterTest();
+                await Task.Delay(1).ConfigureAwait(false);
+
                 if (IsTestStopPending)
                 {
                     break;
                 }
 
-                SetMemoryUsage();
-                TestInfo += CreateTestInfo($"Cycle {docIndex}");
+                if (!ShowMemoryUsageOnlyTwoTimes)
+                {
+                    TestInfo += CreateTestInfo($"Cycle {CurrentTestCycle}");
+                }
             }
 
+            TestInfo += CreateTestInfo("Test3 - end");
             IsTestActive = false;
             IsTestStopPending = false;
         }
@@ -172,22 +220,25 @@
         private async Task Test4()
         {
             IsTestActive = true;
-            SetMemoryUsage();
+
+            TestInfo = "Open, jump to every bookmark destination, close" + Environment.NewLine;
+            TestInfo += CreateTestInfo("Test 4 - start");
 
             var count = CountOfTestCycles;
-            TestInfo = "Open, jump to every bookmark destination, close" + Environment.NewLine;
-            TestInfo += CreateTestInfo("Test4 start");
-
             for (var docIndex = 0; docIndex < count; docIndex++)
             {
-                CurrentTestCycle = docIndex;
+                GUIPrepareForTest();
+
+                CurrentTestCycle = docIndex + 1;
                 OpenDocumentResult result;
-                Application.Current.Dispatcher.Invoke(() => result = _pdfComponent.OpenDocument(_pdfFileToUse));
-                Application.Current.Dispatcher.Invoke(() => _viewPageComponent.NavigateToPage(1));
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    result = _pdfComponent.OpenDocument(_pdfFileToUse);
+                    _viewPageComponent.NavigateToPage(1);
+                });
                 await Task.Delay(1).ConfigureAwait(false);
 
                 var bookmarks = GetBookmarks(_pdfComponent.BookmarkComponent.Bookmarks);
-
                 foreach (var bookmark in bookmarks)
                 {
                     Application.Current.Dispatcher.Invoke(() => _viewPageComponent.NavigateToDestination(bookmark.Destination));
@@ -196,20 +247,24 @@
                     {
                         break;
                     }
-
-                    SetMemoryUsage();
                 }
 
-                Application.Current.Dispatcher.Invoke(() => _pdfComponent.CloseDocument());
+                Application.Current.Dispatcher.Invoke(_pdfComponent.CloseDocument);
+                GUICleanupAfterTest();
+                await Task.Delay(1).ConfigureAwait(false);
+
                 if (IsTestStopPending)
                 {
                     break;
                 }
 
-                SetMemoryUsage();
-                TestInfo += CreateTestInfo($"Cycle {docIndex}");
+                if (!ShowMemoryUsageOnlyTwoTimes)
+                {
+                    TestInfo += CreateTestInfo($"Cycle {CurrentTestCycle}");
+                }
             }
 
+            TestInfo += CreateTestInfo("Test4 - end");
             IsTestActive = false;
             IsTestStopPending = false;
         }
@@ -237,11 +292,13 @@
 
         private string CreateTestInfo(string startText)
         {
+            _memoryUsage.GatherMemoryUsage();
             var sb = new StringBuilder();
             sb.AppendLine(startText);
-            sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "    {0}", PrivateMemoryUsage));
-            sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "    {0}", PhysicalMemoryUsage));
-            sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "    {0}", VirtualMemoryUsage));
+            sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "\t{0}", PrivateMemoryUsage));
+            sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "\t{0}", PhysicalMemoryUsage));
+            sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "\t{0}", VirtualMemoryUsage));
+            sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "\t{0}", ManagedMemoryUsage));
             return sb.ToString();
         }
 

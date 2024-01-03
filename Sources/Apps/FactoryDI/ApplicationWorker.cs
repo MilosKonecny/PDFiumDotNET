@@ -14,9 +14,12 @@
     /// </summary>
     public class ApplicationWorker : BackgroundService
     {
+        private const string _pdfFile1 = @"Precalculus.pdf";
+        private const string _pdfFile2 = @"..\..\..\..\..\..\TestData\PDFs\Precalculus.pdf";
         private readonly ILogger<ApplicationWorker> _logger;
         private readonly IPDFComponent _pdfComponent1;
         private readonly IPDFComponent _pdfComponent2;
+        private string _pdfFileToUse;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationWorker"/> class.
@@ -31,6 +34,15 @@
         /// <inheritdoc/>
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            if (File.Exists(Path.GetFullPath(_pdfFile2)))
+            {
+                _pdfFileToUse = Path.GetFullPath(_pdfFile2);
+            }
+            else
+            {
+                _pdfFileToUse = Path.GetFullPath(_pdfFile1);
+            }
+
             var automat = 0;
             _logger.LogInformation("Application worker started at: {time}", DateTimeOffset.Now);
             await Task.Delay(2000, stoppingToken).ConfigureAwait(false);
@@ -44,7 +56,7 @@
                 {
                     case 0:
                         var folder = Directory.GetCurrentDirectory();
-                        var documentToOpen = Path.Combine(folder, @"..\..\..\..\..\..\TestData\PDFs\Precalculus.pdf");
+                        var documentToOpen = Path.Combine(folder, _pdfFileToUse);
                         documentToOpen = Path.GetFullPath(documentToOpen);
                         _logger.LogWarning($"Open document: {documentToOpen}");
                         var result = _pdfComponent1.OpenDocument(documentToOpen);
