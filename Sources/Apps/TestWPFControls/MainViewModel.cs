@@ -387,6 +387,7 @@
             Test2Command = new ViewModelCommand(ExecuteTest2Command, CanExecuteTest2Command);
             Test3Command = new ViewModelCommand(ExecuteTest3Command, CanExecuteTest3Command);
             Test4Command = new ViewModelCommand(ExecuteTest4Command, CanExecuteTest4Command);
+            Test5Command = new ViewModelCommand(ExecuteTest5Command, CanExecuteTest5Command);
             StopTestCommand = new ViewModelCommand(ExecuteStopTestCommand, CanExecuteStopTestCommand);
         }
 

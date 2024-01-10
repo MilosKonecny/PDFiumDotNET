@@ -84,6 +84,8 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="3"/>
                 <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3"/>
+                <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" Content="Reset usage" Command="{Binding Path=TestResetMemoryUsageCommand}"/>
             <Button Grid.Column="2" Content="GC.Collect" Command="{Binding Path=TestGCCollectCommand}"/>
@@ -91,7 +93,8 @@
             <Button Grid.Column="6" Content="Test 2" Command="{Binding Path=Test2Command}"/>
             <Button Grid.Column="8" Content="Test 3" Command="{Binding Path=Test3Command}"/>
             <Button Grid.Column="10" Content="Test 4" Command="{Binding Path=Test4Command}"/>
-            <Button Grid.Column="12" Content="Stop test" Command="{Binding Path=StopTestCommand}"/>
+            <Button Grid.Column="12" Content="Test 5" Command="{Binding Path=Test5Command}"/>
+            <Button Grid.Column="14" Content="Stop test" Command="{Binding Path=StopTestCommand}"/>
         </Grid>
     </Grid>
 </Window>

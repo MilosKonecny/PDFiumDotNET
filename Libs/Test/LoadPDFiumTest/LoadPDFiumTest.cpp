@@ -19,8 +19,10 @@ void PrintMemoryUsage(int counter)
 {
     PROCESS_MEMORY_COUNTERS_EX pmc;
     GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
-    size_t virtualMemUsedByMe = pmc.PrivateUsage / 1024;
-    _tprintf(TEXT("%*" PRId32 ": Memory usage = %*" PRId32 " kB\n"), WIDTH, counter, WIDTH, (int)virtualMemUsedByMe);
+    size_t privateMemoryUsage = pmc.PrivateUsage / 1024;
+    size_t physicalMemoryUsage = pmc.WorkingSetSize / 1024;
+    _tprintf(TEXT("%*" PRId32 ": Private memory usage = %*" PRId32 " KiB / Physical memory usage = %*" PRId32 " KiB\n"),
+        WIDTH, counter, WIDTH, (int)privateMemoryUsage, WIDTH, (int)physicalMemoryUsage);
 }
 
 std::string GetLibraryToLoad()

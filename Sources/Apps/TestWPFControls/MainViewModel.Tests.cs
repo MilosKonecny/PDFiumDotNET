@@ -238,7 +238,12 @@
                 });
                 await Task.Delay(1).ConfigureAwait(false);
 
-                var bookmarks = GetBookmarks(_pdfComponent.BookmarkComponent.Bookmarks);
+                List<IPDFBookmark> bookmarks = null;
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    bookmarks = GetBookmarks(_pdfComponent.BookmarkComponent.Bookmarks);
+                });
+
                 foreach (var bookmark in bookmarks)
                 {
                     Application.Current.Dispatcher.Invoke(() => _viewPageComponent.NavigateToDestination(bookmark.Destination));
@@ -265,6 +270,46 @@
             }
 
             TestInfo += CreateTestInfo("Test4 - end");
+            IsTestActive = false;
+            IsTestStopPending = false;
+        }
+
+        private async Task Test5()
+        {
+            IsTestActive = true;
+
+            TestInfo = "Open, navigate to first page, close" + Environment.NewLine;
+            TestInfo += CreateTestInfo("Test 5 - start");
+
+            var count = CountOfTestCycles;
+            for (var docIndex = 0; docIndex < count; docIndex++)
+            {
+                GUIPrepareForTest();
+
+                CurrentTestCycle = docIndex + 1;
+                OpenDocumentResult result;
+                Application.Current.Dispatcher.Invoke(() => result = _pdfComponent.OpenDocument(_pdfFileToUse));
+                await Task.Delay(1).ConfigureAwait(false);
+
+                Application.Current.Dispatcher.Invoke(() => _viewPageComponent.NavigateToPage(1));
+                await Task.Delay(1).ConfigureAwait(false);
+
+                Application.Current.Dispatcher.Invoke(_pdfComponent.CloseDocument);
+                GUICleanupAfterTest();
+                await Task.Delay(1).ConfigureAwait(false);
+
+                if (IsTestStopPending)
+                {
+                    break;
+                }
+
+                if (!ShowMemoryUsageOnlyTwoTimes)
+                {
+                    TestInfo += CreateTestInfo($"Cycle {CurrentTestCycle}");
+                }
+            }
+
+            TestInfo += CreateTestInfo("Test5 - end");
             IsTestActive = false;
             IsTestStopPending = false;
         }
