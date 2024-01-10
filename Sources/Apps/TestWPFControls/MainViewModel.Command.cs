@@ -41,6 +41,11 @@
         public ViewModelCommand Test4Command { get; private set; }
 
         /// <summary>
+        /// Gets the command for test 5.
+        /// </summary>
+        public ViewModelCommand Test5Command { get; private set; }
+
+        /// <summary>
         /// Gets the command for stop test.
         /// </summary>
         public ViewModelCommand StopTestCommand { get; private set; }
@@ -109,6 +114,17 @@
         }
 
         private bool CanExecuteTest4Command()
+        {
+            return !IsTestActive;
+        }
+
+        private async void ExecuteTest5Command()
+        {
+            await Test5().ConfigureAwait(false);
+            InvokePropertyChangedEvent();
+        }
+
+        private bool CanExecuteTest5Command()
         {
             return !IsTestActive;
         }

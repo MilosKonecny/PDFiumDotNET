@@ -33,15 +33,27 @@ typedef int(__cdecl* GetPageCountDef)(FPDF_DOCUMENT document);
 typedef FPDF_PAGE(__cdecl* LoadPageDef)(FPDF_DOCUMENT document, int page_index);
 // FPDF_EXPORT void FPDF_CALLCONV FPDF_ClosePage(FPDF_PAGE page);
 typedef void(__cdecl* ClosePageDef)(FPDF_PAGE page);
+// FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDF_GetPageSizeByIndexF(FPDF_DOCUMENT document, int page_index, FS_SIZEF* size);
+typedef bool(__cdecl* GetPageSizeByIndexFDef)(FPDF_DOCUMENT document, int page_index, FS_SIZEF* size);
+// FPDF_EXPORT FPDF_BITMAP FPDF_CALLCONV FPDFBitmap_CreateEx(int width, int height, int format, void* first_scan, int stride);
+typedef FPDF_BITMAP(__cdecl* Bitmap_CreateExDef)(int width, int height, int format, void* first_scan, int stride);
+// FPDF_EXPORT void FPDF_CALLCONV FPDFBitmap_Destroy(FPDF_BITMAP bitmap);
+typedef void(__cdecl* Bitmap_DestroyDef)(FPDF_BITMAP bitmap);
+// FPDF_EXPORT void FPDF_CALLCONV FPDF_RenderPageBitmapWithMatrix(FPDF_BITMAP bitmap, FPDF_PAGE page, const FS_MATRIX* matrix, const FS_RECTF* clipping, int flags);
+typedef void(__cdecl* RenderPageBitmapWithMatrixDef)(FPDF_BITMAP bitmap, FPDF_PAGE page, const FS_MATRIX* matrix, const FS_RECTF* clipping, int flags);
 
 HMODULE libraryHandle = nullptr;
-VoidFuncDef InitLibrary = nullptr;
-VoidFuncDef DestroyLibrary = nullptr;
-LoadDocumentDef LoadDocument = nullptr;
-CloseDocumentDef CloseDocument = nullptr;
-GetPageCountDef GetPageCount = nullptr;
-LoadPageDef LoadPage = nullptr;
-ClosePageDef ClosePage = nullptr;
+VoidFuncDef PDFium_InitLibrary = nullptr;
+VoidFuncDef PDFium_DestroyLibrary = nullptr;
+LoadDocumentDef PDFium_LoadDocument = nullptr;
+CloseDocumentDef PDFium_CloseDocument = nullptr;
+GetPageCountDef PDFium_GetPageCount = nullptr;
+LoadPageDef PDFium_LoadPage = nullptr;
+ClosePageDef PDFium_ClosePage = nullptr;
+GetPageSizeByIndexFDef PDFium_GetPageSizeByIndexF = nullptr;
+Bitmap_CreateExDef PDFium_Bitmap_CreateEx = nullptr;
+Bitmap_DestroyDef PDFium_Bitmap_Destroy = nullptr;
+RenderPageBitmapWithMatrixDef PDFium_RenderPageBitmapWithMatrix = nullptr;
 
 /// <summary>
 /// Facet for defining numeric punctuation text
@@ -73,7 +85,7 @@ void PrintMemoryUsage(std::string text)
 	std::cout << std::right << std::setw(COLUMN_3_WIDTH) << physicalMemoryUsage << std::endl;
 }
 
-std::string GetPDFiumToLoad()
+std::string DeterminePDFiumToLoad()
 {
 	std::string ret = BASE_PATH;
 	SYSTEM_INFO si;
@@ -105,76 +117,132 @@ std::string GetPDFiumToLoad()
 
 void LoadPDFium()
 {
-	libraryHandle = ::LoadLibraryA(GetPDFiumToLoad().c_str());
+	// Load DLL
+	libraryHandle = ::LoadLibraryA(DeterminePDFiumToLoad().c_str());
 	assert(libraryHandle);
-	InitLibrary = (VoidFuncDef)::GetProcAddress(libraryHandle, "FPDF_InitLibrary");
-	assert(InitLibrary);
-	DestroyLibrary = (VoidFuncDef)::GetProcAddress(libraryHandle, "FPDF_DestroyLibrary");
-	assert(DestroyLibrary);
-	LoadDocument = (LoadDocumentDef)::GetProcAddress(libraryHandle, "FPDF_LoadDocument");
-	assert(LoadDocument);
-	CloseDocument = (CloseDocumentDef)::GetProcAddress(libraryHandle, "FPDF_CloseDocument");
-	assert(CloseDocument);
-	GetPageCount = (GetPageCountDef)::GetProcAddress(libraryHandle, "FPDF_GetPageCount");
-	assert(GetPageCount);
-	LoadPage = (LoadPageDef)::GetProcAddress(libraryHandle, "FPDF_LoadPage");
-	assert(LoadPage);
-	ClosePage = (ClosePageDef)::GetProcAddress(libraryHandle, "FPDF_ClosePage");
-	assert(ClosePage);
 
-	InitLibrary();
+	// Load all necessary functions
+	PDFium_InitLibrary = (VoidFuncDef)::GetProcAddress(libraryHandle, "FPDF_InitLibrary");
+	assert(PDFium_InitLibrary);
+	PDFium_DestroyLibrary = (VoidFuncDef)::GetProcAddress(libraryHandle, "FPDF_DestroyLibrary");
+	assert(PDFium_DestroyLibrary);
+	PDFium_LoadDocument = (LoadDocumentDef)::GetProcAddress(libraryHandle, "FPDF_LoadDocument");
+	assert(PDFium_LoadDocument);
+	PDFium_CloseDocument = (CloseDocumentDef)::GetProcAddress(libraryHandle, "FPDF_CloseDocument");
+	assert(PDFium_CloseDocument);
+	PDFium_GetPageCount = (GetPageCountDef)::GetProcAddress(libraryHandle, "FPDF_GetPageCount");
+	assert(PDFium_GetPageCount);
+	PDFium_LoadPage = (LoadPageDef)::GetProcAddress(libraryHandle, "FPDF_LoadPage");
+	assert(PDFium_LoadPage);
+	PDFium_ClosePage = (ClosePageDef)::GetProcAddress(libraryHandle, "FPDF_ClosePage");
+	assert(PDFium_ClosePage);
+	PDFium_GetPageSizeByIndexF = (GetPageSizeByIndexFDef)::GetProcAddress(libraryHandle, "FPDF_GetPageSizeByIndexF");
+	assert(PDFium_GetPageSizeByIndexF);
+	PDFium_Bitmap_CreateEx = (Bitmap_CreateExDef)::GetProcAddress(libraryHandle, "FPDFBitmap_CreateEx");
+	assert(PDFium_Bitmap_CreateEx);
+	PDFium_Bitmap_Destroy = (Bitmap_DestroyDef)::GetProcAddress(libraryHandle, "FPDFBitmap_Destroy");
+	assert(PDFium_Bitmap_Destroy);
+	PDFium_RenderPageBitmapWithMatrix = (RenderPageBitmapWithMatrixDef)::GetProcAddress(libraryHandle, "FPDF_RenderPageBitmapWithMatrix");
+	assert(PDFium_RenderPageBitmapWithMatrix);
+
+	// Initialize PDFium DLL
+	PDFium_InitLibrary();
 }
 
 void FreePDFium()
 {
-	DestroyLibrary();
+	// Destroy PDFium DLL
+	PDFium_DestroyLibrary();
+
+	// Free DLL
 	auto result = ::FreeLibrary(libraryHandle);
 	assert(result);
 
+	// Reset loaded functions
 	libraryHandle = nullptr;
-	InitLibrary = nullptr;
-	DestroyLibrary = nullptr;
-	LoadDocument = nullptr;
-	CloseDocument = nullptr;
-	GetPageCount = nullptr;
-	LoadPage = nullptr;
-	ClosePage = nullptr;
+	PDFium_InitLibrary = nullptr;
+	PDFium_DestroyLibrary = nullptr;
+	PDFium_LoadDocument = nullptr;
+	PDFium_CloseDocument = nullptr;
+	PDFium_GetPageCount = nullptr;
+	PDFium_LoadPage = nullptr;
+	PDFium_ClosePage = nullptr;
+	PDFium_GetPageSizeByIndexF = nullptr;
+	PDFium_Bitmap_CreateEx = nullptr;
+	PDFium_Bitmap_Destroy = nullptr;
+	PDFium_RenderPageBitmapWithMatrix = nullptr;
 }
 
 int main()
 {
+	// Load PDFium
 	LoadPDFium();
 
+	// Show memory information
 	PrintMemoryUsageHeader();
 	PrintMemoryUsage("Before test:");
-	auto counter = 0;
-	for (auto step = 0; step < 40; step++)
+
+	// Perform many tests
+	for (auto step = 0; step < 100; step++)
 	{
+		// Open PDF document
+		auto document = PDFium_LoadDocument(".\\Precalculus.pdf", "");
+		assert(document);
+
+		// Get page count
+		auto page_count = PDFium_GetPageCount(document);
+
+		// Prepare and start progress bar
 		ProgressBar pb;
-		pb.Start(38, 50);
-		for (auto index = 0; index < 50; index++)
+		pb.Start(38, page_count);
+
+		// Iterate through all pages
+		for (auto page_index = 0; page_index < page_count; page_index++)
 		{
-			counter++;
-			auto document = LoadDocument(".\\Precalculus.pdf", "");
-			assert(document);
-			auto page_count = GetPageCount(document);
-			for (auto page_index = 0; page_index < page_count; page_index++)
+			// Load page
+			auto page = PDFium_LoadPage(document, page_index);
+			FS_SIZEF size;
+			if (PDFium_GetPageSizeByIndexF(document, page_index, &size))
 			{
-				auto page = LoadPage(document, page_index);
-				ClosePage(page);
+				// Round up page size
+				auto int_width = std::ceil(size.width);
+				auto int_height = std::ceil(size.height);
+				// Allocate buffer
+				auto buffer = malloc(int_height * int_width * 4);
+				// Create bitmap
+				auto bitmap = PDFium_Bitmap_CreateEx(int_width, int_height, 4, buffer, int_width * 4);
+				// Render page into bitmap
+				FS_MATRIX matrix;
+				matrix.a = 1; matrix.b = 0; matrix.c = 0; matrix.d = 1; matrix.e = 0; matrix.f = 0;
+				FS_RECTF rect;
+				rect.left = 0; rect.right = size.width; rect.top = 0; rect.bottom = size.height;
+				PDFium_RenderPageBitmapWithMatrix(bitmap, page, &matrix, &rect, 0);
+				// Free created bitmap
+				PDFium_Bitmap_Destroy(bitmap);
+				// Free allocated buffer
+				free(buffer);
 			}
-			CloseDocument(document);
+
+			// Close page
+			PDFium_ClosePage(page);
+			// Step
 			pb.Step();
 		}
+
+		// Close PDF document
+		PDFium_CloseDocument(document);
+		// Stop progress bar
 		pb.Stop();
 
-		std::string text("Step ");
+		// Show memory information
+		std::string text("After test ");
 		text += std::to_string(step + 1);
-		text += " (";
-		text += std::to_string(counter);
-		text += "):";
+		text += ":";
 		PrintMemoryUsage(text);
 	}
+
+	// Free PDFium
+	FreePDFium();
 
 	std::cout << "Press ENTER to exit" << std::endl;
 	std::cin.get();
