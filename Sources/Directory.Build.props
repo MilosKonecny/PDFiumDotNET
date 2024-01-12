@@ -11,6 +11,7 @@
     <PropertyGroup>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <DefineConstants>$(DefineConstants);USE_DYNAMICALLY_LOADED_PDFIUM</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(STRONGNAMEKEYFILEFOLDER)' != ''">

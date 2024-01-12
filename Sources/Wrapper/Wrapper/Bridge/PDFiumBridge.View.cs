@@ -3,18 +3,27 @@
     using System;
     using System.Runtime.InteropServices;
 
-    // Disable "Member 'xxxx' does not access instance data and can be marked as static."
+    // Disable "Member 'member' does not access instance data and can be marked as static."
 #pragma warning disable CA1822
+
+    // Disable "Specify marshaling for P/Invoke string arguments."
+#pragma warning disable CA2101
 
     /// <summary>
     /// The class contains all pdfium methods currently supported in this project.
     /// </summary>
     internal sealed partial class PDFiumBridge
     {
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void FPDF_InitLibrary_Delegate();
 
         private static FPDF_InitLibrary_Delegate FPDF_InitLibraryStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_InitLibrary")]
+        private static extern void FPDF_InitLibraryStatic();
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Initialize the FPDFSDK library.
@@ -43,10 +52,16 @@
         //////          processing functions.
         ////FPDF_EXPORT void FPDF_CALLCONV FPDF_InitLibraryWithConfig(const FPDF_LIBRARY_CONFIG* config);
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void FPDF_DestroyLibrary_Delegate();
 
         private static FPDF_DestroyLibrary_Delegate FPDF_DestroyLibraryStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_DestroyLibrary")]
+        private static extern void FPDF_DestroyLibraryStatic();
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Release all resources allocated by the FPDFSDK library.
@@ -74,10 +89,16 @@
         //////          None.
         ////FPDF_EXPORT void FPDF_CALLCONV FPDF_SetSandBoxPolicy(FPDF_DWORD policy, FPDF_BOOL enable);
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDF_SetPrintMode_Delegate(FPDF_PRINTMODES mode);
 
         private static FPDF_SetPrintMode_Delegate FPDF_SetPrintModeStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_SetPrintMode")]
+        private static extern bool FPDF_SetPrintModeStatic(FPDF_PRINTMODES mode);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -106,10 +127,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_DOCUMENT FPDF_LoadDocument_Delegate([MarshalAs(UnmanagedType.LPStr)] string file_path, [MarshalAs(UnmanagedType.LPStr)] string password);
 
         private static FPDF_LoadDocument_Delegate FPDF_LoadDocumentStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_LoadDocument")]
+        private static extern FPDF_DOCUMENT FPDF_LoadDocumentStatic([MarshalAs(UnmanagedType.LPStr)] string file_path, [MarshalAs(UnmanagedType.LPStr)] string password);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Open and load a PDF document.
@@ -133,10 +160,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_DOCUMENT FPDF_LoadMemDocument_Delegate(IntPtr data_buf, int size, [MarshalAs(UnmanagedType.LPStr)] string password);
 
         private static FPDF_LoadMemDocument_Delegate FPDF_LoadMemDocumentStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_LoadMemDocument")]
+        private static extern FPDF_DOCUMENT FPDF_LoadMemDocumentStatic(IntPtr data_buf, int size, [MarshalAs(UnmanagedType.LPStr)] string password);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Open and load a PDF document from memory.
@@ -154,7 +187,7 @@
         /// after the PDF document loaded to support XFA fields defined in the fpdfformfill.h file.
         /// FPDF_EXPORT FPDF_DOCUMENT FPDF_CALLCONV FPDF_LoadMemDocument(const void* data_buf, int size, FPDF_BYTESTRING password);.
         /// </remarks>
-        public FPDF_DOCUMENT FPDF_LoadMemDocument(IntPtr data_buf, int size, [MarshalAs(UnmanagedType.LPStr)] string password)
+        public FPDF_DOCUMENT FPDF_LoadMemDocument(IntPtr data_buf, int size, string password)
         {
             lock (_syncObject)
             {
@@ -162,10 +195,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_DOCUMENT FPDF_LoadMemDocument64_Delegate(IntPtr data_buf, int size, [MarshalAs(UnmanagedType.LPStr)] string password);
 
         private static FPDF_LoadMemDocument64_Delegate FPDF_LoadMemDocument64Static { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_LoadMemDocument64")]
+        private static extern FPDF_DOCUMENT FPDF_LoadMemDocument64Static(IntPtr data_buf, int size, [MarshalAs(UnmanagedType.LPStr)] string password);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -184,7 +223,7 @@
         /// after the PDF document loaded to support XFA fields defined in the fpdfformfill.h file.
         /// FPDF_EXPORT FPDF_DOCUMENT FPDF_CALLCONV FPDF_LoadMemDocument64(const void* data_buf, size_t size, FPDF_BYTESTRING password);.
         /// </remarks>
-        public FPDF_DOCUMENT FPDF_LoadMemDocument64(IntPtr data_buf, int size, [MarshalAs(UnmanagedType.LPStr)] string password)
+        public FPDF_DOCUMENT FPDF_LoadMemDocument64(IntPtr data_buf, int size, string password)
         {
             lock (_syncObject)
             {
@@ -214,10 +253,16 @@
         //////          fields defined in the fpdfformfill.h file.
         ////FPDF_EXPORT FPDF_DOCUMENT FPDF_CALLCONV FPDF_LoadCustomDocument(FPDF_FILEACCESS* pFileAccess, FPDF_BYTESTRING password);
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDF_GetFileVersion_Delegate(FPDF_DOCUMENT doc, out int fileVersion);
 
         private static FPDF_GetFileVersion_Delegate FPDF_GetFileVersionStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetFileVersion")]
+        private static extern bool FPDF_GetFileVersionStatic(FPDF_DOCUMENT doc, out int fileVersion);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the file version of the given PDF document.
@@ -237,10 +282,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_ERROR FPDF_GetLastError_Delegate();
 
         private static FPDF_GetLastError_Delegate FPDF_GetLastErrorStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetLastError")]
+        private static extern FPDF_ERROR FPDF_GetLastErrorStatic();
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get last error code when a function fails.
@@ -259,10 +310,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDF_DocumentHasValidCrossReferenceTable_Delegate(FPDF_DOCUMENT document);
 
         private static FPDF_DocumentHasValidCrossReferenceTable_Delegate FPDF_DocumentHasValidCrossReferenceTableStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_DocumentHasValidCrossReferenceTable")]
+        private static extern bool FPDF_DocumentHasValidCrossReferenceTableStatic(FPDF_DOCUMENT document);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Whether the document's cross reference table is valid or not. Experimental API.
@@ -283,10 +340,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate ulong FPDF_GetTrailerEnds_Delegate(FPDF_DOCUMENT document, IntPtr buffer, ulong length);
 
         private static FPDF_GetTrailerEnds_Delegate FPDF_GetTrailerEndsStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetTrailerEnds")]
+        private static extern ulong FPDF_GetTrailerEndsStatic(FPDF_DOCUMENT document, IntPtr buffer, ulong length);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -309,10 +372,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_PERMISSIONS FPDF_GetDocPermissions_Delegate(FPDF_DOCUMENT document);
 
         private static FPDF_GetDocPermissions_Delegate FPDF_GetDocPermissionsStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetDocPermissions")]
+        private static extern FPDF_PERMISSIONS FPDF_GetDocPermissionsStatic(FPDF_DOCUMENT document);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get file permission flags of the document.
@@ -331,10 +400,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_PERMISSIONS FPDF_GetDocUserPermissions_Delegate(FPDF_DOCUMENT document);
 
         private static FPDF_GetDocUserPermissions_Delegate FPDF_GetDocUserPermissionsStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetDocUserPermissions")]
+        private static extern FPDF_PERMISSIONS FPDF_GetDocUserPermissionsStatic(FPDF_DOCUMENT document);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get user file permission flags of the document.
@@ -343,6 +418,9 @@
         /// <returns>A 32-bit integer indicating permission flags. Please refer to the PDF Reference for detailed descriptions.
         /// If the document is not protected, 0xffffffff will be returned.
         /// Always returns user permissions, even if the document was unlocked by the owner.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDF_GetDocUserPermissions(FPDF_DOCUMENT document);.
+        /// </remarks>
         public FPDF_PERMISSIONS FPDF_GetDocUserPermissions(FPDF_DOCUMENT document)
         {
             lock (_syncObject)
@@ -351,10 +429,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDF_GetSecurityHandlerRevision_Delegate(FPDF_DOCUMENT document);
 
         private static FPDF_GetSecurityHandlerRevision_Delegate FPDF_GetSecurityHandlerRevisionStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetSecurityHandlerRevision")]
+        private static extern int FPDF_GetSecurityHandlerRevisionStatic(FPDF_DOCUMENT document);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the revision for the security handler.
@@ -373,10 +457,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDF_GetPageCount_Delegate(FPDF_DOCUMENT document);
 
         private static FPDF_GetPageCount_Delegate FPDF_GetPageCountStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetPageCount")]
+        private static extern int FPDF_GetPageCountStatic(FPDF_DOCUMENT document);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get total number of pages in the document.
@@ -394,10 +484,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_PAGE FPDF_LoadPage_Delegate(FPDF_DOCUMENT document, int page_index);
 
         private static FPDF_LoadPage_Delegate FPDF_LoadPageStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_LoadPage")]
+        private static extern FPDF_PAGE FPDF_LoadPageStatic(FPDF_DOCUMENT document, int page_index);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Load a page inside the document.
@@ -418,10 +514,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate float FPDF_GetPageWidthF_Delegate(FPDF_PAGE page);
 
         private static FPDF_GetPageWidthF_Delegate FPDF_GetPageWidthFStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetPageWidthF")]
+        private static extern float FPDF_GetPageWidthFStatic(FPDF_PAGE page);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get page width.
@@ -439,10 +541,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate double FPDF_GetPageWidth_Delegate(FPDF_PAGE page);
 
         private static FPDF_GetPageWidth_Delegate FPDF_GetPageWidthStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetPageWidth")]
+        private static extern double FPDF_GetPageWidthStatic(FPDF_PAGE page);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get page width.
@@ -461,10 +569,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate float FPDF_GetPageHeightF_Delegate(FPDF_PAGE page);
 
         private static FPDF_GetPageHeightF_Delegate FPDF_GetPageHeightFStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetPageHeightF")]
+        private static extern float FPDF_GetPageHeightFStatic(FPDF_PAGE page);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get page height.
@@ -482,10 +596,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate double FPDF_GetPageHeight_Delegate(FPDF_PAGE page);
 
         private static FPDF_GetPageHeight_Delegate FPDF_GetPageHeightStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetPageHeight")]
+        private static extern double FPDF_GetPageHeightStatic(FPDF_PAGE page);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get page height.
@@ -504,10 +624,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDF_GetPageBoundingBox_Delegate(FPDF_PAGE page, out FS_RECTF rect);
 
         private static FPDF_GetPageBoundingBox_Delegate FPDF_GetPageBoundingBoxStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetPageBoundingBox")]
+        private static extern bool FPDF_GetPageBoundingBoxStatic(FPDF_PAGE page, out FS_RECTF rect);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the bounding box of the page. This is the intersection between its media box and its crop box.
@@ -526,10 +652,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDF_GetPageSizeByIndexF_Delegate(FPDF_DOCUMENT document, int page_index, out FS_SIZEF size);
 
         private static FPDF_GetPageSizeByIndexF_Delegate FPDF_GetPageSizeByIndexFStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetPageSizeByIndexF")]
+        private static extern bool FPDF_GetPageSizeByIndexFStatic(FPDF_DOCUMENT document, int page_index, out FS_SIZEF size);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the size of the page at the given index.
@@ -549,10 +681,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDF_GetPageSizeByIndex_Delegate(FPDF_DOCUMENT document, int page_index, ref double width, ref double height);
 
         private static FPDF_GetPageSizeByIndex_Delegate FPDF_GetPageSizeByIndexStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetPageSizeByIndex")]
+        private static extern int FPDF_GetPageSizeByIndexStatic(FPDF_DOCUMENT document, int page_index, ref double width, ref double height);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the size of the page at the given index.
@@ -597,10 +735,16 @@
         //////          None.
         ////FPDF_EXPORT void FPDF_CALLCONV FPDF_RenderPage(HDC dc, FPDF_PAGE page, int start_x, int start_y, int size_x, int size_y, int rotate, int flags);
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void FPDF_RenderPageBitmap_Delegate(FPDF_BITMAP bitmap, FPDF_PAGE page, int start_x, int start_y, int size_x, int size_y, int rotate, FPDF_RENDERING_FLAGS flags);
 
         private static FPDF_RenderPageBitmap_Delegate FPDF_RenderPageBitmapStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_RenderPageBitmap")]
+        private static extern void FPDF_RenderPageBitmapStatic(FPDF_BITMAP bitmap, FPDF_PAGE page, int start_x, int start_y, int size_x, int size_y, int rotate, FPDF_RENDERING_FLAGS flags);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Render contents of a page to a device independent bitmap.
@@ -631,10 +775,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void FPDF_RenderPageBitmapWithMatrix_Delegate(FPDF_BITMAP bitmap, FPDF_PAGE page, ref FS_MATRIX matrix, ref FS_RECTF clipping, FPDF_RENDERING_FLAGS flags);
 
         private static FPDF_RenderPageBitmapWithMatrix_Delegate FPDF_RenderPageBitmapWithMatrixStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_RenderPageBitmapWithMatrix")]
+        private static extern void FPDF_RenderPageBitmapWithMatrixStatic(FPDF_BITMAP bitmap, FPDF_PAGE page, ref FS_MATRIX matrix, ref FS_RECTF clipping, FPDF_RENDERING_FLAGS flags);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Render contents of a page to a device independent bitmap.
@@ -669,10 +819,16 @@
         //////
         ////FPDF_EXPORT FPDF_RECORDER FPDF_CALLCONV FPDF_RenderPageSkp(FPDF_PAGE page, int size_x, int size_y);
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void FPDF_ClosePage_Delegate(FPDF_PAGE page);
 
         private static FPDF_ClosePage_Delegate FPDF_ClosePageStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_ClosePage")]
+        private static extern void FPDF_ClosePageStatic(FPDF_PAGE page);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Close a loaded PDF page.
@@ -689,10 +845,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void FPDF_CloseDocument_Delegate(FPDF_DOCUMENT document);
 
         private static FPDF_CloseDocument_Delegate FPDF_CloseDocumentStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_CloseDocument")]
+        private static extern void FPDF_CloseDocumentStatic(FPDF_DOCUMENT document);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Close a loaded PDF document.
@@ -709,10 +871,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDF_DeviceToPage_Delegate(FPDF_PAGE page, int start_x, int start_y, int size_x, int size_y, int rotate, int device_x, int device_y, ref double page_x, ref double page_y);
 
         private static FPDF_DeviceToPage_Delegate FPDF_DeviceToPageStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_DeviceToPage")]
+        private static extern bool FPDF_DeviceToPageStatic(FPDF_PAGE page, int start_x, int start_y, int size_x, int size_y, int rotate, int device_x, int device_y, ref double page_x, ref double page_y);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Convert the screen coordinates of a point to page coordinates.
@@ -751,10 +919,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDF_PageToDevice_Delegate(FPDF_PAGE page, int start_x, int start_y, int size_x, int size_y, int rotate, double page_x, double page_y, ref int device_x, ref int device_y);
 
         private static FPDF_PageToDevice_Delegate FPDF_PageToDeviceStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_PageToDevice")]
+        private static extern bool FPDF_PageToDeviceStatic(FPDF_PAGE page, int start_x, int start_y, int size_x, int size_y, int rotate, double page_x, double page_y, ref int device_x, ref int device_y);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Convert the page coordinates of a point to screen coordinates.
@@ -786,10 +960,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_BITMAP FPDFBitmap_Create_Delegate(int width, int height, bool hasAlpha);
 
         private static FPDFBitmap_Create_Delegate FPDFBitmap_CreateStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFBitmap_Create")]
+        private static extern FPDF_BITMAP FPDFBitmap_CreateStatic(int width, int height, bool hasAlpha);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Create a device independent bitmap (FXDIB).
@@ -817,10 +997,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_BITMAP FPDFBitmap_CreateEx_Delegate(int width, int height, FPDFBitmapFormat format, IntPtr first_scan, int stride);
 
         private static FPDFBitmap_CreateEx_Delegate FPDFBitmap_CreateExStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFBitmap_CreateEx")]
+        private static extern FPDF_BITMAP FPDFBitmap_CreateExStatic(int width, int height, FPDFBitmapFormat format, IntPtr first_scan, int stride);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Create a device independent bitmap (FXDIB).
@@ -851,10 +1037,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDFBitmapFormat FPDFBitmap_GetFormat_Delegate(FPDF_BITMAP bitmap);
 
         private static FPDFBitmap_GetFormat_Delegate FPDFBitmap_GetFormatStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFBitmap_GetFormat")]
+        private static extern FPDFBitmapFormat FPDFBitmap_GetFormatStatic(FPDF_BITMAP bitmap);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the format of the bitmap.
@@ -873,10 +1065,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void FPDFBitmap_FillRect_Delegate(FPDF_BITMAP bitmap, int left, int top, int width, int height, FPDF_COLOR color);
 
         private static FPDFBitmap_FillRect_Delegate FPDFBitmap_FillRectStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFBitmap_FillRect")]
+        private static extern void FPDFBitmap_FillRectStatic(FPDF_BITMAP bitmap, int left, int top, int width, int height, FPDF_COLOR color);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Fill a rectangle in a bitmap.
@@ -898,10 +1096,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate IntPtr FPDFBitmap_GetBuffer_Delegate(FPDF_BITMAP bitmap);
 
         private static FPDFBitmap_GetBuffer_Delegate FPDFBitmap_GetBufferStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFBitmap_GetBuffer")]
+        private static extern IntPtr FPDFBitmap_GetBufferStatic(FPDF_BITMAP bitmap);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get data buffer of a bitmap.
@@ -922,10 +1126,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFBitmap_GetWidth_Delegate(FPDF_BITMAP bitmap);
 
         private static FPDFBitmap_GetWidth_Delegate FPDFBitmap_GetWidthStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFBitmap_GetWidth")]
+        private static extern int FPDFBitmap_GetWidthStatic(FPDF_BITMAP bitmap);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get width of a bitmap.
@@ -943,10 +1153,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFBitmap_GetHeight_Delegate(FPDF_BITMAP bitmap);
 
         private static FPDFBitmap_GetHeight_Delegate FPDFBitmap_GetHeightStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFBitmap_GetHeight")]
+        private static extern int FPDFBitmap_GetHeightStatic(FPDF_BITMAP bitmap);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get height of a bitmap.
@@ -964,10 +1180,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFBitmap_GetStride_Delegate(FPDF_BITMAP bitmap);
 
         private static FPDFBitmap_GetStride_Delegate FPDFBitmap_GetStrideStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFBitmap_GetStride")]
+        private static extern int FPDFBitmap_GetStrideStatic(FPDF_BITMAP bitmap);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get number of bytes for each line in the bitmap buffer.
@@ -986,10 +1208,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void FPDFBitmap_Destroy_Delegate(FPDF_BITMAP bitmap);
 
         private static FPDFBitmap_Destroy_Delegate FPDFBitmap_DestroyStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFBitmap_Destroy")]
+        private static extern void FPDFBitmap_DestroyStatic(FPDF_BITMAP bitmap);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Destroy a bitmap and release all related buffers.
@@ -1007,10 +1235,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDF_VIEWERREF_GetPrintScaling_Delegate(FPDF_DOCUMENT document);
 
         private static FPDF_VIEWERREF_GetPrintScaling_Delegate FPDF_VIEWERREF_GetPrintScalingStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_VIEWERREF_GetPrintScaling")]
+        private static extern bool FPDF_VIEWERREF_GetPrintScalingStatic(FPDF_DOCUMENT document);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Whether the PDF document prefers to be scaled or not.
@@ -1028,10 +1262,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDF_VIEWERREF_GetNumCopies_Delegate(FPDF_DOCUMENT document);
 
         private static FPDF_VIEWERREF_GetNumCopies_Delegate FPDF_VIEWERREF_GetNumCopiesStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_VIEWERREF_GetNumCopies")]
+        private static extern int FPDF_VIEWERREF_GetNumCopiesStatic(FPDF_DOCUMENT document);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Returns the number of copies to be printed.
@@ -1049,10 +1289,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_PAGERANGE FPDF_VIEWERREF_GetPrintPageRange_Delegate(FPDF_DOCUMENT document);
 
         private static FPDF_VIEWERREF_GetPrintPageRange_Delegate FPDF_VIEWERREF_GetPrintPageRangeStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_VIEWERREF_GetPrintPageRange")]
+        private static extern FPDF_PAGERANGE FPDF_VIEWERREF_GetPrintPageRangeStatic(FPDF_DOCUMENT document);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Page numbers to initialize print dialog box when file is printed.
@@ -1070,10 +1316,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate long FPDF_VIEWERREF_GetPrintPageRangeCount_Delegate(FPDF_PAGERANGE pagerange);
 
         private static FPDF_VIEWERREF_GetPrintPageRangeCount_Delegate FPDF_VIEWERREF_GetPrintPageRangeCountStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_VIEWERREF_GetPrintPageRangeCount")]
+        private static extern long FPDF_VIEWERREF_GetPrintPageRangeCountStatic(FPDF_PAGERANGE pagerange);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Returns the number of elements in a FPDF_PAGERANGE. Experimental API.
@@ -1091,10 +1343,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDF_VIEWERREF_GetPrintPageRangeElement_Delegate(FPDF_PAGERANGE pagerange, long index);
 
         private static FPDF_VIEWERREF_GetPrintPageRangeElement_Delegate FPDF_VIEWERREF_GetPrintPageRangeElementStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_VIEWERREF_GetPrintPageRangeElement")]
+        private static extern int FPDF_VIEWERREF_GetPrintPageRangeElementStatic(FPDF_PAGERANGE pagerange, long index);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Returns an element from a FPDF_PAGERANGE. Experimental API.
@@ -1113,10 +1371,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_DUPLEXTYPE FPDF_VIEWERREF_GetDuplex_Delegate(FPDF_DOCUMENT document);
 
         private static FPDF_VIEWERREF_GetDuplex_Delegate FPDF_VIEWERREF_GetDuplexStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_VIEWERREF_GetDuplex")]
+        private static extern FPDF_DUPLEXTYPE FPDF_VIEWERREF_GetDuplexStatic(FPDF_DOCUMENT document);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Returns the paper handling option to be used when printing from the print dialog.
@@ -1134,10 +1398,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate uint FPDF_VIEWERREF_GetName_Delegate(FPDF_DOCUMENT document, [MarshalAs(UnmanagedType.LPTStr)] string key, IntPtr buffer, uint length);
 
         private static FPDF_VIEWERREF_GetName_Delegate FPDF_VIEWERREF_GetNameStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_VIEWERREF_GetName")]
+        private static extern uint FPDF_VIEWERREF_GetNameStatic(FPDF_DOCUMENT document, [MarshalAs(UnmanagedType.LPTStr)] string key, IntPtr buffer, uint length);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Gets the contents for a viewer ref, with a given key. The value must be of type "name".
@@ -1160,10 +1430,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDF_CountNamedDests_Delegate(FPDF_DOCUMENT document);
 
         private static FPDF_CountNamedDests_Delegate FPDF_CountNamedDestsStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_CountNamedDests")]
+        private static extern int FPDF_CountNamedDestsStatic(FPDF_DOCUMENT document);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the count of named destinations in the PDF document.
@@ -1181,10 +1457,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_DEST FPDF_GetNamedDestByName_Delegate(FPDF_DOCUMENT document, string name);
 
         private static FPDF_GetNamedDestByName_Delegate FPDF_GetNamedDestByNameStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetNamedDestByName")]
+        private static extern FPDF_DEST FPDF_GetNamedDestByNameStatic(FPDF_DOCUMENT document, string name);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get a the destination handle for the given name.
@@ -1203,10 +1485,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_DEST FPDF_GetNamedDest_Delegate(FPDF_DOCUMENT document, int index, IntPtr buffer, ref int buflen);
 
         private static FPDF_GetNamedDest_Delegate FPDF_GetNamedDestStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetNamedDest")]
+        private static extern FPDF_DEST FPDF_GetNamedDestStatic(FPDF_DOCUMENT document, int index, IntPtr buffer, ref int buflen);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the named destination by index.
@@ -1233,12 +1521,7 @@
 
         private static void LoadDllViewPart()
         {
-            LoadDllViewPart1();
-            LoadDllViewPart2();
-        }
-
-        private static void LoadDllViewPart1()
-        {
+#if USE_DYNAMICALLY_LOADED_PDFIUM
             FPDF_InitLibraryStatic = GetPDFiumFunction<FPDF_InitLibrary_Delegate>(nameof(FPDF_InitLibrary));
             ////FPDF_EXPORT void FPDF_CALLCONV FPDF_InitLibraryWithConfig(const FPDF_LIBRARY_CONFIG* config);
             FPDF_DestroyLibraryStatic = GetPDFiumFunction<FPDF_DestroyLibrary_Delegate>(nameof(FPDF_DestroyLibrary));
@@ -1270,10 +1553,6 @@
             ////FPDF_EXPORT FPDF_RECORDER FPDF_CALLCONV FPDF_RenderPageSkp(FPDF_PAGE page, int size_x, int size_y);
             FPDF_ClosePageStatic = GetPDFiumFunction<FPDF_ClosePage_Delegate>(nameof(FPDF_ClosePage));
             FPDF_CloseDocumentStatic = GetPDFiumFunction<FPDF_CloseDocument_Delegate>(nameof(FPDF_CloseDocument));
-        }
-
-        private static void LoadDllViewPart2()
-        {
             FPDF_DeviceToPageStatic = GetPDFiumFunction<FPDF_DeviceToPage_Delegate>(nameof(FPDF_DeviceToPage));
             FPDF_PageToDeviceStatic = GetPDFiumFunction<FPDF_PageToDevice_Delegate>(nameof(FPDF_PageToDevice));
             FPDFBitmap_CreateStatic = GetPDFiumFunction<FPDFBitmap_Create_Delegate>(nameof(FPDFBitmap_Create));
@@ -1295,6 +1574,65 @@
             FPDF_CountNamedDestsStatic = GetPDFiumFunction<FPDF_CountNamedDests_Delegate>(nameof(FPDF_CountNamedDests));
             FPDF_GetNamedDestByNameStatic = GetPDFiumFunction<FPDF_GetNamedDestByName_Delegate>(nameof(FPDF_GetNamedDestByName));
             FPDF_GetNamedDestStatic = GetPDFiumFunction<FPDF_GetNamedDest_Delegate>(nameof(FPDF_GetNamedDest));
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
+        }
+
+        private static void UnloadDllViewPart()
+        {
+#if USE_DYNAMICALLY_LOADED_PDFIUM
+            FPDF_InitLibraryStatic = null;
+            ////FPDF_EXPORT void FPDF_CALLCONV FPDF_InitLibraryWithConfig(const FPDF_LIBRARY_CONFIG* config);
+            FPDF_DestroyLibraryStatic = null;
+            ////FPDF_EXPORT void FPDF_CALLCONV FPDF_SetSandBoxPolicy(FPDF_DWORD policy, FPDF_BOOL enable);
+            FPDF_SetPrintModeStatic = null;
+            FPDF_LoadDocumentStatic = null;
+            FPDF_LoadMemDocumentStatic = null;
+            FPDF_LoadMemDocument64Static = null;
+            ////FPDF_EXPORT FPDF_DOCUMENT FPDF_CALLCONV FPDF_LoadCustomDocument(FPDF_FILEACCESS* pFileAccess, FPDF_BYTESTRING password);
+            FPDF_GetFileVersionStatic = null;
+            FPDF_GetLastErrorStatic = null;
+            FPDF_DocumentHasValidCrossReferenceTableStatic = null;
+            FPDF_GetTrailerEndsStatic = null;
+            FPDF_GetDocPermissionsStatic = null;
+            FPDF_GetDocUserPermissionsStatic = null;
+            FPDF_GetSecurityHandlerRevisionStatic = null;
+            FPDF_GetPageCountStatic = null;
+            FPDF_LoadPageStatic = null;
+            FPDF_GetPageWidthFStatic = null;
+            FPDF_GetPageWidthStatic = null;
+            FPDF_GetPageHeightFStatic = null;
+            FPDF_GetPageHeightStatic = null;
+            FPDF_GetPageBoundingBoxStatic = null;
+            FPDF_GetPageSizeByIndexFStatic = null;
+            FPDF_GetPageSizeByIndexStatic = null;
+            ////FPDF_EXPORT void FPDF_CALLCONV FPDF_RenderPage(HDC dc, FPDF_PAGE page, int start_x, int start_y, int size_x, int size_y, int rotate, int flags);
+            FPDF_RenderPageBitmapStatic = null;
+            FPDF_RenderPageBitmapWithMatrixStatic = null;
+            ////FPDF_EXPORT FPDF_RECORDER FPDF_CALLCONV FPDF_RenderPageSkp(FPDF_PAGE page, int size_x, int size_y);
+            FPDF_ClosePageStatic = null;
+            FPDF_CloseDocumentStatic = null;
+            FPDF_DeviceToPageStatic = null;
+            FPDF_PageToDeviceStatic = null;
+            FPDFBitmap_CreateStatic = null;
+            FPDFBitmap_CreateExStatic = null;
+            FPDFBitmap_GetFormatStatic = null;
+            FPDFBitmap_FillRectStatic = null;
+            FPDFBitmap_GetBufferStatic = null;
+            FPDFBitmap_GetWidthStatic = null;
+            FPDFBitmap_GetHeightStatic = null;
+            FPDFBitmap_GetStrideStatic = null;
+            FPDFBitmap_DestroyStatic = null;
+            FPDF_VIEWERREF_GetPrintScalingStatic = null;
+            FPDF_VIEWERREF_GetNumCopiesStatic = null;
+            FPDF_VIEWERREF_GetPrintPageRangeStatic = null;
+            FPDF_VIEWERREF_GetPrintPageRangeCountStatic = null;
+            FPDF_VIEWERREF_GetPrintPageRangeElementStatic = null;
+            FPDF_VIEWERREF_GetDuplexStatic = null;
+            FPDF_VIEWERREF_GetNameStatic = null;
+            FPDF_CountNamedDestsStatic = null;
+            FPDF_GetNamedDestByNameStatic = null;
+            FPDF_GetNamedDestStatic = null;
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
         }
     }
 }

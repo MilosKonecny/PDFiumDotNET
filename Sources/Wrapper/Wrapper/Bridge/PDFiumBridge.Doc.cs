@@ -3,18 +3,27 @@
     using System;
     using System.Runtime.InteropServices;
 
-    // Disable "Member 'xxxx' does not access instance data and can be marked as static."
+    // Disable "Member 'member' does not access instance data and can be marked as static."
 #pragma warning disable CA1822
+
+    // Disable "Specify marshaling for P/Invoke string arguments."
+#pragma warning disable CA2101
 
     /// <summary>
     /// The class contains all pdfium methods currently supported in this project.
     /// </summary>
     internal sealed partial class PDFiumBridge
     {
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_BOOKMARK FPDFBookmark_GetFirstChild_Delegate(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark);
 
         private static FPDFBookmark_GetFirstChild_Delegate FPDFBookmark_GetFirstChildStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFBookmark_GetFirstChild")]
+        private static extern FPDF_BOOKMARK FPDFBookmark_GetFirstChildStatic(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the first child of |bookmark|, or the first top-level bookmark item.
@@ -37,10 +46,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_BOOKMARK FPDFBookmark_GetNextSibling_Delegate(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark);
 
         private static FPDFBookmark_GetNextSibling_Delegate FPDFBookmark_GetNextSiblingStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFBookmark_GetNextSibling")]
+        private static extern FPDF_BOOKMARK FPDFBookmark_GetNextSiblingStatic(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the next sibling of |bookmark|.
@@ -60,10 +75,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFBookmark_GetTitle_Delegate(FPDF_BOOKMARK bookmark, IntPtr buffer, ulong buflen);
 
         private static FPDFBookmark_GetTitle_Delegate FPDFBookmark_GetTitleStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFBookmark_GetTitle")]
+        private static extern int FPDFBookmark_GetTitleStatic(FPDF_BOOKMARK bookmark, IntPtr buffer, ulong buflen);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the title of |bookmark|.
@@ -86,10 +107,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFBookmark_GetCount_Delegate(FPDF_BOOKMARK bookmark);
 
         private static FPDFBookmark_GetCount_Delegate FPDFBookmark_GetCountStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFBookmark_GetCount")]
+        private static extern int FPDFBookmark_GetCountStatic(FPDF_BOOKMARK bookmark);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -110,10 +137,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_BOOKMARK FPDFBookmark_Find_Delegate(FPDF_DOCUMENT document, IntPtr title);
 
         private static FPDFBookmark_Find_Delegate FPDFBookmark_FindStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFBookmark_Find")]
+        private static extern FPDF_BOOKMARK FPDFBookmark_FindStatic(FPDF_DOCUMENT document, IntPtr title);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Find the bookmark with |title| in |document|.
@@ -133,10 +166,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_DEST FPDFBookmark_GetDest_Delegate(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark);
 
         private static FPDFBookmark_GetDest_Delegate FPDFBookmark_GetDestStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFBookmark_GetDest")]
+        private static extern FPDF_DEST FPDFBookmark_GetDestStatic(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the destination associated with |bookmark|.
@@ -155,10 +194,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_ACTION FPDFBookmark_GetAction_Delegate(FPDF_BOOKMARK bookmark);
 
         private static FPDFBookmark_GetAction_Delegate FPDFBookmark_GetActionStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFBookmark_GetAction")]
+        private static extern FPDF_ACTION FPDFBookmark_GetActionStatic(FPDF_BOOKMARK bookmark);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the action associated with |bookmark|.
@@ -177,10 +222,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate uint FPDFAction_GetType_Delegate(FPDF_ACTION action);
 
         private static FPDFAction_GetType_Delegate FPDFAction_GetTypeStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAction_GetType")]
+        private static extern uint FPDFAction_GetTypeStatic(FPDF_ACTION action);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the type of |action|.
@@ -198,10 +249,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_DEST FPDFAction_GetDest_Delegate(FPDF_DOCUMENT document, FPDF_ACTION action);
 
         private static FPDFAction_GetDest_Delegate FPDFAction_GetDestStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAction_GetDest")]
+        private static extern FPDF_DEST FPDFAction_GetDestStatic(FPDF_DOCUMENT document, FPDF_ACTION action);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the destination of |action|.
@@ -223,10 +280,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFAction_GetFilePath_Delegate(FPDF_ACTION action, IntPtr buffer, ulong buflen);
 
         private static FPDFAction_GetFilePath_Delegate FPDFAction_GetFilePathStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAction_GetFilePath")]
+        private static extern int FPDFAction_GetFilePathStatic(FPDF_ACTION action, IntPtr buffer, ulong buflen);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the file path of |action|.
@@ -249,10 +312,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFAction_GetURIPath_Delegate(FPDF_DOCUMENT document, FPDF_ACTION action, IntPtr buffer, ulong buflen);
 
         private static FPDFAction_GetURIPath_Delegate FPDFAction_GetURIPathStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAction_GetURIPath")]
+        private static extern int FPDFAction_GetURIPathStatic(FPDF_DOCUMENT document, FPDF_ACTION action, IntPtr buffer, ulong buflen);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the URI path of |action|.
@@ -282,10 +351,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFDest_GetDestPageIndex_Delegate(FPDF_DOCUMENT document, FPDF_DEST dest);
 
         private static FPDFDest_GetDestPageIndex_Delegate FPDFDest_GetDestPageIndexStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFDest_GetDestPageIndex")]
+        private static extern int FPDFDest_GetDestPageIndexStatic(FPDF_DOCUMENT document, FPDF_DEST dest);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the page index of |dest|.
@@ -304,10 +379,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate ulong FPDFDest_GetView_Delegate(FPDF_DEST dest, ref ulong pNumParams, IntPtr pParams);
 
         private static FPDFDest_GetView_Delegate FPDFDest_GetViewStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFDest_GetView")]
+        private static extern ulong FPDFDest_GetViewStatic(FPDF_DEST dest, ref ulong pNumParams, IntPtr pParams);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -328,10 +409,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFDest_GetLocationInPage_Delegate(FPDF_DEST dest, out bool hasXVal, out bool hasYVal, out bool hasZoomVal, out float x, out float y, out float zoom);
 
         private static FPDFDest_GetLocationInPage_Delegate FPDFDest_GetLocationInPageStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFDest_GetLocationInPage")]
+        private static extern bool FPDFDest_GetLocationInPageStatic(FPDF_DEST dest, out bool hasXVal, out bool hasYVal, out bool hasZoomVal, out float x, out float y, out float zoom);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the (x, y, zoom) location of |dest| in the destination page, if the destination is in [page /XYZ x y zoom] syntax.
@@ -356,10 +443,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_LINK FPDFLink_GetLinkAtPoint_Delegate(FPDF_PAGE page, double x, double y);
 
         private static FPDFLink_GetLinkAtPoint_Delegate FPDFLink_GetLinkAtPointStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFLink_GetLinkAtPoint")]
+        private static extern FPDF_LINK FPDFLink_GetLinkAtPointStatic(FPDF_PAGE page, double x, double y);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Find a link at point (|x|,|y|) on |page|.
@@ -380,10 +473,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFLink_GetLinkZOrderAtPoint_Delegate(FPDF_PAGE page, double x, double y);
 
         private static FPDFLink_GetLinkZOrderAtPoint_Delegate FPDFLink_GetLinkZOrderAtPointStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFLink_GetLinkZOrderAtPoint")]
+        private static extern int FPDFLink_GetLinkZOrderAtPointStatic(FPDF_PAGE page, double x, double y);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Find the Z-order of link at point (|x|,|y|) on |page|.
@@ -405,10 +504,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_DEST FPDFLink_GetDest_Delegate(FPDF_DOCUMENT document, FPDF_LINK link);
 
         private static FPDFLink_GetDest_Delegate FPDFLink_GetDestStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFLink_GetDest")]
+        private static extern FPDF_DEST FPDFLink_GetDestStatic(FPDF_DOCUMENT document, FPDF_LINK link);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get destination info for |link|.
@@ -428,10 +533,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_ACTION FPDFLink_GetAction_Delegate(FPDF_LINK link);
 
         private static FPDFLink_GetAction_Delegate FPDFLink_GetActionStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFLink_GetAction")]
+        private static extern FPDF_ACTION FPDFLink_GetActionStatic(FPDF_LINK link);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get action info for |link|.
@@ -449,10 +560,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFLink_Enumerate_Delegate(FPDF_PAGE page, ref int start_pos, ref FPDF_LINK link_annot);
 
         private static FPDFLink_Enumerate_Delegate FPDFLink_EnumerateStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFLink_Enumerate")]
+        private static extern bool FPDFLink_EnumerateStatic(FPDF_PAGE page, ref int start_pos, ref FPDF_LINK link_annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Enumerates all the link annotations in |page|.
@@ -472,10 +589,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_ANNOTATION FPDFLink_GetAnnot_Delegate(FPDF_PAGE page, FPDF_LINK link_annot);
 
         private static FPDFLink_GetAnnot_Delegate FPDFLink_GetAnnotStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFLink_GetAnnot")]
+        private static extern FPDF_ANNOTATION FPDFLink_GetAnnotStatic(FPDF_PAGE page, FPDF_LINK link_annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Gets FPDF_ANNOTATION object for |link_annot|. Experimental API.
@@ -494,10 +617,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFLink_GetAnnotRect_Delegate(FPDF_LINK link_annot, ref FS_RECTF rect);
 
         private static FPDFLink_GetAnnotRect_Delegate FPDFLink_GetAnnotRectStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFLink_GetAnnotRect")]
+        private static extern bool FPDFLink_GetAnnotRectStatic(FPDF_LINK link_annot, ref FS_RECTF rect);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the rectangle for |link_annot|.
@@ -516,10 +645,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFLink_CountQuadPoints_Delegate(FPDF_LINK link_annot);
 
         private static FPDFLink_CountQuadPoints_Delegate FPDFLink_CountQuadPointsStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFLink_CountQuadPoints")]
+        private static extern int FPDFLink_CountQuadPointsStatic(FPDF_LINK link_annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the count of quadrilateral points to the |link_annot|.
@@ -537,10 +672,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFLink_GetQuadPoints_Delegate(FPDF_LINK link_annot, int quad_index, ref FS_QUADPOINTSF quad_points);
 
         private static FPDFLink_GetQuadPoints_Delegate FPDFLink_GetQuadPointsStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFLink_GetQuadPoints")]
+        private static extern bool FPDFLink_GetQuadPointsStatic(FPDF_LINK link_annot, int quad_index, ref FS_QUADPOINTSF quad_points);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the quadrilateral points for the specified |quad_index| in |link_annot|.
@@ -560,10 +701,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_ACTION FPDF_GetPageAAction_Delegate(FPDF_PAGE page, int aa_type);
 
         private static FPDF_GetPageAAction_Delegate FPDF_GetPageAActionStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetPageAAction")]
+        private static extern FPDF_ACTION FPDF_GetPageAActionStatic(FPDF_PAGE page, int aa_type);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API
@@ -583,10 +730,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate ulong FPDF_GetFileIdentifier_Delegate(FPDF_DOCUMENT document, FPDF_FILEIDTYPE id_type, IntPtr buffer, ulong buflen);
 
         private static FPDF_GetFileIdentifier_Delegate FPDF_GetFileIdentifierStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetFileIdentifier")]
+        private static extern ulong FPDF_GetFileIdentifierStatic(FPDF_DOCUMENT document, FPDF_FILEIDTYPE id_type, IntPtr buffer, ulong buflen);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -610,10 +763,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDF_GetMetaText_Delegate(FPDF_DOCUMENT document, [MarshalAs(UnmanagedType.LPStr)] string tag, IntPtr buffer, ulong buflen);
 
         private static FPDF_GetMetaText_Delegate FPDF_GetMetaTextStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetMetaText")]
+        private static extern int FPDF_GetMetaTextStatic(FPDF_DOCUMENT document, [MarshalAs(UnmanagedType.LPStr)] string tag, IntPtr buffer, ulong buflen);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get meta-data |tag| content from |document|.
@@ -631,7 +790,7 @@
         /// Before that, there is no guarantee the metadata has been loaded.
         /// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDF_GetMetaText(FPDF_DOCUMENT document, FPDF_BYTESTRING tag, void* buffer, unsigned long buflen);.
         /// </remarks>
-        public int FPDF_GetMetaText(FPDF_DOCUMENT document, [MarshalAs(UnmanagedType.LPStr)] string tag, IntPtr buffer, ulong buflen)
+        public int FPDF_GetMetaText(FPDF_DOCUMENT document, string tag, IntPtr buffer, ulong buflen)
         {
             lock (_syncObject)
             {
@@ -639,10 +798,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDF_GetPageLabel_Delegate(FPDF_DOCUMENT document, int page_index, IntPtr buffer, ulong buflen);
 
         private static FPDF_GetPageLabel_Delegate FPDF_GetPageLabelStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_GetPageLabel")]
+        private static extern int FPDF_GetPageLabelStatic(FPDF_DOCUMENT document, int page_index, IntPtr buffer, ulong buflen);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the page label for |page_index| from |document|.
@@ -667,6 +832,7 @@
 
         private static void LoadDllDocPart()
         {
+#if USE_DYNAMICALLY_LOADED_PDFIUM
             FPDFBookmark_GetFirstChildStatic = GetPDFiumFunction<FPDFBookmark_GetFirstChild_Delegate>(nameof(FPDFBookmark_GetFirstChild));
             FPDFBookmark_GetNextSiblingStatic = GetPDFiumFunction<FPDFBookmark_GetNextSibling_Delegate>(nameof(FPDFBookmark_GetNextSibling));
             FPDFBookmark_GetTitleStatic = GetPDFiumFunction<FPDFBookmark_GetTitle_Delegate>(nameof(FPDFBookmark_GetTitle));
@@ -694,6 +860,40 @@
             FPDF_GetFileIdentifierStatic = GetPDFiumFunction<FPDF_GetFileIdentifier_Delegate>(nameof(FPDF_GetFileIdentifier));
             FPDF_GetMetaTextStatic = GetPDFiumFunction<FPDF_GetMetaText_Delegate>(nameof(FPDF_GetMetaText));
             FPDF_GetPageLabelStatic = GetPDFiumFunction<FPDF_GetPageLabel_Delegate>(nameof(FPDF_GetPageLabel));
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
+        }
+
+        private static void UnloadDllDocPart()
+        {
+#if USE_DYNAMICALLY_LOADED_PDFIUM
+            FPDFBookmark_GetFirstChildStatic = null;
+            FPDFBookmark_GetNextSiblingStatic = null;
+            FPDFBookmark_GetTitleStatic = null;
+            FPDFBookmark_GetCountStatic = null;
+            FPDFBookmark_FindStatic = null;
+            FPDFBookmark_GetDestStatic = null;
+            FPDFBookmark_GetActionStatic = null;
+            FPDFAction_GetTypeStatic = null;
+            FPDFAction_GetDestStatic = null;
+            FPDFAction_GetFilePathStatic = null;
+            FPDFAction_GetURIPathStatic = null;
+            FPDFDest_GetDestPageIndexStatic = null;
+            FPDFDest_GetViewStatic = null;
+            FPDFDest_GetLocationInPageStatic = null;
+            FPDFLink_GetLinkAtPointStatic = null;
+            FPDFLink_GetLinkZOrderAtPointStatic = null;
+            FPDFLink_GetDestStatic = null;
+            FPDFLink_GetActionStatic = null;
+            FPDFLink_EnumerateStatic = null;
+            FPDFLink_GetAnnotStatic = null;
+            FPDFLink_GetAnnotRectStatic = null;
+            FPDFLink_CountQuadPointsStatic = null;
+            FPDFLink_GetQuadPointsStatic = null;
+            FPDF_GetPageAActionStatic = null;
+            FPDF_GetFileIdentifierStatic = null;
+            FPDF_GetMetaTextStatic = null;
+            FPDF_GetPageLabelStatic = null;
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
         }
     }
 }
