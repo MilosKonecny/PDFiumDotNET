@@ -2,7 +2,7 @@
 {
     using System.Runtime.InteropServices;
 
-    // Disable "Member 'xxxx' does not access instance data and can be marked as static."
+    // Disable "Member 'member' does not access instance data and can be marked as static."
 #pragma warning disable CA1822
 
     /// <summary>
@@ -10,10 +10,16 @@
     /// </summary>
     internal sealed partial class PDFiumBridge
     {
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_DOCUMENT FPDF_CreateNewDocument_Delegate();
 
         private static FPDF_CreateNewDocument_Delegate FPDF_CreateNewDocumentStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_CreateNewDocument")]
+        private static extern FPDF_DOCUMENT FPDF_CreateNewDocumentStatic();
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Create a new PDF document.
@@ -30,10 +36,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_PAGE FPDFPage_New_Delegate(FPDF_DOCUMENT document, int page_index, double width, double height);
 
         private static FPDFPage_New_Delegate FPDFPage_NewStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFPage_New")]
+        private static extern FPDF_PAGE FPDFPage_NewStatic(FPDF_DOCUMENT document, int page_index, double width, double height);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Create a new PDF page.
@@ -56,10 +68,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void FPDFPage_Delete_Delegate(FPDF_DOCUMENT document, int page_index);
 
         private static FPDFPage_Delete_Delegate FPDFPage_DeleteStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFPage_Delete")]
+        private static extern void FPDFPage_DeleteStatic(FPDF_DOCUMENT document, int page_index);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Delete the page at |page_index|.
@@ -77,10 +95,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDF_MovePages_Delegate(FPDF_DOCUMENT document, int[] page_indices, ulong page_indices_len, int dest_page_index);
 
         private static FPDF_MovePages_Delegate FPDF_MovePagesStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_MovePages")]
+        private static extern bool FPDF_MovePagesStatic(FPDF_DOCUMENT document, int[] page_indices, ulong page_indices_len, int dest_page_index);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -116,10 +140,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFPage_GetRotation_Delegate(FPDF_PAGE page);
 
         private static FPDFPage_GetRotation_Delegate FPDFPage_GetRotationStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFPage_GetRotation")]
+        private static extern int FPDFPage_GetRotationStatic(FPDF_PAGE page);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the rotation of |page|.
@@ -141,10 +171,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void FPDFPage_SetRotation_Delegate(FPDF_PAGE page, int rotate);
 
         private static FPDFPage_SetRotation_Delegate FPDFPage_SetRotationStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFPage_SetRotation")]
+        private static extern void FPDFPage_SetRotationStatic(FPDF_PAGE page, int rotate);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Set rotation for |page|.
@@ -168,6 +204,7 @@
 
         private static void LoadDllEditPart()
         {
+#if USE_DYNAMICALLY_LOADED_PDFIUM
             // fpdf_edit.h exports 103 functions
             FPDF_CreateNewDocumentStatic = GetPDFiumFunction<FPDF_CreateNewDocument_Delegate>(nameof(FPDF_CreateNewDocument));
             FPDFPage_NewStatic = GetPDFiumFunction<FPDFPage_New_Delegate>(nameof(FPDFPage_New));
@@ -175,6 +212,20 @@
             FPDF_MovePagesStatic = GetPDFiumFunction<FPDF_MovePages_Delegate>(nameof(FPDF_MovePages));
             FPDFPage_GetRotationStatic = GetPDFiumFunction<FPDFPage_GetRotation_Delegate>(nameof(FPDFPage_GetRotation));
             FPDFPage_SetRotationStatic = GetPDFiumFunction<FPDFPage_SetRotation_Delegate>(nameof(FPDFPage_SetRotation));
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
+        }
+
+        private static void UnloadDllEditPart()
+        {
+#if USE_DYNAMICALLY_LOADED_PDFIUM
+            // fpdf_edit.h exports 103 functions
+            FPDF_CreateNewDocumentStatic = null;
+            FPDFPage_NewStatic = null;
+            FPDFPage_DeleteStatic = null;
+            FPDF_MovePagesStatic = null;
+            FPDFPage_GetRotationStatic = null;
+            FPDFPage_SetRotationStatic = null;
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
         }
     }
 }

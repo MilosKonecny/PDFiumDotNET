@@ -3,18 +3,30 @@
     using System;
     using System.Runtime.InteropServices;
 
-    // Disable "Member 'xxxx' does not access instance data and can be marked as static."
+    // Disable "Member 'member' does not access instance data and can be marked as static."
 #pragma warning disable CA1822
+
+    // Disable "Move P/Invokes to native methods class."
+#pragma warning disable CA1060
+
+    // Disable "Specify marshaling for P/Invoke string arguments."
+#pragma warning disable CA2101
 
     /// <summary>
     /// The class contains all pdfium methods currently supported in this project.
     /// </summary>
     internal sealed partial class PDFiumBridge
     {
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_IsSupportedSubtype_Delegate(FPDF_ANNOTATION_SUBTYPE subtype);
 
         private static FPDFAnnot_IsSupportedSubtype_Delegate FPDFAnnot_IsSupportedSubtypeStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_IsSupportedSubtype")]
+        private static extern bool FPDFAnnot_IsSupportedSubtypeStatic(FPDF_ANNOTATION_SUBTYPE subtype);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -47,10 +59,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_ANNOTATION FPDFPage_CreateAnnot_Delegate(FPDF_PAGE page, FPDF_ANNOTATION_SUBTYPE subtype);
 
         private static FPDFPage_CreateAnnot_Delegate FPDFPage_CreateAnnotStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFPage_CreateAnnot")]
+        private static extern FPDF_ANNOTATION FPDFPage_CreateAnnotStatic(FPDF_PAGE page, FPDF_ANNOTATION_SUBTYPE subtype);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -72,10 +90,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFPage_GetAnnotCount_Delegate(FPDF_PAGE page);
 
         private static FPDFPage_GetAnnotCount_Delegate FPDFPage_GetAnnotCountStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFPage_GetAnnotCount")]
+        private static extern int FPDFPage_GetAnnotCountStatic(FPDF_PAGE page);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -94,10 +118,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_ANNOTATION FPDFPage_GetAnnot_Delegate(FPDF_PAGE page, int index);
 
         private static FPDFPage_GetAnnot_Delegate FPDFPage_GetAnnotStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFPage_GetAnnot")]
+        private static extern FPDF_ANNOTATION FPDFPage_GetAnnotStatic(FPDF_PAGE page, int index);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -117,10 +147,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFPage_GetAnnotIndex_Delegate(FPDF_PAGE page, FPDF_ANNOTATION annot);
 
         private static FPDFPage_GetAnnotIndex_Delegate FPDFPage_GetAnnotIndexStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFPage_GetAnnotIndex")]
+        private static extern int FPDFPage_GetAnnotIndexStatic(FPDF_PAGE page, FPDF_ANNOTATION annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -140,10 +176,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void FPDFPage_CloseAnnot_Delegate(FPDF_ANNOTATION annot);
 
         private static FPDFPage_CloseAnnot_Delegate FPDFPage_CloseAnnotStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFPage_CloseAnnot")]
+        private static extern void FPDFPage_CloseAnnotStatic(FPDF_ANNOTATION annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -162,10 +204,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFPage_RemoveAnnot_Delegate(FPDF_PAGE page, int index);
 
         private static FPDFPage_RemoveAnnot_Delegate FPDFPage_RemoveAnnotStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFPage_RemoveAnnot")]
+        private static extern bool FPDFPage_RemoveAnnotStatic(FPDF_PAGE page, int index);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -185,10 +233,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_ANNOTATION_SUBTYPE FPDFAnnot_GetSubtype_Delegate(FPDF_ANNOTATION annot);
 
         private static FPDFAnnot_GetSubtype_Delegate FPDFAnnot_GetSubtypeStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetSubtype")]
+        private static extern FPDF_ANNOTATION_SUBTYPE FPDFAnnot_GetSubtypeStatic(FPDF_ANNOTATION annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -207,10 +261,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_IsObjectSupportedSubtype_Delegate(FPDF_ANNOTATION_SUBTYPE subtype);
 
         private static FPDFAnnot_IsObjectSupportedSubtype_Delegate FPDFAnnot_IsObjectSupportedSubtypeStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_IsObjectSupportedSubtype")]
+        private static extern bool FPDFAnnot_IsObjectSupportedSubtypeStatic(FPDF_ANNOTATION_SUBTYPE subtype);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -230,10 +290,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_UpdateObject_Delegate(FPDF_ANNOTATION annot, FPDF_PAGEOBJECT obj);
 
         private static FPDFAnnot_UpdateObject_Delegate FPDFAnnot_UpdateObjectStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_UpdateObject")]
+        private static extern bool FPDFAnnot_UpdateObjectStatic(FPDF_ANNOTATION annot, FPDF_PAGEOBJECT obj);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -255,10 +321,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFAnnot_AddInkStroke_Delegate(FPDF_ANNOTATION annot, ref FS_POINTF[] points, ulong point_count);
 
         private static FPDFAnnot_AddInkStroke_Delegate FPDFAnnot_AddInkStrokeStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_AddInkStroke")]
+        private static extern int FPDFAnnot_AddInkStrokeStatic(FPDF_ANNOTATION annot, ref FS_POINTF[] points, ulong point_count);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -281,10 +353,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_RemoveInkList_Delegate(FPDF_ANNOTATION annot);
 
         private static FPDFAnnot_RemoveInkList_Delegate FPDFAnnot_RemoveInkListStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_RemoveInkList")]
+        private static extern bool FPDFAnnot_RemoveInkListStatic(FPDF_ANNOTATION annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -303,10 +381,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_AppendObject_Delegate(FPDF_ANNOTATION annot, FPDF_PAGEOBJECT obj);
 
         private static FPDFAnnot_AppendObject_Delegate FPDFAnnot_AppendObjectStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_AppendObject")]
+        private static extern bool FPDFAnnot_AppendObjectStatic(FPDF_ANNOTATION annot, FPDF_PAGEOBJECT obj);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -328,10 +412,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFAnnot_GetObjectCount_Delegate(FPDF_ANNOTATION annot);
 
         private static FPDFAnnot_GetObjectCount_Delegate FPDFAnnot_GetObjectCountStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetObjectCount")]
+        private static extern int FPDFAnnot_GetObjectCountStatic(FPDF_ANNOTATION annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -350,10 +440,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_PAGEOBJECT FPDFAnnot_GetObject_Delegate(FPDF_ANNOTATION annot, int index);
 
         private static FPDFAnnot_GetObject_Delegate FPDFAnnot_GetObjectStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetObject")]
+        private static extern FPDF_PAGEOBJECT FPDFAnnot_GetObjectStatic(FPDF_ANNOTATION annot, int index);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -373,10 +469,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_RemoveObject_Delegate(FPDF_ANNOTATION annot, int index);
 
         private static FPDFAnnot_RemoveObject_Delegate FPDFAnnot_RemoveObjectStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_RemoveObject")]
+        private static extern bool FPDFAnnot_RemoveObjectStatic(FPDF_ANNOTATION annot, int index);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -396,10 +498,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_SetColor_Delegate(FPDF_ANNOTATION annot, FPDFANNOT_COLORTYPES type, uint r, uint g, uint b, uint a);
 
         private static FPDFAnnot_SetColor_Delegate FPDFAnnot_SetColorStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_SetColor")]
+        private static extern bool FPDFAnnot_SetColorStatic(FPDF_ANNOTATION annot, FPDFANNOT_COLORTYPES type, uint r, uint g, uint b, uint a);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -423,10 +531,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_GetColor_Delegate(FPDF_ANNOTATION annot, FPDFANNOT_COLORTYPES type, ref uint r, ref uint g, ref uint b, ref uint a);
 
         private static FPDFAnnot_GetColor_Delegate FPDFAnnot_GetColorStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetColor")]
+        private static extern bool FPDFAnnot_GetColorStatic(FPDF_ANNOTATION annot, FPDFANNOT_COLORTYPES type, ref uint r, ref uint g, ref uint b, ref uint a);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -451,10 +565,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_HasAttachmentPoints_Delegate(FPDF_ANNOTATION annot);
 
         private static FPDFAnnot_HasAttachmentPoints_Delegate FPDFAnnot_HasAttachmentPointsStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_HasAttachmentPoints")]
+        private static extern bool FPDFAnnot_HasAttachmentPointsStatic(FPDF_ANNOTATION annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -476,10 +596,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_SetAttachmentPoints_Delegate(FPDF_ANNOTATION annot, ulong quad_index, ref FS_QUADPOINTSF quad_points);
 
         private static FPDFAnnot_SetAttachmentPoints_Delegate FPDFAnnot_SetAttachmentPointsStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_SetAttachmentPoints")]
+        private static extern bool FPDFAnnot_SetAttachmentPointsStatic(FPDF_ANNOTATION annot, ulong quad_index, ref FS_QUADPOINTSF quad_points);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -503,10 +629,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_AppendAttachmentPoints_Delegate(FPDF_ANNOTATION annot, ref FS_QUADPOINTSF quad_points);
 
         private static FPDFAnnot_AppendAttachmentPoints_Delegate FPDFAnnot_AppendAttachmentPointsStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_AppendAttachmentPoints")]
+        private static extern bool FPDFAnnot_AppendAttachmentPointsStatic(FPDF_ANNOTATION annot, ref FS_QUADPOINTSF quad_points);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -528,10 +660,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFAnnot_CountAttachmentPoints_Delegate(FPDF_ANNOTATION annot);
 
         private static FPDFAnnot_CountAttachmentPoints_Delegate FPDFAnnot_CountAttachmentPointsStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_CountAttachmentPoints")]
+        private static extern int FPDFAnnot_CountAttachmentPointsStatic(FPDF_ANNOTATION annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -549,10 +687,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_GetAttachmentPoints_Delegate(FPDF_ANNOTATION annot, int quad_index, ref FS_QUADPOINTSF quad_points);
 
         private static FPDFAnnot_GetAttachmentPoints_Delegate FPDFAnnot_GetAttachmentPointsStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetAttachmentPoints")]
+        private static extern bool FPDFAnnot_GetAttachmentPointsStatic(FPDF_ANNOTATION annot, int quad_index, ref FS_QUADPOINTSF quad_points);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -573,10 +717,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_SetRect_Delegate(FPDF_ANNOTATION annot, ref FS_RECTF rect);
 
         private static FPDFAnnot_SetRect_Delegate FPDFAnnot_SetRectStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_SetRect")]
+        private static extern bool FPDFAnnot_SetRectStatic(FPDF_ANNOTATION annot, ref FS_RECTF rect);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -597,10 +747,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_GetRect_Delegate(FPDF_ANNOTATION annot, ref FS_RECTF rect);
 
         private static FPDFAnnot_GetRect_Delegate FPDFAnnot_GetRectStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetRect")]
+        private static extern bool FPDFAnnot_GetRectStatic(FPDF_ANNOTATION annot, ref FS_RECTF rect);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -620,10 +776,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFAnnot_GetVertices_Delegate(FPDF_ANNOTATION annot, IntPtr buffer, int length);
 
         private static FPDFAnnot_GetVertices_Delegate FPDFAnnot_GetVerticesStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetVertices")]
+        private static extern int FPDFAnnot_GetVerticesStatic(FPDF_ANNOTATION annot, IntPtr buffer, int length);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -645,10 +807,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate ulong FPDFAnnot_GetInkListCount_Delegate(FPDF_ANNOTATION annot);
 
         private static FPDFAnnot_GetInkListCount_Delegate FPDFAnnot_GetInkListCountStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetInkListCount")]
+        private static extern ulong FPDFAnnot_GetInkListCountStatic(FPDF_ANNOTATION annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -667,10 +835,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate ulong FPDFAnnot_GetInkListPath_Delegate(FPDF_ANNOTATION annot, ulong path_index, IntPtr buffer, ulong length);
 
         private static FPDFAnnot_GetInkListPath_Delegate FPDFAnnot_GetInkListPathStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetInkListPath")]
+        private static extern ulong FPDFAnnot_GetInkListPathStatic(FPDF_ANNOTATION annot, ulong path_index, IntPtr buffer, ulong length);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -693,10 +867,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_GetLine_Delegate(FPDF_ANNOTATION annot, ref FS_POINTF start, ref FS_POINTF end);
 
         private static FPDFAnnot_GetLine_Delegate FPDFAnnot_GetLineStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetLine")]
+        private static extern bool FPDFAnnot_GetLineStatic(FPDF_ANNOTATION annot, ref FS_POINTF start, ref FS_POINTF end);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -717,10 +897,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_SetBorder_Delegate(FPDF_ANNOTATION annot, float horizontal_radius, float vertical_radius, float border_width);
 
         private static FPDFAnnot_SetBorder_Delegate FPDFAnnot_SetBorderStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_SetBorder")]
+        private static extern bool FPDFAnnot_SetBorderStatic(FPDF_ANNOTATION annot, float horizontal_radius, float vertical_radius, float border_width);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -743,10 +929,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_GetBorder_Delegate(FPDF_ANNOTATION annot, ref float horizontal_radius, ref float vertical_radius, ref float border_width);
 
         private static FPDFAnnot_GetBorder_Delegate FPDFAnnot_GetBorderStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetBorder")]
+        private static extern bool FPDFAnnot_GetBorderStatic(FPDF_ANNOTATION annot, ref float horizontal_radius, ref float vertical_radius, ref float border_width);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -768,10 +960,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_GetFormAdditionalActionJavaScript_Delegate(FPDF_FORMHANDLE hHandle, FPDF_ANNOTATION annot, int eventType, IntPtr buffer, ulong buflen);
 
         private static FPDFAnnot_GetFormAdditionalActionJavaScript_Delegate FPDFAnnot_GetFormAdditionalActionJavaScriptStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetFormAdditionalActionJavaScript")]
+        private static extern bool FPDFAnnot_GetFormAdditionalActionJavaScriptStatic(FPDF_FORMHANDLE hHandle, FPDF_ANNOTATION annot, int eventType, IntPtr buffer, ulong buflen);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Get the JavaScript of an event of the annotation's additional actions. |buffer| is only modified if |buflen| is large enough to hold the whole
@@ -796,10 +994,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_HasKey_Delegate(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key);
 
         private static FPDFAnnot_HasKey_Delegate FPDFAnnot_HasKeyStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_HasKey")]
+        private static extern bool FPDFAnnot_HasKeyStatic(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -811,7 +1015,7 @@
         /// <remarks>
         /// FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_HasKey(FPDF_ANNOTATION annot, FPDF_BYTESTRING key);.
         /// </remarks>
-        public bool FPDFAnnot_HasKey(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key)
+        public bool FPDFAnnot_HasKey(FPDF_ANNOTATION annot, string key)
         {
             lock (_syncObject)
             {
@@ -819,10 +1023,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFAnnot_GetValueType_Delegate(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key);
 
         private static FPDFAnnot_GetValueType_Delegate FPDFAnnot_GetValueTypeStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetValueType")]
+        private static extern int FPDFAnnot_GetValueTypeStatic(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -834,7 +1044,7 @@
         /// <remarks>
         /// FPDF_EXPORT FPDF_OBJECT_TYPE FPDF_CALLCONV FPDFAnnot_GetValueType(FPDF_ANNOTATION annot, FPDF_BYTESTRING key);.
         /// </remarks>
-        public int FPDFAnnot_GetValueType(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key)
+        public int FPDFAnnot_GetValueType(FPDF_ANNOTATION annot, string key)
         {
             lock (_syncObject)
             {
@@ -842,10 +1052,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_SetStringValue_Delegate(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key, IntPtr value);
 
         private static FPDFAnnot_SetStringValue_Delegate FPDFAnnot_SetStringValueStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_SetStringValue")]
+        private static extern bool FPDFAnnot_SetStringValueStatic(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key, IntPtr value);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -859,7 +1075,7 @@
         /// <remarks>
         /// FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_SetStringValue(FPDF_ANNOTATION annot, FPDF_BYTESTRING key, FPDF_WIDESTRING value);.
         /// </remarks>
-        public bool FPDFAnnot_SetStringValue(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key, IntPtr value)
+        public bool FPDFAnnot_SetStringValue(FPDF_ANNOTATION annot, string key, IntPtr value)
         {
             lock (_syncObject)
             {
@@ -867,10 +1083,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate ulong FPDFAnnot_GetStringValue_Delegate(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key, IntPtr buffer, ulong buflen);
 
         private static FPDFAnnot_GetStringValue_Delegate FPDFAnnot_GetStringValueStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetStringValue")]
+        private static extern ulong FPDFAnnot_GetStringValueStatic(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key, IntPtr buffer, ulong buflen);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -888,7 +1110,7 @@
         /// <remarks>
         /// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDFAnnot_GetStringValue(FPDF_ANNOTATION annot, FPDF_BYTESTRING key, FPDF_WCHAR* buffer, unsigned long buflen);.
         /// </remarks>
-        public ulong FPDFAnnot_GetStringValue(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key, IntPtr buffer, ulong buflen)
+        public ulong FPDFAnnot_GetStringValue(FPDF_ANNOTATION annot, string key, IntPtr buffer, ulong buflen)
         {
             lock (_syncObject)
             {
@@ -896,10 +1118,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_GetNumberValue_Delegate(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key, ref float value);
 
         private static FPDFAnnot_GetNumberValue_Delegate FPDFAnnot_GetNumberValueStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetNumberValue")]
+        private static extern bool FPDFAnnot_GetNumberValueStatic(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key, ref float value);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -913,7 +1141,7 @@
         /// <remarks>
         /// FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_GetNumberValue(FPDF_ANNOTATION annot, FPDF_BYTESTRING key, float* value);.
         /// </remarks>
-        public bool FPDFAnnot_GetNumberValue(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key, ref float value)
+        public bool FPDFAnnot_GetNumberValue(FPDF_ANNOTATION annot, string key, ref float value)
         {
             lock (_syncObject)
             {
@@ -921,10 +1149,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_SetAP_Delegate(FPDF_ANNOTATION annot, FPDF_ANNOT_APPEARANCEMODES appearanceMode, IntPtr value);
 
         private static FPDFAnnot_SetAP_Delegate FPDFAnnot_SetAPStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_SetAP")]
+        private static extern bool FPDFAnnot_SetAPStatic(FPDF_ANNOTATION annot, FPDF_ANNOT_APPEARANCEMODES appearanceMode, IntPtr value);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -946,10 +1180,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate ulong FPDFAnnot_GetAP_Delegate(FPDF_ANNOTATION annot, FPDF_ANNOT_APPEARANCEMODES appearanceMode, IntPtr buffer, ulong buflen);
 
         private static FPDFAnnot_GetAP_Delegate FPDFAnnot_GetAPStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetAP")]
+        private static extern ulong FPDFAnnot_GetAPStatic(FPDF_ANNOTATION annot, FPDF_ANNOT_APPEARANCEMODES appearanceMode, IntPtr buffer, ulong buflen);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -975,10 +1215,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_ANNOTATION FPDFAnnot_GetLinkedAnnot_Delegate(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key);
 
         private static FPDFAnnot_GetLinkedAnnot_Delegate FPDFAnnot_GetLinkedAnnotStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetLinkedAnnot")]
+        private static extern FPDF_ANNOTATION FPDFAnnot_GetLinkedAnnotStatic(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -991,7 +1237,7 @@
         /// <remarks>
         /// FPDF_EXPORT FPDF_ANNOTATION FPDF_CALLCONV FPDFAnnot_GetLinkedAnnot(FPDF_ANNOTATION annot, FPDF_BYTESTRING key);.
         /// </remarks>
-        public FPDF_ANNOTATION FPDFAnnot_GetLinkedAnnot(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string key)
+        public FPDF_ANNOTATION FPDFAnnot_GetLinkedAnnot(FPDF_ANNOTATION annot, string key)
         {
             lock (_syncObject)
             {
@@ -999,10 +1245,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFAnnot_GetFlags_Delegate(FPDF_ANNOTATION annot);
 
         private static FPDFAnnot_GetFlags_Delegate FPDFAnnot_GetFlagsStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetFlags")]
+        private static extern int FPDFAnnot_GetFlagsStatic(FPDF_ANNOTATION annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1021,10 +1273,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_SetFlags_Delegate(FPDF_ANNOTATION annot, int flags);
 
         private static FPDFAnnot_SetFlags_Delegate FPDFAnnot_SetFlagsStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_SetFlags")]
+        private static extern bool FPDFAnnot_SetFlagsStatic(FPDF_ANNOTATION annot, int flags);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1044,10 +1302,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFAnnot_GetFormFieldFlags_Delegate(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot);
 
         private static FPDFAnnot_GetFormFieldFlags_Delegate FPDFAnnot_GetFormFieldFlagsStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetFormFieldFlags")]
+        private static extern int FPDFAnnot_GetFormFieldFlagsStatic(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1067,10 +1331,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_ANNOTATION FPDFAnnot_GetFormFieldAtPoint_Delegate(FPDF_FORMHANDLE handle, FPDF_PAGE page, ref FS_POINTF point);
 
         private static FPDFAnnot_GetFormFieldAtPoint_Delegate FPDFAnnot_GetFormFieldAtPointStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetFormFieldAtPoint")]
+        private static extern FPDF_ANNOTATION FPDFAnnot_GetFormFieldAtPointStatic(FPDF_FORMHANDLE handle, FPDF_PAGE page, ref FS_POINTF point);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1093,10 +1363,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate ulong FPDFAnnot_GetFormFieldName_Delegate(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot, IntPtr buffer, ulong buflen);
 
         private static FPDFAnnot_GetFormFieldName_Delegate FPDFAnnot_GetFormFieldNameStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetFormFieldName")]
+        private static extern ulong FPDFAnnot_GetFormFieldNameStatic(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot, IntPtr buffer, ulong buflen);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1121,10 +1397,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate ulong FPDFAnnot_GetFormFieldAlternateName_Delegate(FPDF_FORMHANDLE hHandle, FPDF_ANNOTATION annot, IntPtr buffer, ulong buflen);
 
         private static FPDFAnnot_GetFormFieldAlternateName_Delegate FPDFAnnot_GetFormFieldAlternateNameStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetFormFieldAlternateName")]
+        private static extern ulong FPDFAnnot_GetFormFieldAlternateNameStatic(FPDF_FORMHANDLE hHandle, FPDF_ANNOTATION annot, IntPtr buffer, ulong buflen);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Gets the alternate name of |annot|, which is an interactive form annotation.
@@ -1148,10 +1430,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFAnnot_GetFormFieldType_Delegate(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot);
 
         private static FPDFAnnot_GetFormFieldType_Delegate FPDFAnnot_GetFormFieldTypeStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetFormFieldType")]
+        private static extern int FPDFAnnot_GetFormFieldTypeStatic(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1172,10 +1460,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate ulong FPDFAnnot_GetFormFieldValue_Delegate(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot, IntPtr buffer, ulong buflen);
 
         private static FPDFAnnot_GetFormFieldValue_Delegate FPDFAnnot_GetFormFieldValueStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetFormFieldValue")]
+        private static extern ulong FPDFAnnot_GetFormFieldValueStatic(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot, IntPtr buffer, ulong buflen);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1200,10 +1494,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFAnnot_GetOptionCount_Delegate(FPDF_FORMHANDLE hHandle, FPDF_ANNOTATION annot);
 
         private static FPDFAnnot_GetOptionCount_Delegate FPDFAnnot_GetOptionCountStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetOptionCount")]
+        private static extern int FPDFAnnot_GetOptionCountStatic(FPDF_FORMHANDLE hHandle, FPDF_ANNOTATION annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1224,10 +1524,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate ulong FPDFAnnot_GetOptionLabel_Delegate(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot, int index, IntPtr buffer, ulong buflen);
 
         private static FPDFAnnot_GetOptionLabel_Delegate FPDFAnnot_GetOptionLabelStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetOptionLabel")]
+        private static extern ulong FPDFAnnot_GetOptionLabelStatic(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot, int index, IntPtr buffer, ulong buflen);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1255,10 +1561,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_IsOptionSelected_Delegate(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot, int index);
 
         private static FPDFAnnot_IsOptionSelected_Delegate FPDFAnnot_IsOptionSelectedStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_IsOptionSelected")]
+        private static extern bool FPDFAnnot_IsOptionSelectedStatic(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot, int index);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1280,10 +1592,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_GetFontSize_Delegate(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot, ref float value);
 
         private static FPDFAnnot_GetFontSize_Delegate FPDFAnnot_GetFontSizeStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetFontSize")]
+        private static extern bool FPDFAnnot_GetFontSizeStatic(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot, ref float value);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1305,10 +1623,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_IsChecked_Delegate(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot);
 
         private static FPDFAnnot_IsChecked_Delegate FPDFAnnot_IsCheckedStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_IsChecked")]
+        private static extern bool FPDFAnnot_IsCheckedStatic(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1328,10 +1652,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_SetFocusableSubtypes_Delegate(FPDF_FORMHANDLE handle, IntPtr subtypes, ulong count);
 
         private static FPDFAnnot_SetFocusableSubtypes_Delegate FPDFAnnot_SetFocusableSubtypesStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_SetFocusableSubtypes")]
+        private static extern bool FPDFAnnot_SetFocusableSubtypesStatic(FPDF_FORMHANDLE handle, IntPtr subtypes, ulong count);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1353,10 +1683,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFAnnot_GetFocusableSubtypesCount_Delegate(FPDF_FORMHANDLE handle);
 
         private static FPDFAnnot_GetFocusableSubtypesCount_Delegate FPDFAnnot_GetFocusableSubtypesCountStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetFocusableSubtypesCount")]
+        private static extern int FPDFAnnot_GetFocusableSubtypesCountStatic(FPDF_FORMHANDLE handle);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1376,10 +1712,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_GetFocusableSubtypes_Delegate(FPDF_FORMHANDLE handle, IntPtr subtypes, ulong count);
 
         private static FPDFAnnot_GetFocusableSubtypes_Delegate FPDFAnnot_GetFocusableSubtypesStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetFocusableSubtypes")]
+        private static extern bool FPDFAnnot_GetFocusableSubtypesStatic(FPDF_FORMHANDLE handle, IntPtr subtypes, ulong count);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1402,10 +1744,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_LINK FPDFAnnot_GetLink_Delegate(FPDF_ANNOTATION annot);
 
         private static FPDFAnnot_GetLink_Delegate FPDFAnnot_GetLinkStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetLink")]
+        private static extern FPDF_LINK FPDFAnnot_GetLinkStatic(FPDF_ANNOTATION annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1424,10 +1772,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFAnnot_GetFormControlCount_Delegate(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot);
 
         private static FPDFAnnot_GetFormControlCount_Delegate FPDFAnnot_GetFormControlCountStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetFormControlCount")]
+        private static extern int FPDFAnnot_GetFormControlCountStatic(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1449,10 +1803,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFAnnot_GetFormControlIndex_Delegate(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot);
 
         private static FPDFAnnot_GetFormControlIndex_Delegate FPDFAnnot_GetFormControlIndexStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetFormControlIndex")]
+        private static extern int FPDFAnnot_GetFormControlIndexStatic(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1474,10 +1834,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate ulong FPDFAnnot_GetFormFieldExportValue_Delegate(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot, IntPtr buffer, ulong buflen);
 
         private static FPDFAnnot_GetFormFieldExportValue_Delegate FPDFAnnot_GetFormFieldExportValueStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetFormFieldExportValue")]
+        private static extern ulong FPDFAnnot_GetFormFieldExportValueStatic(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot, IntPtr buffer, ulong buflen);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1503,10 +1869,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_SetURI_Delegate(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string uri);
 
         private static FPDFAnnot_SetURI_Delegate FPDFAnnot_SetURIStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_SetURI")]
+        private static extern bool FPDFAnnot_SetURIStatic(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string uri);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -1518,7 +1890,7 @@
         /// <remarks>
         /// FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_SetURI(FPDF_ANNOTATION annot, const char* uri);.
         /// </remarks>
-        public bool FPDFAnnot_SetURI(FPDF_ANNOTATION annot, [MarshalAs(UnmanagedType.LPStr)] string uri)
+        public bool FPDFAnnot_SetURI(FPDF_ANNOTATION annot, string uri)
         {
             lock (_syncObject)
             {
@@ -1528,12 +1900,7 @@
 
         private static void LoadDllAnnotPart()
         {
-            LoadDllAnnotPart1();
-            LoadDllAnnotPart2();
-        }
-
-        private static void LoadDllAnnotPart1()
-        {
+#if USE_DYNAMICALLY_LOADED_PDFIUM
             FPDFAnnot_IsSupportedSubtypeStatic = GetPDFiumFunction<FPDFAnnot_IsSupportedSubtype_Delegate>(nameof(FPDFAnnot_IsSupportedSubtype));
             FPDFPage_CreateAnnotStatic = GetPDFiumFunction<FPDFPage_CreateAnnot_Delegate>(nameof(FPDFPage_CreateAnnot));
             FPDFPage_GetAnnotCountStatic = GetPDFiumFunction<FPDFPage_GetAnnotCount_Delegate>(nameof(FPDFPage_GetAnnotCount));
@@ -1564,10 +1931,6 @@
             FPDFAnnot_GetInkListPathStatic = GetPDFiumFunction<FPDFAnnot_GetInkListPath_Delegate>(nameof(FPDFAnnot_GetInkListPath));
             FPDFAnnot_GetLineStatic = GetPDFiumFunction<FPDFAnnot_GetLine_Delegate>(nameof(FPDFAnnot_GetLine));
             FPDFAnnot_SetBorderStatic = GetPDFiumFunction<FPDFAnnot_SetBorder_Delegate>(nameof(FPDFAnnot_SetBorder));
-        }
-
-        private static void LoadDllAnnotPart2()
-        {
             FPDFAnnot_GetBorderStatic = GetPDFiumFunction<FPDFAnnot_GetBorder_Delegate>(nameof(FPDFAnnot_GetBorder));
             FPDFAnnot_GetFormAdditionalActionJavaScriptStatic = GetPDFiumFunction<FPDFAnnot_GetFormAdditionalActionJavaScript_Delegate>(nameof(FPDFAnnot_GetFormAdditionalActionJavaScript));
             FPDFAnnot_HasKeyStatic = GetPDFiumFunction<FPDFAnnot_HasKey_Delegate>(nameof(FPDFAnnot_HasKey));
@@ -1599,6 +1962,74 @@
             FPDFAnnot_GetFormControlIndexStatic = GetPDFiumFunction<FPDFAnnot_GetFormControlIndex_Delegate>(nameof(FPDFAnnot_GetFormControlIndex));
             FPDFAnnot_GetFormFieldExportValueStatic = GetPDFiumFunction<FPDFAnnot_GetFormFieldExportValue_Delegate>(nameof(FPDFAnnot_GetFormFieldExportValue));
             FPDFAnnot_SetURIStatic = GetPDFiumFunction<FPDFAnnot_SetURI_Delegate>(nameof(FPDFAnnot_SetURI));
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
+        }
+
+        private static void UnloadDllAnnotPart()
+        {
+#if USE_DYNAMICALLY_LOADED_PDFIUM
+            FPDFAnnot_IsSupportedSubtypeStatic = null;
+            FPDFPage_CreateAnnotStatic = null;
+            FPDFPage_GetAnnotCountStatic = null;
+            FPDFPage_GetAnnotStatic = null;
+            FPDFPage_GetAnnotIndexStatic = null;
+            FPDFPage_CloseAnnotStatic = null;
+            FPDFPage_RemoveAnnotStatic = null;
+            FPDFAnnot_GetSubtypeStatic = null;
+            FPDFAnnot_IsObjectSupportedSubtypeStatic = null;
+            FPDFAnnot_UpdateObjectStatic = null;
+            FPDFAnnot_AddInkStrokeStatic = null;
+            FPDFAnnot_RemoveInkListStatic = null;
+            FPDFAnnot_AppendObjectStatic = null;
+            FPDFAnnot_GetObjectCountStatic = null;
+            FPDFAnnot_GetObjectStatic = null;
+            FPDFAnnot_RemoveObjectStatic = null;
+            FPDFAnnot_SetColorStatic = null;
+            FPDFAnnot_GetColorStatic = null;
+            FPDFAnnot_HasAttachmentPointsStatic = null;
+            FPDFAnnot_SetAttachmentPointsStatic = null;
+            FPDFAnnot_AppendAttachmentPointsStatic = null;
+            FPDFAnnot_CountAttachmentPointsStatic = null;
+            FPDFAnnot_GetAttachmentPointsStatic = null;
+            FPDFAnnot_SetRectStatic = null;
+            FPDFAnnot_GetRectStatic = null;
+            FPDFAnnot_GetVerticesStatic = null;
+            FPDFAnnot_GetInkListCountStatic = null;
+            FPDFAnnot_GetInkListPathStatic = null;
+            FPDFAnnot_GetLineStatic = null;
+            FPDFAnnot_SetBorderStatic = null;
+            FPDFAnnot_GetBorderStatic = null;
+            FPDFAnnot_GetFormAdditionalActionJavaScriptStatic = null;
+            FPDFAnnot_HasKeyStatic = null;
+            FPDFAnnot_GetValueTypeStatic = null;
+            FPDFAnnot_SetStringValueStatic = null;
+            FPDFAnnot_GetStringValueStatic = null;
+            FPDFAnnot_GetNumberValueStatic = null;
+            FPDFAnnot_SetAPStatic = null;
+            FPDFAnnot_GetAPStatic = null;
+            FPDFAnnot_GetLinkedAnnotStatic = null;
+            FPDFAnnot_GetFlagsStatic = null;
+            FPDFAnnot_SetFlagsStatic = null;
+            FPDFAnnot_GetFormFieldFlagsStatic = null;
+            FPDFAnnot_GetFormFieldAtPointStatic = null;
+            FPDFAnnot_GetFormFieldNameStatic = null;
+            FPDFAnnot_GetFormFieldAlternateNameStatic = null;
+            FPDFAnnot_GetFormFieldTypeStatic = null;
+            FPDFAnnot_GetFormFieldValueStatic = null;
+            FPDFAnnot_GetOptionCountStatic = null;
+            FPDFAnnot_GetOptionLabelStatic = null;
+            FPDFAnnot_IsOptionSelectedStatic = null;
+            FPDFAnnot_GetFontSizeStatic = null;
+            FPDFAnnot_IsCheckedStatic = null;
+            FPDFAnnot_SetFocusableSubtypesStatic = null;
+            FPDFAnnot_GetFocusableSubtypesCountStatic = null;
+            FPDFAnnot_GetFocusableSubtypesStatic = null;
+            FPDFAnnot_GetLinkStatic = null;
+            FPDFAnnot_GetFormControlCountStatic = null;
+            FPDFAnnot_GetFormControlIndexStatic = null;
+            FPDFAnnot_GetFormFieldExportValueStatic = null;
+            FPDFAnnot_SetURIStatic = null;
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
         }
     }
 }

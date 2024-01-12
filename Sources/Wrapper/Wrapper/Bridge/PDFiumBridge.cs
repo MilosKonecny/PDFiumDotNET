@@ -97,6 +97,36 @@
             LoadDllSearchExPart();
         }
 
+        private static void UnloadDll()
+        {
+            // Load the functions declared in view header - fpdfview.h.
+            UnloadDllViewPart();
+
+            // Load the functions declared in view header - fpdf_ppo.h.
+            UnloadDllPpoPart();
+
+            // Load the functions declared in view header - fpdf_edit.h.
+            UnloadDllEditPart();
+
+            // Load the functions declared in view header - fpdf_save.h.
+            UnloadDllSavePart();
+
+            // Load the functions declared in doc header - fpdf_doc.h.
+            UnloadDllDocPart();
+
+            // Load the functions declared in text header - fpdf_text.h.
+            UnloadDllTextPart();
+
+            // Load the functions declared in annot header - fpdf_annot.h.
+            UnloadDllAnnotPart();
+
+            // Load the functions declared in annot header - fpdf_searchex.h.
+            UnloadDllSearchExPart();
+
+            NativeMethods.FreeLibrary(_libraryHandle);
+            _libraryHandle = IntPtr.Zero;
+        }
+
         /// <summary>
         /// Loads appropriate version of pdfium dll and extracts all pdfium methods currently supported in this project.
         /// </summary>
@@ -126,12 +156,12 @@
                 if (UsageCount == 0)
                 {
                     FPDF_DestroyLibraryStatic();
-                    NativeMethods.FreeLibrary(_libraryHandle);
-                    _libraryHandle = IntPtr.Zero;
+                    UnloadDll();
                 }
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         private static T GetPDFiumFunction<T>(string functionName)
         {
             var address = NativeMethods.GetProcAddressAnsi(_libraryHandle, functionName);
@@ -142,6 +172,7 @@
 
             return Marshal.GetDelegateForFunctionPointer<T>(address);
         }
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         #endregion Private static methods
 

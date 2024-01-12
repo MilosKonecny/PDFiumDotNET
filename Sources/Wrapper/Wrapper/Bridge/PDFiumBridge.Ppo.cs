@@ -3,18 +3,27 @@
     using System;
     using System.Runtime.InteropServices;
 
-    // Disable "Member 'xxxx' does not access instance data and can be marked as static."
+    // Disable "Member 'member' does not access instance data and can be marked as static."
 #pragma warning disable CA1822
+
+    // Disable "Specify marshaling for P/Invoke string arguments."
+#pragma warning disable CA2101
 
     /// <summary>
     /// The class contains all pdfium methods currently supported in this project.
     /// </summary>
     internal sealed partial class PDFiumBridge
     {
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDF_ImportPagesByIndex_Delegate(FPDF_DOCUMENT dest_doc, FPDF_DOCUMENT src_doc, IntPtr page_indices, ulong length, int index);
 
         private static FPDF_ImportPagesByIndex_Delegate FPDF_ImportPagesByIndexStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_ImportPagesByIndex")]
+        private static extern bool FPDF_ImportPagesByIndexStatic(FPDF_DOCUMENT dest_doc, FPDF_DOCUMENT src_doc, IntPtr page_indices, ulong length, int index);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -41,10 +50,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDF_ImportPages_Delegate(FPDF_DOCUMENT dest_doc, FPDF_DOCUMENT src_doc, [MarshalAs(UnmanagedType.LPStr)] string pagerange, int index);
 
         private static FPDF_ImportPages_Delegate FPDF_ImportPagesStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_ImportPages")]
+        private static extern bool FPDF_ImportPagesStatic(FPDF_DOCUMENT dest_doc, FPDF_DOCUMENT src_doc, [MarshalAs(UnmanagedType.LPStr)] string pagerange, int index);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Import pages to a FPDF_DOCUMENT.
@@ -57,7 +72,7 @@
         /// <remarks>
         /// FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDF_ImportPages(FPDF_DOCUMENT dest_doc, FPDF_DOCUMENT src_doc, FPDF_BYTESTRING pagerange, int index);.
         /// </remarks>
-        public bool FPDF_ImportPages(FPDF_DOCUMENT dest_doc, FPDF_DOCUMENT src_doc, [MarshalAs(UnmanagedType.LPStr)] string pagerange, int index)
+        public bool FPDF_ImportPages(FPDF_DOCUMENT dest_doc, FPDF_DOCUMENT src_doc, string pagerange, int index)
         {
             lock (_syncObject)
             {
@@ -65,10 +80,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate FPDF_DOCUMENT FPDF_ImportNPagesToOne_Delegate(FPDF_DOCUMENT src_doc, float output_width, float output_height, int num_pages_on_x_axis, int num_pages_on_y_axis);
 
         private static FPDF_ImportNPagesToOne_Delegate FPDF_ImportNPagesToOneStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_ImportNPagesToOne")]
+        private static extern FPDF_DOCUMENT FPDF_ImportNPagesToOneStatic(FPDF_DOCUMENT src_doc, float output_width, float output_height, int num_pages_on_x_axis, int num_pages_on_y_axis);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Experimental API.
@@ -113,10 +134,16 @@
         ////// newly created object.
         ////FPDF_EXPORT FPDF_PAGEOBJECT FPDF_CALLCONV FPDF_NewFormObjectFromXObject(FPDF_XOBJECT xobject);
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDF_CopyViewerPreferences_Delegate(FPDF_DOCUMENT dest_doc, FPDF_DOCUMENT src_doc);
 
         private static FPDF_CopyViewerPreferences_Delegate FPDF_CopyViewerPreferencesStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_CopyViewerPreferences")]
+        private static extern bool FPDF_CopyViewerPreferencesStatic(FPDF_DOCUMENT dest_doc, FPDF_DOCUMENT src_doc);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Copy the viewer preferences from |src_doc| into |dest_doc|.
@@ -137,11 +164,24 @@
 
         private static void LoadDllPpoPart()
         {
+#if USE_DYNAMICALLY_LOADED_PDFIUM
             // fpdf_ppo.h exports 7 functions
             FPDF_ImportPagesByIndexStatic = GetPDFiumFunction<FPDF_ImportPagesByIndex_Delegate>(nameof(FPDF_ImportPagesByIndex));
             FPDF_ImportPagesStatic = GetPDFiumFunction<FPDF_ImportPages_Delegate>(nameof(FPDF_ImportPages));
             FPDF_ImportNPagesToOneStatic = GetPDFiumFunction<FPDF_ImportNPagesToOne_Delegate>(nameof(FPDF_ImportNPagesToOne));
             FPDF_CopyViewerPreferencesStatic = GetPDFiumFunction<FPDF_CopyViewerPreferences_Delegate>(nameof(FPDF_CopyViewerPreferences));
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
+        }
+
+        private static void UnloadDllPpoPart()
+        {
+#if USE_DYNAMICALLY_LOADED_PDFIUM
+            // fpdf_ppo.h exports 7 functions
+            FPDF_ImportPagesByIndexStatic = null;
+            FPDF_ImportPagesStatic = null;
+            FPDF_ImportNPagesToOneStatic = null;
+            FPDF_CopyViewerPreferencesStatic = null;
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
         }
     }
 }

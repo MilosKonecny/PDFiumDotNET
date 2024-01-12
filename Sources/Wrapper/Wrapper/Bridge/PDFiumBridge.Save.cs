@@ -3,7 +3,7 @@
     using System;
     using System.Runtime.InteropServices;
 
-    // Disable "Member 'xxxx' does not access instance data and can be marked as static."
+    // Disable "Member 'member' does not access instance data and can be marked as static."
 #pragma warning disable CA1822
 
     /// <summary>
@@ -74,10 +74,16 @@
             FPDF_REMOVE_SECURITY = 3,
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDF_SaveAsCopy_Delegate(FPDF_DOCUMENT document, ref FPDF_FILEWRITE pFileWrite, FPDF_SAVEFLAGS flags);
 
         private static FPDF_SaveAsCopy_Delegate FPDF_SaveAsCopyStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_SaveAsCopy")]
+        private static extern bool FPDF_SaveAsCopyStatic(FPDF_DOCUMENT document, ref FPDF_FILEWRITE pFileWrite, FPDF_SAVEFLAGS flags);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Saves the copy of specified document in custom way.
@@ -97,10 +103,16 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDF_SaveWithVersion_Delegate(FPDF_DOCUMENT document, ref FPDF_FILEWRITE pFileWrite, FPDF_SAVEFLAGS flags, int fileVersion);
 
         private static FPDF_SaveWithVersion_Delegate FPDF_SaveWithVersionStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_SaveWithVersion")]
+        private static extern bool FPDF_SaveWithVersionStatic(FPDF_DOCUMENT document, ref FPDF_FILEWRITE pFileWrite, FPDF_SAVEFLAGS flags, int fileVersion);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
         /// Same as FPDF_SaveAsCopy(), except the file version of the saved document can be specified by the caller.
@@ -123,9 +135,20 @@
 
         private static void LoadDllSavePart()
         {
+#if USE_DYNAMICALLY_LOADED_PDFIUM
             // fpdf_save.h exports 2 functions
             FPDF_SaveAsCopyStatic = GetPDFiumFunction<FPDF_SaveAsCopy_Delegate>(nameof(FPDF_SaveAsCopy));
             FPDF_SaveWithVersionStatic = GetPDFiumFunction<FPDF_SaveWithVersion_Delegate>(nameof(FPDF_SaveWithVersion));
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
+        }
+
+        private static void UnloadDllSavePart()
+        {
+#if USE_DYNAMICALLY_LOADED_PDFIUM
+            // fpdf_save.h exports 2 functions
+            FPDF_SaveAsCopyStatic = null;
+            FPDF_SaveWithVersionStatic = null;
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
         }
     }
 }
