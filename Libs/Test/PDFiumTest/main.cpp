@@ -205,8 +205,8 @@ int main()
 			if (PDFium_GetPageSizeByIndexF(document, page_index, &size))
 			{
 				// Round up page size
-				auto int_width = std::ceil(size.width);
-				auto int_height = std::ceil(size.height);
+				auto int_width = (int)std::ceil(size.width);
+				auto int_height = (int)std::ceil(size.height);
 				// Allocate buffer
 				auto buffer = malloc(int_height * int_width * 4);
 				// Create bitmap
