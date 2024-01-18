@@ -108,17 +108,32 @@
         /// <summary>
         /// Gets the find command.
         /// </summary>
-        public ViewModelCommand FindCommand { get; private set; }
+        public ViewModelCommand FindTextCommand { get; private set; }
 
         /// <summary>
         /// Gets the clear find result command.
         /// </summary>
-        public ViewModelCommand FindClearResultCommand { get; private set; }
+        public ViewModelCommand FindTextClearResultCommand { get; private set; }
 
         /// <summary>
         /// Gets the cancel find command.
         /// </summary>
-        public ViewModelCommand FindCancelCommand { get; private set; }
+        public ViewModelCommand FindTextCancelCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the find command.
+        /// </summary>
+        public ViewModelCommand FindAnnotationsCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the clear find result command.
+        /// </summary>
+        public ViewModelCommand FindAnnotationsClearResultCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the cancel find command.
+        /// </summary>
+        public ViewModelCommand FindAnnotationsCancelCommand { get; private set; }
 
         #endregion Public properties - commands
 
@@ -157,7 +172,7 @@
 
                 return null;
             });
-            InvokePropertyChangedEvent();
+            InvokePropertyChangedEvent(string.Empty);
 
             if (result != OpenDocumentResult.Success)
             {
@@ -178,6 +193,7 @@
             }
 
             _pdfComponent.CloseDocument();
+            InvokePropertyChangedEvent(string.Empty);
         }
 
         private bool CanExecuteCloseCommand()
@@ -226,7 +242,7 @@
             if (_pdfComponent != null && _pdfComponent.IsDocumentOpen && relatedButton != null)
             {
                 _viewPageComponent.IsAnnotationToRender = !_viewPageComponent.IsAnnotationToRender;
-                InvokePropertyChangedEvent();
+                InvokePropertyChangedEvent(string.Empty);
                 _view.InvalidatePDFControl();
             }
         }
@@ -401,11 +417,11 @@
             return _pdfComponent != null && _pdfComponent.IsDocumentOpen;
         }
 
-        private async void ExecuteFindCommand()
+        private async void ExecuteFindTextCommand()
         {
-            ActiveFindPage = 1;
-            FindResult.Clear();
-            IsFindActive = true;
+            ActiveFindTextPage = 1;
+            FindTextResult.Clear();
+            IsFindTextActive = true;
 
             // Cancellation token not used.
             // The cancellation is implemented by the IsFindActive property
@@ -415,12 +431,12 @@
                 {
                     _viewPageComponent.FindComponent.FindText(
                         FindText,
-                        IsFindCaseSensitive,
-                        IsFindWholeWords,
+                        IsFindTextCaseSensitive,
+                        IsFindTextWholeWords,
                         (pageIndex) =>
                         {
-                            ActiveFindPage = pageIndex + 1;
-                            return IsFindActive;
+                            ActiveFindTextPage = pageIndex + 1;
+                            return IsFindTextActive;
                         },
                         (page) =>
                         {
@@ -428,11 +444,11 @@
                             {
                                 App.Current.Dispatcher.Invoke(() =>
                                 {
-                                    FindResult.Add(page);
+                                    FindTextResult.Add(page);
                                 });
                             }
 
-                            return IsFindActive;
+                            return IsFindTextActive;
                         },
                         (page, position) =>
                         {
@@ -444,43 +460,106 @@
                                 });
                             }
 
-                            return IsFindActive;
+                            return IsFindTextActive;
                         });
                 },
                 ct,
                 TaskCreationOptions.LongRunning,
                 TaskScheduler.Default).ConfigureAwait(false);
 
-            IsFindActive = false;
+            IsFindTextActive = false;
         }
 
-        private bool CanExecuteFindCommand()
+        private bool CanExecuteFindTextCommand()
         {
             return _pdfComponent != null && _pdfComponent.IsDocumentOpen;
         }
 
-        private void ExecuteFindClearResultCommand()
+        private void ExecuteFindTextClearResultCommand()
         {
-            FindResult.Clear();
+            FindTextResult.Clear();
             if (_pdfComponent != null && _pdfComponent.IsDocumentOpen)
             {
                 _viewPageComponent.FindComponent.ClearFindSelections();
             }
         }
 
-        private bool CanExecuteFindClearResultCommand()
+        private bool CanExecuteFindTextClearResultCommand()
         {
             return _pdfComponent != null && _pdfComponent.IsDocumentOpen;
         }
 
-        private void ExecuteFindCancelCommand()
+        private void ExecuteFindTextCancelCommand()
         {
-            IsFindActive = false;
+            IsFindTextActive = false;
         }
 
-        private bool CanExecuteFindCancelCommand()
+        private bool CanExecuteFindTextCancelCommand()
         {
-            return IsFindActive;
+            return IsFindTextActive;
+        }
+
+        private async void ExecuteFindAnnotationsCommand()
+        {
+            ActiveFindAnnotationsPage = 1;
+            FindAnnotationsResult.Clear();
+            IsFindAnnotationsActive = true;
+
+            // Cancellation token not used.
+            // The cancellation is implemented by the IsFindActive property
+            var ct = new CancellationToken();
+            await Task.Factory.StartNew(
+                () =>
+                {
+                    _viewPageComponent.FindAnnotations(
+                        (pageIndex) =>
+                        {
+                            ActiveFindAnnotationsPage = pageIndex + 1;
+                            return IsFindAnnotationsActive;
+                        },
+                        (page) =>
+                        {
+                            if (page != null)
+                            {
+                                App.Current.Dispatcher.Invoke(() =>
+                                {
+                                    FindAnnotationsResult.Add(page);
+                                });
+                            }
+
+                            return IsFindAnnotationsActive;
+                        });
+                },
+                ct,
+                TaskCreationOptions.LongRunning,
+                TaskScheduler.Default).ConfigureAwait(false);
+
+            IsFindAnnotationsActive = false;
+        }
+
+        private bool CanExecuteFindAnnotationsCommand()
+        {
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpen;
+        }
+
+        private void ExecuteFindAnnotationsClearResultCommand()
+        {
+            FindAnnotationsResult.Clear();
+        }
+
+        private bool CanExecuteFindAnnotationsClearResultCommand()
+        {
+            return _pdfComponent != null && _pdfComponent.IsDocumentOpen;
+        }
+
+        private void ExecuteFindAnnotationsCancelCommand()
+        {
+            IsFindAnnotationsActive = false;
+        }
+
+        private bool CanExecuteFindAnnotationsCancelCommand()
+        {
+            return IsFindAnnotationsActive;
         }
 
         #endregion Private methods - command related

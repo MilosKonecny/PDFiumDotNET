@@ -4,7 +4,9 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
+    using PDFiumDotNET.Components.Annotation;
     using PDFiumDotNET.Components.Contracts.Action;
+    using PDFiumDotNET.Components.Contracts.Annotation;
     using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Destination;
     using PDFiumDotNET.Components.Contracts.EventArguments;
@@ -16,6 +18,7 @@
     using PDFiumDotNET.Components.Render;
     using PDFiumDotNET.Components.Transformation;
     using PDFiumDotNET.Components.Zoom;
+    using PDFiumDotNET.Wrapper.Bridge;
 
     /// <summary>
     /// The class implements functionality defined by <see cref="IPDFPageComponent"/>.
@@ -431,6 +434,57 @@
                     InvokePropertyChangedEvent();
                 }
             }
+        }
+
+        /// <inheritdoc/>
+        public bool FindAnnotations(Func<int, bool> progress, Func<IPDFPageAnnotations, bool> addPage)
+        {
+            var found = false;
+
+            foreach (PDFPage page in Pages)
+            {
+                if (progress != null)
+                {
+                    if (!progress(page.PageIndex))
+                    {
+                        break;
+                    }
+                }
+
+                var pageHandle = PDFComponent.PDFiumBridge.FPDF_LoadPage(PDFComponent.PDFiumDocument, page.PageIndex);
+                var count = PDFComponent.PDFiumBridge.FPDFPage_GetAnnotCount(pageHandle);
+                var add = false;
+                if (count > 0)
+                {
+                    for (var index = 0; index < count; index++)
+                    {
+                        var annot = PDFComponent.PDFiumBridge.FPDFPage_GetAnnot(pageHandle, index);
+                        var subtype = PDFComponent.PDFiumBridge.FPDFAnnot_GetSubtype(annot);
+                        if (subtype != PDFiumBridge.FPDF_ANNOTATION_SUBTYPE.FPDF_ANNOT_LINK)
+                        {
+                            add = true;
+                            found = true;
+                        }
+
+                        PDFComponent.PDFiumBridge.FPDFPage_CloseAnnot(annot);
+                        if (add)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                PDFComponent.PDFiumBridge.FPDF_ClosePage(pageHandle);
+                if (add && addPage != null)
+                {
+                    if (!addPage(new PDFPageAnnotations(page, count)))
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return found;
         }
 
         /// <inheritdoc/>

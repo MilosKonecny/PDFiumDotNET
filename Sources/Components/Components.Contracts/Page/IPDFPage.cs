@@ -1,6 +1,7 @@
 ﻿namespace PDFiumDotNET.Components.Contracts.Page
 {
     using System;
+    using PDFiumDotNET.Components.Contracts.Annotation;
     using PDFiumDotNET.Components.Contracts.Bitmap;
     using PDFiumDotNET.Components.Contracts.Link;
 
@@ -40,6 +41,11 @@
         int PageIndex { get; }
 
         /// <summary>
+        /// Gets the annotation information.
+        /// </summary>
+        IPDFPageAnnotations PageAnnotations { get; }
+
+        /// <summary>
         /// Creates page bitmap of page. Usable to get the scaled page.
         /// </summary>
         /// <param name="zoomFactor">Zoom factor to use for transformation.</param>
@@ -75,6 +81,6 @@
         /// <summary>
         /// Navigates to this page.
         /// </summary>
-        void NavigteTo();
+        void NavigateTo();
     }
 }
