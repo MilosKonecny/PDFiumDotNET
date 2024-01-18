@@ -3,7 +3,9 @@
     using System;
     using System.Globalization;
     using System.Runtime.InteropServices;
+    using PDFiumDotNET.Components.Annotation;
     using PDFiumDotNET.Components.Bitmap;
+    using PDFiumDotNET.Components.Contracts.Annotation;
     using PDFiumDotNET.Components.Contracts.Bitmap;
     using PDFiumDotNET.Components.Contracts.Link;
     using PDFiumDotNET.Components.Contracts.Page;
@@ -18,7 +20,6 @@
         #region Private fields
 
         private readonly PDFPageComponent _pageComponent;
-        private readonly PDFComponent _mainComponent;
 
         #endregion Private fields
 
@@ -32,7 +33,6 @@
         public PDFPage(PDFPageComponent pageComponent, int pageIndex)
         {
             _pageComponent = pageComponent ?? throw new ArgumentNullException(nameof(pageComponent));
-            _mainComponent = _pageComponent.MainComponent as PDFComponent;
             PageIndex = pageIndex;
         }
 
@@ -59,25 +59,25 @@
         /// </summary>
         public void Build()
         {
-            if (_mainComponent.PDFiumBridge == null || !_mainComponent.PDFiumDocument.IsValid)
+            if (_pageComponent.PDFComponent.PDFiumBridge == null || !_pageComponent.PDFComponent.PDFiumDocument.IsValid)
             {
                 return;
             }
 
             OriginalWidth = 0;
             OriginalHeight = 0;
-            if (_mainComponent.PDFiumBridge.FPDF_GetPageSizeByIndexF(_mainComponent.PDFiumDocument, PageIndex, out FS_SIZEF size))
+            if (_pageComponent.PDFComponent.PDFiumBridge.FPDF_GetPageSizeByIndexF(_pageComponent.PDFComponent.PDFiumDocument, PageIndex, out FS_SIZEF size))
             {
                 OriginalWidth = size.Width;
                 OriginalHeight = size.Height;
             }
 
             PageLabel = null;
-            var requiredLen = _mainComponent.PDFiumBridge.FPDF_GetPageLabel(_mainComponent.PDFiumDocument, PageIndex, IntPtr.Zero, 0);
+            var requiredLen = _pageComponent.PDFComponent.PDFiumBridge.FPDF_GetPageLabel(_pageComponent.PDFComponent.PDFiumDocument, PageIndex, IntPtr.Zero, 0);
             if (requiredLen > 0)
             {
                 var buffer = Marshal.AllocHGlobal(requiredLen);
-                _mainComponent.PDFiumBridge.FPDF_GetPageLabel(_mainComponent.PDFiumDocument, PageIndex, buffer, (ulong)requiredLen);
+                _pageComponent.PDFComponent.PDFiumBridge.FPDF_GetPageLabel(_pageComponent.PDFComponent.PDFiumDocument, PageIndex, buffer, (ulong)requiredLen);
                 PageLabel = Marshal.PtrToStringUni(buffer);
                 Marshal.FreeHGlobal(buffer);
             }
@@ -125,12 +125,24 @@
         public int PageIndex { get; private set; }
 
         /// <inheritdoc/>
+        public IPDFPageAnnotations PageAnnotations
+        {
+            get
+            {
+                var pageHandle = _pageComponent.PDFComponent.PDFiumBridge.FPDF_LoadPage(_pageComponent.PDFComponent.PDFiumDocument, PageIndex);
+                var count = _pageComponent.PDFComponent.PDFiumBridge.FPDFPage_GetAnnotCount(pageHandle);
+                _pageComponent.PDFComponent.PDFiumBridge.FPDF_ClosePage(pageHandle);
+                return new PDFPageAnnotations(this, count);
+            }
+        }
+
+        /// <inheritdoc/>
         public void RenderPageBitmap(double zoomFactor, int startX, int startY, int sizeX, int sizeY, int width, int height, BitmapFormat format, IntPtr buffer, int stride)
         {
             var bmp = new PDFBitmap(_pageComponent);
             bmp.Create(width, height, format, buffer, stride);
 
-            var pageHandle = _mainComponent.PDFiumBridge.FPDF_LoadPage(_mainComponent.PDFiumDocument, PageIndex);
+            var pageHandle = _pageComponent.PDFComponent.PDFiumBridge.FPDF_LoadPage(_pageComponent.PDFComponent.PDFiumDocument, PageIndex);
             bmp.RenderWithTransformation(
                 pageHandle,
                 zoomFactor,
@@ -139,7 +151,7 @@
                 sizeX,
                 sizeY,
                 _pageComponent.IsAnnotationToRender ? FPDF_RENDERING_FLAGS.FPDF_ANNOT : FPDF_RENDERING_FLAGS.FPDF_NONE);
-            _mainComponent.PDFiumBridge.FPDF_ClosePage(pageHandle);
+            _pageComponent.PDFComponent.PDFiumBridge.FPDF_ClosePage(pageHandle);
 
             if (_pageComponent.PageIndexWithSelections == PageIndex && _pageComponent.SelectionRectangles.Count != 0)
             {
@@ -158,7 +170,7 @@
             var bmp = new PDFBitmap(_pageComponent);
             bmp.Create((int)Width, (int)Height, format, buffer, stride);
 
-            var pageHandle = _mainComponent.PDFiumBridge.FPDF_LoadPage(_mainComponent.PDFiumDocument, PageIndex);
+            var pageHandle = _pageComponent.PDFComponent.PDFiumBridge.FPDF_LoadPage(_pageComponent.PDFComponent.PDFiumDocument, PageIndex);
             bmp.RenderWithoutTransformation(
                 pageHandle,
                 0,
@@ -166,7 +178,7 @@
                 (int)Width,
                 (int)Height,
                 FPDF_RENDERING_FLAGS.FPDF_NONE);
-            _mainComponent.PDFiumBridge.FPDF_ClosePage(pageHandle);
+            _pageComponent.PDFComponent.PDFiumBridge.FPDF_ClosePage(pageHandle);
 
             bmp.Destroy();
         }
@@ -174,20 +186,20 @@
         /// <inheritdoc/>
         public IPDFLink GetLinkFromPoint(double x, double y)
         {
-            var pageHandle = _mainComponent.PDFiumBridge.FPDF_LoadPage(_mainComponent.PDFiumDocument, PageIndex);
-            var linkHandle = _mainComponent.PDFiumBridge.FPDFLink_GetLinkAtPoint(pageHandle, x, y);
-            _mainComponent.PDFiumBridge.FPDF_ClosePage(pageHandle);
+            var pageHandle = _pageComponent.PDFComponent.PDFiumBridge.FPDF_LoadPage(_pageComponent.PDFComponent.PDFiumDocument, PageIndex);
+            var linkHandle = _pageComponent.PDFComponent.PDFiumBridge.FPDFLink_GetLinkAtPoint(pageHandle, x, y);
+            _pageComponent.PDFComponent.PDFiumBridge.FPDF_ClosePage(pageHandle);
 
             if (linkHandle.IsValid)
             {
-                return new PDFLink(_mainComponent, linkHandle);
+                return new PDFLink(_pageComponent.PDFComponent, linkHandle);
             }
 
             return null;
         }
 
         /// <inheritdoc/>
-        public void NavigteTo()
+        public void NavigateTo()
         {
             _pageComponent.NavigateToPage(PageIndex + 1);
         }

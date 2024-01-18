@@ -11,7 +11,7 @@
         xmlns:controls="clr-namespace:PDFiumDotNET.Apps.PDFViewWPF.Controls"
         mc:Ignorable="d" 
         d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type local:MainViewModel}}"
-        d:DesignHeight="300" d:DesignWidth="500"
+        d:DesignHeight="400" d:DesignWidth="600"
         Title="{Binding Path=TitleInformation, StringFormat=PDFViewWPF example application ({0})}">
     <Window.Resources>
         <ResourceDictionary>
@@ -310,23 +310,25 @@
                         </Grid.RowDefinitions>
                         <TextBox Grid.Row="0" Text="{Binding Path=FindText, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=IsDocumentOpened}">
                             <TextBox.InputBindings>
-                                <KeyBinding Command="{Binding Path=FindCommand}" Key="Return" />
+                                <KeyBinding Command="{Binding Path=FindTextCommand}" Key="Return" />
                             </TextBox.InputBindings>
                         </TextBox>
-                        <CheckBox Grid.Row="2" IsChecked="{Binding Path=IsFindCaseSensitive}" IsEnabled="{Binding Path=IsDocumentOpened}">
+                        <CheckBox Grid.Row="2" IsChecked="{Binding Path=IsFindTextCaseSensitive}" IsEnabled="{Binding Path=IsDocumentOpened}">
                             <TextBlock Text="Case sensitive"/>
                         </CheckBox>
-                        <CheckBox Grid.Row="4" IsChecked="{Binding Path=IsFindWholeWords}" IsEnabled="{Binding Path=IsDocumentOpened}">
+                        <CheckBox Grid.Row="4" IsChecked="{Binding Path=IsFindTextWholeWords}" IsEnabled="{Binding Path=IsDocumentOpened}">
                             <TextBlock Text="Whole words"/>
                         </CheckBox>
-                        <Button Grid.Row="6" HorizontalAlignment="Left" Style="{StaticResource ResourceKey=NoStyles}" Width="50" Command="{Binding Path=FindCommand}">
-                            <TextBlock Text="Find"/>
-                        </Button>
-                        <Button Grid.Row="6" HorizontalAlignment="Right" Style="{StaticResource ResourceKey=NoStyles}" Width="50" Command="{Binding Path=FindClearResultCommand}">
-                            <TextBlock Text="Clear"/>
-                        </Button>
+                        <StackPanel Grid.Row="6" Orientation="Horizontal">
+                            <Button Style="{StaticResource ResourceKey=NoStyles}" Width="50" Command="{Binding Path=FindTextCommand}">
+                                <TextBlock Text="Find"/>
+                            </Button>
+                            <Button Style="{StaticResource ResourceKey=NoStyles}" Width="50" Margin="3,0,0,0" Command="{Binding Path=FindTextClearResultCommand}">
+                                <TextBlock Text="Clear"/>
+                            </Button>
+                        </StackPanel>
                         <TreeView Grid.Row="8"
-                                  ItemsSource="{Binding Path=FindResult}"
+                                  ItemsSource="{Binding Path=FindTextResult}"
                                   SelectedItemChanged="HandleFindTreeViewSelectedItemChangedEvent"
                                   ItemTemplateSelector="{StaticResource ResourceKey=FindTemplateSelectorKey}">
                             <TreeView.ItemContainerStyle>
@@ -338,19 +340,59 @@
                     </Grid>
                 </Border>
             </TabItem>
+            <TabItem Header="Pages with annotation">
+                <Border Margin="3" BorderThickness="1" BorderBrush="{Binding ElementName=_tabControl, Path=BorderBrush}">
+                    <Grid Margin="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="3"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+                            <Button Style="{StaticResource ResourceKey=NoStyles}" Width="50" Command="{Binding Path=FindAnnotationsCommand}">
+                                <TextBlock Text="Find"/>
+                            </Button>
+                            <Button Style="{StaticResource ResourceKey=NoStyles}" Width="50" Margin="3,0,0,0" Command="{Binding Path=FindAnnotationsClearResultCommand}">
+                                <TextBlock Text="Clear"/>
+                            </Button>
+                        </StackPanel>
+                        <ListBox Grid.Row="2" ItemsSource="{Binding FindAnnotationsResult}" SelectedItem="{Binding SelectedPageWithAnnotation}" SelectionMode="Single">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Path=RelatedPage.PageLabel, StringFormat=Page {0}}"/>
+                                        <TextBlock Text="{Binding Path=Count, StringFormat=({0})}" Margin="3,0,0,0"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Border>
+            </TabItem>
         </TabControl>
         <!-- PDF -->
         <ScrollViewer Grid.Row="4" Grid.Column="2" CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <wpfControl:PDFView x:Name="_pdfView"
                                 PDFPageComponent="{Binding Path=ViewPageComponent}" />
         </ScrollViewer>
-        <!-- Find active -->
+        <!-- Find text active -->
         <Grid Grid.Row="0" Grid.RowSpan="10" Grid.Column="0" Grid.ColumnSpan="10"
               Background="White" Opacity="0.8"
-              Visibility="{Binding Path=IsFindActive, Converter={StaticResource ResourceKey=BooleanToVisibilityConverterKey}}">
+              Visibility="{Binding Path=IsFindTextActive, Converter={StaticResource ResourceKey=BooleanToVisibilityConverterKey}}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock FontWeight="Bold" Text="{Binding Path=ActiveFindPage, StringFormat=Find text on page {0:#}}"/>
-                <Button Style="{StaticResource ResourceKey=NoStyles}" Command="{Binding Path=FindCancelCommand}">
+                <TextBlock FontWeight="Bold" Text="{Binding Path=ActiveFindTextPage, StringFormat=Find text on page {0:#}}"/>
+                <Button Style="{StaticResource ResourceKey=NoStyles}" Command="{Binding Path=FindTextCancelCommand}">
+                    <TextBlock Text="Cancel"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <!-- Find annotations active -->
+        <Grid Grid.Row="0" Grid.RowSpan="10" Grid.Column="0" Grid.ColumnSpan="10"
+              Background="White" Opacity="0.8"
+              Visibility="{Binding Path=IsFindAnnotationsActive, Converter={StaticResource ResourceKey=BooleanToVisibilityConverterKey}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock FontWeight="Bold" Text="{Binding Path=ActiveFindAnnotationsPage, StringFormat=Find annotations on page {0:#}}"/>
+                <Button Style="{StaticResource ResourceKey=NoStyles}" Command="{Binding Path=FindAnnotationsCancelCommand}">
                     <TextBlock Text="Cancel"/>
                 </Button>
             </StackPanel>

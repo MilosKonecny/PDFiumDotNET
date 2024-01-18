@@ -1,6 +1,8 @@
 ﻿namespace PDFiumDotNET.Apps.PDFViewWPF
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -11,6 +13,7 @@
     using PDFiumDotNET.Apps.PDFViewWPF.Base;
     using PDFiumDotNET.Apps.PDFViewWPF.Contracts;
     using PDFiumDotNET.Components.Contracts;
+    using PDFiumDotNET.Components.Contracts.Annotation;
     using PDFiumDotNET.Components.Contracts.Bookmark;
     using PDFiumDotNET.Components.Contracts.Find;
     using PDFiumDotNET.Components.Contracts.Layout;
@@ -38,8 +41,11 @@
         private IPDFPageComponent _thumbnailPageComponent;
         private string _currentPageLabel;
         private int _currentPageIndex;
-        private bool _isFindActive;
-        private int _activeFindPage;
+        private bool _isFindTextActive;
+        private int _activeFindTextPage;
+        private bool _isFindAnnotationsActive;
+        private int _activeFindAnnotationsPage;
+        private IPDFPageAnnotations _selectedPageWithAnnotations;
         private PageLayoutType _pageLayoutType = PageLayoutType.Standard;
 
         #endregion Private fields
@@ -51,7 +57,8 @@
         /// </summary>
         public MainViewModel()
         {
-            FindResult = new ObservableCollection<IPDFFindPage>();
+            FindTextResult = new ObservableCollection<IPDFFindPage>();
+            FindAnnotationsResult = new ObservableCollection<IPDFPageAnnotations>();
         }
 
         #endregion Constructors
@@ -200,20 +207,20 @@
         }
 
         /// <summary>
-        /// Gets flag whether find process is active or not.
+        /// Gets flag whether find text process is active or not.
         /// </summary>
-        public bool IsFindActive
+        public bool IsFindTextActive
         {
             get
             {
-                return _isFindActive;
+                return _isFindTextActive;
             }
 
             private set
             {
-                if (value != _isFindActive)
+                if (value != _isFindTextActive)
                 {
-                    _isFindActive = value;
+                    _isFindTextActive = value;
                     InvokePropertyChangedEvent();
                 }
             }
@@ -222,18 +229,18 @@
         /// <summary>
         /// Gets the page where is find text active.
         /// </summary>
-        public int ActiveFindPage
+        public int ActiveFindTextPage
         {
             get
             {
-                return _activeFindPage;
+                return _activeFindTextPage;
             }
 
             private set
             {
-                if (value != _activeFindPage)
+                if (value != _activeFindTextPage)
                 {
-                    _activeFindPage = value;
+                    _activeFindTextPage = value;
                     InvokePropertyChangedEvent();
                 }
             }
@@ -247,17 +254,62 @@
         /// <summary>
         /// Gets or sets the find filter.
         /// </summary>
-        public bool IsFindCaseSensitive { get; set; }
+        public bool IsFindTextCaseSensitive { get; set; }
 
         /// <summary>
         /// Gets or sets the find filter.
         /// </summary>
-        public bool IsFindWholeWords { get; set; }
+        public bool IsFindTextWholeWords { get; set; }
+
+        /// <summary>
+        /// Gets flag whether find annotations process is active or not.
+        /// </summary>
+        public bool IsFindAnnotationsActive
+        {
+            get
+            {
+                return _isFindAnnotationsActive;
+            }
+
+            private set
+            {
+                if (value != _isFindAnnotationsActive)
+                {
+                    _isFindAnnotationsActive = value;
+                    InvokePropertyChangedEvent();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the page where is find annotations active.
+        /// </summary>
+        public int ActiveFindAnnotationsPage
+        {
+            get
+            {
+                return _activeFindAnnotationsPage;
+            }
+
+            private set
+            {
+                if (value != _activeFindAnnotationsPage)
+                {
+                    _activeFindAnnotationsPage = value;
+                    InvokePropertyChangedEvent();
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the collection of find result.
         /// </summary>
-        public ObservableCollection<IPDFFindPage> FindResult { get; private set; }
+        public ObservableCollection<IPDFFindPage> FindTextResult { get; private set; }
+
+        /// <summary>
+        /// Gets the collection of find annotations result.
+        /// </summary>
+        public ObservableCollection<IPDFPageAnnotations> FindAnnotationsResult { get; private set; }
 
         /// <summary>
         /// Gets the value indicating whether view with pages in one column is active.
@@ -292,7 +344,33 @@
             }
         }
 
-#endregion Public properties
+        /// <summary>
+        /// Gets or sets the selected page with annotation.
+        /// </summary>
+        public object SelectedPageWithAnnotation
+        {
+            get
+            {
+                return _selectedPageWithAnnotations;
+            }
+
+            set
+            {
+                var page = value as IPDFPageAnnotations;
+                if (page != null)
+                {
+                    if (page != _selectedPageWithAnnotations)
+                    {
+                        _selectedPageWithAnnotations = page;
+                        InvokePropertyChangedEvent();
+                    }
+
+                    page.RelatedPage?.NavigateTo();
+                }
+            }
+        }
+
+        #endregion Public properties
 
         #region Public methods
 
@@ -380,10 +458,15 @@
             ViewTwoColumnsCommand = new ViewModelCommand(ExecuteViewTwoColumnsCommand, CanExecuteViewTwoColumnsCommand);
             ViewTwoColumnsSpecialCommand = new ViewModelCommand(ExecuteViewTwoColumnsSpecialCommand, CanExecuteViewTwoColumnsSpecialCommand);
 
-            // Find commands
-            FindCommand = new ViewModelCommand(ExecuteFindCommand, CanExecuteFindCommand);
-            FindClearResultCommand = new ViewModelCommand(ExecuteFindClearResultCommand, CanExecuteFindClearResultCommand);
-            FindCancelCommand = new ViewModelCommand(ExecuteFindCancelCommand, CanExecuteFindCancelCommand);
+            // Find text commands
+            FindTextCommand = new ViewModelCommand(ExecuteFindTextCommand, CanExecuteFindTextCommand);
+            FindTextClearResultCommand = new ViewModelCommand(ExecuteFindTextClearResultCommand, CanExecuteFindTextClearResultCommand);
+            FindTextCancelCommand = new ViewModelCommand(ExecuteFindTextCancelCommand, CanExecuteFindTextCancelCommand);
+
+            // Find annotations commands
+            FindAnnotationsCommand = new ViewModelCommand(ExecuteFindAnnotationsCommand, CanExecuteFindAnnotationsCommand);
+            FindAnnotationsClearResultCommand = new ViewModelCommand(ExecuteFindAnnotationsClearResultCommand, CanExecuteFindAnnotationsClearResultCommand);
+            FindAnnotationsCancelCommand = new ViewModelCommand(ExecuteFindAnnotationsCancelCommand, CanExecuteFindAnnotationsCancelCommand);
 
             // Initialize PDF component
             _pdfComponent = PDFFactory.PDFComponent;
@@ -392,8 +475,10 @@
             {
                 if (string.Equals(nameof(IPDFComponent.IsDocumentOpen), e?.PropertyName, StringComparison.OrdinalIgnoreCase))
                 {
-                    IsFindActive = false;
-                    FindResult.Clear();
+                    IsFindTextActive = false;
+                    FindTextResult.Clear();
+                    IsFindAnnotationsActive = false;
+                    FindAnnotationsResult.Clear();
                     InvokePropertyChangedEvent(nameof(IsDocumentOpened));
                     InvokePropertyChangedEvent(nameof(IsDocumentClosed));
                 }

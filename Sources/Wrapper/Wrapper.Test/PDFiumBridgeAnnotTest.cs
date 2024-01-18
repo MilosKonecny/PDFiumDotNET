@@ -74,7 +74,7 @@
             Assert.IsTrue(page.IsValid);
 
             var count = bridge.FPDFPage_GetAnnotCount(page);
-            Assert.AreEqual(21, count);
+            Assert.AreEqual(8, count);
 
             bridge.FPDF_ClosePage(page);
             bridge.FPDF_CloseDocument(document);

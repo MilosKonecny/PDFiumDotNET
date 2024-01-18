@@ -3,6 +3,7 @@
     using System;
     using System.Collections.ObjectModel;
     using PDFiumDotNET.Components.Contracts.Action;
+    using PDFiumDotNET.Components.Contracts.Annotation;
     using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Destination;
     using PDFiumDotNET.Components.Contracts.EventArguments;
@@ -67,14 +68,26 @@
         bool IsAnnotationToRender { get; set; }
 
         /// <summary>
-        /// Gets or set the function to obtain color to use to draw find selection rectangle.
+        /// Gets or sets the function to obtain color to use to draw find selection rectangle.
         /// </summary>
         Func<int> FindSelectionBackgroundFunc { get; set; }
 
         /// <summary>
-        /// Gets or set the function to obtain color to use to draw find selection rectangle.
+        /// Gets or sets the function to obtain color to use to draw find selection rectangle.
         /// </summary>
         Func<int> FindSelectionBorderFunc { get; set; }
+
+        /// <summary>
+        /// Find all pages with annotation.
+        /// </summary>
+        /// <param name="progress">Callback method.
+        /// Parameter is actual page index where is tried to find annotation. First page has index 0.
+        /// Return <c>true</c> to continue and <c>false</c> to cancel find process.</param>
+        /// <param name="addPage">Callback method.
+        /// Called whenever next page was identified, where the annotation exists.
+        /// Return <c>true</c> to continue and <c>false</c> to cancel find process.</param>
+        /// <returns><c>true</c> at least one page with annotation was found.</returns>
+        bool FindAnnotations(Func<int, bool> progress, Func<IPDFPageAnnotations, bool> addPage);
 
         /// <summary>
         /// Performs the action defined in given <see cref="IPDFAction"/>.
