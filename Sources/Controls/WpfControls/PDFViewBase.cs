@@ -176,7 +176,8 @@
         /// <param name="pixelHeight">The desired height of the bitmap.</param>
         protected void InitializeRenderBitmap(int pixelWidth, int pixelHeight)
         {
-            _renderBitmap = new WriteableBitmap(pixelWidth, pixelHeight, 96, 96, PixelFormats.Bgra32, null);
+            var dpi = VisualTreeHelper.GetDpi(this);
+            _renderBitmap = new WriteableBitmap(pixelWidth, pixelHeight, dpi.PixelsPerInchX, dpi.PixelsPerInchY, PixelFormats.Bgra32, null);
         }
 
         /// <summary>
