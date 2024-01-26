@@ -24,8 +24,8 @@
                 return;
             }
 
-            var intViewportWidth = (int)(ViewportWidth + 0.5d);
-            var intViewportHeight = (int)(ViewportHeight + 0.5d);
+            var intViewportWidth = (int)Math.Ceiling(ViewportWidth);
+            var intViewportHeight = (int)Math.Ceiling(ViewportHeight);
 
             if (intViewportWidth <= 0 || intViewportHeight <= 0)
             {
@@ -73,10 +73,10 @@
                         ClearRenderBuffer();
 
                         var visiblePart = new PDFRectangle<int>(
-                            (int)pageInfo.VisiblePart.Left,
-                            (int)pageInfo.VisiblePart.Top,
-                            (int)pageInfo.VisiblePart.Width,
-                            (int)pageInfo.VisiblePart.Height);
+                            (int)Math.Ceiling(pageInfo.VisiblePart.Left),
+                            (int)Math.Ceiling(pageInfo.VisiblePart.Top),
+                            (int)Math.Ceiling(pageInfo.VisiblePart.Width),
+                            (int)Math.Ceiling(pageInfo.VisiblePart.Height));
 
                         var visiblePartStride = 4 * visiblePart.Width;
 
@@ -97,8 +97,8 @@
                         wbe.CopyImageBuffer(
                             RenderBuffer,
                             RenderBufferSize,
-                            (int)(pageInfo.VisiblePartInViewportArea.X + 0.5d),
-                            (int)(pageInfo.VisiblePartInViewportArea.Y + 0.5d),
+                            (int)Math.Ceiling(pageInfo.VisiblePartInViewportArea.X),
+                            (int)Math.Ceiling(pageInfo.VisiblePartInViewportArea.Y),
                             visiblePartStride,
                             visiblePart.Height);
                     }
@@ -144,22 +144,22 @@
                         new Point(pageInfo.RelativePositionInViewportArea.Left, pageInfo.RelativePositionInViewportArea.Bottom),
                         new Point(pageInfo.RelativePositionInViewportArea.Right, pageInfo.RelativePositionInViewportArea.Bottom));
                 }
-
-                // Draw background border - left
-                drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Left), new Point(0, 0), new Point(0, ViewportHeight));
-
-                // Draw background border - top
-                drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Top), new Point(0, 0), new Point(ViewportWidth, 0));
-
-                // Draw background border - right
-                drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Right), new Point(ViewportWidth, 0), new Point(ViewportWidth, ViewportHeight));
-
-                // Draw background border - bottom
-                drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Bottom), new Point(0, ViewportHeight), new Point(ViewportWidth, ViewportHeight));
             }
 
             // Draw all pages into drawing context.
             drawingContext.DrawImage(RenderBitmap, new Rect(0, 0, ViewportWidth, ViewportHeight));
+
+            // Draw background border - left
+            drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Left), new Point(0, 0), new Point(0, ViewportHeight));
+
+            // Draw background border - top
+            drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Top), new Point(0, 0), new Point(ViewportWidth, 0));
+
+            // Draw background border - right
+            drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Right), new Point(ViewportWidth, 0), new Point(ViewportWidth, ViewportHeight));
+
+            // Draw background border - bottom
+            drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Bottom), new Point(0, ViewportHeight), new Point(ViewportWidth, ViewportHeight));
         }
 
         private void RenderEmptyArea(DrawingContext drawingContext)

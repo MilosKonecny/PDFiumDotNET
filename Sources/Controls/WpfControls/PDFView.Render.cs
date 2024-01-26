@@ -69,8 +69,8 @@
             var factor = 1.5d;
             var zoomFactor = factor * PDFPageComponent.ZoomComponent.CurrentZoomFactor;
 
-            var intViewportWidthFactor = (int)(factor * ViewportWidth + 0.5d);
-            var intViewportHeightFactor = (int)(factor * ViewportHeight + 0.5d);
+            var intViewportWidthFactor = (int)Math.Ceiling(factor * ViewportWidth);
+            var intViewportHeightFactor = (int)Math.Ceiling(factor * ViewportHeight);
 
             if (intViewportWidthFactor <= 0 || intViewportHeightFactor <= 0)
             {
@@ -116,10 +116,10 @@
                         ClearRenderBuffer();
 
                         var visiblePart = new PDFRectangle<int>(
-                            (int)(factor * pageInfo.VisiblePart.Left),
-                            (int)(factor * pageInfo.VisiblePart.Top),
-                            (int)(factor * pageInfo.VisiblePart.Width),
-                            (int)(factor * pageInfo.VisiblePart.Height));
+                            (int)Math.Ceiling(factor * pageInfo.VisiblePart.Left),
+                            (int)Math.Ceiling(factor * pageInfo.VisiblePart.Top),
+                            (int)Math.Ceiling(factor * pageInfo.VisiblePart.Width),
+                            (int)Math.Ceiling(factor * pageInfo.VisiblePart.Height));
 
                         var visiblePartStride = 4 * visiblePart.Width;
 
@@ -140,8 +140,8 @@
                         wbe.CopyImageBuffer(
                             RenderBuffer,
                             RenderBufferSize,
-                            (int)(factor * pageInfo.VisiblePartInViewportArea.X + 0.5d),
-                            (int)(factor * pageInfo.VisiblePartInViewportArea.Y + 0.5d),
+                            (int)Math.Ceiling(factor * pageInfo.VisiblePartInViewportArea.X),
+                            (int)Math.Ceiling(factor * pageInfo.VisiblePartInViewportArea.Y),
                             visiblePartStride,
                             visiblePart.Height);
                     }
@@ -190,34 +190,22 @@
                         new Point(pageInfo.RelativePositionInViewportArea.Left, pageInfo.RelativePositionInViewportArea.Bottom),
                         new Point(pageInfo.RelativePositionInViewportArea.Right, pageInfo.RelativePositionInViewportArea.Bottom));
                 }
-
-                // Draw background border - left
-                drawingContext.DrawLine(
-                    new Pen(BorderBrush, BorderThickness.Left),
-                    new Point(0, 0),
-                    new Point(0, ViewportHeight));
-
-                // Draw background border - top
-                drawingContext.DrawLine(
-                    new Pen(BorderBrush, BorderThickness.Top),
-                    new Point(0, 0),
-                    new Point(ViewportWidth, 0));
-
-                // Draw background border - right
-                drawingContext.DrawLine(
-                    new Pen(BorderBrush, BorderThickness.Right),
-                    new Point(ViewportWidth, 0),
-                    new Point(ViewportWidth, ViewportHeight));
-
-                // Draw background border - bottom
-                drawingContext.DrawLine(
-                    new Pen(BorderBrush, BorderThickness.Bottom),
-                    new Point(0, ViewportHeight),
-                    new Point(ViewportWidth, ViewportHeight));
             }
 
             // Draw all pages into drawing context.
-            drawingContext.DrawImage(RenderBitmap, new Rect(0, 0, ViewportWidth, ViewportHeight));
+            drawingContext.DrawImage(RenderBitmap, new Rect(0, 0, (int)Math.Ceiling(ViewportWidth), (int)Math.Ceiling(ViewportHeight)));
+
+            // Draw background border - left
+            drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Left), new Point(0, 0), new Point(0, ViewportHeight));
+
+            // Draw background border - top
+            drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Top), new Point(0, 0), new Point(ViewportWidth, 0));
+
+            // Draw background border - right
+            drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Right), new Point(ViewportWidth, 0), new Point(ViewportWidth, ViewportHeight));
+
+            // Draw background border - bottom
+            drawingContext.DrawLine(new Pen(BorderBrush, BorderThickness.Bottom), new Point(0, ViewportHeight), new Point(ViewportWidth, ViewportHeight));
 
             RenderDebugInfo(drawingContext, RenderInformation.PagesToRender);
         }
