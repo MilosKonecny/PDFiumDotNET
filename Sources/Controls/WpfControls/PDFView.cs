@@ -18,11 +18,6 @@
         #region Private fields
 
         /// <summary>
-        /// Point with mouse/touch down.
-        /// </summary>
-        private Point _downPoint;
-
-        /// <summary>
         /// Zoom at manipulation start.
         /// </summary>
         private double _startManipulationZoom;
@@ -295,7 +290,6 @@
                 _startHorizontalOffset = HorizontalOffset;
                 _startVerticalOffset = VerticalOffset;
                 _startDragPoint = e.GetPosition(this);
-                _downPoint = e.GetPosition(this);
             }
         }
 
@@ -304,12 +298,10 @@
         {
             base.OnMouseLeftButtonUp(e);
 
-            _startDragPoint = new Point(-1, -1);
-
             if (e != null)
             {
                 var point = e.GetPosition(this);
-                if (Distance(_downPoint, point) < 5)
+                if (Distance(_startDragPoint, point) < 5)
                 {
                     var link = GetLinkFromPoint(point);
                     if (link != null)
@@ -330,6 +322,8 @@
                     }
                 }
             }
+
+            _startDragPoint = new Point(-1, -1);
         }
 
         /// <inheritdoc/>
@@ -339,7 +333,7 @@
 
             if (e != null && RenderInformation?.PagesToRender != null)
             {
-                _downPoint = e.GetTouchPoint(this).Position;
+                _startDragPoint = e.GetTouchPoint(this).Position;
             }
         }
 
@@ -348,10 +342,10 @@
         {
             base.OnTouchUp(e);
 
-            if (e != null)
+            if (e != null && RenderInformation?.PagesToRender != null)
             {
                 var point = e.GetTouchPoint(this).Position;
-                if (Distance(_downPoint, point) < 5)
+                if (Distance(_startDragPoint, point) < 5)
                 {
                     var link = GetLinkFromPoint(point);
                     if (link != null)
@@ -372,19 +366,13 @@
                     }
                 }
             }
+
+            _startDragPoint = new Point(-1, -1);
         }
 
         #endregion Protected override methods
 
         #region Private methods
-
-        private static double Distance(Point point1, Point point2)
-        {
-            var dX = point1.X - point2.X;
-            var dY = point1.Y - point2.Y;
-            var val = Math.Sqrt((dX * dX) + (dY * dY));
-            return val;
-        }
 
         private IPDFPageRenderInfo PageFromPoint(Point point)
         {

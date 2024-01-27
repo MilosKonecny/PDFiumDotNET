@@ -15,11 +15,6 @@
         #region Private fields
 
         /// <summary>
-        /// Page with touch down.
-        /// </summary>
-        private IPDFPageRenderInfo _onTouchDownPage;
-
-        /// <summary>
         /// Horizontal offset at manipulation start.
         /// </summary>
         private double _startManipulationHorizontalOffset;
@@ -302,17 +297,17 @@
         {
             base.OnMouseLeftButtonUp(e);
 
-            _startDragPoint = new Point(-1, -1);
-
             if (e != null && RenderInformation?.PagesToRender != null)
             {
                 var point = e.GetPosition(this);
                 var page = RenderInformation.PagesToRender.FirstOrDefault(p => point.X > p.RelativePositionInViewportArea.Left && point.X < p.RelativePositionInViewportArea.Right && point.Y > p.RelativePositionInViewportArea.Top && point.Y < p.RelativePositionInViewportArea.Bottom);
-                if (page != null)
+                if (page != null && Distance(_startDragPoint, point) < 5)
                 {
                     PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
                 }
             }
+
+            _startDragPoint = new Point(-1, -1);
         }
 
         /// <inheritdoc/>
@@ -322,8 +317,7 @@
 
             if (e != null && RenderInformation?.PagesToRender != null)
             {
-                var point = e.GetTouchPoint(this).Position;
-                _onTouchDownPage = RenderInformation.PagesToRender.FirstOrDefault(p => point.X > p.RelativePositionInViewportArea.Left && point.X < p.RelativePositionInViewportArea.Right && point.Y > p.RelativePositionInViewportArea.Top && point.Y < p.RelativePositionInViewportArea.Bottom);
+                _startDragPoint = e.GetTouchPoint(this).Position;
             }
         }
 
@@ -336,15 +330,13 @@
             {
                 var point = e.GetTouchPoint(this).Position;
                 var page = RenderInformation.PagesToRender.FirstOrDefault(p => point.X > p.RelativePositionInViewportArea.Left && point.X < p.RelativePositionInViewportArea.Right && point.Y > p.RelativePositionInViewportArea.Top && point.Y < p.RelativePositionInViewportArea.Bottom);
-                if (page != null && _onTouchDownPage != null)
+                if (page != null && Distance(_startDragPoint, point) < 5)
                 {
-                    if (_onTouchDownPage.Page.PageIndex == page.Page.PageIndex)
-                    {
-                        // Navigate to this page only if touch down and up was made on the same page.
-                        PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
-                    }
+                    PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
                 }
             }
+
+            _startDragPoint = new Point(-1, -1);
         }
 
         #endregion Protected override methods

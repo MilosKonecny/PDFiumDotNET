@@ -137,6 +137,24 @@
 
         #endregion Protected properties
 
+        #region Protected static methods
+
+        /// <summary>
+        /// The method computes distance between two points.
+        /// </summary>
+        /// <param name="point1">Point one for the calculation.</param>
+        /// <param name="point2">Point two for the calculation.</param>
+        /// <returns>Distance between two points.</returns>
+        protected static double Distance(Point point1, Point point2)
+        {
+            var dX = point1.X - point2.X;
+            var dY = point1.Y - point2.Y;
+            var val = Math.Sqrt((dX * dX) + (dY * dY));
+            return val;
+        }
+
+        #endregion Protected static methods
+
         #region Protected methods
 
         /// <summary>
