@@ -303,7 +303,7 @@
                 var page = RenderInformation.PagesToRender.FirstOrDefault(p => point.X > p.RelativePositionInViewportArea.Left && point.X < p.RelativePositionInViewportArea.Right && point.Y > p.RelativePositionInViewportArea.Top && point.Y < p.RelativePositionInViewportArea.Bottom);
                 if (page != null && Distance(_startDragPoint, point) < 5)
                 {
-                    PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
+                    PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1, true);
                 }
             }
 
@@ -332,7 +332,7 @@
                 var page = RenderInformation.PagesToRender.FirstOrDefault(p => point.X > p.RelativePositionInViewportArea.Left && point.X < p.RelativePositionInViewportArea.Right && point.Y > p.RelativePositionInViewportArea.Top && point.Y < p.RelativePositionInViewportArea.Bottom);
                 if (page != null && Distance(_startDragPoint, point) < 5)
                 {
-                    PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
+                    PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1, true);
                 }
             }
 
