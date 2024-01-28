@@ -1,6 +1,7 @@
 ﻿namespace PDFiumDotNET.Apps.PDFViewWPF
 {
     using System.Windows;
+    using System.Windows.Input;
     using PDFiumDotNET.Apps.PDFViewWPF.Contracts;
     using PDFiumDotNET.Components.Contracts.Bookmark;
 
@@ -42,9 +43,9 @@
 
         #region Private event handler methods
 
-        private void HandleTreeViewSelectedItemChangedEvent(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void HandleTreeViewItemMouseLeftButtonUpEvent(object sender, MouseButtonEventArgs e)
         {
-            if (e.NewValue is IPDFBookmark bookmark)
+            if (_treeView.SelectedItem is IPDFBookmark bookmark)
             {
                 ViewModel.NavigateTo(bookmark);
             }

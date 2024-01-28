@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.Linq;
     using PDFiumDotNET.Components.Annotation;
     using PDFiumDotNET.Components.Contracts.Action;
@@ -108,7 +109,9 @@
         /// Sets all 'current' properties based on given page.
         /// </summary>
         /// <param name="page">Page to use as a source for 'current' properties.</param>
-        internal void SetCurrentInformation(IPDFPage page)
+        /// <param name="forcePropertyChangedEvent">If <c>true</c>, <see cref="INotifyPropertyChanged.PropertyChanged"/>
+        /// will be invoked even if the properties are already set to the same value.</param>
+        internal void SetCurrentInformation(IPDFPage page, bool forcePropertyChangedEvent)
         {
             var newPageIndex = 0;
             var newPageLabel = string.Empty;
@@ -116,6 +119,12 @@
             {
                 newPageIndex = page.PageIndex + 1;
                 newPageLabel = page.PageLabel;
+            }
+
+            if (forcePropertyChangedEvent)
+            {
+                _currentPageIndex = -1;
+                _currentPageLabel = "-1";
             }
 
             CurrentPageIndex = newPageIndex;
@@ -166,7 +175,7 @@
             PageCount = 0;
             Pages.Clear();
             (RenderManager as PDFRenderManager)?.CalculateDocumentArea();
-            SetCurrentInformation(null);
+            SetCurrentInformation(null, false);
             InvokePropertyChangedEvent(null);
         }
 
@@ -188,7 +197,7 @@
                     Pages.Add(newPage);
                 }
 
-                SetCurrentInformation(Pages[0]);
+                SetCurrentInformation(Pages[0], false);
             }
 
             (RenderManager as PDFRenderManager).CalculateDocumentArea();
@@ -507,7 +516,7 @@
             }
 
             var previousCurrentPageIndex = CurrentPageIndex;
-            SetCurrentInformation(GetPage(action.Destination.PageIndex));
+            SetCurrentInformation(GetPage(action.Destination.PageIndex), true);
             NavigatedToPage?.Invoke(this, new NavigatedToPageEventArgs(previousCurrentPageIndex, CurrentPageIndex));
         }
 
@@ -525,7 +534,7 @@
             }
 
             var previousCurrentPageIndex = CurrentPageIndex;
-            SetCurrentInformation(GetPage(destination.PageIndex));
+            SetCurrentInformation(GetPage(destination.PageIndex), true);
             NavigatedToPage?.Invoke(this, new NavigatedToPageEventArgs(previousCurrentPageIndex, CurrentPageIndex));
         }
 
@@ -537,11 +546,11 @@
                 return;
             }
 
-            this.SetCurrentInformation(GetPage(pageIndex - 1));
+            SetCurrentInformation(GetPage(pageIndex - 1), true);
         }
 
         /// <inheritdoc/>
-        public void NavigateToPage(int pageIndex)
+        public void NavigateToPage(int pageIndex, bool forceNavigate = false)
         {
             if (pageIndex < 1 || pageIndex > PageCount)
             {
@@ -549,12 +558,31 @@
             }
 
             var previousCurrentPageIndex = CurrentPageIndex;
-            SetCurrentInformation(GetPage(pageIndex - 1));
+            SetCurrentInformation(GetPage(pageIndex - 1), forceNavigate);
             NavigatedToPage?.Invoke(this, new NavigatedToPageEventArgs(previousCurrentPageIndex, CurrentPageIndex));
         }
 
         /// <inheritdoc/>
-        public void NavigateToFindPlace(IPDFFindPage page)
+        public void NavigateToPage(string pageLabel, bool forceNavigate = false)
+        {
+            var page = Pages.FirstOrDefault(p => string.Equals(p.PageLabel, pageLabel, StringComparison.OrdinalIgnoreCase));
+            if (page != null)
+            {
+                var previousCurrentPageIndex = CurrentPageIndex;
+                SetCurrentInformation(page, forceNavigate);
+                NavigatedToPage?.Invoke(this, new NavigatedToPageEventArgs(previousCurrentPageIndex, CurrentPageIndex));
+            }
+            else
+            {
+                if (int.TryParse(pageLabel, out var pageIndex))
+                {
+                    NavigateToPage(pageIndex, forceNavigate);
+                }
+            }
+        }
+
+        /// <inheritdoc/>
+        public void NavigateToFindPlace(IPDFFindPage page, bool forceNavigate = false)
         {
             if (page == null)
             {
@@ -562,11 +590,11 @@
             }
 
             ClearSelectionRectangles();
-            NavigateToPage(page.RelatedPage.PageIndex + 1);
+            NavigateToPage(page.RelatedPage.PageIndex + 1, forceNavigate);
         }
 
         /// <inheritdoc/>
-        public void NavigateToFindPlace(IPDFFindPosition position)
+        public void NavigateToFindPlace(IPDFFindPosition position, bool forceNavigate = false)
         {
             if (position == null)
             {
@@ -604,24 +632,12 @@
 
                 var previousCurrentPageIndex = CurrentPageIndex;
                 var currentPageIndex = position.Page.RelatedPage.PageIndex + 1;
-                SetCurrentInformation(position.Page.RelatedPage);
+                SetCurrentInformation(position.Page.RelatedPage, forceNavigate);
                 NavigatedToPage?.Invoke(this, new NavigatedToPageEventArgs(previousCurrentPageIndex, CurrentPageIndex, positionX, positionY));
             }
             else
             {
                 NavigateToPage(position.Page.RelatedPage.PageIndex + 1);
-            }
-        }
-
-        /// <inheritdoc/>
-        public void NavigateToPage(string pageLabel)
-        {
-            var page = Pages.FirstOrDefault(p => string.Equals(p.PageLabel, pageLabel, StringComparison.OrdinalIgnoreCase));
-            if (page != null)
-            {
-                var previousCurrentPageIndex = CurrentPageIndex;
-                SetCurrentInformation(page);
-                NavigatedToPage?.Invoke(this, new NavigatedToPageEventArgs(previousCurrentPageIndex, CurrentPageIndex));
             }
         }
 

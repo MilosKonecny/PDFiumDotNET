@@ -244,15 +244,17 @@
         <TabControl x:Name="_tabControl" Grid.Row="4" Grid.Column="0">
             <TabItem Header="Bookmarks">
                 <Border Margin="3" BorderThickness="1" BorderBrush="{Binding ElementName=_tabControl, Path=BorderBrush}">
-                    <TreeView BorderThickness="0"
+                    <TreeView x:Name="_treeView"
+                              BorderThickness="0"
                               ScrollViewer.VerticalScrollBarVisibility="Auto"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                              ItemsSource="{Binding Path=BookmarkComponent.Bookmarks}" SelectedItemChanged="HandleTreeViewSelectedItemChangedEvent"
+                              ItemsSource="{Binding Path=BookmarkComponent.Bookmarks}"
                               VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Standard">
                         <TreeView.Resources>
                             <Style TargetType="TreeViewItem" BasedOn="{StaticResource {x:Type TreeViewItem}}">
                                 <Setter Property="IsExpanded" Value="{Binding Path=IsOpened}"/>
                                 <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                <EventSetter Event="MouseLeftButtonUp" Handler="HandleTreeViewItemMouseLeftButtonUpEvent"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="TreeViewItem">

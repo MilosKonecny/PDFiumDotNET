@@ -318,7 +318,7 @@
                     else if (ActivatePageOnClick)
                     {
                         var page = PageFromPoint(point);
-                        PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
+                        PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1, true);
                     }
                 }
             }
@@ -362,7 +362,7 @@
                     else if (ActivatePageOnClick)
                     {
                         var page = PageFromPoint(point);
-                        PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1);
+                        PDFPageComponent.NavigateToPage(page.Page.PageIndex + 1, true);
                     }
                 }
             }

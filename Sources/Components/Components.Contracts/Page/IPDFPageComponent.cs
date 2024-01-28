@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using PDFiumDotNET.Components.Contracts.Action;
     using PDFiumDotNET.Components.Contracts.Annotation;
     using PDFiumDotNET.Components.Contracts.Basic;
@@ -109,33 +110,41 @@
         /// Sets the specified page as current page.
         /// </summary>
         /// <param name="pageIndex">Index of page to set as current page. Index is 1 based.</param>
-        /// <remarks>This method is as the same as <see cref="NavigateToPage(int)"/> / <see cref="NavigateToPage(string)"/>, but event <see cref="NavigatedToPage"/> is not triggered.</remarks>
+        /// <remarks>This method is as the same as <see cref="NavigateToPage(int, bool)"/> / <see cref="NavigateToPage(string, bool)"/>, but event <see cref="NavigatedToPage"/> is not triggered.</remarks>
         void SetCurrentPage(int pageIndex);
 
         /// <summary>
         /// Navigates to the specified page based on its index.
         /// </summary>
         /// <param name="pageIndex">Index of page to navigate to. Index is 1 based.</param>
-        void NavigateToPage(int pageIndex);
+        /// <param name="forceNavigate">If <c>true</c>, navigation to the page is forced, even if the page is already active
+        /// - <see cref="INotifyPropertyChanged.PropertyChanged"/> event will be invoked.</param>
+        void NavigateToPage(int pageIndex, bool forceNavigate = false);
 
         /// <summary>
         /// Navigates to the specified page based on its label.
         /// </summary>
         /// <param name="pageLabel">Label of page to navigate to.
-        /// In case the label not exists, text is converted to index and method <see cref="NavigateToPage(int)"/> will be used.</param>
-        void NavigateToPage(string pageLabel);
+        /// In case the label not exists, text is converted to index and method <see cref="NavigateToPage(int, bool)"/> will be used.</param>
+        /// <param name="forceNavigate">If <c>true</c>, navigation to the page is forced, even if the page is already active
+        /// - <see cref="INotifyPropertyChanged.PropertyChanged"/> event will be invoked.</param>
+        void NavigateToPage(string pageLabel, bool forceNavigate = false);
 
         /// <summary>
         /// Navigates to the place where the searched text was found.
         /// </summary>
         /// <param name="page">This definition contains only page where the searched text was found.</param>
-        void NavigateToFindPlace(IPDFFindPage page);
+        /// <param name="forceNavigate">If <c>true</c>, navigation to the page is forced, even if the page is already active
+        /// - <see cref="INotifyPropertyChanged.PropertyChanged"/> event will be invoked.</param>
+        void NavigateToFindPlace(IPDFFindPage page, bool forceNavigate = false);
 
         /// <summary>
         /// Navigates to the place where searched text was found.
         /// </summary>
         /// <param name="position">This definition contains whole information where the searched text was found.</param>
-        void NavigateToFindPlace(IPDFFindPosition position);
+        /// <param name="forceNavigate">If <c>true</c>, navigation to the page is forced, even if the page is already active
+        /// - <see cref="INotifyPropertyChanged.PropertyChanged"/> event will be invoked.</param>
+        void NavigateToFindPlace(IPDFFindPosition position, bool forceNavigate = false);
 
         /// <summary>
         /// Occurs whenever some of 'navigate' / 'perform' methods was called and <see cref="CurrentPageIndex"/> was changed.
