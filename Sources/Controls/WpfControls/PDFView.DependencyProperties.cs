@@ -351,7 +351,7 @@
             }
 
             // Current page is changed. Scroll to this page.
-            var verticalOffset = PDFPageComponent.RenderManager.DeterminePagePosition(e.CurrentPageIndex - 1).Y;
+            var verticalOffset = Math.Max(0, PDFPageComponent.RenderManager.DeterminePagePosition(e.CurrentPageIndex - 1).Y - PDFPageComponent.PageMargin.Height);
             var horizontalOffset = double.NaN;
             if (e.IsDetailedNavigation)
             {

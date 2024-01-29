@@ -33,6 +33,7 @@
 
             var zoomFactor = PageComponent.ZoomComponent != null ? PageComponent.ZoomComponent.CurrentZoomFactor : 1d;
             WidestPageRow = 0d;
+            HighestPageRow = 0d;
 
             // Determine height of all pages and widest page.
             var width = 0d;
@@ -49,12 +50,18 @@
                 {
                     WidestPageRow = page.Width;
                 }
+
+                if (page.Height > HighestPageRow)
+                {
+                    HighestPageRow = page.Height;
+                }
             }
 
             // Add margins
             height += PageMargin.Height * (PageComponent.PageCount + 1);
             width += 2 * PageMargin.Width;
             WidestPageRow += 2 * PageMargin.Width;
+            HighestPageRow += 2 * PageMargin.Height;
 
             // Set document area
             _requiredDocumentArea = new PDFSize<double>(width, height);

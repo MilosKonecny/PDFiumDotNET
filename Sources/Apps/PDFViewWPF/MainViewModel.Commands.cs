@@ -284,11 +284,15 @@
                 return;
             }
 
-            var page = pageComponent.CurrentPage;
-            if (page != null)
-            {
-                zoomComponent.CurrentZoomFactor = _view.PDFActualHeight / (page.Height + (2 * _view.PDFPageMargin.Height));
-            }
+            zoomComponent.CurrentZoomFactor = _view.PDFActualHeight / pageComponent.RenderManager.HighestPageRow;
+
+            // ToDo: Do we need a zoom to the height/width of the actual page?
+            // Zoom to height of actual page
+            ////var page = pageComponent.CurrentPage;
+            ////if (page != null)
+            ////{
+            ////    zoomComponent.CurrentZoomFactor = _view.PDFActualHeight / (page.Height + (2 * _view.PDFPageMargin.Height));
+            ////}
         }
 
         private bool CanExecuteZoomHeightCommand()
