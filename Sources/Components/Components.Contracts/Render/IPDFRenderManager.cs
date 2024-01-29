@@ -4,6 +4,7 @@
     using PDFiumDotNET.Components.Contracts.Basic;
     using PDFiumDotNET.Components.Contracts.Layout;
     using PDFiumDotNET.Components.Contracts.Page;
+    using PDFiumDotNET.Components.Contracts.Zoom;
 
     /// <summary>
     /// The interface defines the functionality to provide all the necessary information to draw a PDF document
@@ -14,17 +15,26 @@
         /// <summary>
         /// Gets or sets the margins between pages.
         /// </summary>
+        /// <remarks>This property should be set from implementation of <see cref="IPDFPageComponent"/>.</remarks>
         PDFSize<double> PageMargin { get; set; }
 
         /// <summary>
         /// Gets the size of the document area in which all pages are rendered.
+        /// Computed document area uses actual zoom factor. Zoom factor is obtained from <see cref="IPDFZoomComponent"/>.
         /// </summary>
         PDFSize<double> DocumentArea { get; }
 
         /// <summary>
         /// Gets the widest row of pages. Count of pages in row depends on layout - one page in row, or two pages in row.
+        /// Determined width doesn't use actual zoom factor.
         /// </summary>
         double WidestPageRow { get; }
+
+        /// <summary>
+        /// Gets the highest row of pages. Count of pages in row depends on layout - one page in row, or two pages in row.
+        /// Determined height doesn't use actual zoom factor.
+        /// </summary>
+        double HighestPageRow { get; }
 
         /// <summary>
         /// The method determines where is particular page positioned.

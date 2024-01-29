@@ -56,6 +56,7 @@
 
             var zoomFactor = PageComponent.ZoomComponent != null ? PageComponent.ZoomComponent.CurrentZoomFactor : 1d;
             WidestPageRow = 0d;
+            HighestPageRow = 0d;
 
             // Determine height of all pages and widest row.
             var documentWidth = 0d;
@@ -65,23 +66,29 @@
             {
                 var leftPage = LeftPageInRow(index);
                 var rightPage = RightPageInRow(index);
-                var leftPageHeight = leftPage == null ? 0d : leftPage.Height * zoomFactor;
-                var leftPageWidth = leftPage == null ? 0d : leftPage.Width * zoomFactor;
-                var rightPageHeight = rightPage == null ? 0d : rightPage.Height * zoomFactor;
-                var rightPageWidth = rightPage == null ? 0d : rightPage.Width * zoomFactor;
+                var leftPageHeight = leftPage == null ? 0d : leftPage.Height;
+                var leftPageWidth = leftPage == null ? 0d : leftPage.Width;
+                var rightPageHeight = rightPage == null ? 0d : rightPage.Height;
+                var rightPageWidth = rightPage == null ? 0d : rightPage.Width;
 
-                var rowWidth = PageMargin.Width + (2d * Math.Max(leftPageWidth, rightPageWidth));
-                var pageRowWidth = (leftPage == null ? 0d : leftPage.Width) + PageMargin.Width + (rightPage == null ? 0d : rightPage.Width);
+                var rowWidth = PageMargin.Width + (2d * Math.Max(leftPageWidth * zoomFactor, rightPageWidth * zoomFactor));
 
-                documentHeight += Math.Max(leftPageHeight, rightPageHeight);
+                documentHeight += Math.Max(leftPageHeight * zoomFactor, rightPageHeight * zoomFactor);
                 if (documentWidth < rowWidth)
                 {
                     documentWidth = rowWidth;
                 }
 
-                if (pageRowWidth > WidestPageRow)
+                var w = PageMargin.Width + (2d * Math.Max(leftPageWidth, rightPageWidth));
+                if (w > WidestPageRow)
                 {
-                    WidestPageRow = pageRowWidth;
+                    WidestPageRow = w;
+                }
+
+                var h = Math.Max(leftPageHeight, rightPageHeight);
+                if (h > HighestPageRow)
+                {
+                    HighestPageRow = h;
                 }
 
                 rows++;
@@ -90,7 +97,8 @@
             // Add margins
             documentHeight += PageMargin.Height * (rows + 1);
             documentWidth += 2 * PageMargin.Width;
-            WidestPageRow = WidestPageRow + (2 * PageMargin.Width);
+            WidestPageRow += 2 * PageMargin.Width;
+            HighestPageRow += 2 * PageMargin.Height;
 
             // Set document area
             _requiredDocumentArea = new PDFSize<double>(documentWidth, documentHeight);

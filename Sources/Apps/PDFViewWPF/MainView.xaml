@@ -366,7 +366,7 @@
                         </TreeView.ItemsPanel>
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding Path=Bookmarks}">
-                                <TextBlock Padding="0,5" Text="{Binding Path=Text, Mode=OneWay}" TextWrapping="Wrap" VerticalAlignment="Center">
+                                <TextBlock Padding="5,5" Text="{Binding Path=Text, Mode=OneWay}" TextWrapping="Wrap" VerticalAlignment="Center">
                                     <TextBlock.ToolTip>
                                         <StackPanel>
                                             <TextBlock Text="{Binding Path=Destination.Info, StringFormat=Destination: {0}}"/>
@@ -473,7 +473,8 @@
             </TabItem>
         </TabControl>
         <!-- PDF -->
-        <ScrollViewer Grid.Row="4" Grid.Column="2" CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="4" Grid.Column="2"
+                      CanContentScroll="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
             <wpfControl:PDFView x:Name="_pdfView"
                                 PDFPageComponent="{Binding Path=ViewPageComponent}" />
         </ScrollViewer>
