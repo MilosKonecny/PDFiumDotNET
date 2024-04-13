@@ -278,6 +278,36 @@
         }
 
         /// <summary>
+        /// Attachment handle struct.
+        /// </summary>
+        internal struct FPDF_ATTACHMENT
+        {
+            /// <summary>
+            /// Gets invalid handle.
+            /// </summary>
+            public static FPDF_ATTACHMENT InvalidHandle => new FPDF_ATTACHMENT();
+
+            /// <summary>
+            /// Attachment handle.
+            /// </summary>
+            private readonly IntPtr _attachment;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="FPDF_ATTACHMENT"/> struct.
+            /// </summary>
+            /// <param name="attachment">Attachment handle to use.</param>
+            public FPDF_ATTACHMENT(IntPtr attachment)
+            {
+                _attachment = attachment;
+            }
+
+            /// <summary>
+            /// Gets a value indicating whether the attachment handle is valid.
+            /// </summary>
+            public bool IsValid => _attachment != IntPtr.Zero;
+        }
+
+        /// <summary>
         /// Text page handle struct.
         /// </summary>
         internal struct FPDF_TEXTPAGE
