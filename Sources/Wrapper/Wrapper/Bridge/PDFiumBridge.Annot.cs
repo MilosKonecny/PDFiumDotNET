@@ -33,6 +33,7 @@
         /// Check if an annotation subtype is currently supported for creation.
         /// Currently supported subtypes:
         ///     - circle
+        ///     - fileattachment
         ///     - freetext
         ///     - highlight
         ///     - ink
@@ -1898,6 +1899,63 @@
             }
         }
 
+#if USE_DYNAMICALLY_LOADED_PDFIUM
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate FPDF_ATTACHMENT FPDFAnnot_GetFileAttachment_Delegate(FPDF_ANNOTATION annot);
+
+        private static FPDFAnnot_GetFileAttachment_Delegate FPDFAnnot_GetFileAttachmentStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetFileAttachment")]
+        private static extern FPDF_ATTACHMENT FPDFAnnot_GetFileAttachmentStatic(FPDF_ANNOTATION annot);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
+
+        /// <summary>
+        /// Experimental API.
+        /// Get the attachment from |annot|.
+        /// </summary>
+        /// <param name="annot">Handle to a file annotation.</param>
+        /// <returns>Returns the handle to the attachment object, or NULL on failure.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT FPDF_ATTACHMENT FPDF_CALLCONV FPDFAnnot_GetFileAttachment(FPDF_ANNOTATION annot);.
+        /// </remarks>
+        public FPDF_ATTACHMENT FPDFAnnot_GetFileAttachment(FPDF_ANNOTATION annot)
+        {
+            lock (_syncObject)
+            {
+                return FPDFAnnot_GetFileAttachmentStatic(annot);
+            }
+        }
+
+#if USE_DYNAMICALLY_LOADED_PDFIUM
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate FPDF_ATTACHMENT FPDFAnnot_AddFileAttachment_Delegate(FPDF_ANNOTATION annot, IntPtr name);
+
+        private static FPDFAnnot_AddFileAttachment_Delegate FPDFAnnot_AddFileAttachmentStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_AddFileAttachment")]
+        private static extern FPDF_ATTACHMENT FPDFAnnot_AddFileAttachmentStatic(FPDF_ANNOTATION annot, IntPtr name);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
+
+        /// <summary>
+        /// Experimental API.
+        /// // Add an embedded file with |name| to |annot|.
+        /// </summary>
+        /// <param name="annot">Handle to a file annotation.</param>
+        /// <param name="name">Name of the new attachment.</param>
+        /// <returns>Returns a handle to the new attachment object, or NULL on failure.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT FPDF_ATTACHMENT FPDF_CALLCONV FPDFAnnot_AddFileAttachment(FPDF_ANNOTATION annot, FPDF_WIDESTRING name);.
+        /// </remarks>
+        public FPDF_ATTACHMENT FPDFAnnot_AddFileAttachment(FPDF_ANNOTATION annot, IntPtr name)
+        {
+            lock (_syncObject)
+            {
+                return FPDFAnnot_AddFileAttachmentStatic(annot, name);
+            }
+        }
+
         private static void LoadDllAnnotPart()
         {
 #if USE_DYNAMICALLY_LOADED_PDFIUM
@@ -1962,6 +2020,8 @@
             FPDFAnnot_GetFormControlIndexStatic = GetPDFiumFunction<FPDFAnnot_GetFormControlIndex_Delegate>(nameof(FPDFAnnot_GetFormControlIndex));
             FPDFAnnot_GetFormFieldExportValueStatic = GetPDFiumFunction<FPDFAnnot_GetFormFieldExportValue_Delegate>(nameof(FPDFAnnot_GetFormFieldExportValue));
             FPDFAnnot_SetURIStatic = GetPDFiumFunction<FPDFAnnot_SetURI_Delegate>(nameof(FPDFAnnot_SetURI));
+            FPDFAnnot_GetFileAttachmentStatic = GetPDFiumFunction<FPDFAnnot_GetFileAttachment_Delegate>(nameof(FPDFAnnot_GetFileAttachment));
+            FPDFAnnot_AddFileAttachmentStatic = GetPDFiumFunction<FPDFAnnot_AddFileAttachment_Delegate>(nameof(FPDFAnnot_AddFileAttachment));
 #endif // USE_DYNAMICALLY_LOADED_PDFIUM
         }
 
@@ -2029,6 +2089,8 @@
             FPDFAnnot_GetFormControlIndexStatic = null;
             FPDFAnnot_GetFormFieldExportValueStatic = null;
             FPDFAnnot_SetURIStatic = null;
+            FPDFAnnot_GetFileAttachmentStatic = null;
+            FPDFAnnot_AddFileAttachmentStatic = null;
 #endif // USE_DYNAMICALLY_LOADED_PDFIUM
         }
     }
