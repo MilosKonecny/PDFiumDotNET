@@ -137,7 +137,18 @@
                 if (UsageCount == 0)
                 {
                     LoadDll();
-                    FPDF_InitLibraryStatic();
+
+                    // Do not use FPDF_RENDERER_TYPE.FPDF_RENDERERTYPE_SKIA unless PDFium is compiled with SKIA.
+                    var configuration = new FPDF_LIBRARY_CONFIG
+                    {
+                        Version = 4,
+                        UserFontPaths = IntPtr.Zero,
+                        Isolate = IntPtr.Zero,
+                        V8EmbedderSlot = 0,
+                        Platform = IntPtr.Zero,
+                        RendererType = FPDF_RENDERER_TYPE.FPDF_RENDERERTYPE_AGG,
+                    };
+                    FPDF_InitLibraryWithConfigStatic(configuration);
                 }
 
                 UsageCount++;

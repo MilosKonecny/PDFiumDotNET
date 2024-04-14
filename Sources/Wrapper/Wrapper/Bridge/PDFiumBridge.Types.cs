@@ -812,6 +812,23 @@
         }
 
         /// <summary>
+        /// PDF renderer types - Experimental.
+        /// Selection of 2D graphics library to use for rendering to FPDF_BITMAPs.
+        /// </summary>
+        internal enum FPDF_RENDERER_TYPE
+        {
+            /// <summary>
+            /// Anti-Grain Geometry - https://sourceforge.net/projects/agg/
+            /// </summary>
+            FPDF_RENDERERTYPE_AGG = 0,
+
+            /// <summary>
+            /// SKIA - https://skia.org/
+            /// </summary>
+            FPDF_RENDERERTYPE_SKIA = 1,
+        }
+
+        /// <summary>
         /// Color struct represents a 32-bit value specifing the color, in 8888 ARGB format.
         /// </summary>
         [StructLayout(LayoutKind.Explicit)]
@@ -985,7 +1002,7 @@
         /// <summary>
         /// Container struct for quadrilateral points.
         /// </summary>
-        public struct FS_QUADPOINTSF
+        internal struct FS_QUADPOINTSF
         {
             /// <summary>
             /// X position of point 1.
@@ -1031,7 +1048,7 @@
         /// <summary>
         /// 2D Point. Coordinate system agnostic.
         /// </summary>
-        public struct FS_POINTF
+        internal struct FS_POINTF
         {
             /// <summary>
             /// X coordinate of point.
@@ -1042,6 +1059,60 @@
             /// Y coordinate of point.
             /// </summary>
             public float Y;
+        }
+
+        /// <summary>
+        /// Process-wide options for initializing the library.
+        /// </summary>
+        internal struct FPDF_LIBRARY_CONFIG
+        {
+            /// <summary>
+            /// Version number of the interface. Currently must be 2.
+            /// Support for version 1 will be deprecated in the future.
+            /// </summary>
+            public int Version;
+
+            /// <summary>
+            /// Array of paths to scan in place of the defaults when using built-in
+            /// FXGE font loading code. The array is terminated by a NULL pointer.
+            /// The Array may be NULL itself to use the default paths. May be ignored
+            /// entirely depending upon the platform.
+            /// </summary>
+            public IntPtr UserFontPaths;
+
+            // Version 2.
+
+            /// <summary>
+            /// Pointer to the v8::Isolate to use, or NULL to force PDFium to create one.
+            /// </summary>
+            public IntPtr Isolate;
+
+            /// <summary>
+            /// The embedder data slot to use in the v8::Isolate to store PDFium's
+            /// per-isolate data. The value needs to be in the range
+            /// [0, |v8::Internals::kNumIsolateDataLots|). Note that 0 is fine for most
+            /// embedder's.
+            /// </summary>
+            public uint V8EmbedderSlot;
+
+            // Version 3 - Experimental.
+
+            /// <summary>
+            /// Pointer to the V8::Platform to use.
+            /// </summary>
+            public IntPtr Platform;
+
+            // Version 4 - Experimental.
+
+            /// <summary>
+            /// Explicit specification of core renderer to use. |m_RendererType| must be
+            /// a valid value for |FPDF_LIBRARY_CONFIG| versions of this level or higher,
+            /// or else the initialization will fail with an immediate crash.
+            /// Note that use of a specified |FPDF_RENDERER_TYPE| value for which the
+            /// corresponding render library is not included in the build will similarly
+            /// fail with an immediate crash.
+            /// </summary>
+            public FPDF_RENDERER_TYPE RendererType;
         }
     }
 }
