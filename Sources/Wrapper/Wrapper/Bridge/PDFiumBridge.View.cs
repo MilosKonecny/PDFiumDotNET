@@ -41,16 +41,32 @@
             }
         }
 
-        ////// Function: FPDF_InitLibraryWithConfig
-        //////          Initialize the FPDFSDK library
-        ////// Parameters:
-        //////          config - configuration information as above.
-        ////// Return value:
-        //////          None.
-        ////// Comments:
-        //////          You have to call this function before you can call any PDF
-        //////          processing functions.
-        ////FPDF_EXPORT void FPDF_CALLCONV FPDF_InitLibraryWithConfig(const FPDF_LIBRARY_CONFIG* config);
+#if USE_DYNAMICALLY_LOADED_PDFIUM
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate void FPDF_InitLibraryWithConfig_Delegate(FPDF_LIBRARY_CONFIG configuration);
+
+        private static FPDF_InitLibraryWithConfig_Delegate FPDF_InitLibraryWithConfigStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDF_InitLibraryWithConfig")]
+        private static extern void FPDF_InitLibraryWithConfigStatic(FPDF_LIBRARY_CONFIG configuration);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
+
+        /// <summary>
+        /// Initialize the FPDFSDK library.
+        /// </summary>
+        /// <param name="configuration">Configuration information.</param>
+        /// <remarks>
+        /// You have to call this function before you can call any PDF processing functions.
+        /// FPDF_EXPORT void FPDF_CALLCONV FPDF_InitLibraryWithConfig(const FPDF_LIBRARY_CONFIG* config);.
+        /// </remarks>
+        public void FPDF_InitLibraryWithConfig(FPDF_LIBRARY_CONFIG configuration)
+        {
+            lock (_syncObject)
+            {
+                FPDF_InitLibraryWithConfigStatic(configuration);
+            }
+        }
 
 #if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1523,7 +1539,7 @@
         {
 #if USE_DYNAMICALLY_LOADED_PDFIUM
             FPDF_InitLibraryStatic = GetPDFiumFunction<FPDF_InitLibrary_Delegate>(nameof(FPDF_InitLibrary));
-            ////FPDF_EXPORT void FPDF_CALLCONV FPDF_InitLibraryWithConfig(const FPDF_LIBRARY_CONFIG* config);
+            FPDF_InitLibraryWithConfigStatic = GetPDFiumFunction<FPDF_InitLibraryWithConfig_Delegate>(nameof(FPDF_InitLibraryWithConfig));
             FPDF_DestroyLibraryStatic = GetPDFiumFunction<FPDF_DestroyLibrary_Delegate>(nameof(FPDF_DestroyLibrary));
             ////FPDF_EXPORT void FPDF_CALLCONV FPDF_SetSandBoxPolicy(FPDF_DWORD policy, FPDF_BOOL enable);
             FPDF_SetPrintModeStatic = GetPDFiumFunction<FPDF_SetPrintMode_Delegate>(nameof(FPDF_SetPrintMode));
@@ -1581,7 +1597,7 @@
         {
 #if USE_DYNAMICALLY_LOADED_PDFIUM
             FPDF_InitLibraryStatic = null;
-            ////FPDF_EXPORT void FPDF_CALLCONV FPDF_InitLibraryWithConfig(const FPDF_LIBRARY_CONFIG* config);
+            FPDF_InitLibraryWithConfigStatic = null;
             FPDF_DestroyLibraryStatic = null;
             ////FPDF_EXPORT void FPDF_CALLCONV FPDF_SetSandBoxPolicy(FPDF_DWORD policy, FPDF_BOOL enable);
             FPDF_SetPrintModeStatic = null;
