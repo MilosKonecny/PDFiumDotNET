@@ -148,7 +148,7 @@
                         Platform = IntPtr.Zero,
                         RendererType = FPDF_RENDERER_TYPE.FPDF_RENDERERTYPE_AGG,
                     };
-                    FPDF_InitLibraryWithConfigStatic(configuration);
+                    FPDF_InitLibraryWithConfigStatic(ref configuration);
                 }
 
                 UsageCount++;

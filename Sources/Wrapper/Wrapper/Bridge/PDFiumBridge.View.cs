@@ -43,13 +43,13 @@
 
 #if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate void FPDF_InitLibraryWithConfig_Delegate(FPDF_LIBRARY_CONFIG configuration);
+        private delegate void FPDF_InitLibraryWithConfig_Delegate(ref FPDF_LIBRARY_CONFIG configuration);
 
         private static FPDF_InitLibraryWithConfig_Delegate FPDF_InitLibraryWithConfigStatic { get; set; }
 #else // USE_DYNAMICALLY_LOADED_PDFIUM
         [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
         [DllImport("pdfium.dll", EntryPoint = "FPDF_InitLibraryWithConfig")]
-        private static extern void FPDF_InitLibraryWithConfigStatic(FPDF_LIBRARY_CONFIG configuration);
+        private static extern void FPDF_InitLibraryWithConfigStatic(ref FPDF_LIBRARY_CONFIG configuration);
 #endif // USE_DYNAMICALLY_LOADED_PDFIUM
 
         /// <summary>
@@ -60,11 +60,11 @@
         /// You have to call this function before you can call any PDF processing functions.
         /// FPDF_EXPORT void FPDF_CALLCONV FPDF_InitLibraryWithConfig(const FPDF_LIBRARY_CONFIG* config);.
         /// </remarks>
-        public void FPDF_InitLibraryWithConfig(FPDF_LIBRARY_CONFIG configuration)
+        public void FPDF_InitLibraryWithConfig(ref FPDF_LIBRARY_CONFIG configuration)
         {
             lock (_syncObject)
             {
-                FPDF_InitLibraryWithConfigStatic(configuration);
+                FPDF_InitLibraryWithConfigStatic(ref configuration);
             }
         }
 
