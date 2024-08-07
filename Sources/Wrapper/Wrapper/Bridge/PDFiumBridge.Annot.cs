@@ -1626,6 +1626,38 @@
 
 #if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate bool FPDFAnnot_GetFontColor_Delegate(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot, ref uint r, ref uint g, ref uint b);
+
+        private static FPDFAnnot_GetFontColor_Delegate FPDFAnnot_GetFontColorStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFAnnot_GetFontColor")]
+        private static extern bool FPDFAnnot_GetFontColorStatic(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot, ref uint r, ref uint g, ref uint b);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
+
+        /// <summary>
+        /// Experimental API.
+        /// Get the RGB value of the font color for an |annot| with variable text.
+        /// </summary>
+        /// <param name="handle">Handle to the form fill module, returned by FPDFDOC_InitFormFillEnvironment.</param>
+        /// <param name="annot">Handle to an annotation.</param>
+        /// <param name="r">Buffer to hold the R value of the color. Ranges from 0 to 255.</param>
+        /// <param name="g">Buffer to hold the G value of the color. Ranges from 0 to 255.</param>
+        /// <param name="b">Buffer to hold the B value of the color. Ranges from 0 to 255.</param>
+        /// <returns>Returns true if the font color was set, false on error or if the font color was not provided.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_GetFontColor(FPDF_FORMHANDLE hHandle, FPDF_ANNOTATION annot, unsigned int* R, unsigned int* G, unsigned int* B);.
+        /// </remarks>
+        public bool FPDFAnnot_GetFontColor(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot, ref uint r, ref uint g, ref uint b)
+        {
+            lock (_syncObject)
+            {
+                return FPDFAnnot_GetFontColorStatic(handle, annot, ref r, ref g, ref b);
+            }
+        }
+
+#if USE_DYNAMICALLY_LOADED_PDFIUM
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate bool FPDFAnnot_IsChecked_Delegate(FPDF_FORMHANDLE handle, FPDF_ANNOTATION annot);
 
         private static FPDFAnnot_IsChecked_Delegate FPDFAnnot_IsCheckedStatic { get; set; }
@@ -2011,6 +2043,7 @@
             FPDFAnnot_GetOptionLabelStatic = GetPDFiumFunction<FPDFAnnot_GetOptionLabel_Delegate>(nameof(FPDFAnnot_GetOptionLabel));
             FPDFAnnot_IsOptionSelectedStatic = GetPDFiumFunction<FPDFAnnot_IsOptionSelected_Delegate>(nameof(FPDFAnnot_IsOptionSelected));
             FPDFAnnot_GetFontSizeStatic = GetPDFiumFunction<FPDFAnnot_GetFontSize_Delegate>(nameof(FPDFAnnot_GetFontSize));
+            FPDFAnnot_GetFontColorStatic = GetPDFiumFunction<FPDFAnnot_GetFontColor_Delegate>(nameof(FPDFAnnot_GetFontColor));
             FPDFAnnot_IsCheckedStatic = GetPDFiumFunction<FPDFAnnot_IsChecked_Delegate>(nameof(FPDFAnnot_IsChecked));
             FPDFAnnot_SetFocusableSubtypesStatic = GetPDFiumFunction<FPDFAnnot_SetFocusableSubtypes_Delegate>(nameof(FPDFAnnot_SetFocusableSubtypes));
             FPDFAnnot_GetFocusableSubtypesCountStatic = GetPDFiumFunction<FPDFAnnot_GetFocusableSubtypesCount_Delegate>(nameof(FPDFAnnot_GetFocusableSubtypesCount));
@@ -2080,6 +2113,7 @@
             FPDFAnnot_GetOptionLabelStatic = null;
             FPDFAnnot_IsOptionSelectedStatic = null;
             FPDFAnnot_GetFontSizeStatic = null;
+            FPDFAnnot_GetFontColorStatic = null;
             FPDFAnnot_IsCheckedStatic = null;
             FPDFAnnot_SetFocusableSubtypesStatic = null;
             FPDFAnnot_GetFocusableSubtypesCountStatic = null;

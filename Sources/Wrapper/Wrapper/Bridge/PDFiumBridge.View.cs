@@ -1430,11 +1430,11 @@
         /// </summary>
         /// <param name="document">Handle to the loaded document.</param>
         /// <param name="key">Name of the key in the viewer pref dictionary, encoded in UTF-8.</param>
-        /// <param name="buffer">A string to write the contents of the key to.</param>
+        /// <param name="buffer">Caller-allocate buffer to receive the key, or NULL to query the required length.</param>
         /// <param name="length">Length of the buffer.</param>
         /// <returns>The number of bytes in the contents, including the NULL terminator.
-        /// Thus if the return value is 0, then that indicates an error, such as when document is invalid or buffer is NULL.
-        /// If length is less than the returned length, or buffer is NULL, buffer will not be modified.</returns>
+        /// Thus if the return value is 0, then that indicates an error, such as when |document| is invalid.
+        /// If |length| is less than the required length, or |buffer| is NULL, |buffer| will not be modified.</returns>
         /// <remarks>
         /// FPDF_EXPORT unsigned long FPDF_CALLCONV FPDF_VIEWERREF_GetName(FPDF_DOCUMENT document, FPDF_BYTESTRING key, char* buffer, unsigned long length);.
         /// </remarks>
