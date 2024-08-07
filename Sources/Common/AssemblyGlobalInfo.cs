@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyCompany("Miloš Konečný")]
 [assembly: AssemblyProduct("PDFiumDotNET")]
-[assembly: AssemblyCopyright("Copyright © Miloš Konečný 2020-2023")]
+[assembly: AssemblyCopyright("Copyright © Miloš Konečný 2020-2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: ComVisible(false)]
 
@@ -13,8 +13,8 @@ using System.Runtime.InteropServices;
 
 [assembly: NeutralResourcesLanguage("en", UltimateResourceFallbackLocation.MainAssembly)]
 
-[assembly: AssemblyVersion("1.00.03.000")]
-[assembly: AssemblyFileVersion("1.0.3.0")]
+[assembly: AssemblyVersion("1.00.04.000")]
+[assembly: AssemblyFileVersion("1.0.4.0")]
 
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
