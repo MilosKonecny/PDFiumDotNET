@@ -25,8 +25,8 @@
         <Authors>Miloš Konečný</Authors>
         <Company>Miloš Konečný OSS</Company>
         <Product>PDFiumDotNET</Product>
-        <Copyright>Copyright © Miloš Konečný 2020-2023</Copyright>
-        <Version>1.0.3</Version>
+        <Copyright>Copyright © Miloš Konečný 2020-2024</Copyright>
+        <Version>1.0.4</Version>
         <PackageProjectUrl>https://github.com/MilosKonecny/PDFiumDotNET</PackageProjectUrl>
         <PackageReadmeFile>LICENSE</PackageReadmeFile>
         <RepositoryType>git</RepositoryType>
