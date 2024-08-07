@@ -142,15 +142,6 @@
         /// Test for <see cref="PDFiumBridge"/> method.
         /// </summary>
         [TestMethod]
-        public void PDFiumBridge_FPDFTextGetTextRenderMode_SimpleCall_NoException()
-        {
-            _bridge.FPDFText_GetTextRenderMode(FPDF_TEXTPAGE.InvalidHandle, 0);
-        }
-
-        /// <summary>
-        /// Test for <see cref="PDFiumBridge"/> method.
-        /// </summary>
-        [TestMethod]
         public void PDFiumBridge_FPDFTextGetFillColor_SimpleCall_NoException()
         {
             uint r, g, b, a;

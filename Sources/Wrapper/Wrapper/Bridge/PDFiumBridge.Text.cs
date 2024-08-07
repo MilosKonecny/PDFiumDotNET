@@ -126,6 +126,36 @@
 
 #if USE_DYNAMICALLY_LOADED_PDFIUM
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate FPDF_PAGEOBJECT FPDFText_GetTextObject_Delegate(FPDF_TEXTPAGE text_page, int index);
+
+        private static FPDFText_GetTextObject_Delegate FPDFText_GetTextObjectStatic { get; set; }
+#else // USE_DYNAMICALLY_LOADED_PDFIUM
+        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
+        [DllImport("pdfium.dll", EntryPoint = "FPDFText_GetTextObject")]
+        private static extern FPDF_PAGEOBJECT FPDFText_GetTextObjectStatic(FPDF_TEXTPAGE text_page, int index);
+#endif // USE_DYNAMICALLY_LOADED_PDFIUM
+
+        /// <summary>
+        /// Experimental API.
+        /// Get the FPDF_PAGEOBJECT associated with a given character.
+        /// </summary>
+        /// <param name="text_page">Handle to a text page information structure. Returned by FPDFText_LoadPage function.</param>
+        /// <param name="index">Zero-based index of the character.</param>
+        /// <returns>The associated text object for the character at |index|, or NULL on error.
+        /// The returned text object, if non-null, is of type |FPDF_PAGEOBJ_TEXT|. The caller does not own the returned object.</returns>
+        /// <remarks>
+        /// FPDF_EXPORT FPDF_PAGEOBJECT FPDF_CALLCONV FPDFText_GetTextObject(FPDF_TEXTPAGE text_page, int index);.
+        /// </remarks>
+        public FPDF_PAGEOBJECT FPDFText_GetTextObject(FPDF_TEXTPAGE text_page, int index)
+        {
+            lock (_syncObject)
+            {
+                return FPDFText_GetTextObjectStatic(text_page, index);
+            }
+        }
+
+#if USE_DYNAMICALLY_LOADED_PDFIUM
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int FPDFText_IsGenerated_Delegate(FPDF_TEXTPAGE text_page, int index);
 
         private static FPDFText_IsGenerated_Delegate FPDFText_IsGeneratedStatic { get; set; }
@@ -305,35 +335,6 @@
             lock (_syncObject)
             {
                 return FPDFText_GetFontWeightStatic(text_page, index);
-            }
-        }
-
-#if USE_DYNAMICALLY_LOADED_PDFIUM
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate FPDF_TEXT_RENDERMODE FPDFText_GetTextRenderMode_Delegate(FPDF_TEXTPAGE text_page, int index);
-
-        private static FPDFText_GetTextRenderMode_Delegate FPDFText_GetTextRenderModeStatic { get; set; }
-#else // USE_DYNAMICALLY_LOADED_PDFIUM
-        [DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
-        [DllImport("pdfium.dll", EntryPoint = "FPDFText_GetTextRenderMode")]
-        private static extern FPDF_TEXT_RENDERMODE FPDFText_GetTextRenderModeStatic(FPDF_TEXTPAGE text_page, int index);
-#endif // USE_DYNAMICALLY_LOADED_PDFIUM
-
-        /// <summary>
-        /// Experimental API. Get text rendering mode of character.
-        /// </summary>
-        /// <param name="text_page">Handle to a text page information structure. Returned by FPDFText_LoadPage function.</param>
-        /// <param name="index">Zero-based index of the character.</param>
-        /// <returns>On success, return the render mode value. A valid value is of type FPDF_TEXT_RENDERMODE.
-        /// If |text_page| is invalid, if |index| is out of bounds, or if the text object is undefined, then return FPDF_TEXTRENDERMODE_UNKNOWN.</returns>
-        /// <remarks>
-        /// FPDF_EXPORT FPDF_TEXT_RENDERMODE FPDF_CALLCONV FPDFText_GetTextRenderMode(FPDF_TEXTPAGE text_page, int index);.
-        /// </remarks>
-        public FPDF_TEXT_RENDERMODE FPDFText_GetTextRenderMode(FPDF_TEXTPAGE text_page, int index)
-        {
-            lock (_syncObject)
-            {
-                return FPDFText_GetTextRenderModeStatic(text_page, index);
             }
         }
 
@@ -603,13 +604,13 @@
         /// </summary>
         /// <param name="text_page">Handle to a text page information structure. Returned by FPDFText_LoadPage function.</param>
         /// <param name="start_index">Index for the start characters.</param>
-        /// <param name="count">Number of characters to be extracted.</param>
-        /// <param name="result">A buffer (allocated by application) receiving the extracted unicodes.
-        /// The size of the buffer must be able to hold the number of characters plus a terminator.</param>
+        /// <param name="count">Number of UCS-2 values to be extracted.</param>
+        /// <param name="result">A buffer (allocated by application) receiving the extracted UCS-2 values.
+        /// The buffer must be able to hold `count` UCS-2 values plus a terminator.</param>
         /// <returns>Number of characters written into the result buffer, including the trailing terminator.</returns>
         /// <remarks>
-        /// This function ignores characters without unicode information.
-        /// It returns all characters on the page, even those that are not visible when the page has a cropbox.
+        /// This function ignores characters without UCS-2 representations.
+        /// It considers all characters on the page, even those that are not visible when the page has a cropbox.
         /// To filter out the characters outside of the cropbox, use FPDF_GetPageBoundingBox() and FPDFText_GetCharBox().
         /// FPDF_EXPORT int FPDF_CALLCONV FPDFText_GetText(FPDF_TEXTPAGE text_page, int start_index, int count, unsigned short* result);.
         /// </remarks>
@@ -705,14 +706,14 @@
         /// <param name="top">Top boundary.</param>
         /// <param name="right">Right boundary.</param>
         /// <param name="bottom">Bottom boundary.</param>
-        /// <param name="buffer">A unicode buffer.</param>
-        /// <param name="buflen">Number of characters (not bytes) for the buffer, excluding an additional terminator.</param>
-        /// <returns>If buffer is NULL or buflen is zero, return number of characters (not bytes) of text present within the rectangle,
-        /// excluding a terminating NUL.
-        /// Generally you should pass a buffer at least one larger than this if you want a terminating NUL,
-        /// which will be provided if space is available. Otherwise, return number of characters copied into the buffer,
-        /// including the terminating NUL when space for it is available.</returns>
+        /// <param name="buffer">Caller-allocated buffer to receive UTF-16 values.</param>
+        /// <param name="buflen">Number of UTF-16 values (not bytes) that `buffer` is capable of holding.</param>
+        /// <returns>If buffer is NULL or buflen is zero, return number of UTF-16 values (not bytes) of text present within the rectangle,
+        /// excluding a terminating NUL. Generally you should pass a buffer at least one larger than this if you want a terminating NUL,
+        /// which will be provided if space is available.
+        /// Otherwise, return number of UTF-16 values copied into the buffer, including the terminating NUL when space for it is available.</returns>
         /// <remarks>
+        /// If the buffer is too small, as much text as will fit is copied into it. May return a split surrogate in that case.
         /// FPDF_EXPORT int FPDF_CALLCONV FPDFText_GetBoundedText(FPDF_TEXTPAGE text_page, double left, double top, double right, double bottom, unsigned short* buffer, int buflen);.
         /// </remarks>
         public int FPDFText_GetBoundedText(FPDF_TEXTPAGE text_page, double left, double top, double right, double bottom, IntPtr buffer, int buflen)
@@ -1109,13 +1110,13 @@
             FPDFText_ClosePageStatic = GetPDFiumFunction<FPDFText_ClosePage_Delegate>(nameof(FPDFText_ClosePage));
             FPDFText_CountCharsStatic = GetPDFiumFunction<FPDFText_CountChars_Delegate>(nameof(FPDFText_CountChars));
             FPDFText_GetUnicodeStatic = GetPDFiumFunction<FPDFText_GetUnicode_Delegate>(nameof(FPDFText_GetUnicode));
+            FPDFText_GetTextObjectStatic = GetPDFiumFunction<FPDFText_GetTextObject_Delegate>(nameof(FPDFText_GetTextObject));
             FPDFText_IsGeneratedStatic = GetPDFiumFunction<FPDFText_IsGenerated_Delegate>(nameof(FPDFText_IsGenerated));
             FPDFText_IsHyphenStatic = GetPDFiumFunction<FPDFText_IsHyphen_Delegate>(nameof(FPDFText_IsHyphen));
             FPDFText_HasUnicodeMapErrorStatic = GetPDFiumFunction<FPDFText_HasUnicodeMapError_Delegate>(nameof(FPDFText_HasUnicodeMapError));
             FPDFText_GetFontSizeStatic = GetPDFiumFunction<FPDFText_GetFontSize_Delegate>(nameof(FPDFText_GetFontSize));
             FPDFText_GetFontInfoStatic = GetPDFiumFunction<FPDFText_GetFontInfo_Delegate>(nameof(FPDFText_GetFontInfo));
             FPDFText_GetFontWeightStatic = GetPDFiumFunction<FPDFText_GetFontWeight_Delegate>(nameof(FPDFText_GetFontWeight));
-            FPDFText_GetTextRenderModeStatic = GetPDFiumFunction<FPDFText_GetTextRenderMode_Delegate>(nameof(FPDFText_GetTextRenderMode));
             FPDFText_GetFillColorStatic = GetPDFiumFunction<FPDFText_GetFillColor_Delegate>(nameof(FPDFText_GetFillColor));
             FPDFText_GetStrokeColorStatic = GetPDFiumFunction<FPDFText_GetStrokeColor_Delegate>(nameof(FPDFText_GetStrokeColor));
             FPDFText_GetCharAngleStatic = GetPDFiumFunction<FPDFText_GetCharAngle_Delegate>(nameof(FPDFText_GetCharAngle));
@@ -1151,13 +1152,13 @@
             FPDFText_ClosePageStatic = null;
             FPDFText_CountCharsStatic = null;
             FPDFText_GetUnicodeStatic = null;
+            FPDFText_GetTextObjectStatic = null;
             FPDFText_IsGeneratedStatic = null;
             FPDFText_IsHyphenStatic = null;
             FPDFText_HasUnicodeMapErrorStatic = null;
             FPDFText_GetFontSizeStatic = null;
             FPDFText_GetFontInfoStatic = null;
             FPDFText_GetFontWeightStatic = null;
-            FPDFText_GetTextRenderModeStatic = null;
             FPDFText_GetFillColorStatic = null;
             FPDFText_GetStrokeColorStatic = null;
             FPDFText_GetCharAngleStatic = null;
